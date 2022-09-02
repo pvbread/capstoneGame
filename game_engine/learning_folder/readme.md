@@ -1,18 +1,21 @@
-#Setting up SDL2
+# Setting up SDL2
 
+### What is SDL2? (recommended)
 <p>
-What is SDL2? (recommended)
  https://youtu.be/QM4WW8hcsPU
 </p>
 
+## Windows setup 
 <p>
-Windows setup (I'll add different ways to do this, particularly from Visual studio and vscode): https://youtu.be/DQ-NBjBFLJ4
+(I'll add different ways to do this, particularly from Visual studio and vscode): https://youtu.be/DQ-NBjBFLJ4
 </p>
 
+## Mac setup
 <p>
-Mac setup: https://youtu.be/V6ACATpl2LQ
+https://youtu.be/V6ACATpl2LQ
 </p>
 
+# Testing
 <p>
 Test in SDLTest1 directory if you can succesfully compile without error! (note, we don't need glad) commands to run:
 <br>
