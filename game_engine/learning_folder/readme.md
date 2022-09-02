@@ -19,7 +19,8 @@ https://youtu.be/V6ACATpl2LQ
 <p>
 Test in SDLTest1 directory if you can succesfully compile without error! (note, we don't need glad for now like in some of the tutorial videos) 
 <br>
-Commands to run:
+
+## Commands to run:
 <br>
 Windows
 
