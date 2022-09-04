@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2_mixer/SDL_mixer.h>
 
 //draws a white canvas with a blue square that moves around the screen
 
@@ -22,12 +23,8 @@ int main()
 
     while (!quit)
     {
-        
-        
-
         while (SDL_PollEvent(&event))
         {
-            //motion 
             if (event.type == SDL_KEYDOWN)
             {
                 switch (event.key.keysym.sym)
