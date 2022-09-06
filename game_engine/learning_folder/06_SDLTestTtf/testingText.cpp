@@ -1,9 +1,8 @@
+//to compile on mac: g++ testingText.cpp -I/Library/Frameworks/SDL2.framework -F/Library/Frameworks -framework SDL2 -I/Library/Frameworks/SDL2_ttf.framework/Headers -framework SDL2_ttf
+
 #include <SDL2/SDL.h>
 #include <SDL2_ttf/SDL_ttf.h>
 #include <iostream>
-
-//load a font and display some text
-//waits for user to press key to quit
 
 int main()
 {

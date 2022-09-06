@@ -1,8 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2_mixer/SDL_mixer.h>
 
-//plays a wave file and moves a red square around the screen with background music and white background
-
 int main()
 {
     SDL_Window *window = NULL;
