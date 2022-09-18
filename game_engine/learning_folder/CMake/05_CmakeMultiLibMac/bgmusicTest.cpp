@@ -1,5 +1,5 @@
-#include <SDL2/SDL.h>
-#include <SDL2_mixer/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_mixer.h>
 #include <iostream>
 
 int main(int argv, char** args)
@@ -70,5 +70,5 @@ int main(int argv, char** args)
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-
+    return 0;
 }

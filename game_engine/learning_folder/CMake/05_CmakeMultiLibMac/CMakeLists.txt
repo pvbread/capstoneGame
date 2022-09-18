@@ -20,10 +20,16 @@ endif(APPLE)
 
 if(MINGW)
   set(SOURCES bgmusicTest.cpp)
-  set(SDL2_INCLUDE_DIR "C:/dev/SDL2-2.24.0/x86_64-w64-mingw32/include")
-  set(SDL2_LIBRARY_DIR "C:/dev/SDL2-2.24.0/x86_64-w64-mingw32/lib")
-  include_directories(${SDL2_INCLUDE_DIR})
   add_executable(example ${SOURCES})
-  target_link_libraries(example -lmingw32 ${SDL2_LIBRARY_DIR}/libSDL2main.a
-                        ${SDL2_LIBRARY_DIR}/libSDL2.dll.a -mwindows)
+  set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
+  set(SDL2_mixer_DIR "C:/dev/SDL2_mixer-2.6.2/cmake")
+  find_package(SDL2 REQUIRED)
+  find_package(SDL2_mixer REQUIRED)
+
+  if(TARGET SDL2::SDL2main)
+    target_link_libraries(example PRIVATE SDL2::SDL2main)
+  endif()
+
+  target_link_libraries(example PRIVATE SDL2::SDL2 SDL2_mixer::SDL2_mixer)
 endif(MINGW)
+
