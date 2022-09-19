@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     TTF_Init();
     TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 24);
 
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0);
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
         std::cout << "Load Mixer Error: " << Mix_GetError() << std::endl;//error check for mixer
     
     Mix_Music *SelectOST = Mix_LoadMUS("./test1.wav");
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
                 //move cursor up
                 cursor.y -= 100;
                 played = Mix_PlayChannel(-1, SelectMusic, 0);//Plays select sound--------------------test
-                if (played = -1){
+                if (played == -1){
                     std::cout << "error";
                 }
                 //if cursor is off the top of the screen, move it to the bottom
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
                 break;
             }
             break;
-            if(cursor.y = 260)
+            if(cursor.y == 260)
             {
                 //atexit(SDL_Quit);
             }
@@ -128,8 +128,6 @@ int main(int argc, char* argv[]) {
     Mix_FreeChunk(SelectMusic);
     Mix_FreeMusic(SelectOST);
     Mix_CloseAudio();
-    SelectMusic = nullptr;  
-    SelectOST = nullptr;
     Mix_Quit();
 
     SDL_DestroyRenderer(renderer);
