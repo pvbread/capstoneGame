@@ -29,7 +29,7 @@ cd build
 Once in build, we have to specify and create the build generator with cmake
 
 ```
-cmake -G "MinGW Makefiles"
+cmake .. -G "MinGW Makefiles"
 ```
 
 and finally build
@@ -41,8 +41,8 @@ mingw32-make
 <b>We're not done</b>
 <br>
 We need to move all the binary .dll files into this build folder as well.
-And potentially audio assets if they're not pointed to correctly (we'll fix this over time).
-
+And potentially audio assets if they're not pointed to correctly (we'll fix this over time). 
+(The make compiles it Alex you dumb fuck remeber this)
 ## Instructions to compile with mac
 
 <b>This requires SDL2 lib to be present in /Library/Frameworks</b>
