@@ -71,56 +71,69 @@ int main(int argc, char* argv[]) {
 
         switch (event.type)
         {
-        case SDL_QUIT:
-            quit = true;
-            break;
-              case SDL_MOUSEMOTION: {
-                SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent*)&event;
-                //assert(m->state == 0);
-                int x, y;
-                SDL_GetMouseState(&x, &y);
-                //assert(x == m->x);//throwing error when moving to fast (may need to be a void function to do mouse)
-                //assert(y == m->y);//our problem child is here
-                printf("motion: %d,%d  %d,%d\n", m->x, m->y, m->xrel, m->yrel);
-                result += 2 * (m->x + m->y + m->xrel + m->yrel);
+            case SDL_QUIT:
+            {
+                quit = true;
                 break;
             }
-
-        case SDL_KEYDOWN:
-            switch (event.key.keysym.sym)
+            case SDL_MOUSEMOTION: 
             {
-            case SDLK_UP:
-                //move cursor up
-                cursor.y -= 100;
-                played = Mix_PlayChannel(-1, SelectMusic, 0);//Plays select sound
-                if (played == -1){
-                    std::cout << "error ";//error check to see if it returns -1
-                }
-                //if cursor is off the top of the screen, move it to the bottom
-                if (cursor.y < 60)
+                //SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent*)&event;// 
+                //assert(m->state == 0);
+                int x, y;
+                Uint32 buttons;
+                SDL_PumpEvents();
+                buttons = SDL_GetMouseState(&x, &y);
+                //assert(x == m->x);//throwing error when moving to fast (may need to be a void function to do mouse)
+                SDL_Log("Mouse cursor is at %d, %d", x, y);
+                if ((buttons & SDL_BUTTON_LMASK) != 0) 
                 {
-                    cursor.y = 360;
+                    SDL_Log("Mouse Button 1 (left) is pressed.");
                 }
                 break;
-            case SDLK_DOWN:
-                //move cursor down
-                cursor.y += 100;
-                Mix_PlayChannel(-1, SelectMusic, 0);//Plays select sound
-                //if cursor is off the bottom of the screen, move it to the top
-                if (cursor.y > 360)
+            }
+            case SDL_KEYDOWN:
+            {
+                switch (event.key.keysym.sym)//
                 {
-                    cursor.y = 60;
+                    case SDLK_UP:
+                    {
+                        //move cursor up
+                        cursor.y -= 100;
+                        played = Mix_PlayChannel(-1, SelectMusic, 0);//Plays select sound
+                        if (played == -1){
+                            std::cout << "error ";//error check to see if it returns -1
+                        }
+                        //if cursor is off the top of the screen, move it to the bottom
+                        if (cursor.y < 60)
+                        {
+                            cursor.y = 360;
+                        }
+                        break;
+                    }
+                    case SDLK_DOWN:
+                    {
+                        //move cursor down
+                        cursor.y += 100;
+                        Mix_PlayChannel(-1, SelectMusic, 0);//Plays select sound
+                        //if cursor is off the bottom of the screen, move it to the top
+                        if (cursor.y > 360)
+                        {
+                            cursor.y = 60;
+                        }
+                        break;
+                    }  
+                    case SDLK_RETURN:
+                    {
+                    //checks for enter press
+                        if(cursor.y == 360)
+                        {
+                            goto labelquit;
+                            std::cout << "goto quit error: " << std::endl;
+                        }
+                        break;
+                    }
                 }
-                break;
-                
-            case SDLK_RETURN:
-            //checks for enter press
-                if(cursor.y == 360)
-                {
-                    goto labelquit;
-                    std::cout << "goto quit error: " << std::endl;
-                }
-                break;
             }
         }
 
