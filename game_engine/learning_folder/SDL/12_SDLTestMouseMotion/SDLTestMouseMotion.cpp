@@ -19,11 +19,11 @@ int main(int argc, char* argv[]) {
     TTF_Init();
     TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 24);
 
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0);
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
         std::cout << "Load Mixer Error: " << Mix_GetError() << std::endl;//error check for mixer
     
-    Mix_Music *SelectOST = Mix_LoadMUS("./test1.wav");
-    Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
+    Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
+    Mix_Chunk *SelectMusic = Mix_LoadWAV("./menuSelct.wav");
     Mix_PlayMusic(SelectOST, -1); //Plays our OST music
   
     SDL_Color color = { 255, 0, 0, 255 };
