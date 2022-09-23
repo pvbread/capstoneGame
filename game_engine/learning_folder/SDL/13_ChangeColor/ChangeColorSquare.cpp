@@ -16,7 +16,8 @@ int main(int argc, char* argv[])
     //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     //SDL_RenderClear(renderer);
 
-    SDL_Rect rect = { 320, 240, 100, 100 };
+    SDL_Rect rect = { 0, 0, 100, 100 };
+    
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
@@ -29,14 +30,36 @@ int main(int argc, char* argv[])
 
         switch (event.type)
         {
+            
+        case SDL_MOUSEBUTTONDOWN: {
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            if(x >= 0 && x <= 100 && y >= 0 && y <= 100){
+                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                SDL_RenderFillRect(renderer, &rect);
+                
+            }
+            break;
+        }
+        case SDL_MOUSEBUTTONUP: {
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
+                
+            
+            break;
+        }
+        
         case SDL_QUIT:
             quit = true;
             break;
         }
 
-        
+        SDL_RenderPresent(renderer);
     }
-
+    
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
