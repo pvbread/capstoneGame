@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
             case SDLK_UP:
                 //move cursor up
                 cursor.y -= 100;
-                
+                played = Mix_PlayChannel(-1, SelectMusic, 0);//Plays select sound
                 if (played == -1){
                     std::cout << "error ";//error check to see if it returns -1
                 }
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
             case SDLK_DOWN:
                 //move cursor down
                 cursor.y += 100;
-                
+                Mix_PlayChannel(-1, SelectMusic, 0);//Plays select sound
                 //if cursor is off the bottom of the screen, move it to the top
                 if (cursor.y > 360)
                 {
