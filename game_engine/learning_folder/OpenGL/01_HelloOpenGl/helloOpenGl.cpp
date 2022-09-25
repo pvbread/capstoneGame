@@ -1,5 +1,7 @@
 //terminal compile
 //g++ helloOpenGl.cpp ./src/glad.c -I./include -I/Library/Frameworks/SDL2.framework -F/Library/Frameworks -framework SDL2
+//terminal compile for windows
+//g++ -Iinclude -Iinclude/sdl -Iinclude/glad -Llib -o Main helloOpenGl.cpp src/glad.c -lmingw32 -lSDL2main -lSDL2
 
 #include <SDL.h>
 #include <glad/glad.h>
