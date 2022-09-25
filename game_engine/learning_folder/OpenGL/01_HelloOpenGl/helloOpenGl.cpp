@@ -10,13 +10,17 @@ int gScreenHeight = 480;
 SDL_Window* gGraphicsApplicationWindow = nullptr;
 SDL_GLContext gOpenGLContext = nullptr;
 bool gQuit = false;
+int x = 50;
 
 void getOpenGLVersionInfo()
 {
+
     std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "Version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "Shading Language: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+    x = 70;
+    
 }
 
 void initProgram()
@@ -35,7 +39,7 @@ void initProgram()
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 
-    gGraphicsApplicationWindow = SDL_CreateWindow("test", 0, 0, gScreenWidth, gScreenHeight, SDL_WINDOW_OPENGL);
+    gGraphicsApplicationWindow = SDL_CreateWindow("test", 50, 50, gScreenWidth, gScreenHeight, SDL_WINDOW_OPENGL);
     if (gGraphicsApplicationWindow == nullptr)
     {
         SDL_Log("sdl window init error");
@@ -97,8 +101,9 @@ void cleanUp()
     SDL_Quit();
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+    std::cout << "test";
     initProgram();
 
     mainLoop();
