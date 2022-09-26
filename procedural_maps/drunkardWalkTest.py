@@ -50,7 +50,7 @@ def drunkWalk(x,y,length):
         options = [(1,0),(0,1),(-1,0),(0,-1)]
         possible_options = []
         for dx, dy in options:
-            if (x_temp[-1] + dx, y_temp[-1] + dy) not in positions and (x_temp[-1] + dx, y_temp[-1] + dy) != (0,0):  #checks if direction leads to a site not visited before and not go trhough origin
+            if (x_temp[-1] + dx, y_temp[-1] + dy) not in positions and ((x_temp[-1] + dx, y_temp[-1] + dy) != (0,0)):  #checks if direction leads to a site not visited before and not go trhough origin
                 possible_options.append((dx,dy))
         if possible_options:  #checks if there is a direction available
             dx, dy = possible_options[np.random.randint(0,len(possible_options))]  #choose a direction at random among available ones
