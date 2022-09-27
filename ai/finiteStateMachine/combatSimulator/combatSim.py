@@ -1,9 +1,13 @@
 from setRoundTurns import setRoundTurns
 from characters.BaseCharacter import BaseCharacter
+from characters.Conehead import Conehead
+from characters.Carl import Carl
 
-carl = BaseCharacter("Carl", 100, 2, 3, 3, 3, 3)
-conehead = BaseCharacter("Conehead", 100, 2, 3, 3, 3, 3)
-banana = BaseCharacter("banana", 100, 2, 3, 3, 3, 3)
+carl = Carl("Carl", 100, 2, 3, 3, 3, 3)
+conehead = Conehead("Conehead", 100, 2, 3, 3, 3, 6) 
+banana = BaseCharacter("banana", 100, 2, 3, 3, 3, 6)
+
+carl.attack(conehead)
 
 #this is going to be passed in to the combatSim program
 #combatSym(playerChars, enemyChars)
