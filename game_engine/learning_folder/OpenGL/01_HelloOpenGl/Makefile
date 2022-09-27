@@ -1,0 +1,2 @@
+all:
+	g++ -Iinclude -IC:/dev/SDL2-2.24.0/x86_64-w64-mingw32/include/SDL2 -Iinclude/glad -Iinclude/headers -LC:/dev/SDL2-2.24.0/x86_64-w64-mingw32/lib -o Main helloOpenGl.cpp src/glad.c -lmingw32 -lSDL2main -lSDL2

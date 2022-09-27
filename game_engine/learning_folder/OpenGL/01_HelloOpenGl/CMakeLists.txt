@@ -25,6 +25,8 @@ endif(APPLE)
 
 if(MINGW)
   
+  include_directories(include/glad)
+
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_mixer_DIR "C:/dev/SDL2_mixer-2.6.2/cmake")
   find_package(SDL2 REQUIRED)
@@ -33,14 +35,15 @@ if(MINGW)
   add_executable(helloOpenGl
     "helloOpenGl.cpp"
     "src/glad.c"
-    "include/glad/glad.h"
   )
+
+  add_library(glad STATIC src/glad.c include/glad/glad.h)
 
   if(TARGET SDL2::SDL2main)
     target_link_libraries(helloOpenGl PRIVATE SDL2::SDL2main)
   endif()
 
-  target_link_libraries(helloOpenGl PRIVATE SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+  target_link_libraries(helloOpenGl PRIVATE SDL2::SDL2 SDL2_mixer::SDL2_mixer glad)
   file(COPY "C:/dev/SDL2-2.24.0/x86_64-w64-mingw32/bin/SDL2.dll" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif(MINGW)
 
