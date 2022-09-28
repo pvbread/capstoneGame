@@ -11,7 +11,23 @@ class BaseCharacter:
         self.speedModifier = speedModifier
         self.dodgeModifier = dodgeModifier
         self.isAlive = True
+        self.moveset = [self.attack]
         
+    def getActionAndTargets(self, decision=None):
+        '''
+        Input: decision algorithm, if none, use random choice
+        Output: a index to the moveset actions, and array of targets
+        '''
+        #todo
+        pass
+
+    def doAction(self, move, targets, participants):
+        '''
+        Input: index to moveset, targets, and participants object to affect
+        Output: modified participants object
+        '''
+        #todo
+        pass
 
     def attack(self, targetCharacter):
         '''

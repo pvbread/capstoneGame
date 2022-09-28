@@ -4,7 +4,8 @@ import random
 #assumes there's a character class
 def setRoundTurns(characters):
     '''
-    Takes an array (living characters) and return an array of characters in the order for the next round
+    Input: Takes an array (living characters) 
+    Output: return an array of characters in the order for the next round
     '''
     roundOrder = []
     #map to keep track of which speed score corresponds to which character
