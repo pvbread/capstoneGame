@@ -1,0 +1,6 @@
+1) outline simulation loop 
+2) print text statements
+3) add armor w/ dodge roll
+4) (don't worry about buffs)
+5) for example if attack and kill, must die? (tests)
+6) positioning of players??
