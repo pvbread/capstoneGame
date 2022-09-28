@@ -2,8 +2,8 @@ from . import BaseCharacter
 import random
 
 class Conehead(BaseCharacter.BaseCharacter):
-    def __init__(self, name, hp, speed, hit, itemModifier, speedModifier, dodgeModifier):
-        super().__init__(name, hp, speed, hit, itemModifier, speedModifier, dodgeModifier)
+    def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
+        super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
         self.moveSet = []
 
     def attack(self, targetCharacter):
