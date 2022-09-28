@@ -7,7 +7,14 @@ class Carl(BaseCharacter.BaseCharacter):
         self.moveSet = []
 
     def attack(self, targetCharacter):
-    '''
-    Takes in
-    '''
-        pass
+        '''
+        Input: Takes in targetCharacter object as output.
+        Calculate an attack (dice roll + modifier *definition tbd)
+        Output: return amount of damage (if miss, 0)
+        '''
+        roll = random.randint(1, 6)
+        #if we hit
+        if (roll + self.hit >= targetCharacter.armor):
+            return self.hit
+        #if we miss
+        return 0
