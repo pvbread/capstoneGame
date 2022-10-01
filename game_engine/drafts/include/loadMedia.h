@@ -1,3 +1,5 @@
+#pragma once
+
 #include "TextureWrapper.h"
 
 bool loadImageAssets(SDL_Renderer* renderer, TextureWrapper& textureWrapper)
@@ -8,5 +10,6 @@ bool loadImageAssets(SDL_Renderer* renderer, TextureWrapper& textureWrapper)
         SDL_Log("Failed to load assets");
         return false;
     }
+
     return true;
 }

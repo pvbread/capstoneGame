@@ -1,4 +1,7 @@
 #include "Tile.h"
+#include "TextureWrapper.h"
+#include "isColliding.h"
+#include <vector>
 
 Tile::Tile(int x, int y, int w, int h, int type)
 {
@@ -9,18 +12,20 @@ Tile::Tile(int x, int y, int w, int h, int type)
     this->type = type;
 }
 
-bool Tile::render(SDL_Rect& camera)
+bool Tile::render(SDL_Renderer *renderer, TextureWrapper tileTexture, const SDL_Rect& camera, const std::vector<SDL_Rect>& tileClips)
 {
-    bool success == true;
+    bool success = true;
     // check if box is in camera
-    if (isColliding(camera, collisionBox))
+    if (isColliding(&camera, &collisionBox))
     {
-        // success == //gtiletexture.render //of type LTexture
-        //returns success
+        success =  tileTexture.render(renderer,
+                                      collisionBox.x - camera.x, 
+                                      collisionBox.y - camera.y,
+                                      &tileClips[type]);
     }
     if (!success)
     {
-        SDL_Log("error occured rendering the tile")
+        SDL_Log("error occured rendering the tile");
     }
     return success;
 }

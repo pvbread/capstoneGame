@@ -1,6 +1,9 @@
 #include "gameEngine.h"
 #include "TextureWrapper.h"
+#include "Tile.h"
+#include "MapDebugController.h"
 #include "loadMedia.h"
+
 
 #include <iostream>
 
@@ -57,6 +60,10 @@ void Phoenix::runGameLoop()
         quit = true;
     }
 
+    //creating random test tile to check if the code runs
+    Tile tile(10,10,10,10,1);
+    MapDebugController mdc;
+
     double degrees = 0;
     SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
@@ -105,10 +112,8 @@ void Phoenix::runGameLoop()
 
         //Render arrow
         //w, h are screen width and screen height
-        testArrowTexture.render(renderer,
-                                (width - testArrowTexture.getWidth()) / 2, 
-                                (height - testArrowTexture.getHeight() ) / 2, 
-                                nullptr, degrees, nullptr, flipType);
+        testArrowTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
+        testArrowTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
 
         //Update screen
         SDL_RenderPresent(renderer);

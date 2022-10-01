@@ -3,7 +3,7 @@
 #include <iostream>
 
 TextureWrapper::TextureWrapper() : 
-                texture{nullptr}, renderer{nullptr}, width{0}, height{0} {}
+                texture{nullptr}, width{0}, height{0} {}
 
 TextureWrapper::~TextureWrapper()
 {
@@ -86,7 +86,7 @@ bool TextureWrapper::setAlpha(Uint8 alpha)
 
 bool TextureWrapper::render(SDL_Renderer* renderer,
                             int x, int y, 
-                            SDL_Rect* clip, 
+                            const SDL_Rect* clip, 
                             double angle, 
                             SDL_Point* center,
                             SDL_RendererFlip flip)
