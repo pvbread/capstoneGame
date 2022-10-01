@@ -12,7 +12,7 @@ Tile::Tile(int x, int y, int w, int h, int type)
     this->type = type;
 }
 
-bool Tile::render(SDL_Renderer *renderer, TextureWrapper tileTexture, const SDL_Rect& camera, const std::vector<SDL_Rect>& tileClips)
+bool Tile::render(SDL_Renderer *renderer, TextureWrapper& tileTexture, const SDL_Rect& camera, const std::vector<SDL_Rect>& tileClips)
 {
     bool success = true;
     // check if box is in camera

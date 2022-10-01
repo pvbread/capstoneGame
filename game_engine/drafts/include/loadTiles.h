@@ -1,6 +1,10 @@
 #include <fstream>
 
-bool loadTiles(std::vector<Tile> tiles, std::vector<SDL_Rect>& tilesClipped, int TILE_COUNT, int TYPE_COUNT)
+bool loadTiles(std::vector<Tile*>& tileSet, 
+               std::vector<SDL_Rect>& tilesClipped, 
+               int TILE_COUNT, 
+               int TYPE_COUNT, 
+               int TILE_LENGTH)
 {
     int x = 0;
     int y = 0;
@@ -13,11 +17,11 @@ bool loadTiles(std::vector<Tile> tiles, std::vector<SDL_Rect>& tilesClipped, int
         return false;
     }
 
+    //tyle type
+    int type;
+
     for (int i = 0; i < TILE_COUNT; i++)
     {
-        //tile type
-        int type;
-
         level >> type;
 
         if (level.fail())
@@ -29,18 +33,18 @@ bool loadTiles(std::vector<Tile> tiles, std::vector<SDL_Rect>& tilesClipped, int
         //define total tile types
         if (type >= 0 && type < TYPE_COUNT)
         {
-            SDL_Log("Tyle type error at %d", i);
-            return false;
+            tileSet[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, type);
         }
-
-        if (x >= MAP_WIDTH)
+        //TODO DON't HARD CODE THIS
+        //MAP_WIDTH
+        if (x >= 1280)
         {
             x = 0;
-            y += TILE_HEIGHT;
+            y += TILE_LENGTH;
         }
         else
         {
-            x += TILE_WIDTH;
+            x += TILE_LENGTH;
         }
     }
 
@@ -49,10 +53,22 @@ bool loadTiles(std::vector<Tile> tiles, std::vector<SDL_Rect>& tilesClipped, int
     //we have 240 x 160 if tile size is 80 (factor this away later)
     //so iterate on the smaller y dimension and set the boundaries of the 
     //rectangles accordingly
-    for (y = 0; y <= 160; y+=TILE_WIDTH)
+    type = 0;
+    for (y = 0; y <= 160; y+=TILE_LENGTH)
     {
-        for (x = 0; y <= 240; x+=TILE_HEIGHT)
+        
+        for (x = 0; x <= 240; x+=TILE_LENGTH)
+        {
+            
+            tilesClipped[type].x = x;
+            tilesClipped[type].y = y;
+            tilesClipped[type].w = TILE_LENGTH;
+            tilesClipped[type].h = TILE_LENGTH;
+            type++;
+        
+        }
     }
+    level.close();
 
     return true;
 }

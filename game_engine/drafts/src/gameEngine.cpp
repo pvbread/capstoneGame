@@ -55,18 +55,22 @@ void Phoenix::runGameLoop()
     // temporary place for this
     TextureWrapper tileTexture;
     TextureWrapper debugControllerTexture;
-    std::vector<TextureWrapper> textureWrappers{tileTexture, debugControllerTexture};
-    std::vector<Tile> tiles;
+    std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture};
+    
+    const int TILE_TYPE_COUNT = 12;
+    const int TILE_COUNT = 192;
+    std::vector<Tile*> tileSet(TILE_COUNT);
+    std::vector<SDL_Rect> tilesClipped(TILE_COUNT);// this is the total tiles
 
-    if (!loadImageAssets(renderer, textureWrappers, tiles))
+    if (!loadImageAssets(renderer, textureWrappers, tileSet, tilesClipped))
     {
         SDL_Log("error loading image assets");
         quit = true;
     }
 
     //creating random test tile to check if the code runs
-    Tile tile(10,10,10,10,1);
-    MapDebugController mdc;
+    //Tile tile(10,10,10,10,1);
+    //MapDebugController mdc;
 
     SDL_Rect camera = {0,0, 640, 480};
 
@@ -114,8 +118,13 @@ void Phoenix::runGameLoop()
         }
 
         //Clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
+
+        for(int i = 0; i < tileSet.size(); i++)
+        {
+            tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
+        }
 
         //Render arrow
         //w, h are screen width and screen height
@@ -123,8 +132,8 @@ void Phoenix::runGameLoop()
         // SDL_FLIP_VERTICAL
         // SDL_FLIP_HORIZONTAL
         // SDL_FLIP_NONE
-        tileTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
-        tileTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
+        //tileTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
+        //tileTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
 
         //Update screen
         SDL_RenderPresent(renderer);

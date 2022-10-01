@@ -100,6 +100,8 @@ bool TextureWrapper::render(SDL_Renderer* renderer,
     // Copies a portion of the texture to current rendering
     // with rotation/flipping option
 
+    //right now the "texture" param is invalid, so is it nullptr?
+
     int didCopy = SDL_RenderCopyEx(renderer, texture, clip, &rectangle, angle, center, flip);
 
     if (didCopy < 0)
