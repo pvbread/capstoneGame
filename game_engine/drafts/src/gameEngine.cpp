@@ -1,5 +1,6 @@
 #include "gameEngine.h"
 #include "TextureWrapper.h"
+#include "loadMedia.h"
 
 #include <iostream>
 
@@ -48,6 +49,17 @@ Phoenix::~Phoenix()
 
 void Phoenix::runGameLoop()
 {
+    // temporary place for this
+    TextureWrapper testArrowTexture;
+    if (!loadImageAssets(renderer, testArrowTexture))
+    {
+        SDL_Log("error loading image assets");
+        quit = true;
+    }
+
+    double degrees = 0;
+    SDL_RendererFlip flipType = SDL_FLIP_NONE;
+
     SDL_Event event;
     while (!quit)
     {
@@ -55,11 +67,51 @@ void Phoenix::runGameLoop()
 
         switch (event.type)
         {
-        case SDL_QUIT:
-            quit = true;
-            break;
+            case SDL_QUIT:
+            {
+                quit = true;
+                break;
+            }
+            case SDL_KEYDOWN:
+            {
+                switch( event.key.keysym.sym )
+                {
+                    case SDLK_a:
+                    degrees -= 90;
+                    break;
+                    
+                    case SDLK_d:
+                    degrees += 90;
+                    break;
+
+                    case SDLK_q:
+                    flipType = SDL_FLIP_HORIZONTAL;
+                    break;
+
+                    case SDLK_w:
+                    flipType = SDL_FLIP_NONE;
+                    break;
+
+                    case SDLK_e:
+                    flipType = SDL_FLIP_VERTICAL;
+                    break;
+                }
+            }
         }
 
+        //Clear screen
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+        SDL_RenderClear(renderer);
+
+        //Render arrow
+        //w, h are screen width and screen height
+        testArrowTexture.render(renderer,
+                                (width - testArrowTexture.getWidth()) / 2, 
+                                (height - testArrowTexture.getHeight() ) / 2, 
+                                nullptr, degrees, nullptr, flipType);
+
+        //Update screen
+        SDL_RenderPresent(renderer);
         
     }
     

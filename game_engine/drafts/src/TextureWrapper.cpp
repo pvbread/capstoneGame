@@ -1,4 +1,6 @@
 #include "TextureWrapper.h"
+#include <string>
+#include <iostream>
 
 TextureWrapper::TextureWrapper() : 
                 texture{nullptr}, renderer{nullptr}, width{0}, height{0} {}
@@ -16,11 +18,10 @@ void TextureWrapper::freeMemory()
         texture = nullptr;
         width = 0;
         height = 0;
-        success = true;
     }
 }
 
-bool TextureWrapper::loadImage(std::string filePath)
+bool TextureWrapper::loadImage(SDL_Renderer* renderer, std::string filePath)
 {
     // guard against texture already being allocated
     if (texture != nullptr)
@@ -28,7 +29,7 @@ bool TextureWrapper::loadImage(std::string filePath)
 
     SDL_Texture* textureToLoad = nullptr;
 
-    SDL_Surface* surface = IMG_LOAD(path.c_str());
+    SDL_Surface* surface = IMG_Load(filePath.c_str());
 
     if (surface == nullptr)
     {
@@ -56,7 +57,8 @@ bool TextureWrapper::loadImage(std::string filePath)
 
     SDL_FreeSurface(surface);
     texture = textureToLoad;
-
+    if (texture == nullptr)
+        return false;
     return true;
 }
 
@@ -82,13 +84,14 @@ bool TextureWrapper::setAlpha(Uint8 alpha)
     return true; 
 }
 
-bool TextureWrapper::render(int x, int y, 
+bool TextureWrapper::render(SDL_Renderer* renderer,
+                            int x, int y, 
                             SDL_Rect* clip, 
                             double angle, 
                             SDL_Point* center,
                             SDL_RendererFlip flip)
 {
-    SDL_Rect = rectangle = {x, y, width, height};
+    SDL_Rect rectangle = {x, y, width, height};
     if (clip != nullptr)
     {
         rectangle.w = clip->w;
@@ -96,11 +99,12 @@ bool TextureWrapper::render(int x, int y,
     }
     // Copies a portion of the texture to current rendering
     // with rotation/flipping option
+
     int didCopy = SDL_RenderCopyEx(renderer, texture, clip, &rectangle, angle, center, flip);
 
     if (didCopy < 0)
     {
-        SDL_Log("Error occurred using renderCopyEx");
+        SDL_Log("RenderCopyEx failed %s\n", SDL_GetError());
         return false;
     }
 

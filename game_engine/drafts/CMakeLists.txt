@@ -16,16 +16,17 @@ if(APPLE)
   add_executable(example
     "src/gameLoop.cpp"
     "src/gameEngine.cpp"
-    "include/gameEngine.h"
+    "src/TextureWrapper.cpp"
   )
   target_link_libraries(example ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})
+  file(COPY myTile.png DESTINATION ${CMAKE_BINARY_DIR})
 endif(APPLE)
 
 if(MINGW)
   add_executable(example
     "src/gameLoop.cpp"
     "src/gameEngine.cpp"
-    "include/gameEngine.h"
+    "src/TextureWrapper.cpp"
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")
@@ -37,4 +38,5 @@ if(MINGW)
   endif()
 
   target_link_libraries(example PRIVATE SDL2::SDL2 SDL2_image::SDL2_image)
+  file(COPY myTile.png DESTINATION ${CMAKE_BINARY_DIR})
 endif(MINGW)

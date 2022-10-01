@@ -2,13 +2,14 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <string>
 
 class TextureWrapper
 {
 public:
     TextureWrapper();
     ~TextureWrapper();
-    bool loadImage(std::string filePath);
+    bool loadImage(SDL_Renderer* renderer, std::string filePath);
     /// @brief in case the user wants to free memory explicitly
     /// will give that functionality and prevent double deletion
     /// plus avoid direct calls to destructor
@@ -17,7 +18,8 @@ public:
     bool setAlpha(Uint8 alpha);
     //bool setBlendMode
     //
-    bool render(int x, int y, 
+    bool render(SDL_Renderer* renderer,
+                int x, int y, 
                 SDL_Rect* clip = nullptr,
                 double angle = 0.0f, 
                 SDL_Point* center = nullptr,
