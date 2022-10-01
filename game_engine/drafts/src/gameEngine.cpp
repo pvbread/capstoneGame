@@ -53,8 +53,12 @@ Phoenix::~Phoenix()
 void Phoenix::runGameLoop()
 {
     // temporary place for this
-    TextureWrapper testArrowTexture;
-    if (!loadImageAssets(renderer, testArrowTexture))
+    TextureWrapper tileTexture;
+    TextureWrapper debugControllerTexture;
+    std::vector<TextureWrapper> textureWrappers{tileTexture, debugControllerTexture};
+    std::vector<Tile> tiles;
+
+    if (!loadImageAssets(renderer, textureWrappers, tiles))
     {
         SDL_Log("error loading image assets");
         quit = true;
@@ -63,6 +67,8 @@ void Phoenix::runGameLoop()
     //creating random test tile to check if the code runs
     Tile tile(10,10,10,10,1);
     MapDebugController mdc;
+
+    SDL_Rect camera = {0,0, 640, 480};
 
     double degrees = 0;
     SDL_RendererFlip flipType = SDL_FLIP_NONE;
@@ -79,6 +85,7 @@ void Phoenix::runGameLoop()
                 quit = true;
                 break;
             }
+            //only for testing flips
             case SDL_KEYDOWN:
             {
                 switch( event.key.keysym.sym )
@@ -112,8 +119,12 @@ void Phoenix::runGameLoop()
 
         //Render arrow
         //w, h are screen width and screen height
-        testArrowTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
-        testArrowTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
+        // different flip types
+        // SDL_FLIP_VERTICAL
+        // SDL_FLIP_HORIZONTAL
+        // SDL_FLIP_NONE
+        tileTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
+        tileTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
 
         //Update screen
         SDL_RenderPresent(renderer);
