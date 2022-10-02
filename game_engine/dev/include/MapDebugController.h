@@ -9,10 +9,12 @@ class MapDebugController
 {
 public:
     MapDebugController(); 
-    void onInput(const SDL_Event& event);
+    void onInput(SDL_Event& event);
     void move(int xBoundary, int yBoundary);
     void centerScreen(SDL_Rect& camera);
-    void render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper debugControllerTexture);
+    void render(SDL_Renderer* renderer, 
+                const SDL_Rect& camera, 
+                TextureWrapper& debugControllerTexture);
 private:    
     int mainVelocity;
     int velocityX;

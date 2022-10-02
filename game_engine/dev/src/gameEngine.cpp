@@ -68,9 +68,7 @@ void Phoenix::runGameLoop()
         quit = true;
     }
 
-    //creating random test tile to check if the code runs
-    //Tile tile(10,10,10,10,1);
-    //MapDebugController mdc;
+    MapDebugController debugController;
 
     SDL_Rect camera = {0,0, 640, 480};
 
@@ -80,42 +78,22 @@ void Phoenix::runGameLoop()
     SDL_Event event;
     while (!quit)
     {
-        SDL_WaitEvent(&event);
-
-        switch (event.type)
+        while(SDL_PollEvent(&event))
         {
-            case SDL_QUIT:
+            if (event.type == SDL_QUIT)
             {
                 quit = true;
                 break;
             }
-            //only for testing flips
-            case SDL_KEYDOWN:
-            {
-                switch( event.key.keysym.sym )
-                {
-                    case SDLK_a:
-                    degrees -= 90;
-                    break;
-                    
-                    case SDLK_d:
-                    degrees += 90;
-                    break;
-
-                    case SDLK_q:
-                    flipType = SDL_FLIP_HORIZONTAL;
-                    break;
-
-                    case SDLK_w:
-                    flipType = SDL_FLIP_NONE;
-                    break;
-
-                    case SDLK_e:
-                    flipType = SDL_FLIP_VERTICAL;
-                    break;
-                }
-            }
+            debugController.onInput(event);
         }
+        
+        //here have to poll event maybe in a loop?
+        
+
+        debugController.move(1280, 960);
+
+        debugController.centerScreen(camera);
 
         //Clear screen
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -135,6 +113,7 @@ void Phoenix::runGameLoop()
         //tileTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
         //tileTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
 
+        debugController.render(renderer, camera, debugControllerTexture);
         //Update screen
         SDL_RenderPresent(renderer);
         

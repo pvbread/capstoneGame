@@ -8,13 +8,13 @@ MapDebugController::MapDebugController() :
 {
     collisionBox.x = 0;
     collisionBox.y = 0;
-    collisionBox.w = 1;
-    collisionBox.h = 1;
+    collisionBox.w = 20;
+    collisionBox.h = 20;
 }
 
-void MapDebugController::onInput(const SDL_Event& event)
+void MapDebugController::onInput(SDL_Event& event)
 {
-    if (event.type == SDL_KEYDOWN)
+    if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
     {
         switch (event.key.keysym.sym)
         {
@@ -40,7 +40,7 @@ void MapDebugController::onInput(const SDL_Event& event)
             }
         }
     }
-    if (event.type == SDL_KEYUP)
+    if (event.type == SDL_KEYUP && event.key.repeat == 0)
     {
         switch (event.key.keysym.sym)
         {
@@ -72,13 +72,13 @@ void MapDebugController::move(int xBoundary, int yBoundary)
 {
     //640 480
     collisionBox.x += velocityX;
-    if(collisionBox.x < 0 || collisionBox.x > 640)
+    if(collisionBox.x < 0 || collisionBox.x > 1280)
     {
         collisionBox.x -= velocityX;
     }
 
     collisionBox.y += velocityY;
-    if(collisionBox.y < 0 || collisionBox.y < 480)
+    if(collisionBox.y < 0 || collisionBox.y > 960)
     {
         collisionBox.y -= velocityY;
     }
@@ -86,21 +86,21 @@ void MapDebugController::move(int xBoundary, int yBoundary)
 
 void MapDebugController::centerScreen(SDL_Rect& camera)
 {
-    camera.x = (collisionBox.x/2) - 640/2;
-    camera.y = (collisionBox.y/2) - 480/2;
+    camera.x = (collisionBox.x+20/2) - (640/2);
+    camera.y = (collisionBox.y+20/2) - (480/2);
 
     if (camera.x < 0)
         camera.x = 0;
     if (camera.y < 0)
         camera.y = 0;
-    if (camera.x > 640 - camera.w)
-        camera.x = 640 - camera.w;
-    if (camera.y > 480 - camera.h)
-        camera.y = 480 - camera.h;
-    
+    if (camera.x > 1280 - camera.w)
+        camera.x = 1280 - camera.w;
+    if (camera.y > 960 - camera.h)
+        camera.y = 960 - camera.h;
+    SDL_Log("camera y: %d", camera.y);
 }
 
-void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper debugControllerTexture)
+void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)
 {
     debugControllerTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
 }

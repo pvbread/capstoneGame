@@ -37,15 +37,14 @@ bool loadTiles(std::vector<Tile*>& tileSet,
         }
         //TODO DON't HARD CODE THIS
         //MAP_WIDTH
+        x += TILE_LENGTH;
+
         if (x >= 1280)
         {
             x = 0;
             y += TILE_LENGTH;
         }
-        else
-        {
-            x += TILE_LENGTH;
-        }
+       
     }
 
     //clip
