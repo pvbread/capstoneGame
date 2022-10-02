@@ -44,6 +44,8 @@ if(MINGW)
   endif()
 
   target_link_libraries(example PRIVATE SDL2::SDL2 SDL2_image::SDL2_image)
+  file(COPY C:/dev/SDL2-2.24.0/x86_64-w64-mingw32/bin/SDL2.dll DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY C:/dev/SDL2_image-2.6.2/x86_64-w64-mingw32/bin/SDL2_image.dll DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY dot.bmp DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY testLevel.map DESTINATION ${CMAKE_BINARY_DIR})

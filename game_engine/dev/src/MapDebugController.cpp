@@ -69,7 +69,7 @@ void MapDebugController::onInput(SDL_Event& event)
 }
 
 void MapDebugController::move(int xBoundary, int yBoundary)
-{
+{ 
     //640 480
     collisionBox.x += velocityX;
     if(collisionBox.x < 0 || collisionBox.x > 1280)
