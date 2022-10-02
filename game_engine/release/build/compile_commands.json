@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/build",
+  "command": "/usr/bin/clang++  -I/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/include -I/Library/Frameworks/SDL2.framework/Headers -I/Library/Frameworks/SDL2_image.framework/Headers -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -F/Library/Frameworks  -std=gnu++17 -o CMakeFiles/example.dir/src/gameLoop.cpp.o -c /Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/gameLoop.cpp",
+  "file": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/gameLoop.cpp"
+},
+{
+  "directory": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/build",
+  "command": "/usr/bin/clang++  -I/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/include -I/Library/Frameworks/SDL2.framework/Headers -I/Library/Frameworks/SDL2_image.framework/Headers -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -F/Library/Frameworks  -std=gnu++17 -o CMakeFiles/example.dir/src/gameEngine.cpp.o -c /Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/gameEngine.cpp",
+  "file": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/gameEngine.cpp"
+},
+{
+  "directory": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/build",
+  "command": "/usr/bin/clang++  -I/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/include -I/Library/Frameworks/SDL2.framework/Headers -I/Library/Frameworks/SDL2_image.framework/Headers -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -F/Library/Frameworks  -std=gnu++17 -o CMakeFiles/example.dir/src/TextureWrapper.cpp.o -c /Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/TextureWrapper.cpp",
+  "file": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/TextureWrapper.cpp"
+},
+{
+  "directory": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/build",
+  "command": "/usr/bin/clang++  -I/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/include -I/Library/Frameworks/SDL2.framework/Headers -I/Library/Frameworks/SDL2_image.framework/Headers -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -F/Library/Frameworks  -std=gnu++17 -o CMakeFiles/example.dir/src/Tile.cpp.o -c /Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/Tile.cpp",
+  "file": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/Tile.cpp"
+},
+{
+  "directory": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/build",
+  "command": "/usr/bin/clang++  -I/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/include -I/Library/Frameworks/SDL2.framework/Headers -I/Library/Frameworks/SDL2_image.framework/Headers -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -F/Library/Frameworks  -std=gnu++17 -o CMakeFiles/example.dir/src/MapDebugController.cpp.o -c /Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/MapDebugController.cpp",
+  "file": "/Users/pita/Documents/GitHub/capstoneGame/game_engine/dev/src/MapDebugController.cpp"
+}
+]
