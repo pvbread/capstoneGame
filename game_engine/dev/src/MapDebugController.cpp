@@ -97,7 +97,7 @@ void MapDebugController::centerScreen(SDL_Rect& camera)
         camera.x = 1280 - camera.w;
     if (camera.y > 960 - camera.h)
         camera.y = 960 - camera.h;
-    SDL_Log("camera y: %d", camera.y);
+    
 }
 
 void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)

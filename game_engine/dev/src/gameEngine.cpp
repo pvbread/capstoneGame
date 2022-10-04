@@ -2,6 +2,7 @@
 #include "TextureWrapper.h"
 #include "Tile.h"
 #include "MapDebugController.h"
+#include "MenuInGame.h"
 #include "loadMedia.h"
 
 
@@ -57,6 +58,7 @@ void Phoenix::runGameLoop()
     TextureWrapper debugControllerTexture;
     std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture};
     
+    
     const int TILE_TYPE_COUNT = 12;
     const int TILE_COUNT = 192;
     std::vector<Tile*> tileSet(TILE_COUNT);
@@ -70,6 +72,8 @@ void Phoenix::runGameLoop()
 
     MapDebugController debugController;
 
+    Menu menu(100, 100, 100, 100);
+    
     SDL_Rect camera = {0,0, 640, 480};
 
     double degrees = 0;
@@ -86,6 +90,18 @@ void Phoenix::runGameLoop()
                 break;
             }
             debugController.onInput(event);
+
+            switch (event.type){
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym)
+                    {
+                    case SDLK_p:
+                        menu.message();
+                        SDL_Log ("---------------");
+                        break;
+                    }
+            }
+            
         }
         
         //here have to poll event maybe in a loop?
@@ -104,6 +120,7 @@ void Phoenix::runGameLoop()
             tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
         }
 
+        
         //Render arrow
         //w, h are screen width and screen height
         // different flip types
@@ -112,6 +129,8 @@ void Phoenix::runGameLoop()
         // SDL_FLIP_NONE
         //tileTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
         //tileTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
+
+        menu.render(renderer)
 
         debugController.render(renderer, camera, debugControllerTexture);
         //Update screen
