@@ -11,18 +11,20 @@ We can have the AI decision policy be added modularly.
 '''
 
 #name = className("print name", hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
-carl = Carl("Carl", 100, 2, 3, 10, 3, 3, 3)
-conehead = Conehead("Conehead", 100, 2, 3, 5, 3, 3, 6) 
-bass = BaseCharacter("bassist", 100, 2, 3, 4, 3, 3, 6)
+carl = Carl("Carl", 50, 0, 3, 5, 3, 3, 1)
+conehead = Conehead("Conehead", 50, 3, 2, 1, 3, 3, 5) 
+bass = BaseCharacter("bassist", 50, 2, 3, 2, 3, 3, 6)
 
 #this is going to be passed in to the combatSim program
 #combatSym(playerChars, enemyChars)
 playerCharacters = [bass]
 enemyCharacters = [conehead, carl]
 
-participants = playerCharacters + enemyCharacters
+roundNum = 1
 
+participants = playerCharacters + enemyCharacters
 while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
+    print(f"Round {roundNum}")
     #gets the new round order
     currentRoundOrder = setRoundTurns(participants)
     #debug print
@@ -30,17 +32,24 @@ while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
     
     for i in range(len(currentRoundOrder)):
         currentChar = currentRoundOrder[i]
+        if currentChar.isAlive == False:
+            break
 
         #get index to moveset (which is an array of action funciton) + targets
-        actionAndTargets = currentChar.getActionAndTargets()
+        actionAndTargets = currentChar.getActionAndTargets(playerCharacters,enemyCharacters)
         #actionAndTargets = currentChar.getActionAndTargets("NeuralNetwork")
         #actionAndTargets = currentChar.getActionAndTargets("FuzzyLogic")
 
         #function takes in all the characters, and 
         #returns a copy of the character objects with the targets
         #having been affected by the action
-        participants = carl.doAction(actionAndTargets[0], actionAndTargets[1], participants)
+        print(f"{currentChar.name} turn")
+        participants = currentChar.doAction(actionAndTargets[0], actionAndTargets[1], participants)
 
-    
-    #want remove participant from array if they die
-
+        
+    print(f"End of round {roundNum}\n")
+    roundNum+=1
+if isTeamAlive(playerCharacters):
+    print("Victory")
+if isTeamAlive(enemyCharacters):
+    print("Defeat")
