@@ -57,12 +57,17 @@ Phoenix::~Phoenix()
 void Phoenix::runGameLoop()
 {
     // temporary place for this
-    Screen screen = MAP;
+    Screen screen = INTRO;
+    //temporary 
+    TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 54);
+    //temp
+    SDL_Rect cursor = { 45, 160, 50, 50 };
+
     TextureWrapper tileTexture;
     TextureWrapper debugControllerTexture;
     std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture};
     
-    const int TILE_TYPE_COUNT = 12;
+    const int TILE_TYPE_COUNT = 24;
     const int TILE_COUNT = 192;
     std::vector<Tile*> tileSet(TILE_COUNT);
     std::vector<SDL_Rect> tilesClipped(TILE_COUNT);// this is the total tiles
@@ -92,43 +97,128 @@ void Phoenix::runGameLoop()
             }
             if (event.type == SDL_KEYDOWN)
             {
-                if (event.key.keysym.sym == SDLK_2)
+                switch (event.key.keysym.sym)
                 {
-                    screen = INTRO;
-                }
-                if (event.key.keysym.sym == SDLK_3)
-                {
-                    screen = COMBAT;
+                    case SDLK_1:
+                    {
+                        screen = INTRO;
+                        break;
+                    }
+                    case SDLK_2:
+                    {
+                        screen = MAP;
+                        break;
+                    }
+                    case SDLK_3:
+                    {
+                        screen = COMBAT;
+                        break;
+                    }
                 }
             }
-            debugController.onInput(event);
+            switch (screen)
+            {
+                case INTRO:
+                {
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_UP:
+                            {
+                                cursor.y -= 100;
+                                //if cursor is off the top of the screen, move it to the bottom
+                                if (cursor.y < 160)
+                                {
+                                    cursor.y = 360;
+                                }
+                                break;
+                            }
+                            case SDLK_DOWN:
+                            {
+                                cursor.y += 100;
+                                //if cursor is off the bottom of the screen, move it to the top
+                                if (cursor.y > 360)
+                                {
+                                    cursor.y = 160;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case MAP:
+                {
+                    debugController.onInput(event);
+                    break;
+                }
+                case COMBAT:
+                {
+                    break;
+                }
+            }
+            
         }
         
         //here have to poll event maybe in a loop?
         
 
-        debugController.move(1280, 960);
-
-        debugController.centerScreen(camera);
+        
 
         //Clear screen
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
 
-        if (screen == INTRO)
+        switch (screen)
         {
-            for(int i = 0; i < tileSet.size(); i++)
+            case INTRO:
             {
-                tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                SDL_RenderClear(renderer);
+                SDL_Rect rect1 = { 100, 140, 400, 100 };
+                SDL_Rect rect2 = { 100, 240, 400, 100 };
+                SDL_Rect rect3 = { 100, 340, 400, 100 };
+                SDL_Color color = { 255, 0, 0, 255 };
+                SDL_Surface *surface1 = TTF_RenderText_Solid(font, "New Game", color);
+                SDL_Surface *surface2 = TTF_RenderText_Solid(font, "Load Game", color);
+                SDL_Surface *surface3 = TTF_RenderText_Solid(font, "Credits", color);
+                SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
+                SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
+                SDL_Texture *texture3 = SDL_CreateTextureFromSurface(renderer, surface3);
+                SDL_FreeSurface(surface1);
+                SDL_FreeSurface(surface2);
+                SDL_FreeSurface(surface3);
+                SDL_Surface *surfaceCursor = TTF_RenderText_Solid(font, ">", color);
+                SDL_Texture *textureCursor = SDL_CreateTextureFromSurface(renderer, surfaceCursor);
+                SDL_FreeSurface(surfaceCursor);
+                SDL_RenderCopy(renderer, texture1, nullptr, &rect1);
+                SDL_RenderCopy(renderer, texture2, nullptr, &rect2);
+                SDL_RenderCopy(renderer, texture3, nullptr, &rect3);
+                SDL_RenderCopy(renderer, textureCursor, nullptr, &cursor);
+                break;
             }
-        } else if (screen == COMBAT)
-        {
-            SDL_Rect rect = { 320, 240, 100, 100 };
-            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-            SDL_RenderFillRect(renderer, &rect);
+            case MAP:
+            {
+                debugController.move(1280, 960);
+                debugController.centerScreen(camera);
+                for(int i = 0; i < tileSet.size(); i++)
+                {
+                    tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
+                }
+                debugController.render(renderer, camera, debugControllerTexture);
+                break;
+            } 
+            case COMBAT:
+            {
+                SDL_Rect rect = { 320, 240, 100, 100 };
+                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                SDL_RenderFillRect(renderer, &rect);
+                break;
+            }
         }
 
-        debugController.render(renderer, camera, debugControllerTexture);
+        
         //Update screen
         SDL_RenderPresent(renderer);
         
