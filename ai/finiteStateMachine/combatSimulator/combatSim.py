@@ -36,7 +36,7 @@ while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
             break
 
         #get index to moveset (which is an array of action funciton) + targets
-        actionAndTargets = currentChar.getActionAndTargets(playerCharacters,enemyCharacters)
+        actionAndTargets = currentChar.getActionAndTargets(playerCharacters,enemyCharacters,participants)
         #actionAndTargets = currentChar.getActionAndTargets("NeuralNetwork")
         #actionAndTargets = currentChar.getActionAndTargets("FuzzyLogic")
 
