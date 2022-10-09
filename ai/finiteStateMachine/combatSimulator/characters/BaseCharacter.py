@@ -13,7 +13,7 @@ class BaseCharacter:
         self.isAlive = True
         self.moveset = [self.attack]
   
-    def getActionAndTargets(self, players, enemies, decision=None):
+    def getActionAndTargets(self, players, enemies, participants, decision=None):
         '''
         Input: decision algorithm, if none, use random choice
         Output: a index to the moveset actions, and array of targets
@@ -25,11 +25,11 @@ class BaseCharacter:
                 if self in players: # if player, choose enemies as targets
                     for character in enemies:
                         if character.isAlive == True:
-                            targets.append(character)
+                            targets.append(participants.index(character))
                 if self in enemies: # if enemy, choose players as targets
                     for character in players:
                         if character.isAlive == True:
-                            targets.append(character)
+                            targets.append(participants.index(character))
             return [option, targets]
 
     def doAction(self, move, targets, participants):
@@ -43,19 +43,12 @@ class BaseCharacter:
             if len(targets)==0:
                 print("No one to attack")
             for target in targets:
-                hit = self.moveset[move](target) # call attack function
-                target.hp = target.hp - hit
-                print(f"{target.name} takes {hit} damage. Health is at {target.hp}")
-                if target.hp <= 0:
-                    target.isAlive = False
-                # update participants array
-                for character in participants:
-                    if character == target:
-                        character.hp = target.hp
-                        #want remove participant from array if they die
-                        if character.hp <= 0:
-                            print(f"{character.name} is dead")
-                            participants.remove(character)
+                hit = self.moveset[move](participants[target]) # call attack function
+                participants[target].hp = participants[target].hp - hit
+                if participants[target].hp <= 0:
+                    participants[target].isAlive = False
+                    print(f"{participants[target].name} is dead")
+                    participants.remove(participants[target])               
         return participants
         
 
@@ -73,4 +66,6 @@ class BaseCharacter:
             return 0
         #we hit
         weaponRoll = random.randint(1,4) # need to add how to keep track of weapon (common weapon for now)
-        return int(weaponRoll + self.hit - (targetCharacter.armor * 0.5))
+        damage = int(weaponRoll + self.hit - (targetCharacter.armor * 0.5))
+        print(f"{targetCharacter.name} takes {damage} damage. Health is at {targetCharacter.hp-damage}")
+        return damage
