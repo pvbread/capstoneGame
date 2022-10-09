@@ -49,6 +49,7 @@ while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
         
     print(f"End of round {roundNum}\n")
     roundNum+=1
+    input("Press ENTER to continue\n")
 if isTeamAlive(playerCharacters):
     print("Victory")
 if isTeamAlive(enemyCharacters):
