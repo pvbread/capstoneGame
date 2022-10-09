@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "MapDebugController.h"
 #include "loadMedia.h"
+#include "Screen.h"
 
 
 #include <iostream>
@@ -41,6 +42,9 @@ Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
     {
         SDL_Log("Error initializing SDL_image");
     }
+
+    if (TTF_Init() < 0)
+        SDL_Log("TTF Init error!");    
 }
 
 Phoenix::~Phoenix()
@@ -53,6 +57,7 @@ Phoenix::~Phoenix()
 void Phoenix::runGameLoop()
 {
     // temporary place for this
+    Screen screen = MAP;
     TextureWrapper tileTexture;
     TextureWrapper debugControllerTexture;
     std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture};
@@ -85,6 +90,17 @@ void Phoenix::runGameLoop()
                 quit = true;
                 break;
             }
+            if (event.type == SDL_KEYDOWN)
+            {
+                if (event.key.keysym.sym == SDLK_2)
+                {
+                    screen = INTRO;
+                }
+                if (event.key.keysym.sym == SDLK_3)
+                {
+                    screen = COMBAT;
+                }
+            }
             debugController.onInput(event);
         }
         
@@ -99,19 +115,18 @@ void Phoenix::runGameLoop()
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
 
-        for(int i = 0; i < tileSet.size(); i++)
+        if (screen == INTRO)
         {
-            tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
+            for(int i = 0; i < tileSet.size(); i++)
+            {
+                tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
+            }
+        } else if (screen == COMBAT)
+        {
+            SDL_Rect rect = { 320, 240, 100, 100 };
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+            SDL_RenderFillRect(renderer, &rect);
         }
-
-        //Render arrow
-        //w, h are screen width and screen height
-        // different flip types
-        // SDL_FLIP_VERTICAL
-        // SDL_FLIP_HORIZONTAL
-        // SDL_FLIP_NONE
-        //tileTexture.render(renderer, 0, 0, nullptr, degrees, nullptr, flipType);
-        //tileTexture.render(renderer, 80, 0, nullptr, degrees, nullptr, SDL_FLIP_HORIZONTAL);
 
         debugController.render(renderer, camera, debugControllerTexture);
         //Update screen
