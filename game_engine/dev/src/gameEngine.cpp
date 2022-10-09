@@ -178,7 +178,7 @@ void Phoenix::runGameLoop()
                 SDL_RenderClear(renderer);
                 SDL_Rect rect1 = { 100, 140, 400, 100 };
                 SDL_Rect rect2 = { 100, 240, 400, 100 };
-                SDL_Rect rect3 = { 100, 340, 400, 100 };
+                SDL_Rect rect3 = { 100, 340, 300, 100 };
                 SDL_Color color = { 255, 0, 0, 255 };
                 SDL_Surface *surface1 = TTF_RenderText_Solid(font, "New Game", color);
                 SDL_Surface *surface2 = TTF_RenderText_Solid(font, "Load Game", color);
