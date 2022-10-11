@@ -59,7 +59,7 @@ void Phoenix::runGameLoop()
     // temporary place for this
     Screen screen = INTRO;
     //temporary 
-    TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 54);
+    TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
     //temp
     SDL_Rect cursor = { 45, 160, 50, 50 };
 
@@ -150,6 +150,8 @@ void Phoenix::runGameLoop()
                 }
                 case MAP:
                 {
+                    //this has a bug where movement
+                    //keeps being read if key is not unpressed
                     debugController.onInput(event);
                     break;
                 }
