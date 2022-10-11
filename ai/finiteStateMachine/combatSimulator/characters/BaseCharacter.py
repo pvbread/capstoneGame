@@ -12,6 +12,21 @@ class BaseCharacter:
         self.dodgeModifier = dodgeModifier
         self.isAlive = True
         self.moveset = [self.attack]
+        self.validMoves = {0: [1,2]} #these have to be relative positions
+        #for example
+
+        # open question is whether it's better to have absolute
+        # numbers (i.e. enemies have negative numbers as attack ranges)
+        # versus relative numbers and then we have to write a lot of conditionals
+        
+        '''
+        self.moveset = [self.attack, self.move]
+        self.validMoves =  {
+                             0: [[5],[6],[7,8]], 
+                             1: [1,2,3] #but you wouldn't be able to move into enemy territory
+                            }
+        #need to write this function getValidMoves(attack) -> i+1 or i+2
+        '''
   
     def getActionAndTargets(self, players, enemies, participants, decision=None):
         '''
@@ -21,7 +36,22 @@ class BaseCharacter:
         if decision == None:
             option = random.randint(0,0) # need to add other attacks/buff/debuff in range
             targets = []
+            
+            #before we pick this action, we have to make sure, there's
+            #a valid opponent for this action
             if option == 0: # if random choice is to attack
+            #if we choose an attack, we need to know what valid targets are for that attack
+            #so we have multiple choices, but also within those, we can hit multiple enemies
+            #so array of array<int> for valid targets for a given attack
+            #but then we need a map of indexes (that refer to moves from moveset)
+            #to said valid moves
+
+            #so now we get a random legal move from the move "0"
+            #and we check if there's an enemy there, if not we keep rolling
+            #
+
+            #put in to avoid attacking ally
+                '''
                 if self in players: # if player, choose enemies as targets
                     for character in enemies:
                         if character.isAlive == True:
@@ -30,6 +60,7 @@ class BaseCharacter:
                     for character in players:
                         if character.isAlive == True:
                             targets.append(participants.index(character))
+                '''
             return [option, targets]
 
     def doAction(self, move, targets, participants):
@@ -50,7 +81,28 @@ class BaseCharacter:
                     print(f"{participants[target].name} is dead")
                     participants.remove(participants[target])               
         return participants
-        
+
+    def getValidMoves(self, move, charIndex, numOfParticipants):
+        '''
+        Input: move is a moveset index to move
+        Output: an array of array<int> of valid action indexes
+        Example: getValidMoves(0) and 0 is index to attack
+        Returns [1,2] for Carl, meaning Carl can attack from
+        his position i: i-1, i-2 (because it's an enemy)
+        [1,2,3,4,5,6,7,8] if carl is at position 5, he can attack
+        validly 3 and 4 because 5-1 = 4 and 5-2 = 3
+        '''
+        #check if it's a player
+        if charIndex < 5:
+            #check for type of move
+                #if attack, sum the move distance
+                #and check if there are existing enemies
+            
+                #if it's a move, you can add, subtract,
+                #but need to keep it under < 5
+
+                # if it's a buff??
+
 
     def attack(self, targetCharacter):
         '''

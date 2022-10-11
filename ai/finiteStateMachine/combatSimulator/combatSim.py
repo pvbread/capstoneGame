@@ -33,7 +33,7 @@ while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
     for i in range(len(currentRoundOrder)):
         currentChar = currentRoundOrder[i]
         if currentChar.isAlive == False:
-            break
+            continue #formerly break #we could remove them from participants but may want to keep revive option
 
         #get index to moveset (which is an array of action funciton) + targets
         actionAndTargets = currentChar.getActionAndTargets(playerCharacters,enemyCharacters,participants)
@@ -48,8 +48,11 @@ while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
 
         
     print(f"End of round {roundNum}\n")
-    roundNum+=1
+    roundNum += 1
     input("Press ENTER to continue\n")
+    ## think about, how are we going to read in event input
+    ## we're actually going to sit on a loop, doing nothing
+    ## once legal input action is selected, we process
 if isTeamAlive(playerCharacters):
     print("Victory")
 if isTeamAlive(enemyCharacters):
