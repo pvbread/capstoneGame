@@ -1,5 +1,6 @@
 import random
 
+
 class BaseCharacter:
     def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
         self.name = name
@@ -11,8 +12,8 @@ class BaseCharacter:
         self.speedModifier = speedModifier
         self.dodgeModifier = dodgeModifier
         self.isAlive = True
-        self.moveset = [self.attack]
-        self.validMoves = {0: [1,2]} #these have to be relative positions
+        self.moveset = [self.attack, self.buff, self.debuff, self.move] #is it true everyone has these moves
+        self.moveType = {0: 'attack', 1:'buff', 2:'debuff', 3:'move'} #Index from moveset maps to string that discribes the type
         #for example
 
         # open question is whether it's better to have absolute
@@ -82,7 +83,7 @@ class BaseCharacter:
                     participants.remove(participants[target])               
         return participants
 
-    def getValidMoves(self, move, charIndex, numOfParticipants):
+    def getValidMoves(self, move, charIndex, players, enemies, participants):
         '''
         Input: move is a moveset index to move
         Output: an array of array<int> of valid action indexes
@@ -92,6 +93,35 @@ class BaseCharacter:
         [1,2,3,4,5,6,7,8] if carl is at position 5, he can attack
         validly 3 and 4 because 5-1 = 4 and 5-2 = 3
         '''
+        #get move type 
+        if self.moveType[move] == 'attack':
+            if self in players:
+                validMoves = []
+                for position in self.validMovesAndRanges[move]:
+                    if charIndex + position < len(participants):
+                        validMoves.append(participants[])#need to talk rules to define attack with range
+            else:
+                #if self in enemies
+                validMoves = []
+                for position in self.validMovesAndRanges[move]:
+                    if charIndex - position >= 0:
+                        validMoves.append(charIndex - position)
+                
+            return validMoves 
+
+        if self.moveType[move] == 'buff':
+            if self in players:
+                validMoves = []
+                for position in self.validMovesAndRanges[move]:
+                    if charIndex < len(participants) - 4: 
+                        validmoves.append()
+
+        if self.moveType[move] == 'debuff':
+            pass
+
+        if self.moveType[move] == 'move':
+            pass
+
         #check if it's a player
         if charIndex < 5:
             #check for type of move
@@ -121,3 +151,12 @@ class BaseCharacter:
         damage = int(weaponRoll + self.hit - (targetCharacter.armor * 0.5))
         print(f"{targetCharacter.name} takes {damage} damage. Health is at {targetCharacter.hp-damage}")
         return damage
+
+    def buff(self, targetCharacter):
+        pass
+
+    def debuff(self, targetCharacter):
+        pass
+
+    def move(self, targetCharacters):
+        pass
