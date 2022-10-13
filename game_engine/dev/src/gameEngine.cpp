@@ -44,7 +44,10 @@ Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
     }
 
     if (TTF_Init() < 0)
-        SDL_Log("TTF Init error!");    
+        SDL_Log("TTF Init error!");
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+        SDL_Log("Load Mixer Error: %s", Mix_GetError());  
 }
 
 Phoenix::~Phoenix()
@@ -63,6 +66,11 @@ void Phoenix::runGameLoop()
     //temp
     SDL_Rect cursor = { 45, 160, 50, 50 };
 
+    Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
+    Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
+    Mix_PlayMusic(SelectOST, -1);
+    int played;
+
     TextureWrapper tileTexture;
     TextureWrapper debugControllerTexture;
     std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture};
@@ -77,6 +85,8 @@ void Phoenix::runGameLoop()
         SDL_Log("error loading image assets");
         quit = true;
     }
+
+    debugControllerTexture.setAlpha(0);
 
     MapDebugController debugController;
 
@@ -127,6 +137,10 @@ void Phoenix::runGameLoop()
                             case SDLK_UP:
                             {
                                 cursor.y -= 100;
+                                played = Mix_PlayChannel(-1, SelectMusic, 0);
+                                if (played == -1){
+                                    SDL_Log("audio error");
+                                }
                                 //if cursor is off the top of the screen, move it to the bottom
                                 if (cursor.y < 160)
                                 {
@@ -137,6 +151,10 @@ void Phoenix::runGameLoop()
                             case SDLK_DOWN:
                             {
                                 cursor.y += 100;
+                                played = Mix_PlayChannel(-1, SelectMusic, 0);
+                                if (played == -1){
+                                    SDL_Log("audio error");
+                                }
                                 //if cursor is off the bottom of the screen, move it to the top
                                 if (cursor.y > 360)
                                 {

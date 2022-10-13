@@ -8,8 +8,8 @@ MapDebugController::MapDebugController() :
 {
     collisionBox.x = 0;
     collisionBox.y = 0;
-    collisionBox.w = 20;
-    collisionBox.h = 20;
+    collisionBox.w = 1;
+    collisionBox.h = 1;
 }
 
 void MapDebugController::onInput(SDL_Event& event)
