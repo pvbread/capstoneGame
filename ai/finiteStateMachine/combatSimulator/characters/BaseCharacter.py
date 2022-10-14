@@ -35,12 +35,14 @@ class BaseCharacter:
         Output: a index to the moveset actions, and array of targets
         '''
         if decision == None:
-            option = random.randint(0,0) # need to add other attacks/buff/debuff in range
-            targets = []
+            move = random.randint(0,len(self.moveType))
+            charIndex = participants.index(self)
+            targets = self.getValidMoves(move, charIndex, players, enemies, participants)
+
             
             #before we pick this action, we have to make sure, there's
             #a valid opponent for this action
-            if option == 0: # if random choice is to attack
+            #if option == 0: # if random choice is to attack
             #if we choose an attack, we need to know what valid targets are for that attack
             #so we have multiple choices, but also within those, we can hit multiple enemies
             #so array of array<int> for valid targets for a given attack
@@ -52,7 +54,7 @@ class BaseCharacter:
             #
 
             #put in to avoid attacking ally
-                '''
+            '''
                 if self in players: # if player, choose enemies as targets
                     for character in enemies:
                         if character.isAlive == True:
@@ -62,7 +64,7 @@ class BaseCharacter:
                         if character.isAlive == True:
                             targets.append(participants.index(character))
                 '''
-            return [option, targets]
+            return [move, targets]
 
     def doAction(self, move, targets, participants):
         '''
@@ -99,7 +101,7 @@ class BaseCharacter:
                 validMoves = []
                 for position in self.validMovesAndRanges[move]:
                     if charIndex + position < len(participants):
-                        validMoves.append(participants[])#need to talk rules to define attack with range
+                        validMoves.append(charIndex + position)
             else:
                 #if self in enemies
                 validMoves = []
@@ -109,29 +111,33 @@ class BaseCharacter:
                 
             return validMoves 
 
-        if self.moveType[move] == 'buff':
-            if self in players:
-                validMoves = []
-                for position in self.validMovesAndRanges[move]:
-                    if charIndex < len(participants) - 4: 
-                        validmoves.append()
+        if self.moveType[move] == 'buff':  
+            validMoves = self.getValidBuffTargets(players, participants, "buff")
 
         if self.moveType[move] == 'debuff':
-            pass
+            validMoves = self.getValidBuffTargets(players, participants, "debuff")
 
         if self.moveType[move] == 'move':
-            pass
-
-        #check if it's a player
-        if charIndex < 5:
-            #check for type of move
-                #if attack, sum the move distance
-                #and check if there are existing enemies
-            
-                #if it's a move, you can add, subtract,
-                #but need to keep it under < 5
-
-                # if it's a buff??
+            validMoves = self.getValidBuffTargets(players, participants, "buff")
+            # doesn't include its charIndex
+            validMoves = list(filter(lambda i: i != charIndex, validMoves))
+        return validMoves
+        
+    def getValidBuffTargets(self, players, participants, typeBuff):
+        #  return [0,1,2,3]
+        if (self in players and typeBuff == "buff") or (self not in players and typeBuff == "debuff"):
+            validMoves = []
+            for i in range(4):
+                if participants[i].isAlive: 
+                    validMoves.append(i) 
+        #  return [4,5,6,7]
+        else:
+            #if self in enemies
+            validMoves = []
+            for i in range(4):
+                if participants[i+4].isAlive:
+                    validMoves.append(i+4) 
+        return validMoves
 
 
     def attack(self, targetCharacter):
@@ -148,8 +154,10 @@ class BaseCharacter:
             return 0
         #we hit
         weaponRoll = random.randint(1,4) # need to add how to keep track of weapon (common weapon for now)
-        damage = int(weaponRoll + self.hit - (targetCharacter.armor * 0.5))
-        print(f"{targetCharacter.name} takes {damage} damage. Health is at {targetCharacter.hp-damage}")
+        damage = weaponRoll + self.hit 
+        reduction = int(damage * (targetCharacter.armor * 0.05))
+        damage = damage - reduction
+        print(f"{targetCharacter.name} takes {damage} damage. Health is at {targetCharacter.hp - damage}")
         return damage
 
     def buff(self, targetCharacter):
