@@ -17,12 +17,15 @@ bass = BaseCharacter("bassist", 50, 2, 3, 2, 3, 3, 6)
 
 #this is going to be passed in to the combatSim program
 #combatSym(playerChars, enemyChars)
-playerCharacters = [bass]
-enemyCharacters = [conehead, carl]
+playerCharacters = [bass]*4
+enemyCharacters = [conehead, conehead, conehead, carl]
 
 roundNum = 1
 
 participants = playerCharacters + enemyCharacters
+moves = carl.getValidMoves(3,7, playerCharacters,enemyCharacters,participants) # consider making the input to be more user friendly
+
+"""
 while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
     print(f"Round {roundNum}")
     #gets the new round order
@@ -57,3 +60,4 @@ if isTeamAlive(playerCharacters):
     print("Victory")
 if isTeamAlive(enemyCharacters):
     print("Defeat")
+"""
