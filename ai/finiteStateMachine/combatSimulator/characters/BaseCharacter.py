@@ -12,7 +12,7 @@ class BaseCharacter:
         self.speedModifier = speedModifier
         self.dodgeModifier = dodgeModifier
         self.isAlive = True
-        self.moveset = [self.attack, self.buff, self.debuff, self.move] #is it true everyone has these moves
+        self.moveSet = [self.attack, self.buff, self.debuff, self.move] #is it true everyone has these moves
         self.moveType = {0: 'attack', 1:'buff', 2:'debuff', 3:'move'} #Index from moveset maps to string that discribes the type
         #for example
 

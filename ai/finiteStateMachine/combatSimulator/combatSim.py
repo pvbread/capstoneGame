@@ -1,8 +1,8 @@
 from utility.setRoundTurns import setRoundTurns
 from utility.isTeamAlive import isTeamAlive 
 from characters.BaseCharacter import BaseCharacter
-from characters.Conehead import Conehead
-from characters.Carl import Carl
+from characters.Enemies.Conehead import Conehead
+from characters.Enemies.Carl import Carl
 
 '''
 CombatSim aims to instantiate the proper game state, round states
@@ -11,7 +11,7 @@ We can have the AI decision policy be added modularly.
 '''
 
 #name = className("print name", hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
-carl = Carl("Carl", 50, 0, 3, 5, 3, 3, 1)
+carl = Carl(name ="Carl", hp= 50, speed=0, hit= 3, armor= 5,itemModifier= 3,speedModifier= 3,dodgeModifier= 1)
 conehead = Conehead("Conehead", 50, 3, 2, 1, 3, 3, 5) 
 bass = BaseCharacter("bassist", 50, 2, 3, 2, 3, 3, 6)
 
@@ -24,6 +24,9 @@ roundNum = 1
 
 participants = playerCharacters + enemyCharacters
 moves = carl.getValidMoves(3,7, playerCharacters,enemyCharacters,participants) # consider making the input to be more user friendly
+
+print("Round Number: ", roundNum)
+print(Carl)
 
 """
 while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
