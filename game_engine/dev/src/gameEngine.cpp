@@ -86,6 +86,7 @@ void Phoenix::runGameLoop()
         quit = true;
     }
 
+    //set this to 0 whenever we want a clear debug controller
     debugControllerTexture.setAlpha(0);
 
     MapDebugController debugController;

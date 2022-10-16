@@ -70,7 +70,7 @@ void MapDebugController::onInput(SDL_Event& event)
 
 void MapDebugController::move(int xBoundary, int yBoundary)
 {
-    //640 480
+    // TODO update to not be hard coded
     collisionBox.x += velocityX;
     if(collisionBox.x < 0 || collisionBox.x > 1280)
     {
@@ -86,8 +86,9 @@ void MapDebugController::move(int xBoundary, int yBoundary)
 
 void MapDebugController::centerScreen(SDL_Rect& camera)
 {
-    camera.x = (collisionBox.x+20/2) - (640/2);
-    camera.y = (collisionBox.y+20/2) - (480/2);
+    // TODO fix this hardcoding to take in any size
+    camera.x = collisionBox.x - (640/2);
+    camera.y = collisionBox.y - (480/2);
 
     if (camera.x < 0)
         camera.x = 0;
@@ -101,5 +102,6 @@ void MapDebugController::centerScreen(SDL_Rect& camera)
 
 void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)
 {
+    //the debug object is drawn at it's distance from the camera's idea of 0
     debugControllerTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
 }

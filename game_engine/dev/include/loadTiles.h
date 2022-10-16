@@ -55,18 +55,16 @@ bool loadTiles(std::vector<Tile*>& tileSet,
     type = 0;
     for (y = 0; y <= 160; y+=TILE_LENGTH)
     {
-        
         for (x = 0; x <= 240; x+=TILE_LENGTH)
-        {
-            
+        { 
             tilesClipped[type].x = x;
             tilesClipped[type].y = y;
             tilesClipped[type].w = TILE_LENGTH;
             tilesClipped[type].h = TILE_LENGTH;
             type++;
-        
         }
     }
+    //close file
     level.close();
 
     return true;
