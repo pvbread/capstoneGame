@@ -234,15 +234,17 @@ void Phoenix::runGameLoop()
             } 
             case COMBAT:
             {
+
                 /*
-                SDL_Rect rect = { 320, 240, 100, 100 };
+                SDL_Rect rectBlue = { 320, 240, 100, 100 };
                 SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                SDL_RenderFillRect(renderer, &rect);
+                SDL_RenderFillRect(renderer, &rectBlue);
                 SDL_Rect textRec = { 320, 240, 100, 100 };
-                SDL_Color testColor = { 255, 0, 0, 255 };
+                SDL_Color textColor = { 255, 0, 0, 255 };
                 std::string testCounterString = std::to_string(testCounter);
-                SDL_Surface *surface1 = TTF_RenderText_Solid(font, testCounterString, testColor);
-                break;*/
+                SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, testCounterString, textColor);
+                */
+                break;
             }
         }
 
