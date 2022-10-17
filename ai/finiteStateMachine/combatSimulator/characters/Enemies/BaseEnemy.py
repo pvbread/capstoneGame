@@ -10,5 +10,7 @@ class BaseEnemy(BaseCharacter.BaseCharacter):
 
         self.validMovesAndRanges = {0: [1,2], 1:[], 2:[]} #these have to be relative positions
 
-    def __str__(self):
-        return f"{self.name, self.hp, self.speed, self.hit, self.armor, self.itemModifier, self.speedModifier, self.dodgeModifier}"
+    def __str__(self) -> str:
+        return super().__str__()
+
+    

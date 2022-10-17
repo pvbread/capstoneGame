@@ -10,14 +10,12 @@ class Carl(BaseEnemy.BaseEnemy):
     def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
         super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
         
-
         #self.moveSet = [self.attack]
         #This is just a hack until we can figure out how to inherit values that arent init
         #self.moveSet = [self.attack, self.buff, self.debuff, self.move] #is it true everyone has these moves
         #self.moveType = {0: 'attack', 1:'buff', 2:'debuff', 3:'move'} #Index from moveset maps to string that discribes the type
 
         
-
     
 
 #

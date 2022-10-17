@@ -1,4 +1,5 @@
 import random
+from unicodedata import name
 
 
 class BaseCharacter:
@@ -168,3 +169,20 @@ class BaseCharacter:
 
     def move(self, targetCharacters):
         pass
+
+    #text utility functions
+
+    
+    def print_stats(BaseCharacter):
+        print (BaseCharacter.name, " stats currently are:")
+        print ("name = ", BaseCharacter.name)
+        print ("hp = ", BaseCharacter.hp)
+        print ("speed = ", BaseCharacter.speed)
+        print ("hit = ", BaseCharacter.hit)
+        print ("armor = ", BaseCharacter.armor)
+        print ("itemModifier = ", BaseCharacter.itemModifier)
+        print ("speedModifier = ", BaseCharacter.speedModifier)
+        print ("dodgeModifier = ", BaseCharacter.dodgeModifier)
+
+    def return_hp(BaseCharacter):
+        return(BaseCharacter.hp)

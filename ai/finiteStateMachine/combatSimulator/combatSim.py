@@ -26,7 +26,9 @@ participants = playerCharacters + enemyCharacters
 moves = carl.getValidMoves(3,7, playerCharacters,enemyCharacters,participants) # consider making the input to be more user friendly
 
 print("Round Number: ", roundNum)
-print(Carl)
+print(carl)
+Carl.print_stats(carl)
+print(carl.name, " has ", Carl.return_hp(carl))
 
 """
 while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):

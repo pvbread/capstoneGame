@@ -1,4 +1,4 @@
-from . import BaseCharacter
+from .. import BaseCharacter
 
 import random
 
