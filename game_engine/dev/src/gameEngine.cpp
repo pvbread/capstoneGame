@@ -60,11 +60,13 @@ Phoenix::~Phoenix()
 void Phoenix::runGameLoop()
 {
     // temporary place for this
-    Screen screen = INTRO;
+    Screen screen = COMBAT;
     //temporary 
     TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
     //temp
     SDL_Rect cursor = { 45, 160, 50, 50 };
+    //incredibly temp
+    int testCounter = 0;
 
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
@@ -232,10 +234,15 @@ void Phoenix::runGameLoop()
             } 
             case COMBAT:
             {
+                /*
                 SDL_Rect rect = { 320, 240, 100, 100 };
                 SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
                 SDL_RenderFillRect(renderer, &rect);
-                break;
+                SDL_Rect textRec = { 320, 240, 100, 100 };
+                SDL_Color testColor = { 255, 0, 0, 255 };
+                std::string testCounterString = std::to_string(testCounter);
+                SDL_Surface *surface1 = TTF_RenderText_Solid(font, testCounterString, testColor);
+                break;*/
             }
         }
 
