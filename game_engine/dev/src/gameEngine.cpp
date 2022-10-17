@@ -7,6 +7,7 @@
 
 
 #include <iostream>
+#include <sstream>
 
 Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
@@ -178,7 +179,17 @@ void Phoenix::runGameLoop()
                 }
                 case COMBAT:
                 {
-                    break;
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_4:
+                            {
+                                testCounter++;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             
@@ -234,16 +245,17 @@ void Phoenix::runGameLoop()
             } 
             case COMBAT:
             {
-
-                /*
                 SDL_Rect rectBlue = { 320, 240, 100, 100 };
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // blue
                 SDL_RenderFillRect(renderer, &rectBlue);
                 SDL_Rect textRec = { 320, 240, 100, 100 };
                 SDL_Color textColor = { 255, 0, 0, 255 };
-                std::string testCounterString = std::to_string(testCounter);
-                SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, testCounterString, textColor);
-                */
+                std::stringstream myFavoriteStream;
+                myFavoriteStream << testCounter;
+                SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, myFavoriteStream.str().c_str(), textColor); //ttf surface  
+                SDL_Texture *textureTesting = SDL_CreateTextureFromSurface(renderer, surfaceTesting);  
+                SDL_FreeSurface(surfaceTesting); 
+                SDL_RenderCopy(renderer, textureTesting, nullptr, &rectBlue);
                 break;
             }
         }
@@ -251,6 +263,12 @@ void Phoenix::runGameLoop()
         
         //Update screen
         SDL_RenderPresent(renderer);
+
+        SDL_Delay(2000);
+        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // blue
+        SDL_RenderPresent(renderer);
+        SDL_Delay(2000);
         
     }
     
