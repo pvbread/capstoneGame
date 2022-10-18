@@ -2,7 +2,7 @@
 #include "TextureWrapper.h"
 
 MapDebugController::MapDebugController() : 
-                                            mainVelocity{10},
+                                            mainVelocity{2},
                                             velocityX{0},
                                             velocityY{0}
 {
