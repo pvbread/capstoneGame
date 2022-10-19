@@ -3,106 +3,138 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 """
-You can change the valuue of length at the last line.
+You can change the value of length at the last line.
 """
-
 
 """
 Takes the length of the path and generates a self avoiding walk.
-If the walker is stuck, the walker backtracks by 1 step
-and tries to find a different path.
+If the walker is stuck in the middle of the loop, the walker backtracks by 1 step
+and tries to find a different direction to take.
 Returns a list of x coordinates and a list of y coordinates,
-boolean variable (stuck) if the path maker had to backtrack,
-and the total number of steps of path.
+and returns a set of array of positions that were visited to avoid collisions.
 """
-def PathMaker(length):    
+def pathMaker(length):
+    
+    # lists storing x and y coordinates where starting position is at (0,0)
     x, y = [0], [0]
-    positions = set([(0,0)])  #positions is a set that stores all sites visited by the walk
-    stuck = False
-    stuck_counter=0
-    for i in range(length+10):
-        options = [(1,0), (0,1), (-1,0), (0,-1)]
-        possible_options = []  #possible_options stores the available directions 
-        for dx, dy in options:
-            if (x[-1] + dx, y[-1] + dy) not in positions:  #checks if direction leads to a site not visited before
-                possible_options.append((dx,dy))
-        if possible_options:  #checks if there is a direction available
-            dx, dy = possible_options[np.random.randint(0,len(possible_options))]  #choose a direction at random among available ones
-            positions.add((x[-1] + dx, y[-1] + dy))
+    
+    # positions_visited is a set that keep track of all the coordinates visited by the random walker
+    positions_visited = set([(0,0)])
+
+    # create initial path with at most a length of some arbitrary number
+    for i in range(length):
+        # directions is a list of taking one additional step right, up, left, down (East, North, West, South)
+        directions = [(1,0), (0,1), (-1,0), (0,-1)]
+        
+        # possible_directions is a list that stores the available directions for the next point that are not in positions_visited
+        possible_directions = []
+
+        for dx, dy in directions:
+            # checks if taking that one additional step leads to a position not visited before
+            if (x[-1] + dx, y[-1] + dy) not in positions_visited:
+                # if the position have not been visited before, add it to the possible_directions list
+                possible_directions.append((dx,dy))
+        # if there is a direction avaliable (meaning there's at least one array in the list)       
+        if len(possible_directions) > 0:
+            # choose a direction at random among available ones 
+            dx, dy = random.choice(possible_directions)
+            # add the new point in the positions_visited set
+            positions_visited.add((x[-1] + dx, y[-1] + dy))
+            # add the x and y coordinates of the new point to the lists
             x.append(x[-1] + dx)
             y.append(y[-1] + dy)
-        else:  #backtracks in that case the walk is stuck before reaching target number of steps
-            positions.pop()
+        # otherwise if there are no possible directions, backtracks by one step by popping the x and y coordinates from the list
+        else: 
             x.pop()
             y.pop()
-            stuck = True
-            stuck_counter +=1 
-        steps = length - stuck_counter
-    return x, y, stuck, steps, positions
+            
+    return x, y, positions_visited
 
 """
-Create branching drunkard's paths from halfway point of original path
+Creates a branching path from halfway point of original path.
+Takes the lists of x and y coordinates of the first path, the set of positions visisted,
+and the length of the original path.
+Returns a temporary list for x and y coordinates of the branches,
+and returns the set of positions that were visisted before.
 """
-def drunkWalk(x,y,length,old_positions):
+def branchMaker(x, y, length, positions_visited):
+    
     #get coordinates of halfway point of first original path
     x2 = x[length//2]
     y2 = y[length//2]
-    # create new lists of x and y starting at halfway point 
-    x_temp = [x2]
-    y_temp = [y2]
-    positions = old_positions # make positions all in one set of arrays to have all paths self avoiding
-    for i in range(length): # make the new branching paths shorter
-        options = [(1,0), (0,1), (-1,0), (0,-1)]
-        possible_options = []
-       
-        for dx, dy in options:
-            if (x_temp[-1] + dx, y_temp[-1] + dy) not in positions:  #checks if direction leads to a site not visited before and not go through the origin
-                possible_options.append((dx,dy))
-        if possible_options:  #checks if there is a direction available
-            dx, dy = possible_options[np.random.randint(0,len(possible_options))]  #choose a direction at random among available ones
-            positions.add((x_temp[-1] + dx, y_temp[-1] + dy))
-            x_temp.append(x_temp[-1] + dx)
-            y_temp.append(y_temp[-1] + dy)
-        elif ((len(x_temp) == 1 and len(y_temp) == 1)): # check if stuck from the start of creating a new branch
-            positions.pop()
-            x_temp.pop()
-            y_temp.pop()
-            x2 = x[length//2+2]
-            y2 = y [length//2+2]
-            positions.add((x2,y2))
-            x_temp.append(x2)
-            y_temp.append(y2)
-        else:  #backtracks in that case the drunk walk is stuck before reaching target number of steps
-            positions.pop()
-            x_temp.pop()
-            y_temp.pop()
+    
+    # create new temporary lists for x and y coordinates for the branches starting at halfway point 
+    x_branch = [x2]
+    y_branch = [y2]
+
+    # counter variable to move to the next point in case there are no directions avaliable at the halfway point
+    step = 1
+
+    # create the new branching paths length at most half of its first initial path
+    for i in range(length//2):
+        # getting avaliable directions is the same as pathMaker function
+        directions = [(1,0), (0,1), (-1,0), (0,-1)]
+        possible_directions = []
+        for dx, dy in directions:
+            if (x_branch[-1] + dx, y_branch[-1] + dy) not in positions_visited:  
+                possible_directions.append((dx,dy))
+        #if there is a direction avaliable, select a direction at random and add new coordinates to the lists
+        if len(possible_directions) > 0:  
+            dx, dy = random.choice(possible_directions) 
+            positions_visited.add((x_branch[-1] + dx, y_branch[-1] + dy))
+            x_branch.append(x_branch[-1] + dx)
+            y_branch.append(y_branch[-1] + dy)    
+        #if there are no avaliable directions from the start of creating a new branch, creates a new branch of n steps away from midpoint
+        elif ((len(x_branch) == 1 and len(y_branch) == 1)):
+            # remove midpoint coordinates from the lists
+            x_branch.pop()
+            y_branch.pop()
+            # make the next starting point n steps away from the midpoint
+            x2 = x[length//2 + step]
+            y2 = y[length//2 + step]
+            # add new starting point to the lists
+            x_branch.append(x2)
+            y_branch.append(y2)
+            # increment the number of steps by one in case the next point also had no avaliable directions
+            step+=1
+        # otherwise, backtrack by one step by popping the x and y coordinates from the branches  
+        else:  
+            x_branch.pop()
+            y_branch.pop()
             
-    return x_temp, y_temp, positions
+    return x_branch, y_branch, positions_visited
 
 """
-Draw the paths with visualization
+Draw the paths with visualization using matplotlib
 """
 def plotWalk(path_length):
-    # draw first self avoiding walk path
-    x, y, stuck, steps, positions = PathMaker(path_length)
+    # draw the first self avoiding walk path
+    x, y, positions_visited = pathMaker(path_length)
     plt.figure(figsize = (8, 8))
     plt.plot(x, y, 'bo-', linewidth = 1)
     plt.plot(0, 0, 'go', ms = 12, label = 'Start')
     plt.plot(x[-1], y[-1], 'ro', ms = 12, label = 'End')
-    new_length=len(x)
-    # draw two drunkard's path branching out at halfway point of first path in different directions
+    
+    # store the actual length of inital path since the path might not always be the desired length due to being stuck 
+    new_length = len(x)
+    
+    # draw two self avoiding walk that branches in different directions at halfway point of the first initial path
     for i in range(2):
-        new_x, new_y, positions = drunkWalk(x,y,new_length,positions)
-        plt.plot(new_x, new_y, 'bo-', linewidth = 1)
-        plt.plot(new_x[-1], new_y[-1], 'ro', ms = 12)
+        x_branch, y_branch, positions_visited = branchMaker(x, y, new_length, positions_visited)
+        plt.plot(x_branch, y_branch, 'bo-', linewidth = 1)
+        plt.plot(x_branch[-1], y_branch[-1], 'ro', ms = 12)
+        # append the branches to the x and y coordinates list that will be used for the tile mapping  
+        x = x + x_branch[1:]
+        y = y + y_branch[1:]
     plt.axis('equal')
     plt.legend()
     plt.show()
 
 """
 You can change the number in the parameter to change the length of the branches.
+Creates 3 branching paths depending on how the first path was generated
 """
-plotWalk(20)  # create at most 3 branches depending on how the first path was generated, each with a length of 20 steps.
+plotWalk(40)  
 
 
 
