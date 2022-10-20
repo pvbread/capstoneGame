@@ -2,7 +2,7 @@
 #include "TextureWrapper.h"
 
 MapDebugController::MapDebugController() : 
-                                            mainVelocity{2},
+                                            mainVelocity{10},
                                             velocityX{0},
                                             velocityY{0}
 {
@@ -83,7 +83,7 @@ void MapDebugController::move(int xBoundary, int yBoundary)
         collisionBox.y -= velocityY;
     }
 }
-
+/*
 void MapDebugController::centerScreen(SDL_Rect& camera)
 {
     // TODO fix this hardcoding to take in any size
@@ -99,7 +99,7 @@ void MapDebugController::centerScreen(SDL_Rect& camera)
     if (camera.y > 960 - camera.h)
         camera.y = 960 - camera.h;
 }
-
+*/
 void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)
 {
     //the debug object is drawn at it's distance from the camera's idea of 0

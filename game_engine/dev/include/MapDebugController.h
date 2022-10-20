@@ -3,15 +3,16 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "TextureWrapper.h"
+#include "BaseSingleTexture.h"
 #include <vector>
 
-class MapDebugController
+class MapDebugController : public BaseSingleTexture
 {
 public:
     MapDebugController(); 
     void onInput(SDL_Event& event);
     void move(int xBoundary, int yBoundary);
-    void centerScreen(SDL_Rect& camera);
+    //void centerScreen(SDL_Rect& camera);
     void render(SDL_Renderer* renderer, 
                 const SDL_Rect& camera, 
                 TextureWrapper& debugControllerTexture);

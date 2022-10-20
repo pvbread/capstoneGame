@@ -23,6 +23,7 @@ if(APPLE)
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
     "src/MapDebugController.cpp"
+    "src/BaseSingleTexture.cpp"
   )
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
