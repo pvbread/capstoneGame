@@ -12,7 +12,7 @@ public:
     MapDebugController(); 
     void onInput(SDL_Event& event);
     void move(int xBoundary, int yBoundary);
-    //void centerScreen(SDL_Rect& camera);
+    void centerScreen(SDL_Rect& camera);
     void render(SDL_Renderer* renderer, 
                 const SDL_Rect& camera, 
                 TextureWrapper& debugControllerTexture);

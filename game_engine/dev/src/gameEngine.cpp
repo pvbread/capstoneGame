@@ -1,6 +1,7 @@
 #include "gameEngine.h"
 #include "TextureWrapper.h"
 #include "Tile.h"
+#include "CharacterInMap.h"
 #include "MapDebugController.h"
 #include "loadMedia.h"
 #include "Screen.h"
