@@ -76,8 +76,9 @@ void Phoenix::runGameLoop()
     int played;
 
     TextureWrapper tileTexture;
+    TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
-    std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture};
+    std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture, &characterInMapTexture};
     
     const int TILE_TYPE_COUNT = 24;
     const int TILE_COUNT = 192;
@@ -94,6 +95,7 @@ void Phoenix::runGameLoop()
     debugControllerTexture.setAlpha(0);
 
     MapDebugController debugController;
+    CharacterInMap characterController;
 
     SDL_Rect camera = {0,0, 640, 480};
 
@@ -176,6 +178,7 @@ void Phoenix::runGameLoop()
                     //this has a bug where movement
                     //keeps being read if key is not unpressed
                     debugController.onInput(event);
+                    characterController.onInput(event);
                     break;
                 }
                 case COMBAT:
@@ -236,12 +239,15 @@ void Phoenix::runGameLoop()
             case MAP:
             {
                 debugController.move(1280, 960);
-                debugController.centerScreen(camera);
+                characterController.move(1280, 960);
+                //debugController.centerScreen(camera);
+                characterController.centerScreen(camera);
                 for(int i = 0; i < tileSet.size(); i++)
                 {
                     tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
                 }
                 debugController.render(renderer, camera, debugControllerTexture);
+                characterController.render(renderer, camera, characterInMapTexture);
                 break;
             } 
             case COMBAT:

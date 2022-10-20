@@ -20,6 +20,12 @@ bool loadImageAssets(SDL_Renderer* renderer, std::vector<TextureWrapper*> textur
         return false;
     }
 
+    if (!textureWrappers[2]->loadImage(renderer, "dot.bmp"))
+    {
+        SDL_Log("Failed to load debug controller");
+        return false;
+    }
+
     //level width 1280, level height 960
     //divided by 80 is 16x12 = 192
     const int TILE_COUNT = 192;
