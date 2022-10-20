@@ -12,7 +12,7 @@ TextureWrapper::~TextureWrapper()
 
 void TextureWrapper::freeMemory()
 {
-    if (texture == nullptr)
+    if (texture != nullptr)
     {
         SDL_DestroyTexture(texture);
         texture = nullptr;
