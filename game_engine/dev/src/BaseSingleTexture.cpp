@@ -1,5 +1,20 @@
 #include "BaseSingleTexture.h"
 
+BaseSingleTexture::BaseSingleTexture(int mainVelocity, 
+                               int velocityX, 
+                               int velocityY, 
+                               SDL_Rect collisionBox)                       
+{
+    this->mainVelocity = mainVelocity;
+    this->velocityX = velocityX;
+    this->velocityY = velocityY;
+    this->collisionBox.x = collisionBox.x;
+    this->collisionBox.y = collisionBox.y;
+    this->collisionBox.w = collisionBox.w;
+    this->collisionBox.h = collisionBox.h;
+}
+
+
 void BaseSingleTexture::centerScreen(SDL_Rect& camera)
 {
     // TODO fix this hardcoding to take in any size

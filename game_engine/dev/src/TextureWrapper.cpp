@@ -115,12 +115,3 @@ bool TextureWrapper::render(SDL_Renderer* renderer,
     return true;
 }
 
-int TextureWrapper::getWidth()
-{
-    return width;
-}
-
-int TextureWrapper::getHeight()
-{
-    return height;
-}

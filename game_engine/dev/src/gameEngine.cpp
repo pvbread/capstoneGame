@@ -94,8 +94,10 @@ void Phoenix::runGameLoop()
     //set this to 0 whenever we want a clear debug controller
     debugControllerTexture.setAlpha(0);
 
-    MapDebugController debugController;
-    CharacterInMap characterController;
+    SDL_Rect debugHitbox = {0, 0, 1, 1};
+    SDL_Rect characterControllerHitbox = {30, 30, 80, 80};
+    MapDebugController debugController(10, 0, 0, debugHitbox);
+    CharacterInMap characterController(80, 0, 0, characterControllerHitbox);
 
     SDL_Rect camera = {0,0, 640, 480};
 

@@ -9,7 +9,10 @@
 class CharacterInMap : public BaseSingleTexture
 {
 public:
-    CharacterInMap(); 
+    CharacterInMap(int mainVelocity, 
+                   int velocityX, 
+                   int velocityY, 
+                   SDL_Rect collisionBox); 
     void onInput(SDL_Event& event);
     void move(int xBoundary, int yBoundary);
     void centerScreen(SDL_Rect& camera);

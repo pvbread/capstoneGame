@@ -25,10 +25,7 @@ public:
                 SDL_Point* center = nullptr,
                 SDL_RendererFlip flip = SDL_FLIP_NONE);
     
-    int getWidth();
-    int getHeight();
-
-private:
+   private:
     SDL_Texture* texture;
     int width;
     int height;

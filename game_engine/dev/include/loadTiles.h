@@ -18,11 +18,11 @@ bool loadTiles(std::vector<Tile*>& tileSet,
     }
 
     //tyle type
-    int type;
+    int tileType;
 
     for (int i = 0; i < TILE_COUNT; i++)
     {
-        level >> type;
+        level >> tileType;
 
         if (level.fail())
         {
@@ -31,9 +31,9 @@ bool loadTiles(std::vector<Tile*>& tileSet,
         }
 
         //define total tile types
-        if (type >= 0 && type < TYPE_COUNT)
+        if (tileType >= 0 && tileType < TYPE_COUNT)
         {
-            tileSet[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, type);
+            tileSet[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, tileType);
         }
         //TODO DON't HARD CODE THIS
         //MAP_WIDTH
@@ -47,25 +47,27 @@ bool loadTiles(std::vector<Tile*>& tileSet,
        
     }
 
+    
+    //close file
+    level.close();
+
     //clip
-    //math is for 4 x 3 tile map
+    //math is for 4 x 3 tile map 
     //we have 240 x 160 if tile size is 80 (factor this away later)
     //so iterate on the smaller y dimension and set the boundaries of the 
     //rectangles accordingly
-    type = 0;
-    for (y = 0; y <= 160; y+=TILE_LENGTH)
+    tileType = 0;
+    for (y = 0; y <= 2; y++)
     {
-        for (x = 0; x <= 240; x+=TILE_LENGTH)
+        for (x = 0; x <= 3; x++)
         { 
-            tilesClipped[type].x = x;
-            tilesClipped[type].y = y;
-            tilesClipped[type].w = TILE_LENGTH;
-            tilesClipped[type].h = TILE_LENGTH;
-            type++;
+            tilesClipped[tileType].x = x*TILE_LENGTH;
+            tilesClipped[tileType].y = y*TILE_LENGTH;
+            tilesClipped[tileType].w = TILE_LENGTH;
+            tilesClipped[tileType].h = TILE_LENGTH;
+            tileType++;
         }
     }
-    //close file
-    level.close();
 
     return true;
 }

@@ -22,8 +22,8 @@ if(APPLE)
     "src/gameEngine.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
-    "src/MapDebugController.cpp"
     "src/BaseSingleTexture.cpp"
+    "src/MapDebugController.cpp"
     "src/CharacterInMap.cpp"
   )
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})

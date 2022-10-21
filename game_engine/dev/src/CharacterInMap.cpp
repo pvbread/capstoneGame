@@ -1,17 +1,23 @@
+#include "BaseSingleTexture.h"
 #include "CharacterInMap.h"
 #include "TextureWrapper.h"
 
-CharacterInMap::CharacterInMap() : 
-                                            mainVelocity{80},
-                                            velocityX{0},
-                                            velocityY{0}
+
+CharacterInMap::CharacterInMap(int mainVelocity, 
+                               int velocityX, 
+                               int velocityY, 
+                               SDL_Rect collisionBox) :
+    BaseSingleTexture(mainVelocity, velocityX, velocityY, collisionBox)                   
 {
-    //TODO don't hard code this
-    collisionBox.x = 35;
-    collisionBox.y = 35;
-    collisionBox.w = 10;
-    collisionBox.h = 10;
+    this->mainVelocity = mainVelocity;
+    this->velocityX = velocityX;
+    this->velocityY = velocityY;
+    this->collisionBox.x = collisionBox.x;
+    this->collisionBox.y = collisionBox.y;
+    this->collisionBox.w = collisionBox.w;
+    this->collisionBox.h = collisionBox.h;
 }
+
 
 void CharacterInMap::onInput(SDL_Event& event)
 {
@@ -63,6 +69,7 @@ void CharacterInMap::render(SDL_Renderer* renderer, const SDL_Rect& camera, Text
     //the debug object is drawn at it's distance from the camera's idea of 0
     characterTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
 }
+
 
 void CharacterInMap::centerScreen(SDL_Rect& camera)
 {
