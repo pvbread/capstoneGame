@@ -18,8 +18,9 @@ if(APPLE)
   find_library(SDL2_MIXER_LIBRARY SDL2_mixer REQUIRED)
   include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE} ${SDL2_TTF_INCLUDE} ${SDL2_MIXER_INCLUDE})
   add_executable(capstoneGame
-    "src/gameLoop.cpp"
-    "src/gameEngine.cpp"
+    "src/main.cpp"
+    "src/GameEngine.cpp"
+    "src/Game.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
     "src/BaseSingleTexture.cpp"
@@ -38,8 +39,9 @@ endif(APPLE)
 
 if(MINGW)
   add_executable(capstoneGame
-    "src/gameLoop.cpp"
-    "src/gameEngine.cpp"
+    "src/main.cpp"
+    "src/GameEngine.cpp"
+    "src/Game.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
     "src/BaseSingleTexture.cpp"
