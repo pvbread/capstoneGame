@@ -1,9 +1,14 @@
 #pragma once
 
+/*
 #include <SDL.h>
 #include <SDL_image.h>
-#include "TextureWrapper.h"
 #include <vector>
+*/
+#include "pch.h"
+
+#include "TextureWrapper.h"
+
 
 //need to make these abstract methods
 class BaseSingleTexture

@@ -1,10 +1,15 @@
 #pragma once
 
+/*
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
+*/
+
+#include "pch.h"
+
 #include "BaseSingleTexture.h"
 #include "TextureWrapper.h"
-#include <vector>
 
 class CharacterInMap : public BaseSingleTexture
 {

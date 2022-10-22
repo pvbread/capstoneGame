@@ -1,10 +1,15 @@
 #pragma once
 
+/*
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
+*/
+#include "pch.h"
+
 #include "TextureWrapper.h"
 #include "BaseSingleTexture.h"
-#include <vector>
+
 
 class MapDebugController : public BaseSingleTexture
 {

@@ -1,18 +1,15 @@
 #pragma once
 
-#include <unordered_map>
+#include "pch.h"
+
 #include "TextureWrapper.h"
 #include "loadTiles.h"
-
-//TODO factor this to take an unordered map of Wrappers to paths
-
 
 bool loadImageAssets(SDL_Renderer* renderer,  
                      std::vector<Tile*>& tileSet, 
                      std::vector<SDL_Rect>& tilesClipped,
                      std::unordered_map<TextureWrapper*, std::string> textureFilePaths)
-{
-    //TODO Fix this hard coding
+{   
     for (auto [texturePtr, textureFilePath]: textureFilePaths)
     {
         bool didTextureLoad = texturePtr->loadImage(renderer, textureFilePath);

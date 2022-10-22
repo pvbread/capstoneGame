@@ -1,8 +1,12 @@
 #pragma once
 
+/*
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+*/
+
+#include "pch.h"
 
 class TextureWrapper
 {

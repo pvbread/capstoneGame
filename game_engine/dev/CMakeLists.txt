@@ -48,7 +48,7 @@ if(MINGW)
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")
-  set(SDL2_ttf_DIR "C:/dev/SDL2_ttf-2.20.1/cmake") #fix this alex to whatever folder it is
+  set(SDL2_ttf_DIR "C:/dev/SDL2_ttf-2.20.1/cmake") 
   set(SDL2_mixer_DIR "C:/dev/SDL2_mixer-2.6.2/cmake")
   find_package(SDL2 REQUIRED)
   find_package(SDL2_image REQUIRED)

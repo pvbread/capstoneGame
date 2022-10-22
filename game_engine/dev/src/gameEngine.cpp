@@ -6,10 +6,12 @@
 #include "loadMedia.h"
 #include "Screen.h"
 
-
+#include "pch.h"
+/*
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
+*/
 
 Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
 {

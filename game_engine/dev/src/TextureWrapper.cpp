@@ -1,6 +1,7 @@
 #include "TextureWrapper.h"
-#include <string>
-#include <iostream>
+
+//#include <string>
+//#include <iostream>
 
 TextureWrapper::TextureWrapper() : 
                 texture{nullptr}, width{0}, height{0} {}
