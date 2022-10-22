@@ -18,7 +18,7 @@ public:
                 TextureWrapper& tileTexture, 
                 const SDL_Rect& camera, 
                 const std::vector<SDL_Rect>& tileClips);
-    int getType();
+    TileType getType();
     SDL_Rect getCollisionBox();
 private:
     // Tile attributes

@@ -33,7 +33,7 @@ bool Tile::render(SDL_Renderer *renderer,
     return success;
 }
 
-int Tile::getType()
+TileType Tile::getType()
 {
     return tileType;
 }

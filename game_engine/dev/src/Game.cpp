@@ -33,10 +33,16 @@ void EscapeFromCapstone::runGameLoop()
     
     const int TILE_TYPE_COUNT = 24;
     const int TILE_COUNT = 192;
-    std::vector<Tile*> tileSet(TILE_COUNT);
+    std::vector<Tile*> tileMap(TILE_COUNT);
     std::vector<SDL_Rect> tilesClipped(TILE_COUNT);// this is the total tiles
-
-    bool didTexturesLoad = loadImageAssets(getRenderer(), tileSet, tilesClipped, textureFilePaths);
+    std::map<std::pair<int, int>, TileType> coordinateToTileTypeMap;
+    //TODO in the destructor, clean this up
+    //maybe better to have a dedicated function to map the coordinate tiles?
+    bool didTexturesLoad = loadImageAssets(getRenderer(), 
+                                           tileMap, 
+                                           tilesClipped, 
+                                           textureFilePaths, 
+                                           coordinateToTileTypeMap);
     if (!didTexturesLoad)
     {
         SDL_Log("error loading image assets");
@@ -193,12 +199,12 @@ void EscapeFromCapstone::runGameLoop()
             case MAP:
             {
                 debugController.move(1280, 960);
-                characterController.move(1280, 960);
+                characterController.move(1280, 960, coordinateToTileTypeMap);
                 //debugController.centerScreen(camera);
                 characterController.centerScreen(camera);
-                for(int i = 0; i < tileSet.size(); i++)
+                for(int i = 0; i < tileMap.size(); i++)
                 {
-                    tileSet[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
+                    tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
                 }
                 debugController.render(getRenderer(), camera, debugControllerTexture);
                 characterController.render(getRenderer(), camera, characterInMapTexture);

@@ -1,6 +1,8 @@
 #include "BaseSingleTexture.h"
 #include "CharacterInMap.h"
 #include "TextureWrapper.h"
+//#include "TileType.h"
+//#include "isColliding.h"
 
 
 CharacterInMap::CharacterInMap(int mainVelocity, 
@@ -49,19 +51,35 @@ void CharacterInMap::onInput(SDL_Event& event)
     }
 }
 
-void CharacterInMap::move(int xBoundary, int yBoundary)
+void CharacterInMap::move(int xBoundary, 
+                          int yBoundary,
+                          std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
 {
     // TODO update to not be hard coded
-    if(collisionBox.x <= 0 || collisionBox.x >= 1280)
-    {
-        collisionBox.x -= velocityX;
-    }
 
-    collisionBox.y += velocityY;
-    if(collisionBox.y <= 0 || collisionBox.y >= 960)
-    {
-        collisionBox.y -= velocityY;
-    }
+    //we have a collision box, which gives us x, y coords in the hitbox
+    //as well as we can ask if the hitbox is colliding (prob not necessary)
+    //we're offset by 30, 30 so the actual position of the player is
+    //x-startingOffset, y-startingOffset
+    //x-30/collisionBoxWidth, y-30/collisionBoxWidth pos
+    //tileSet[y][x]
+
+
+//issue with this method is that a new pointer would not be able to access
+//some random pointer
+    std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
+    std::cout << coordinateToTileTypeMap[coordinates] << std::endl;
+
+    //TileType currentTileType = 
+    
+    if (collisionBox.x < 30)
+        collisionBox.x += mainVelocity;
+    else if (collisionBox.x >= 1280)
+        collisionBox.x -= mainVelocity; 
+    else if (collisionBox.y < 30) 
+        collisionBox.y += mainVelocity;
+    else if (collisionBox.y >= 960)
+        collisionBox.y -= mainVelocity;
 }
 
 void CharacterInMap::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& characterTexture)

@@ -19,7 +19,7 @@ public:
                       int velocityY, 
                       SDL_Rect collisionBox); 
     virtual void onInput(SDL_Event& event) = 0;
-    virtual void move(int xBoundary, int yBoundary) = 0;
+    virtual void move(int xBoundary, int yBoundary){};
     virtual void centerScreen(SDL_Rect& camera);
     virtual void render(SDL_Renderer* renderer, 
                         const SDL_Rect& camera, 

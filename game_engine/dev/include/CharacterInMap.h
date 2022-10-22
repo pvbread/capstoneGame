@@ -10,6 +10,7 @@
 
 #include "BaseSingleTexture.h"
 #include "TextureWrapper.h"
+#include "TileType.h"
 
 class CharacterInMap : public BaseSingleTexture
 {
@@ -19,7 +20,9 @@ public:
                    int velocityY, 
                    SDL_Rect collisionBox); 
     void onInput(SDL_Event& event);
-    void move(int xBoundary, int yBoundary);
+    void move(int xBoundary, 
+              int yBoundary, 
+              std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap);
     void centerScreen(SDL_Rect& camera);
     void render(SDL_Renderer* renderer, 
                 const SDL_Rect& camera, 

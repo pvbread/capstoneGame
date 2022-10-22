@@ -6,6 +6,7 @@
 #include "MapDebugController.h"
 //#include "loadMedia.h"
 #include "Screen.h"
+#include "TileType.h"
 
 #include "pch.h"
 /*
@@ -71,8 +72,9 @@ void Phoenix::stopGameLoop()
     quit = true;
 }
 
-bool Phoenix::loadTiles(std::vector<Tile*>& tileSet, 
-                        std::vector<SDL_Rect>& tilesClipped, 
+bool Phoenix::loadTiles(std::vector<Tile*>& tileMap, 
+                        std::vector<SDL_Rect>& tilesClipped,
+                        std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                         int TILE_COUNT, 
                         int TYPE_COUNT, 
                         int TILE_LENGTH)
@@ -105,7 +107,9 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileSet,
         //it can't read it in right
         if (tileType >= 0 && tileType < TYPE_COUNT)
         {
-            tileSet[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, (TileType)tileType);
+            tileMap[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, (TileType)tileType);
+            std::pair<int, int> coordinates = std::make_pair(x,y);
+            coordinateToTileTypeMap[coordinates] = (TileType)tileType; 
         }
         //TODO DON't HARD CODE THIS
         //MAP_WIDTH
@@ -145,9 +149,10 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileSet,
 }
 
 bool Phoenix::loadImageAssets(SDL_Renderer* renderer,  
-                              std::vector<Tile*>& tileSet, 
+                              std::vector<Tile*>& tileMap, 
                               std::vector<SDL_Rect>& tilesClipped,
-                              std::unordered_map<TextureWrapper*, std::string> textureFilePaths)
+                              std::unordered_map<TextureWrapper*, std::string> textureFilePaths,
+                              std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
 {
     for (auto [texturePtr, textureFilePath]: textureFilePaths)
     {
@@ -165,7 +170,7 @@ bool Phoenix::loadImageAssets(SDL_Renderer* renderer,
     const int TILE_LENGTH = 80;
     const int TYPE_COUNT = 12;
 
-    if (!loadTiles(tileSet, tilesClipped, TILE_COUNT, TYPE_COUNT, TILE_LENGTH))
+    if (!loadTiles(tileMap, tilesClipped, coordinateToTileTypeMap, TILE_COUNT, TYPE_COUNT, TILE_LENGTH))
     {
         SDL_Log("Failed to load tile set");
         return false;
