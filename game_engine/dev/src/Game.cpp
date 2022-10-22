@@ -138,7 +138,7 @@ void EscapeFromCapstone::runGameLoop()
                     //this has a bug where movement
                     //keeps being read if key is not unpressed
                     debugController.onInput(event);
-                    characterController.onInput(event);
+                    characterController.onInput(event, coordinateToTileTypeMap);
                     break;
                 }
                 case COMBAT:
@@ -199,7 +199,7 @@ void EscapeFromCapstone::runGameLoop()
             case MAP:
             {
                 debugController.move(1280, 960);
-                characterController.move(1280, 960, coordinateToTileTypeMap);
+                characterController.move(1280, 960);
                 //debugController.centerScreen(camera);
                 characterController.centerScreen(camera);
                 for(int i = 0; i < tileMap.size(); i++)

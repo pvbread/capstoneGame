@@ -20,42 +20,9 @@ CharacterInMap::CharacterInMap(int mainVelocity,
     this->collisionBox.h = collisionBox.h;
 }
 
-
-void CharacterInMap::onInput(SDL_Event& event)
+bool CharacterInMap::isMoveValid(std::string direction, 
+                 std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
 {
-    if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
-    {
-        switch (event.key.keysym.sym)
-        {
-            case SDLK_a:
-            {
-                collisionBox.x -= mainVelocity;
-                break;
-            }
-            case SDLK_w:
-            {
-                collisionBox.y -= mainVelocity;
-                break;
-            }
-            case SDLK_d:
-            {
-                collisionBox.x += mainVelocity;
-                break;
-            }
-            case SDLK_s:
-            {
-                collisionBox.y += mainVelocity;
-                break;
-            }
-        }
-    }
-}
-
-void CharacterInMap::move(int xBoundary, 
-                          int yBoundary,
-                          std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
-{
-    // TODO update to not be hard coded
 
     //we have a collision box, which gives us x, y coords in the hitbox
     //as well as we can ask if the hitbox is colliding (prob not necessary)
@@ -64,13 +31,107 @@ void CharacterInMap::move(int xBoundary,
     //x-30/collisionBoxWidth, y-30/collisionBoxWidth pos
     //tileSet[y][x]
 
-
-//issue with this method is that a new pointer would not be able to access
-//some random pointer
     std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
-    std::cout << coordinateToTileTypeMap[coordinates] << std::endl;
+    TileType currentTileType = coordinateToTileTypeMap[coordinates];
 
-    //TileType currentTileType = 
+    //can't go down
+    if ( direction == "down" &&
+            (
+                currentTileType == BLACK ||
+                currentTileType == TUP ||
+                currentTileType == UPRIGHT ||
+                currentTileType == LEFTRIGHT ||
+                currentTileType == LEFTUP
+            )
+       )
+    {
+        return false;
+    }
+
+    //can't go up
+    if ( direction == "up" &&
+            (
+                currentTileType == BLACK ||
+                currentTileType == DOWNRIGHT ||
+                currentTileType == TDOWN ||
+                currentTileType == LEFTRIGHT ||
+                currentTileType == LEFTDOWN
+            )
+       )
+    {
+        return false;
+    }
+
+    //can't go left
+    if ( direction == "left" &&
+            (
+                currentTileType == BLACK ||
+                currentTileType == TRIGHT ||
+                currentTileType == UPRIGHT ||
+                currentTileType == UPDOWN ||
+                currentTileType == DOWNRIGHT
+            )
+       )
+    {
+        return false;
+    }
+    //can't go right 
+    if ( direction == "right" &&
+            (
+                currentTileType == BLACK ||
+                currentTileType == TLEFT ||
+                currentTileType == LEFTDOWN ||
+                currentTileType == UPDOWN ||
+                currentTileType == LEFTUP
+            )
+       )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void CharacterInMap::onInput(SDL_Event& event,
+                             std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
+{
+    if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
+    {
+        switch (event.key.keysym.sym)
+        {
+            case SDLK_a:
+            {
+                if (isMoveValid("left", coordinateToTileTypeMap))
+                    collisionBox.x -= mainVelocity;
+                break;
+            }
+            case SDLK_w:
+            {
+                if (isMoveValid("up", coordinateToTileTypeMap))
+                    collisionBox.y -= mainVelocity;
+                break;
+            }
+            case SDLK_d:
+            {
+                if (isMoveValid("right", coordinateToTileTypeMap))
+                    collisionBox.x += mainVelocity;
+                break;
+            }
+            case SDLK_s:
+            {
+                if (isMoveValid("down", coordinateToTileTypeMap))
+                    collisionBox.y += mainVelocity;
+                break;
+            }
+        }
+    }
+}
+
+void CharacterInMap::move(int xBoundary, 
+                          int yBoundary)
+{
+    // TODO update to not be hard coded
+
     
     if (collisionBox.x < 30)
         collisionBox.x += mainVelocity;

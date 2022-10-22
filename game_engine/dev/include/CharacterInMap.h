@@ -19,10 +19,12 @@ public:
                    int velocityX, 
                    int velocityY, 
                    SDL_Rect collisionBox); 
-    void onInput(SDL_Event& event);
+    bool isMoveValid(std::string direction, 
+                     std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap);
+    void onInput(SDL_Event& event,
+                 std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap);
     void move(int xBoundary, 
-              int yBoundary, 
-              std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap);
+              int yBoundary);
     void centerScreen(SDL_Rect& camera);
     void render(SDL_Renderer* renderer, 
                 const SDL_Rect& camera, 
