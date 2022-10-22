@@ -3,16 +3,19 @@
 #include "isColliding.h"
 #include <vector>
 
-Tile::Tile(int x, int y, int w, int h, int type)
+Tile::Tile(int x, int y, int w, int h, TileType tileType)
 {
     collisionBox.x = x;
     collisionBox.y = y;
     collisionBox.w = w;
     collisionBox.h = h;
-    this->type = type;
+    this->tileType = tileType;
 }
 
-bool Tile::render(SDL_Renderer *renderer, TextureWrapper& tileTexture, const SDL_Rect& camera, const std::vector<SDL_Rect>& tileClips)
+bool Tile::render(SDL_Renderer *renderer, 
+                  TextureWrapper& tileTexture, 
+                  const SDL_Rect& camera, 
+                  const std::vector<SDL_Rect>& tileClips)
 {
     bool success = true;
     // check if box is in camera
@@ -21,7 +24,7 @@ bool Tile::render(SDL_Renderer *renderer, TextureWrapper& tileTexture, const SDL
         success =  tileTexture.render(renderer,
                                       collisionBox.x - camera.x, 
                                       collisionBox.y - camera.y,
-                                      &tileClips[type]);
+                                      &tileClips[tileType]);
     }
     if (!success)
     {
@@ -32,7 +35,7 @@ bool Tile::render(SDL_Renderer *renderer, TextureWrapper& tileTexture, const SDL
 
 int Tile::getType()
 {
-    return type;
+    return tileType;
 }
 
 SDL_Rect Tile::getCollisionBox()

@@ -1,4 +1,7 @@
+#pragma once
+
 #include <fstream>
+#include "TileType.h"
 
 bool loadTiles(std::vector<Tile*>& tileSet, 
                std::vector<SDL_Rect>& tilesClipped, 
@@ -30,10 +33,11 @@ bool loadTiles(std::vector<Tile*>& tileSet,
             return false;
         }
 
-        //define total tile types
+        //need to cast tileType here otherwise
+        //it can't read it in right
         if (tileType >= 0 && tileType < TYPE_COUNT)
         {
-            tileSet[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, tileType);
+            tileSet[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, (TileType)tileType);
         }
         //TODO DON't HARD CODE THIS
         //MAP_WIDTH

@@ -1,4 +1,4 @@
-#include "gameEngine.h"
+#include "GameEngine.h"
 #include "TextureWrapper.h"
 #include "Tile.h"
 #include "CharacterInMap.h"
@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <map>
 
 Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
@@ -78,14 +79,19 @@ void Phoenix::runGameLoop()
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
-    std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture, &characterInMapTexture};
+    std::map<TextureWrapper*, std::string> textureFilePaths = {
+        {&tileTexture, "../../assets/image/tilesDraft.png"},
+        {&characterInMapTexture, "../../assets/image/dot.bmp"},
+        {&debugControllerTexture, "../../assets/image/dot.bmp"}
+    };
     
     const int TILE_TYPE_COUNT = 24;
     const int TILE_COUNT = 192;
     std::vector<Tile*> tileSet(TILE_COUNT);
     std::vector<SDL_Rect> tilesClipped(TILE_COUNT);// this is the total tiles
 
-    if (!loadImageAssets(renderer, textureWrappers, tileSet, tilesClipped))
+    bool didTexturesLoad = loadImageAssets(renderer, tileSet, tilesClipped, textureFilePaths);
+    if (!didTexturesLoad)
     {
         SDL_Log("error loading image assets");
         quit = true;

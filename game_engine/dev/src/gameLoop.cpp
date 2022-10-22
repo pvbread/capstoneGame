@@ -1,5 +1,5 @@
 #include <iostream>
-#include "gameEngine.h"
+#include "GameEngine.h"
 
 Phoenix* gameEngine;
 

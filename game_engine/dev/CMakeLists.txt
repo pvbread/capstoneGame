@@ -42,7 +42,9 @@ if(MINGW)
     "src/gameEngine.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
+    "src/BaseSingleTexture.cpp"
     "src/MapDebugController.cpp"
+    "src/CharacterInMap.cpp"
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")
