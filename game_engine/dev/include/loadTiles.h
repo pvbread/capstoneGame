@@ -61,9 +61,9 @@ bool loadTiles(std::vector<Tile*>& tileSet,
     //so iterate on the smaller y dimension and set the boundaries of the 
     //rectangles accordingly
     tileType = 0;
-    for (y = 0; y <= 2; y++)
+    for (y = 0; y < 3; y++)
     {
-        for (x = 0; x <= 3; x++)
+        for (x = 0; x < 4; x++)
         { 
             tilesClipped[tileType].x = x*TILE_LENGTH;
             tilesClipped[tileType].y = y*TILE_LENGTH;
