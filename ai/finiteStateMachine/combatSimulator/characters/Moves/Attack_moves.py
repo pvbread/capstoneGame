@@ -1,7 +1,15 @@
-def att1():
-    pass
+import math
+
+def backendsAttOther(self, targetCharacter, participants):
     #Target: Position distance 7
+    shoter = participants.index(self)
+    target = participants.index(targetCharacter)
+    if shoter ==0 and target==7:
+        target.hp -=2
+    elif shoter ==7 and target==0:
+        target.hp -=2
     #Effect: Damage 2
+    return None
 
 def Flutter():
     pass

@@ -12,7 +12,7 @@ class BaseCharacter:
         self.speed = speed
         self.hit = hit
         self.armor = armor
-        self.itemModifier = itemModifier
+        self.itemModifier = itemModifier #Filler for encounters/item drop rate/ etc unsused at the moment
         self.speedModifier = speedModifier
         self.dodgeModifier = dodgeModifier
         self.isAlive = True
