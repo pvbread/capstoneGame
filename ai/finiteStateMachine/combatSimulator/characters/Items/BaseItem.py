@@ -15,3 +15,7 @@ class BaseItem:
 
     def __del__(self):
         print(name, " has been deleted")
+
+    def eat(self):
+        pass
+        #will remove consumables items

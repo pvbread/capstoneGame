@@ -29,7 +29,7 @@ cd build
 Once in build, we have to specify and create the build generator with cmake
 
 ```
-cmake -G "MinGW Makefiles"
+cmake .. -G "MinGW Makefiles"
 ```
 
 and finally build

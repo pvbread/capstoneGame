@@ -1,4 +1,6 @@
 import random
+import math
+from turtle import fd
 from unicodedata import name
 
 
@@ -6,6 +8,7 @@ class BaseCharacter:
     def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
         self.name = name
         self.hp = hp
+        self.maxHp = hp     #we do not currently have items that increase max hp
         self.speed = speed
         self.hit = hit
         self.armor = armor
@@ -161,14 +164,58 @@ class BaseCharacter:
         print(f"{targetCharacter.name} takes {damage} damage. Health is at {targetCharacter.hp - damage}")
         return damage
 
-    def buff(self, targetCharacter):
-        pass
+    def buff(self, targetCharacter): #Heal
+        '''
+        Input: Takes in targetCharacter object as output.
+        Increase hp of character
+        Print heal result in sentance
+        Output: return new hp number
+        '''
+        #gonna have to figure out how to prevent overheal
+        #Scenario 1: Target already at or surpasses max hp
+        if (targetCharacter.hp >= targetCharacter.maxHp):
+            print(f"{targetCharacter.name} can't Heal, their healthy.")
+            return 0
 
-    def debuff(self, targetCharacter):
-        pass
+        #Scenario 2: Target is at 0 hp
+        elif (targetCharacter.isAlive == False):
+            print(f"{targetCharacter.name} is out of the fight.")
+            return 0
 
-    def move(self, targetCharacters):
-        pass
+        #Scenario 3: Target is between 0-> maxHp not inclusive
+        elif (targetCharacter.hp < targetCharacter.maxHp):
+            #math %10 hp heal, rounded up
+            healAmount = math.ceil(targetCharacter.maxHp * .1)
+            targetCharacter.hp += healAmount
+            print(f"{targetCharacter.name} heals {healAmount}. Health is at {targetCharacter.hp}.")
+            return targetCharacter.hp
+
+    def debuff(self, targetCharacter): #Slow
+        '''
+        Input: Takes in targetCharacter object as output.
+        Decreases speedModifier of character
+        Print debuff result in sentance
+        Output: return new speed number
+        '''
+        #math decrease targetCharacter by 1
+        targetCharacter.speedModifier -= 1
+        print(f"{targetCharacter.name} speed slows by 1 tempo. Speed is at {(targetCharacter.speed + targetCharacter.speedModifier)}.")
+        return targetCharacter.speedModifier
+
+    def move(self, targetCharacters, participants): #Move forward 1
+        # This is not the Conductors swap
+        #This is A moving forward/backwards 1 step and Character B going to the slot A was at
+        #[A][B][C][D] -> [B][A][C][D] and vice versa
+        #dont need to check [3]vs[4] positions
+        CharA = participants.index(self)
+        CharB = participants.index(targetCharacters)
+        participants[CharA], participants[CharB]= participants[CharB], participants[CharA]
+        print(f"{self.name} has switched places with {targetCharacters.name}.")
+        
+        return participants
+
+    ###### Important NOte #####
+    
 
     #text utility functions
 

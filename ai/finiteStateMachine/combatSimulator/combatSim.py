@@ -13,12 +13,14 @@ We can have the AI decision policy be added modularly.
 #name = className("print name", hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
 carl = Carl(name ="Carl", hp= 50, speed=0, hit= 3, armor= 5,itemModifier= 3,speedModifier= 3,dodgeModifier= 1)
 conehead = Conehead("Conehead", 50, 3, 2, 1, 3, 3, 5) 
+coneheadBeta = Conehead("ConeheadBeta", 50, 3, 2, 1, 3, 3, 5) 
+coneheadAlpha = Conehead("ConeheadAlpha", 50, 3, 2, 1, 3, 3, 5) 
 bass = BaseCharacter("bassist", 50, 2, 3, 2, 3, 3, 6)
 
 #this is going to be passed in to the combatSim program
 #combatSym(playerChars, enemyChars)
 playerCharacters = [bass]*4
-enemyCharacters = [conehead, conehead, conehead, carl]
+enemyCharacters = [conehead, coneheadBeta, coneheadAlpha, carl]
 
 roundNum = 1
 
@@ -29,6 +31,47 @@ print("Round Number: ", roundNum)
 print(carl)
 Carl.print_stats(carl)
 print(carl.name, " has ", Carl.return_hp(carl))
+
+#basic funciton test
+print(carl.name, " has taken damage. Blame Covid")
+carl.hp -= 30
+print(carl.name, " has ", Carl.return_hp(carl), " hp left. Lets heal them! Repair Function Deus Ex Alex")
+carl.buff(carl)
+print(carl.name, " has healed! Carl now has", Carl.return_hp(carl), " hp left. Thanks Alex!")
+print("\n")
+print(carl.name, " has slowed down. Blame Society")
+
+print(carl.name, " was ", carl.speedModifier)
+carl.debuff(carl)
+print(carl.name, " is speed", carl.speedModifier)
+
+
+
+
+#function to print out the array
+def printCombatArray(partipants):
+    positionString =""
+    for i in range(len(participants)):
+        newBit = (f"[ {participants[i].name} ] ")
+        positionString = positionString + newBit
+    print (positionString)
+
+print("\n")
+printCombatArray(participants)
+
+print("\n")
+carl.move(coneheadAlpha, participants)
+printCombatArray(participants)
+
+print("\n")
+carl.move(conehead, participants)
+print("move is not concerned with targets being next to each other, that is the concren of checkValidMoves")
+printCombatArray(participants)
+
+print("\n")
+carl.move(bass, participants)
+print("move is not concerned with legality, that is the concren of checkValidMoves")
+printCombatArray(participants)
 
 """
 while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
