@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <map>
+#include <unordered_map>
 
 Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
@@ -79,7 +79,7 @@ void Phoenix::runGameLoop()
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
-    std::map<TextureWrapper*, std::string> textureFilePaths = {
+    std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/tilesDraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include "TextureWrapper.h"
 #include "loadTiles.h"
 
@@ -10,7 +10,7 @@
 bool loadImageAssets(SDL_Renderer* renderer,  
                      std::vector<Tile*>& tileSet, 
                      std::vector<SDL_Rect>& tilesClipped,
-                     std::map<TextureWrapper*, std::string> textureFilePaths)
+                     std::unordered_map<TextureWrapper*, std::string> textureFilePaths)
 {
     //TODO Fix this hard coding
     for (auto [texturePtr, textureFilePath]: textureFilePaths)
