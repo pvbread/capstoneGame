@@ -10,6 +10,7 @@
 #include "MapDebugController.h"
 //#include "loadMedia.h"
 #include "Screen.h"
+#include "BaseMenu.h"
 
 class EscapeFromCapstone : public Phoenix
 {

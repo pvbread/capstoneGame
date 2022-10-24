@@ -4,16 +4,12 @@
 #include "Tile.h"
 #include "CharacterInMap.h"
 #include "MapDebugController.h"
-//#include "loadMedia.h"
 #include "Screen.h"
 #include "TileType.h"
+#include "BaseMenu.h"
 
 #include "pch.h"
-/*
-#include <iostream>
-#include <sstream>
-#include <unordered_map>
-*/
+
 
 Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
@@ -99,7 +95,7 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
 
         if (level.fail())
         {
-            SDL_Log("EOF error with level read at %d", i);
+            SDL_Log("Error with level read at %d", i);
             return false;
         }
 

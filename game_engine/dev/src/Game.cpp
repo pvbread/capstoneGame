@@ -9,13 +9,21 @@ EscapeFromCapstone::EscapeFromCapstone(Uint32 flags,
 void EscapeFromCapstone::runGameLoop()
 {
     // temporary place for this
-    Screen screen = COMBAT;
+    Screen screen = INTRO;
     //temporary 
     TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
     //temp
     SDL_Rect cursor = { 45, 160, 50, 50 };
     //incredibly temp
     int testCounter = 0;
+    const std::vector<const char*> introOptions = {
+        "New Game ",
+        "Load Game",
+        "Credits  "
+    };
+    const char* railwayFontPath = "./Raleway-Medium.ttf";
+    SDL_Color introMenuColor = { 255, 0, 0, 255 };
+    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100, 3, introOptions, railwayFontPath, introMenuColor, getRenderer());
 
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
@@ -97,6 +105,8 @@ void EscapeFromCapstone::runGameLoop()
             {
                 case INTRO:
                 {
+                    introMenu.onInput(event, SelectMusic);
+                    /*
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
@@ -130,7 +140,7 @@ void EscapeFromCapstone::runGameLoop()
                             }
                             break;
                         }
-                    }
+                    }*/
                     break;
                 }
                 case MAP:
@@ -174,26 +184,7 @@ void EscapeFromCapstone::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
-                SDL_Rect rect1 = { 100, 140, 400, 100 };
-                SDL_Rect rect2 = { 100, 240, 400, 100 };
-                SDL_Rect rect3 = { 100, 340, 300, 100 };
-                SDL_Color color = { 255, 0, 0, 255 };
-                SDL_Surface *surface1 = TTF_RenderText_Solid(font, "New Game", color);
-                SDL_Surface *surface2 = TTF_RenderText_Solid(font, "Load Game", color);
-                SDL_Surface *surface3 = TTF_RenderText_Solid(font, "Credits", color);
-                SDL_Texture *texture1 = SDL_CreateTextureFromSurface(getRenderer(), surface1);
-                SDL_Texture *texture2 = SDL_CreateTextureFromSurface(getRenderer(), surface2);
-                SDL_Texture *texture3 = SDL_CreateTextureFromSurface(getRenderer(), surface3);
-                SDL_FreeSurface(surface1);
-                SDL_FreeSurface(surface2);
-                SDL_FreeSurface(surface3);
-                SDL_Surface *surfaceCursor = TTF_RenderText_Solid(font, ">", color);
-                SDL_Texture *textureCursor = SDL_CreateTextureFromSurface(getRenderer(), surfaceCursor);
-                SDL_FreeSurface(surfaceCursor);
-                SDL_RenderCopy(getRenderer(), texture1, nullptr, &rect1);
-                SDL_RenderCopy(getRenderer(), texture2, nullptr, &rect2);
-                SDL_RenderCopy(getRenderer(), texture3, nullptr, &rect3);
-                SDL_RenderCopy(getRenderer(), textureCursor, nullptr, &cursor);
+                introMenu.render(getRenderer());   
                 break;
             }
             case MAP:
@@ -239,3 +230,35 @@ void EscapeFromCapstone::runGameLoop()
         
     }
 }
+
+/*
+                SDL_Rect rect1 = { 100, 140, 400, 100 };
+                SDL_Rect rect2 = { 100, 240, 400, 100 };
+                SDL_Rect rect3 = { 100, 340, 300, 100 };
+                SDL_Color color = { 255, 0, 0, 255 };
+                //unnamed textures initd in vector?
+                //same surface can just be overwritten
+                SDL_Surface *surface1 = TTF_RenderText_Solid(font, "New Game", color);
+                SDL_Surface *surface2 = TTF_RenderText_Solid(font, "Load Game", color);
+                SDL_Surface *surface3 = TTF_RenderText_Solid(font, "Credits", color);
+                std::vector<SDL_Texture*> myTextTextures(3);
+                myTextTextures[0] = SDL_CreateTextureFromSurface(getRenderer(), surface1);
+                myTextTextures[1] = SDL_CreateTextureFromSurface(getRenderer(), surface2);
+                myTextTextures[2] = SDL_CreateTextureFromSurface(getRenderer(), surface3);
+                //SDL_Texture *texture1 = SDL_CreateTextureFromSurface(getRenderer(), surface1);
+                //SDL_Texture *texture2 = SDL_CreateTextureFromSurface(getRenderer(), surface2);
+                //SDL_Texture *texture3 = SDL_CreateTextureFromSurface(getRenderer(), surface3);
+                SDL_FreeSurface(surface1);
+                SDL_FreeSurface(surface2);
+                SDL_FreeSurface(surface3);
+                SDL_Surface *surfaceCursor = TTF_RenderText_Solid(font, ">", color);
+                SDL_Texture *textureCursor = SDL_CreateTextureFromSurface(getRenderer(), surfaceCursor);
+                SDL_FreeSurface(surfaceCursor);
+                SDL_RenderCopy(getRenderer(), myTextTextures[0], nullptr, &rect1);
+                SDL_RenderCopy(getRenderer(), myTextTextures[1], nullptr, &rect2);
+                SDL_RenderCopy(getRenderer(), myTextTextures[2], nullptr, &rect3);
+                //SDL_RenderCopy(getRenderer(), texture1, nullptr, &rect1);
+                //SDL_RenderCopy(getRenderer(), texture2, nullptr, &rect2);
+                //SDL_RenderCopy(getRenderer(), texture3, nullptr, &rect3);
+                SDL_RenderCopy(getRenderer(), textureCursor, nullptr, &cursor);
+                */

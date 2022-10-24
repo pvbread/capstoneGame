@@ -26,6 +26,7 @@ if(APPLE)
     "src/BaseSingleTexture.cpp"
     "src/MapDebugController.cpp"
     "src/CharacterInMap.cpp"
+    "src/BaseMenu.cpp"
   )
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
@@ -47,6 +48,7 @@ if(MINGW)
     "src/BaseSingleTexture.cpp"
     "src/MapDebugController.cpp"
     "src/CharacterInMap.cpp"
+    "src/BaseMenu.cpp"
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")
