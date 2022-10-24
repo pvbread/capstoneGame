@@ -18,12 +18,15 @@ if(APPLE)
   find_library(SDL2_MIXER_LIBRARY SDL2_mixer REQUIRED)
   include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE} ${SDL2_TTF_INCLUDE} ${SDL2_MIXER_INCLUDE})
   add_executable(capstoneGame
-    "src/gameLoop.cpp"
-    "src/gameEngine.cpp"
+    "src/main.cpp"
+    "src/GameEngine.cpp"
+    "src/Game.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
+    "src/BaseSingleTexture.cpp"
     "src/MapDebugController.cpp"
-    "src/MenuInGame.cpp"
+    "src/CharacterInMap.cpp"
+    "src/BaseMenu.cpp"
   )
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
@@ -37,17 +40,20 @@ endif(APPLE)
 
 if(MINGW)
   add_executable(capstoneGame
-    "src/gameLoop.cpp"
-    "src/gameEngine.cpp"
+    "src/main.cpp"
+    "src/GameEngine.cpp"
+    "src/Game.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
+    "src/BaseSingleTexture.cpp"
     "src/MapDebugController.cpp"
-    "src/MenuInGame.cpp"
+    "src/CharacterInMap.cpp"
+    "src/BaseMenu.cpp"
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")
-  set(SDL2_ttf_DIR "C:/dev/SDL2_ttf/cmake") #fix this alex to whatever folder it is
-  set(SDL2_mixer_DIR "C:/dev/SDL2_mixer/cmake")
+  set(SDL2_ttf_DIR "C:/dev/SDL2_ttf-2.20.1/cmake") 
+  set(SDL2_mixer_DIR "C:/dev/SDL2_mixer-2.6.2/cmake")
   find_package(SDL2 REQUIRED)
   find_package(SDL2_image REQUIRED)
   find_package(SDL2_ttf REQUIRED)
@@ -61,5 +67,13 @@ if(MINGW)
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY dot.bmp DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY testLevel.map DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY Raleway-Medium.ttf DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY bgmusic1.wav DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY menuMove.wav DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY menuSelect.wav DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY "C:/dev/SDL2-2.24.0/x86_64-w64-mingw32/bin/SDL2.dll" DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY "C:/dev/SDL2_image-2.6.2/x86_64-w64-mingw32/bin/SDL2_image.dll" DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY "C:/dev/SDL2_ttf-2.20.1/x86_64-w64-mingw32/bin/SDL2_ttf.dll" DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY "C:/dev/SDL2_mixer-2.6.2/x86_64-w64-mingw32/bin/SDL2_mixer.dll" DESTINATION ${CMAKE_BINARY_DIR})
   
 endif(MINGW)
