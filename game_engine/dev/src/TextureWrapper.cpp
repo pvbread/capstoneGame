@@ -1,6 +1,7 @@
 #include "TextureWrapper.h"
-#include <string>
-#include <iostream>
+
+//#include <string>
+//#include <iostream>
 
 TextureWrapper::TextureWrapper() : 
                 texture{nullptr}, width{0}, height{0} {}
@@ -12,7 +13,7 @@ TextureWrapper::~TextureWrapper()
 
 void TextureWrapper::freeMemory()
 {
-    if (texture == nullptr)
+    if (texture != nullptr)
     {
         SDL_DestroyTexture(texture);
         texture = nullptr;
@@ -115,12 +116,3 @@ bool TextureWrapper::render(SDL_Renderer* renderer,
     return true;
 }
 
-int TextureWrapper::getWidth()
-{
-    return width;
-}
-
-int TextureWrapper::getHeight()
-{
-    return height;
-}

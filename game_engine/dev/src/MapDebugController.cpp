@@ -1,16 +1,23 @@
+#include "BaseSingleTexture.h"
 #include "MapDebugController.h"
 #include "TextureWrapper.h"
 
-MapDebugController::MapDebugController() : 
-                                            mainVelocity{2},
-                                            velocityX{0},
-                                            velocityY{0}
+
+MapDebugController::MapDebugController(int mainVelocity, 
+                                       int velocityX, 
+                                       int velocityY, 
+                                       SDL_Rect collisionBox) :
+    BaseSingleTexture(mainVelocity, velocityX, velocityY, collisionBox)
 {
-    collisionBox.x = 0;
-    collisionBox.y = 0;
-    collisionBox.w = 1;
-    collisionBox.h = 1;
+    this->mainVelocity = mainVelocity;
+    this->velocityX = velocityX;
+    this->velocityY = velocityY;
+    this->collisionBox.x = collisionBox.x;
+    this->collisionBox.y = collisionBox.y;
+    this->collisionBox.w = collisionBox.w;
+    this->collisionBox.h = collisionBox.h;
 }
+
 
 void MapDebugController::onInput(SDL_Event& event)
 {
@@ -84,6 +91,13 @@ void MapDebugController::move(int xBoundary, int yBoundary)
     }
 }
 
+void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)
+{
+    //the debug object is drawn at it's distance from the camera's idea of 0
+    debugControllerTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
+}
+
+
 void MapDebugController::centerScreen(SDL_Rect& camera)
 {
     // TODO fix this hardcoding to take in any size
@@ -98,10 +112,4 @@ void MapDebugController::centerScreen(SDL_Rect& camera)
         camera.x = 1280 - camera.w;
     if (camera.y > 960 - camera.h)
         camera.y = 960 - camera.h;
-}
-
-void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)
-{
-    //the debug object is drawn at it's distance from the camera's idea of 0
-    debugControllerTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
 }

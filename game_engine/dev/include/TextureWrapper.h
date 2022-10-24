@@ -1,8 +1,12 @@
 #pragma once
 
+/*
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+*/
+
+#include "pch.h"
 
 class TextureWrapper
 {
@@ -25,9 +29,6 @@ public:
                 SDL_Point* center = nullptr,
                 SDL_RendererFlip flip = SDL_FLIP_NONE);
     
-    int getWidth();
-    int getHeight();
-
 private:
     SDL_Texture* texture;
     int width;

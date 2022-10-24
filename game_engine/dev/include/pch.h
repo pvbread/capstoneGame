@@ -5,3 +5,8 @@
 #include <SDL_mixer.h>
 #include <fstream>
 #include <string>
+#include <unordered_map>
+#include <vector>
+#include <sstream>
+#include <utility>
+#include <map>

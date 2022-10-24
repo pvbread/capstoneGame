@@ -18,11 +18,14 @@ if(APPLE)
   find_library(SDL2_MIXER_LIBRARY SDL2_mixer REQUIRED)
   include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE} ${SDL2_TTF_INCLUDE} ${SDL2_MIXER_INCLUDE})
   add_executable(capstoneGame
-    "src/gameLoop.cpp"
-    "src/gameEngine.cpp"
+    "src/main.cpp"
+    "src/GameEngine.cpp"
+    "src/Game.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
+    "src/BaseSingleTexture.cpp"
     "src/MapDebugController.cpp"
+    "src/CharacterInMap.cpp"
   )
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
@@ -36,15 +39,18 @@ endif(APPLE)
 
 if(MINGW)
   add_executable(capstoneGame
-    "src/gameLoop.cpp"
-    "src/gameEngine.cpp"
+    "src/main.cpp"
+    "src/GameEngine.cpp"
+    "src/Game.cpp"
     "src/TextureWrapper.cpp"
     "src/Tile.cpp"
+    "src/BaseSingleTexture.cpp"
     "src/MapDebugController.cpp"
+    "src/CharacterInMap.cpp"
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")
-  set(SDL2_ttf_DIR "C:/dev/SDL2_ttf-2.20.1/cmake") #fix this alex to whatever folder it is
+  set(SDL2_ttf_DIR "C:/dev/SDL2_ttf-2.20.1/cmake") 
   set(SDL2_mixer_DIR "C:/dev/SDL2_mixer-2.6.2/cmake")
   find_package(SDL2 REQUIRED)
   find_package(SDL2_image REQUIRED)

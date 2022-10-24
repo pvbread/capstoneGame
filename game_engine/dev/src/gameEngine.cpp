@@ -1,13 +1,19 @@
-#include "gameEngine.h"
+#include "GameEngine.h"
+
 #include "TextureWrapper.h"
 #include "Tile.h"
+#include "CharacterInMap.h"
 #include "MapDebugController.h"
-#include "loadMedia.h"
+//#include "loadMedia.h"
 #include "Screen.h"
+#include "TileType.h"
 
-
+#include "pch.h"
+/*
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
+*/
 
 Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
@@ -59,222 +65,146 @@ Phoenix::~Phoenix()
 }
 
 void Phoenix::runGameLoop()
-{
-    // temporary place for this
-    Screen screen = COMBAT;
-    //temporary 
-    TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
-    //temp
-    SDL_Rect cursor = { 45, 160, 50, 50 };
-    //incredibly temp
-    int testCounter = 0;
-
-    Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
-    Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1);
-    int played;
-
-    TextureWrapper tileTexture;
-    TextureWrapper debugControllerTexture;
-    std::vector<TextureWrapper*> textureWrappers{&tileTexture, &debugControllerTexture};
-    
-    const int TILE_TYPE_COUNT = 24;
-    const int TILE_COUNT = 192;
-    std::vector<Tile*> tileSet(TILE_COUNT);
-    std::vector<SDL_Rect> tilesClipped(TILE_COUNT);// this is the total tiles
-
-    if (!loadImageAssets(renderer, textureWrappers, tileSet, tilesClipped))
-    {
-        SDL_Log("error loading image assets");
-        quit = true;
-    }
-
-    //set this to 0 whenever we want a clear debug controller
-    debugControllerTexture.setAlpha(0);
-
-    MapDebugController debugController;
-
-    SDL_Rect camera = {0,0, 640, 480};
-
-    double degrees = 0;
-    SDL_RendererFlip flipType = SDL_FLIP_NONE;
-
-    SDL_Event event;
-    while (!quit)
-    {
-        while(SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_QUIT)
-            {
-                quit = true;
-                break;
-            }
-            if (event.type == SDL_KEYDOWN)
-            {
-                switch (event.key.keysym.sym)
-                {
-                    case SDLK_1:
-                    {
-                        screen = INTRO;
-                        break;
-                    }
-                    case SDLK_2:
-                    {
-                        screen = MAP;
-                        break;
-                    }
-                    case SDLK_3:
-                    {
-                        screen = COMBAT;
-                        break;
-                    }
-                }
-            }
-            switch (screen)
-            {
-                case INTRO:
-                {
-                    if (event.type == SDL_KEYDOWN)
-                    {
-                        switch (event.key.keysym.sym)
-                        {
-                            case SDLK_UP:
-                            {
-                                cursor.y -= 100;
-                                played = Mix_PlayChannel(-1, SelectMusic, 0);
-                                if (played == -1){
-                                    SDL_Log("audio error");
-                                }
-                                //if cursor is off the top of the screen, move it to the bottom
-                                if (cursor.y < 160)
-                                {
-                                    cursor.y = 360;
-                                }
-                                break;
-                            }
-                            case SDLK_DOWN:
-                            {
-                                cursor.y += 100;
-                                played = Mix_PlayChannel(-1, SelectMusic, 0);
-                                if (played == -1){
-                                    SDL_Log("audio error");
-                                }
-                                //if cursor is off the bottom of the screen, move it to the top
-                                if (cursor.y > 360)
-                                {
-                                    cursor.y = 160;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    break;
-                }
-                case MAP:
-                {
-                    //this has a bug where movement
-                    //keeps being read if key is not unpressed
-                    debugController.onInput(event);
-                    break;
-                }
-                case COMBAT:
-                {
-                    if (event.type == SDL_KEYDOWN)
-                    {
-                        switch (event.key.keysym.sym)
-                        {
-                            case SDLK_4:
-                            {
-                                testCounter++;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            
-        }
-        
-        //here have to poll event maybe in a loop?
-        
-
-        
-
-        //Clear screen
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderClear(renderer);
-
-        switch (screen)
-        {
-            case INTRO:
-            {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-                SDL_RenderClear(renderer);
-                SDL_Rect rect1 = { 100, 140, 400, 100 };
-                SDL_Rect rect2 = { 100, 240, 400, 100 };
-                SDL_Rect rect3 = { 100, 340, 300, 100 };
-                SDL_Color color = { 255, 0, 0, 255 };
-                SDL_Surface *surface1 = TTF_RenderText_Solid(font, "New Game", color);
-                SDL_Surface *surface2 = TTF_RenderText_Solid(font, "Load Game", color);
-                SDL_Surface *surface3 = TTF_RenderText_Solid(font, "Credits", color);
-                SDL_Texture *texture1 = SDL_CreateTextureFromSurface(renderer, surface1);
-                SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, surface2);
-                SDL_Texture *texture3 = SDL_CreateTextureFromSurface(renderer, surface3);
-                SDL_FreeSurface(surface1);
-                SDL_FreeSurface(surface2);
-                SDL_FreeSurface(surface3);
-                SDL_Surface *surfaceCursor = TTF_RenderText_Solid(font, ">", color);
-                SDL_Texture *textureCursor = SDL_CreateTextureFromSurface(renderer, surfaceCursor);
-                SDL_FreeSurface(surfaceCursor);
-                SDL_RenderCopy(renderer, texture1, nullptr, &rect1);
-                SDL_RenderCopy(renderer, texture2, nullptr, &rect2);
-                SDL_RenderCopy(renderer, texture3, nullptr, &rect3);
-                SDL_RenderCopy(renderer, textureCursor, nullptr, &cursor);
-                break;
-            }
-            case MAP:
-            {
-                debugController.move(1280, 960);
-                debugController.centerScreen(camera);
-                for(int i = 0; i < tileSet.size(); i++)
-                {
-                    tileSet[i]->render(renderer, tileTexture, camera, tilesClipped);
-                }
-                debugController.render(renderer, camera, debugControllerTexture);
-                break;
-            } 
-            case COMBAT:
-            {
-                SDL_Rect rectBlue = { 320, 240, 100, 100 };
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // blue
-                SDL_RenderFillRect(renderer, &rectBlue);
-                SDL_Rect textRec = { 320, 240, 100, 100 };
-                SDL_Color textColor = { 255, 0, 0, 255 };
-                std::stringstream myFavoriteStream;
-                myFavoriteStream << testCounter;
-                SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, myFavoriteStream.str().c_str(), textColor); //ttf surface  
-                SDL_Texture *textureTesting = SDL_CreateTextureFromSurface(renderer, surfaceTesting);  
-                SDL_FreeSurface(surfaceTesting); 
-                SDL_RenderCopy(renderer, textureTesting, nullptr, &rectBlue);
-                break;
-            }
-        }
-
-        
-        //Update screen
-        SDL_RenderPresent(renderer);
-        /*
-        SDL_Delay(2000);
-        SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // blue
-        SDL_RenderPresent(renderer);
-        SDL_Delay(2000);*/
-        
-    }
-    
-}
+{}
 
 void Phoenix::stopGameLoop()
 {
     quit = true;
+}
+
+bool Phoenix::loadTiles(std::vector<Tile*>& tileMap, 
+                        std::vector<SDL_Rect>& tilesClipped,
+                        std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
+                        int TILE_COUNT, 
+                        int TYPE_COUNT, 
+                        int TILE_LENGTH)
+{
+    int x = 0;
+    int y = 0;
+
+    std::ifstream level("testLevel.map");
+
+    if (level.fail())
+    {
+        SDL_Log("Failure loading level");
+        return false;
+    }
+
+    //tyle type
+    int tileType;
+
+    for (int i = 0; i < TILE_COUNT; i++)
+    {
+        level >> tileType;
+
+        if (level.fail())
+        {
+            SDL_Log("EOF error with level read at %d", i);
+            return false;
+        }
+
+        //need to cast tileType here otherwise
+        //it can't read it in right
+        if (tileType >= 0 && tileType < TYPE_COUNT)
+        {
+            tileMap[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, (TileType)tileType);
+            std::pair<int, int> coordinates = std::make_pair(x,y);
+            coordinateToTileTypeMap[coordinates] = (TileType)tileType; 
+        }
+        //TODO DON't HARD CODE THIS
+        //MAP_WIDTH
+        x += TILE_LENGTH;
+
+        if (x >= 1280)
+        {
+            x = 0;
+            y += TILE_LENGTH;
+        }
+       
+    }
+
+    
+    //close file
+    level.close();
+
+    //clip
+    //math is for 4 x 3 tile map 
+    //we have 240 x 160 if tile size is 80 (factor this away later)
+    //so iterate on the smaller y dimension and set the boundaries of the 
+    //rectangles accordingly
+    tileType = 0;
+    for (y = 0; y < 3; y++)
+    {
+        for (x = 0; x < 4; x++)
+        { 
+            tilesClipped[tileType].x = x*TILE_LENGTH;
+            tilesClipped[tileType].y = y*TILE_LENGTH;
+            tilesClipped[tileType].w = TILE_LENGTH;
+            tilesClipped[tileType].h = TILE_LENGTH;
+            tileType++;
+        }
+    }
+
+    return true;
+}
+
+bool Phoenix::loadImageAssets(SDL_Renderer* renderer,  
+                              std::vector<Tile*>& tileMap, 
+                              std::vector<SDL_Rect>& tilesClipped,
+                              std::unordered_map<TextureWrapper*, std::string> textureFilePaths,
+                              std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
+{
+    for (auto [texturePtr, textureFilePath]: textureFilePaths)
+    {
+        bool didTextureLoad = texturePtr->loadImage(renderer, textureFilePath);
+        if (!didTextureLoad)
+        {
+            SDL_Log("Failed to load tiles");
+            return false;
+        }
+    }
+
+    //level width 1280, level height 960
+    //divided by 80 is 16x12 = 192
+    const int TILE_COUNT = 192;
+    const int TILE_LENGTH = 80;
+    const int TYPE_COUNT = 12;
+
+    if (!loadTiles(tileMap, tilesClipped, coordinateToTileTypeMap, TILE_COUNT, TYPE_COUNT, TILE_LENGTH))
+    {
+        SDL_Log("Failed to load tile set");
+        return false;
+    }
+
+    return true;
+}
+
+SDL_Window* Phoenix::getWindow() const
+{
+    return window;
+}
+
+SDL_Renderer* Phoenix::getRenderer() const
+{
+    return renderer;
+}
+
+bool Phoenix::getQuit() const
+{
+    return quit;
+}
+    
+int Phoenix::getWidth() const
+{
+    return width;
+}
+    
+int Phoenix::getHeight() const
+{
+    return height;
+}
+
+void Phoenix::setToQuit()
+{
+    quit = !quit;
 }
