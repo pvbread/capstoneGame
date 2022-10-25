@@ -23,7 +23,29 @@ void EscapeFromCapstone::runGameLoop()
     };
     const char* railwayFontPath = "./Raleway-Medium.ttf";
     SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100, 3, introOptions, railwayFontPath, introMenuColor, getRenderer());
+    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100, 
+                                  introOptions.size(), 
+                                  introOptions, 
+                                  railwayFontPath, 
+                                  introMenuColor, 
+                                  getRenderer()
+    );
+
+    const std::vector<const char*> combatOptions = {
+        "Attack ",
+        "Buff   ",
+        "Debuff ",
+        "Move   "
+    };
+
+    SDL_Color combatMenuColor = { 0, 0, 255, 255 };
+    BaseMenu combatMenu = BaseMenu(25, 520, 200, 50, 100, 
+                                   combatOptions.size(), 
+                                   combatOptions, 
+                                   railwayFontPath, 
+                                   combatMenuColor, 
+                                   getRenderer()
+    );
 
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
@@ -65,7 +87,9 @@ void EscapeFromCapstone::runGameLoop()
     MapDebugController debugController(10, 0, 0, debugHitbox);
     CharacterInMap characterController(80, 0, 0, characterControllerHitbox);
 
-    SDL_Rect camera = {0,0, 640, 480};
+    const int SCREEN_WIDTH = 960;
+    const int SCREEN_HEIGHT = 720;
+    SDL_Rect camera = {0,0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     double degrees = 0;
     SDL_RendererFlip flipType = SDL_FLIP_NONE;
@@ -106,41 +130,6 @@ void EscapeFromCapstone::runGameLoop()
                 case INTRO:
                 {
                     introMenu.onInput(event, SelectMusic);
-                    /*
-                    if (event.type == SDL_KEYDOWN)
-                    {
-                        switch (event.key.keysym.sym)
-                        {
-                            case SDLK_UP:
-                            {
-                                cursor.y -= 100;
-                                played = Mix_PlayChannel(-1, SelectMusic, 0);
-                                if (played == -1){
-                                    SDL_Log("audio error");
-                                }
-                                //if cursor is off the top of the screen, move it to the bottom
-                                if (cursor.y < 160)
-                                {
-                                    cursor.y = 360;
-                                }
-                                break;
-                            }
-                            case SDLK_DOWN:
-                            {
-                                cursor.y += 100;
-                                played = Mix_PlayChannel(-1, SelectMusic, 0);
-                                if (played == -1){
-                                    SDL_Log("audio error");
-                                }
-                                //if cursor is off the bottom of the screen, move it to the top
-                                if (cursor.y > 360)
-                                {
-                                    cursor.y = 160;
-                                }
-                            }
-                            break;
-                        }
-                    }*/
                     break;
                 }
                 case MAP:
@@ -153,6 +142,7 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 case COMBAT:
                 {
+                    combatMenu.onInput(event, SelectMusic);
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
@@ -168,12 +158,6 @@ void EscapeFromCapstone::runGameLoop()
             }
             
         }
-        
-        //here have to poll event maybe in a loop?
-        
-
-        
-
         //Clear screen
         SDL_SetRenderDrawColor(getRenderer(), 255, 255, 255, 255);
         SDL_RenderClear(getRenderer());
@@ -203,10 +187,11 @@ void EscapeFromCapstone::runGameLoop()
             } 
             case COMBAT:
             {
-                SDL_Rect rectBlue = { 320, 240, 100, 100 };
+                combatMenu.render(getRenderer());   
+                SDL_Rect rectBlue = { 600, 240, 100, 100 };
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 255, 255); // blue
                 SDL_RenderFillRect(getRenderer(), &rectBlue);
-                SDL_Rect textRec = { 320, 240, 100, 100 };
+                SDL_Rect textRec = { 600, 240, 100, 100 };
                 SDL_Color textColor = { 255, 0, 0, 255 };
                 std::stringstream myFavoriteStream;
                 myFavoriteStream << testCounter;

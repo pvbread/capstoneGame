@@ -8,7 +8,7 @@ EscapeFromCapstone* game;
 int main(int argc, char* argv[])
 {
     const char* title = "Escape from the Capstone Underground";
-    game = new EscapeFromCapstone(SDL_INIT_VIDEO, title, 20, 20, 640, 480);
+    game = new EscapeFromCapstone(SDL_INIT_VIDEO, title, 20, 20, 960, 720);
     game->runGameLoop();
 
     delete game;

@@ -153,8 +153,8 @@ void CharacterInMap::render(SDL_Renderer* renderer, const SDL_Rect& camera, Text
 void CharacterInMap::centerScreen(SDL_Rect& camera)
 {
     // TODO fix this hardcoding to take in any size
-    camera.x = collisionBox.x - (640/2);
-    camera.y = collisionBox.y - (480/2);
+    camera.x = collisionBox.x - (camera.w/2);
+    camera.y = collisionBox.y - (camera.h/2);
 
     if (camera.x < 0)
         camera.x = 0;
