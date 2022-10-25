@@ -55,12 +55,28 @@ void EscapeFromCapstone::runGameLoop()
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
+    TextureWrapper characterTestTexture;
+    //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/tilesDraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
-        {&debugControllerTexture, "../../assets/image/dot.bmp"}
+        {&debugControllerTexture, "../../assets/image/dot.bmp"},
+        {&characterTestTexture, "../../assets/image/char.png"}
     };
     
+    //this is temporary
+    
+    //so there's going to be a couple of these per char
+    //maybe a map would do well here?
+    
+    std::vector<SDL_Rect> spriteClipped(ANIMATION_FRAME_COUNT);
+    std::unordered_map<TextureWrapper*, int> textureFrameCount = {
+        {&characterTestTexture, 5}
+    };
+    std::unordered_map<TextureWrapper*, SDL_Rect> texturePtrToSpriteMap = {
+        {&characterTestTexture, spriteClipped}
+    };
+
     const int TILE_TYPE_COUNT = 24;
     const int TILE_COUNT = 192;
     std::vector<Tile*> tileMap(TILE_COUNT);

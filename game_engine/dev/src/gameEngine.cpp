@@ -32,7 +32,7 @@ Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
         SDL_Log("Error creating window");
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (renderer == nullptr)
     {
@@ -159,6 +159,7 @@ bool Phoenix::loadImageAssets(SDL_Renderer* renderer,
             return false;
         }
     }
+    //kind of convinced the clipping has to be their own functions
     
     
     //TODO this might have to be its own function
