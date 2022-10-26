@@ -91,7 +91,9 @@ void MapDebugController::move(int xBoundary, int yBoundary)
     }
 }
 
-void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)
+void MapDebugController::render(SDL_Renderer* renderer, 
+                                const SDL_Rect& camera, 
+                                TextureWrapper& debugControllerTexture)
 {
     //the debug object is drawn at it's distance from the camera's idea of 0
     debugControllerTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
@@ -100,9 +102,8 @@ void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, 
 
 void MapDebugController::centerScreen(SDL_Rect& camera)
 {
-    // TODO fix this hardcoding to take in any size
-    camera.x = collisionBox.x - (640/2);
-    camera.y = collisionBox.y - (480/2);
+    camera.x = collisionBox.x - (camera.w/2);
+    camera.y = collisionBox.y - (camera.w/2);
 
     if (camera.x < 0)
         camera.x = 0;

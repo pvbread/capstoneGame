@@ -33,7 +33,7 @@ BaseMenu::BaseMenu(int x, int y, int w, int h,
     }
 
     //cursor initialization
-    cursorRectangle = { x-55, y+20, 50, 50 };
+    cursorRectangle = { x-(optionHeight/2), y+(optionHeight/5), optionHeight/2, optionHeight/2 };
     surface = TTF_RenderText_Solid(menuFont, ">", fontColor);
     SDL_Texture* menuCursorTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
@@ -47,36 +47,40 @@ void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic)
     int played;
     if (event.type == SDL_KEYDOWN)
     {
+        //alias to make code more readable
+        SDL_Rect & cursor = optionRectangles.back(); 
         switch (event.key.keysym.sym)
         {
             case SDLK_UP:
             {
                 //hack, see constructor and render method
                 //for notes on why i chose to do it
-                optionRectangles.back().y -= 100;
+                cursor.y -= optionHeight;
                 //cursorRectangle.y -= 100;
                 played = Mix_PlayChannel(-1, SelectMusic, 0);
                 if (played == -1){
                     SDL_Log("audio error");
                 }
                 //if cursor is off the top of the screen, move it to the bottom
-                if (optionRectangles.back().y < 160)
+                //checks against the first option
+                if (cursor.y < optionRectangles[0].y)
                 {
-                    optionRectangles.back().y = 360;
+                    cursor.y += (optionRectangles.size()-1) * optionHeight;
                 }
                 break;
             }
             case SDLK_DOWN:
             {
-                optionRectangles.back().y += 100;
+                optionRectangles.back().y += optionHeight;
                 played = Mix_PlayChannel(-1, SelectMusic, 0);
                 if (played == -1){
                     SDL_Log("audio error");
                 }
                 //if cursor is off the bottom of the screen, move it to the top
-                if (optionRectangles.back().y > 360)
+                //checks next to last (because of cursor hack)
+                if (cursor.y > optionRectangles.end()[-2].y + cursor.h)
                 {
-                    optionRectangles.back().y = 160;
+                    cursor.y -= (optionRectangles.size()-1) * optionHeight;
                 }
             }
             break;
