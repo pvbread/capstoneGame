@@ -11,12 +11,12 @@ def backendsAttOther(self, targetCharacter, participants):
     #Effect: Damage 2
     return None
 
-def Flutter():
+def flutter():
     pass
     #Target: Position Distance 5&6
     #Effect: Damage 2
 
-def Smash():
+def smash():
     pass
     #Target: Position Distance 1
     #Effect: Damage 1, 50% Stun chance

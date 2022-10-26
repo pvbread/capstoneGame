@@ -207,9 +207,9 @@ class BaseCharacter:
         #This is A moving forward/backwards 1 step and Character B going to the slot A was at
         #[A][B][C][D] -> [B][A][C][D] and vice versa
         #dont need to check [3]vs[4] positions
-        CharA = participants.index(self)
-        CharB = participants.index(targetCharacters)
-        participants[CharA], participants[CharB]= participants[CharB], participants[CharA]
+        charA = participants.index(self)
+        charB = participants.index(targetCharacters)
+        participants[charA], participants[charB]= participants[charB], participants[charA]
         print(f"{self.name} has switched places with {targetCharacters.name}.")
         
         return participants
@@ -220,16 +220,16 @@ class BaseCharacter:
     #text utility functions
 
     
-    def print_stats(BaseCharacter):
-        print (BaseCharacter.name, " stats currently are:")
-        print ("name = ", BaseCharacter.name)
-        print ("hp = ", BaseCharacter.hp)
-        print ("speed = ", BaseCharacter.speed)
-        print ("hit = ", BaseCharacter.hit)
-        print ("armor = ", BaseCharacter.armor)
-        print ("itemModifier = ", BaseCharacter.itemModifier)
-        print ("speedModifier = ", BaseCharacter.speedModifier)
-        print ("dodgeModifier = ", BaseCharacter.dodgeModifier)
+    def print_stats(self):
+        print (self.name, " stats currently are:")
+        print ("name = ", self.name)
+        print ("hp = ", self.hp)
+        print ("speed = ", self.speed)
+        print ("hit = ", self.hit)
+        print ("armor = ", self.armor)
+        print ("itemModifier = ", self.itemModifier)
+        print ("speedModifier = ", self.speedModifier)
+        print ("dodgeModifier = ", self.dodgeModifier)
 
     def return_hp(BaseCharacter):
         return(BaseCharacter.hp)
