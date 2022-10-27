@@ -7,7 +7,7 @@ project(myProject VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(testingPython test.cpp)
+add_executable(testingPython test2.cpp)
 
 find_package(Python3 REQUIRED COMPONENTS Development)
 include_directories(testingPython ${Python3_INCLUDE_DIRS})

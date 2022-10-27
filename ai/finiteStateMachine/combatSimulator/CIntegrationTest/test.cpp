@@ -38,8 +38,8 @@ int main(int argc, char const *argv[])
         std::cout << "Error instantiating class";
     }
 
-    int hasHP = PyObject_HasAttrString(baseCharInstance, "name");
-    if (hasHP)
+    int hasName = PyObject_HasAttrString(baseCharInstance, "name");
+    if (hasName)
     {
         std::cout << "we queried that BaseChar has name attr!" << std::endl;
     }
