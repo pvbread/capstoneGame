@@ -9,7 +9,7 @@ int main(int argc, char const *argv[])
     PyObject* sysmodule = PyImport_ImportModule("sys");
     PyObject* syspath = PyObject_GetAttrString(sysmodule, "path");
     PyList_Append(syspath, PyUnicode_FromString("../PythonCode"));
-    PyObject* pName = PyUnicode_DecodeFSDefault("Test");
+    PyObject* pName = PyUnicode_DecodeFSDefault("Characters");
     PyObject* pModule = PyImport_Import(pName);
 
     if (!pModule)
