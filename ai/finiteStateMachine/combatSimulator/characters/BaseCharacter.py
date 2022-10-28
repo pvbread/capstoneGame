@@ -1,6 +1,8 @@
 import random
 import math
+from characters.EmptySpace import shiftDead
 from unicodedata import name
+
 
 
 class BaseCharacter:
@@ -37,8 +39,9 @@ class BaseCharacter:
         Input: decision algorithm, if none, use random choice
         Output: a index to the moveset actions, and array of targets
         '''
+        # if decision is None -> random choice 
         if decision == None:
-            move = random.randint(0,len(self.moveType))
+            move = random.randint(0,len(self.moveType)-1)
             charIndex = participants.index(self)
             targets = self.getValidMoves(move, charIndex, players, enemies, participants)
 
@@ -80,15 +83,39 @@ class BaseCharacter:
             if len(targets)==0:
                 print("No one to attack")
             for target in targets:
-                hit = self.moveset[move](participants[target]) # call attack function
-                participants[target].hp = participants[target].hp - hit
-                if participants[target].hp <= 0:
-                    participants[target].isAlive = False
-                    print(f"{participants[target].name} is dead")
-                    participants.remove(participants[target])               
+                if participants[target].isAlive:
+                    hit = self.moveSet[move](participants[target]) # call attack function
+                    participants[target].hp = participants[target].hp - hit
+                    if participants[target].hp <= 0:
+                        participants[target].isAlive = False
+                        print(f"{participants[target].name} is dead")
+                        shiftDead(participants) 
+        # if the move chosen is to buff an ally
+        elif move == 1:
+            print(f"{self.name} chose buff")
+            target = random.choice(targets)
+            targetHp = self.buff(participants[target])
+            participants[target].hp = targetHp
+        # if the move chosen is to debuff a target
+        elif move == 2:
+            print(f"{self.name} chose debuff")
+            target = random.choice(targets)
+            targetSpeedMod = self.debuff(participants[target])
+            participants[target].speedModifier = targetSpeedMod
+        # if the move chosen is to move positions
+        elif move == 3:
+            print(f"{self.name} chose to move")
+            if (len(targets) > 0):
+                target = random.choice(targets)
+                participants = self.move(participants[target],participants)   
+            else:
+                print("Invalid move")           
         return participants
+    
 
-    def getValidMoves(self, move, charIndex, players, enemies, participants):
+    def getValidMoves(self, move, charIndex, players, enemies, participants, userInputRanges=None):
+        #userInputRanges is the user input to pick the relevent range. By default, userInputRanges is 'None' for enemy AI
+
         '''
         Input: move is a moveset index to move
         Output: an array of array<int> of valid action indexes
@@ -100,15 +127,24 @@ class BaseCharacter:
         '''
         #get move type 
         if self.moveType[move] == 'attack':
+            # for enemy AI
+            if userInputRanges == None:
+                range = random.randint(0,len(self.validMovesAndRanges)-1)
+                if charIndex >= 2 and charIndex <= 5:
+                    range = 0
+            # for user input
+            else:
+                range = userInputRanges
+
             if self in players:
                 validMoves = []
-                for position in self.validMovesAndRanges[move]:
+                for position in self.validMovesAndRanges[range]:
                     if charIndex + position < len(participants):
                         validMoves.append(charIndex + position)
             else:
                 #if self in enemies
                 validMoves = []
-                for position in self.validMovesAndRanges[move]:
+                for position in self.validMovesAndRanges[range]:
                     if charIndex - position >= 0:
                         validMoves.append(charIndex - position)
                 
@@ -122,8 +158,8 @@ class BaseCharacter:
 
         if self.moveType[move] == 'move':
             validMoves = self.getValidBuffTargets(players, participants, "buff")
-            # doesn't include its charIndex
-            validMoves = list(filter(lambda i: i != charIndex, validMoves))
+            # doesn't include its charIndex (edit: can only move one space forward or backward per turn)
+            validMoves = list(filter(lambda i: i == charIndex + 1 or i == charIndex - 1, validMoves))
         return validMoves
         
     def getValidBuffTargets(self, players, participants, typeBuff):
@@ -230,5 +266,7 @@ class BaseCharacter:
         print ("speedModifier = ", self.speedModifier)
         print ("dodgeModifier = ", self.dodgeModifier)
 
-    def return_hp(BaseCharacter):
-        return(BaseCharacter.hp)
+
+    def return_hp(self):
+        return(self.hp)
+

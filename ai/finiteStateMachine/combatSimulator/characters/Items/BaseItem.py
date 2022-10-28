@@ -13,6 +13,7 @@ class BaseItem:
         self.healNum=healNum        #for Healing
         self.statEffect=statEffect  #for status effects
 
+
     def __del__(self):
         print(name, " has been deleted")
 

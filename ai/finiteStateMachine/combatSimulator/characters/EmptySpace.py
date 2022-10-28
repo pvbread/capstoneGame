@@ -11,3 +11,16 @@
 #
 #When character is dead and player tries to click on space with mouse it wont display anything and
 #   wont take input. For keybord when selecting terget if it will go over emptySpace immeadetly SDLK_UP/ SDLK_DOWN
+
+def shiftDead(participants):
+    # shifting dead characters on player side (left side of the array)
+    for i in range(3):
+        for j in range(3):
+            if participants[j].isAlive and participants[j+1].isAlive == False:
+                participants[j], participants[j+1] = participants[j+1], participants[j]
+    # shifting dead characters on the enemies side (right side of the array)
+    for i in range(3):
+        for j in range(3):
+            if participants[j+5].isAlive and participants[j+4].isAlive == False:
+                participants[j+4], participants[j+5] = participants[j+5], participants[j+4]
+    return participants
