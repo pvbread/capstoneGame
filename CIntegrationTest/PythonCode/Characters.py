@@ -1,6 +1,19 @@
 import random
 import math
 
+def shiftDead(participants):
+    # shifting dead characters on player side (left side of the array)
+    for i in range(3):
+        for j in range(3):
+            if participants[j].isAlive and participants[j+1].isAlive == False:
+                participants[j], participants[j+1] = participants[j+1], participants[j]
+    # shifting dead characters on the enemies side (right side of the array)
+    for i in range(3):
+        for j in range(3):
+            if participants[j+5].isAlive and participants[j+4].isAlive == False:
+                participants[j+4], participants[j+5] = participants[j+5], participants[j+4]
+    return participants
+
 class BaseCharacter:
     def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
         self.name = name
@@ -78,12 +91,33 @@ class BaseCharacter:
             if len(targets)==0:
                 print("No one to attack")
             for target in targets:
-                hit = self.moveset[move](participants[target]) # call attack function
-                participants[target].hp = participants[target].hp - hit
-                if participants[target].hp <= 0:
-                    participants[target].isAlive = False
-                    print(f"{participants[target].name} is dead")
-                    participants.remove(participants[target])               
+                if participants[target].isAlive:
+                    hit = self.moveSet[move](participants[target]) # call attack function
+                    participants[target].hp = participants[target].hp - hit
+                    if participants[target].hp <= 0:
+                        participants[target].isAlive = False
+                        print(f"{participants[target].name} is dead")
+                        shiftDead(participants) 
+        # if the move chosen is to buff an ally
+        elif move == 1:
+            print(f"{self.name} chose buff")
+            target = random.choice(targets)
+            targetHp = self.buff(participants[target])
+            participants[target].hp = targetHp
+        # if the move chosen is to debuff a target
+        elif move == 2:
+            print(f"{self.name} chose debuff")
+            target = random.choice(targets)
+            targetSpeedMod = self.debuff(participants[target])
+            participants[target].speedModifier = targetSpeedMod
+        # if the move chosen is to move positions
+        elif move == 3:
+            print(f"{self.name} chose to move")
+            if (len(targets) > 0):
+                target = random.choice(targets)
+                participants = self.move(participants[target],participants)   
+            else:
+                print("Invalid move")           
         return participants
 
     def getValidMoves(self, move, charIndex, players, enemies, participants):
