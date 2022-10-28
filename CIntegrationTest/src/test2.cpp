@@ -2,6 +2,9 @@
 
 #include <Python.h>
 #include <iostream>
+#include "GameCharacter.h"
+#include "ParticipantsList.h"
+#include "ParticipantsVector.h"
 
 int main(int argc, char const *argv[])
 {
@@ -18,6 +21,51 @@ int main(int argc, char const *argv[])
         exit(1);
     }
     PyObject* dict = PyModule_GetDict(pModule);
+
+    GameCharacter carl = GameCharacter(dict, "Carl", "Carl", 100, 2, 6, 10, 1, 1, 1);
+    GameCharacter conehead = GameCharacter(dict, "ConeHead", "ConeHead", 100, 2, 6, 10, 1, 1, 1);
+    GameCharacter coneheadBeta = GameCharacter(dict, "ConeHead", "ConeHeadBeta", 100, 2, 6, 10, 1, 1, 1);
+    GameCharacter coneheadAlpha = GameCharacter(dict, "ConeHead", "ConeHeadAlpha", 100, 2, 6, 10, 1, 1, 1);
+    GameCharacter bass = GameCharacter(dict, "Bass", "Bassist", 100, 2, 6, 10, 1, 1, 1);
+    GameCharacter drums = GameCharacter(dict, "Drums", "Drummer", 100, 2, 6, 10, 1, 1, 1);
+    GameCharacter flute = GameCharacter(dict, "Flute", "Flutist", 100, 2, 6, 10, 1, 1, 1);
+    GameCharacter conductor = GameCharacter(dict, "Conductor", "Maestro", 100, 2, 6, 10, 1, 1, 1);
+    
+    std::vector<GameCharacter> pv {
+        flute,
+        conductor,
+        drums,
+        bass,
+        conehead,
+        coneheadAlpha,
+        coneheadBeta,
+        carl
+    };
+
+    ParticipantsVector participantsVector = ParticipantsVector(pv);
+
+    ParticipantsList participantsList = ParticipantsList(
+        flute.getChar(),
+        drums.getChar(),
+        conductor.getChar(),
+        bass.getChar(),
+        carl.getChar(),
+        conehead.getChar(),
+        coneheadAlpha.getChar(),
+        coneheadBeta.getChar(),
+        8
+    );
+    
+    participantsVector.print();
+    participantsVector.update(participantsList);
+    participantsVector.print(); 
+
+    //PyObject* temp = participantsList[6];
+    //participantsVector[0].setChar(temp);
+   
+
+
+    /*
     PyObject* baseCharClass = PyDict_GetItemString(dict, "Carl");
 
     PyObject* pArgs = PyTuple_New(8);
@@ -81,7 +129,7 @@ int main(int argc, char const *argv[])
     unsigned char* cppName = PyUnicode_1BYTE_DATA(name); 
 
     std::cout << "HIS NAME IS " << cppName;
-    
+    */
    
 
     Py_FinalizeEx();

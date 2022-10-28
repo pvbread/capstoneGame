@@ -10,7 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(include)
 
 add_executable(testingPython 
-    src/test2.cpp
+    "src/test2.cpp"
+    "src/GameCharacter.cpp"
+    "src/ParticipantsList.cpp"
+    "src/ParticipantsVector.cpp"
 )
 
 find_package(Python3 REQUIRED COMPONENTS Development)

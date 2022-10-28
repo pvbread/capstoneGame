@@ -221,7 +221,34 @@ class Carl(BaseEnemy):
     def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
         super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
 
-class Conehead(BaseEnemy):
+class ConeHead(BaseEnemy):
+    def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
+        super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
+        self.moveSet = [self.attack]
+
+class BasePlayer(BaseCharacter):
+    def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
+        super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
+        #self.moveSet = [self.attack]
+        self.validMovesAndRanges = {0: [1,2], 1:[3,4], 2:[5,6]} #these have to be relative positions
+        #(edit: added further ranges to make the combat sim rounds go quicker)
+
+class Bass(BasePlayer):
+    def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
+        super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
+        self.moveSet = [self.attack]
+
+class Conductor(BasePlayer):
+    def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
+        super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
+        self.moveSet = [self.attack]
+
+class Drums(BasePlayer):
+    def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
+        super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
+        self.moveSet = [self.attack]
+
+class Flute(BasePlayer):
     def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
         super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
         self.moveSet = [self.attack]
