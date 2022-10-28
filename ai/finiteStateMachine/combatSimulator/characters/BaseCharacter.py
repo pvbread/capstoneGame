@@ -237,15 +237,15 @@ class BaseCharacter:
         print(f"{targetCharacter.name} speed slows by 1 tempo. Speed is at {(targetCharacter.speed + targetCharacter.speedModifier)}.")
         return targetCharacter.speedModifier
 
-    def move(self, targetCharacters, participants): #Move forward 1
+    def move(self, targetCharacter, participants): #Move forward 1
         # This is not the Conductors swap
         #This is A moving forward/backwards 1 step and Character B going to the slot A was at
         #[A][B][C][D] -> [B][A][C][D] and vice versa
         #dont need to check [3]vs[4] positions
         charA = participants.index(self)
-        charB = participants.index(targetCharacters)
+        charB = participants.index(targetCharacter)
         participants[charA], participants[charB]= participants[charB], participants[charA]
-        print(f"{self.name} has switched places with {targetCharacters.name}.")
+        print(f"{self.name} has switched places with {targetCharacter.name}.")
         
         return participants
 

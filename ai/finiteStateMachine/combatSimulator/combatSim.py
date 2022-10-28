@@ -1,7 +1,7 @@
 from utility.setRoundTurns import setRoundTurns
 from utility.isTeamAlive import isTeamAlive 
 from characters.BaseCharacter import BaseCharacter
-from characters.Enemies.Conehead import Conehead
+from characters.Enemies.ConeHead import ConeHead
 from characters.Enemies.Carl import Carl
 from characters.Player.Drums import Drums
 from characters.Player.Conductor import Conductor
@@ -18,9 +18,9 @@ We can have the AI decision policy be added modularly.
 
 #name = className("print name", hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
 carl = Carl(name ="Carl", hp= 30, speed=0, hit= 3, armor= 5,itemModifier= 3,speedModifier= 3,dodgeModifier= 1)
-conehead = Conehead(name = "Conehead", hp=30, speed=3, hit=2, armor=1, itemModifier=3, speedModifier=3, dodgeModifier=5) 
-coneheadBeta = Conehead(name = "ConeheadBeta", hp=30, speed=3, hit=2, armor=1, itemModifier=3, speedModifier=3, dodgeModifier=5) 
-coneheadAlpha = Conehead(name = "ConeheadAlpha", hp=30, speed=3, hit=2, armor=1, itemModifier=3, speedModifier=3, dodgeModifier=5) 
+conehead = ConeHead(name = "Conehead", hp=30, speed=3, hit=2, armor=1, itemModifier=3, speedModifier=3, dodgeModifier=5) 
+coneheadBeta = ConeHead(name = "ConeheadBeta", hp=30, speed=3, hit=2, armor=1, itemModifier=3, speedModifier=3, dodgeModifier=5) 
+coneheadAlpha = ConeHead(name = "ConeheadAlpha", hp=30, speed=3, hit=2, armor=1, itemModifier=3, speedModifier=3, dodgeModifier=5) 
 bass = Bass(name="Bassist", hp=30, speed=1, hit=3, armor=0, itemModifier=3, speedModifier=3, dodgeModifier=3)
 drum = Drums("Drunmmer", hp=30, speed=3, hit=3, armor=3, itemModifier=3, speedModifier=3, dodgeModifier=2)
 flute = Flute("Flutist", hp=30, speed=4, hit=3, armor=2, itemModifier=3, speedModifier=3, dodgeModifier=4)
