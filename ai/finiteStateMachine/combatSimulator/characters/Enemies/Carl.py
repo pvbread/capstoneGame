@@ -1,4 +1,4 @@
-from . import BaseEnemy
+fromm . import BaseEnemy
 
 import random
 
