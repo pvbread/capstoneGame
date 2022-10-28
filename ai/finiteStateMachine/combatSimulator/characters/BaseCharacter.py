@@ -1,6 +1,8 @@
 import random
 import math
 from characters.EmptySpace import shiftDead
+from unicodedata import name
+
 
 
 class BaseCharacter:
@@ -264,5 +266,7 @@ class BaseCharacter:
         print ("speedModifier = ", self.speedModifier)
         print ("dodgeModifier = ", self.dodgeModifier)
 
+
     def return_hp(self):
         return(self.hp)
+

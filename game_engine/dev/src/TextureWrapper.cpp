@@ -1,6 +1,7 @@
 #include "TextureWrapper.h"
-#include <string>
-#include <iostream>
+
+//#include <string>
+//#include <iostream>
 
 TextureWrapper::TextureWrapper() : 
                 texture{nullptr}, width{0}, height{0} {}
@@ -12,7 +13,7 @@ TextureWrapper::~TextureWrapper()
 
 void TextureWrapper::freeMemory()
 {
-    if (texture == nullptr)
+    if (texture != nullptr)
     {
         SDL_DestroyTexture(texture);
         texture = nullptr;
@@ -92,15 +93,17 @@ bool TextureWrapper::render(SDL_Renderer* renderer,
                             SDL_RendererFlip flip)
 {
     SDL_Rect rectangle = {x, y, width, height};
+
+    //clip is only if we want to render a portion of this texture
+    //like in the case of the tilemap
     if (clip != nullptr)
     {
         rectangle.w = clip->w;
         rectangle.h = clip->h;
     }
     // Copies a portion of the texture to current rendering
-    // with rotation/flipping option
-
-    //right now the "texture" param is invalid, so is it nullptr?
+    // with rotation/flipping option which we may eventually want to use
+    //the src is the clip and dest is the &rect at the position we specified
 
     int didCopy = SDL_RenderCopyEx(renderer, texture, clip, &rectangle, angle, center, flip);
 
@@ -113,12 +116,3 @@ bool TextureWrapper::render(SDL_Renderer* renderer,
     return true;
 }
 
-int TextureWrapper::getWidth()
-{
-    return width;
-}
-
-int TextureWrapper::getHeight()
-{
-    return height;
-}

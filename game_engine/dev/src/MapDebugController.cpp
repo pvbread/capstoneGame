@@ -1,16 +1,23 @@
+#include "BaseSingleTexture.h"
 #include "MapDebugController.h"
 #include "TextureWrapper.h"
 
-MapDebugController::MapDebugController() : 
-                                            mainVelocity{10},
-                                            velocityX{0},
-                                            velocityY{0}
+
+MapDebugController::MapDebugController(int mainVelocity, 
+                                       int velocityX, 
+                                       int velocityY, 
+                                       SDL_Rect collisionBox) :
+    BaseSingleTexture(mainVelocity, velocityX, velocityY, collisionBox)
 {
-    collisionBox.x = 0;
-    collisionBox.y = 0;
-    collisionBox.w = 20;
-    collisionBox.h = 20;
+    this->mainVelocity = mainVelocity;
+    this->velocityX = velocityX;
+    this->velocityY = velocityY;
+    this->collisionBox.x = collisionBox.x;
+    this->collisionBox.y = collisionBox.y;
+    this->collisionBox.w = collisionBox.w;
+    this->collisionBox.h = collisionBox.h;
 }
+
 
 void MapDebugController::onInput(SDL_Event& event)
 {
@@ -70,7 +77,7 @@ void MapDebugController::onInput(SDL_Event& event)
 
 void MapDebugController::move(int xBoundary, int yBoundary)
 {
-    //640 480
+    // TODO update to not be hard coded
     collisionBox.x += velocityX;
     if(collisionBox.x < 0 || collisionBox.x > 1280)
     {
@@ -84,10 +91,19 @@ void MapDebugController::move(int xBoundary, int yBoundary)
     }
 }
 
+void MapDebugController::render(SDL_Renderer* renderer, 
+                                const SDL_Rect& camera, 
+                                TextureWrapper& debugControllerTexture)
+{
+    //the debug object is drawn at it's distance from the camera's idea of 0
+    debugControllerTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
+}
+
+
 void MapDebugController::centerScreen(SDL_Rect& camera)
 {
-    camera.x = (collisionBox.x+20/2) - (640/2);
-    camera.y = (collisionBox.y+20/2) - (480/2);
+    camera.x = collisionBox.x - (camera.w/2);
+    camera.y = collisionBox.y - (camera.w/2);
 
     if (camera.x < 0)
         camera.x = 0;
@@ -97,10 +113,4 @@ void MapDebugController::centerScreen(SDL_Rect& camera)
         camera.x = 1280 - camera.w;
     if (camera.y > 960 - camera.h)
         camera.y = 960 - camera.h;
-    SDL_Log("camera y: %d", camera.y);
-}
-
-void MapDebugController::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& debugControllerTexture)
-{
-    debugControllerTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
 }
