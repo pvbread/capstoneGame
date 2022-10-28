@@ -1,6 +1,5 @@
 import random
 import math
-from turtle import fd
 from unicodedata import name
 
 
