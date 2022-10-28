@@ -1,7 +1,7 @@
 from utility.setRoundTurns import setRoundTurns
 from utility.isTeamAlive import isTeamAlive 
 from characters.BaseCharacter import BaseCharacter
-from characters.Enemies.Conehead import Conehead
+from characters.Enemies.ConeHead import ConeHead
 from characters.Enemies.Carl import Carl
 
 '''
@@ -12,9 +12,9 @@ We can have the AI decision policy be added modularly.
 
 #name = className("print name", hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
 carl = Carl(name ="Carl", hp= 50, speed=0, hit= 3, armor= 5,itemModifier= 3,speedModifier= 3,dodgeModifier= 1)
-conehead = Conehead("Conehead", 50, 3, 2, 1, 3, 3, 5) 
-coneheadBeta = Conehead("ConeheadBeta", 50, 3, 2, 1, 3, 3, 5) 
-coneheadAlpha = Conehead("ConeheadAlpha", 50, 3, 2, 1, 3, 3, 5) 
+conehead = ConeHead("Conehead", 50, 3, 2, 1, 3, 3, 5) 
+coneheadBeta = ConeHead("ConeheadBeta", 50, 3, 2, 1, 3, 3, 5) 
+coneheadAlpha = ConeHead("ConeheadAlpha", 50, 3, 2, 1, 3, 3, 5) 
 bass = BaseCharacter("bassist", 50, 2, 3, 2, 3, 3, 6)
 
 #this is going to be passed in to the combatSim program

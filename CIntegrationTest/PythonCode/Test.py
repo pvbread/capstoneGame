@@ -220,4 +220,8 @@ class Carl(BaseEnemy):
     #need to figure out how to neatly do an inheritance of this
     def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
         super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
-    
+
+class Conehead(BaseEnemy):
+    def __init__(self, name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier):
+        super().__init__(name, hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
+        self.moveSet = [self.attack]
