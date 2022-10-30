@@ -13,7 +13,9 @@ def setRoundTurns(characters):
     provisionalOrder = PriorityQueue()
     for character in characters:
         totalSpeedScore = character.speed + character.speedModifier + random.randint(1,6)
-        print(f"{character.name} got a initiative of {totalSpeedScore} and a speed stat of {character.speed + character.speedModifier}")
+        # only print characters who are alive and prevent screen clutter
+        if character.isAlive:
+            print(f"{character.name} got a initiative of {totalSpeedScore} and a speed stat of {character.speed + character.speedModifier}")
         if -totalSpeedScore not in speedMap:
             speedMap[-totalSpeedScore] = [character]
         else:
@@ -23,7 +25,7 @@ def setRoundTurns(characters):
             for i in range(len(speedMap[-totalSpeedScore])):
                 for j in range(len(speedMap[-totalSpeedScore]) - i - 1):
                     if (speedMap[-totalSpeedScore][j].speed + speedMap[-totalSpeedScore][j].speedModifier) > (speedMap[-totalSpeedScore][j+1].speed + speedMap[-totalSpeedScore][j+1].speedModifier):
-                        speedMap[-totalSpeedScore][j], speedMap[-totalSpeedScore][j+1] = speedMap[-totalSpeedScore][j+1], speedMap[-totalSpeedScore][j]
+                         speedMap[-totalSpeedScore][j], speedMap[-totalSpeedScore][j+1] = speedMap[-totalSpeedScore][j+1], speedMap[-totalSpeedScore][j]
                     # if speed is the same. lower health character goes first
                     elif (speedMap[-totalSpeedScore][j].speed + speedMap[-totalSpeedScore][j].speedModifier) == (speedMap[-totalSpeedScore][j+1].speed + speedMap[-totalSpeedScore][j+1].speedModifier):
                         if speedMap[-totalSpeedScore][j].hp < speedMap[-totalSpeedScore][j+1].hp:

@@ -159,6 +159,9 @@ bool Phoenix::loadImageAssets(SDL_Renderer* renderer,
             return false;
         }
     }
+    
+    
+    //TODO this might have to be its own function
 
     //level width 1280, level height 960
     //divided by 80 is 16x12 = 192
