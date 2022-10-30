@@ -34,7 +34,7 @@ void Timer::Reset()
     mDelataTime = 0.0f;
 }
 
-float Timer::DeltaTimer()
+float Timer::DeltaTimer()//remove me
 {
     return mDeltaTimer;
 }
