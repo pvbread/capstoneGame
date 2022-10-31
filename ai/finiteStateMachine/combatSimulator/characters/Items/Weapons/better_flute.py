@@ -1,8 +1,9 @@
-from .. import BaseItem
+from . import BaseWeapon
 import random
 
-class Better_Flute(BaseItem.BaseItem):
-    def __init__(self, name, evasion, defense, agility, tempS, swiftness, healNum, statEffect):
-        super().__init__(self, name, evasion, defense, agility, tempS, swiftness, healNum, statEffect)
-
+class Better_Flute(BaseWeapon.Weapon):
+    def __init__(self, name, tempS, swiftness, healNum, statEffect, rarity):
+        super().__init__(self, name, tempS, swiftness, healNum, statEffect, rarity)
+        
+    
     

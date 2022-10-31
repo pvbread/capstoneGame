@@ -1,4 +1,7 @@
 import math
+from shutil import move
+
+## check for weapon
 
 def backendsAttOther(self, targetCharacter, participants):
     #Target: Position distance 7
@@ -9,6 +12,10 @@ def backendsAttOther(self, targetCharacter, participants):
     elif shoter ==7 and target==0:
         target.hp -=2
     #Effect: Damage 2
+    return None
+
+def shove(targetCharacter, participants):
+    move(targetCharacter,participants)
     return None
 
 def flutter():
