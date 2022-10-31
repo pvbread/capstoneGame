@@ -55,30 +55,76 @@ void EscapeFromCapstone::runGameLoop()
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
+    TextureWrapper characterTestTexture;
+    //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/tilesDraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
-        {&debugControllerTexture, "../../assets/image/dot.bmp"}
+        {&debugControllerTexture, "../../assets/image/dot.bmp"},
+        {&characterTestTexture, "../../assets/image/char.png"}
     };
     
-    const int TILE_TYPE_COUNT = 24;
-    const int TILE_COUNT = 192;
-    std::vector<Tile*> tileMap(TILE_COUNT);
-    std::vector<SDL_Rect> tilesClipped(TILE_COUNT);// this is the total tiles
-    std::map<std::pair<int, int>, TileType> coordinateToTileTypeMap;
+    //this is temporary
+    
+    //so there's going to be a couple of these per char
+    //maybe a map would do well here?
+
+    
+
+
     //TODO in the destructor, clean this up
     //maybe better to have a dedicated function to map the coordinate tiles?
     bool didTexturesLoad = loadImageAssets(getRenderer(), 
-                                           tileMap, 
-                                           tilesClipped, 
-                                           textureFilePaths, 
-                                           coordinateToTileTypeMap);
+                                           textureFilePaths
+    );
     if (!didTexturesLoad)
     {
         SDL_Log("error loading image assets");
         setToQuit();
     }
 
+    const int TILE_COUNT = 192;
+    const int TILE_LENGTH = 80;
+    const int TILE_TYPE_COUNT = 12;
+
+    std::vector<Tile*> tileMap(TILE_COUNT);
+    std::vector<SDL_Rect> tilesClipped(TILE_TYPE_COUNT);// this is the total tiles
+    std::map<std::pair<int, int>, TileType> coordinateToTileTypeMap;
+
+    bool didTilesLoad = loadTiles(tileMap, coordinateToTileTypeMap, TILE_COUNT, TILE_TYPE_COUNT, TILE_LENGTH);
+    if (!didTilesLoad)
+    {
+        SDL_Log("Error loading tiles");
+        setToQuit();
+    }
+
+    const int TILE_SHEET_ROWS = 3;
+    const int TILE_SHEET_COLS = 4;
+    //clip tiles
+    bool didClip = clipSheet(TILE_SHEET_ROWS, TILE_SHEET_COLS, TILE_LENGTH, TILE_LENGTH, TILE_TYPE_COUNT, tilesClipped);
+    if (!didClip)
+    {
+        setToQuit();
+    }
+    const int TEST_CHAR_SHEET_ROWS = 1;
+    const int TEST_CHAR_SHEET_COLS = 5;
+    const int ANIMATION_FRAME_COUNT = 5;
+    int currFrameNum = 0;
+    int currRectNum = 0;
+    
+    std::vector<SDL_Rect> spriteClipped(ANIMATION_FRAME_COUNT);
+    std::unordered_map<TextureWrapper*, int> textureFrameCount = {
+        {&characterTestTexture, ANIMATION_FRAME_COUNT}
+    };
+    std::unordered_map<TextureWrapper*, std::vector<SDL_Rect>> texturePtrToSpriteMap = {
+        {&characterTestTexture, spriteClipped}
+    };
+
+    didClip = clipSheet(TEST_CHAR_SHEET_ROWS, TEST_CHAR_SHEET_COLS, 64, 64, ANIMATION_FRAME_COUNT, spriteClipped);
+    if (!didClip)
+    {
+        setToQuit();
+    }
     //set this to 0 whenever we want a clear debug controller
     debugControllerTexture.setAlpha(0);
 
@@ -89,10 +135,10 @@ void EscapeFromCapstone::runGameLoop()
 
     const int SCREEN_WIDTH = 960;
     const int SCREEN_HEIGHT = 720;
-    SDL_Rect camera = {0,0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
-    double degrees = 0;
-    SDL_RendererFlip flipType = SDL_FLIP_NONE;
+    //double degrees = 0;
+    //SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
     SDL_Event event;
     while (!getQuit())
@@ -187,7 +233,14 @@ void EscapeFromCapstone::runGameLoop()
             } 
             case COMBAT:
             {
+                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
+                SDL_RenderClear(getRenderer());
                 combatMenu.render(getRenderer());   
+                
+                SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
+                characterTestTexture.render(getRenderer(), 100, 100, currFrameRect);
+
+                //test drawing text on a rectangle
                 SDL_Rect rectBlue = { 600, 240, 100, 100 };
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 255, 255); // blue
                 SDL_RenderFillRect(getRenderer(), &rectBlue);
@@ -206,44 +259,7 @@ void EscapeFromCapstone::runGameLoop()
         
         //Update screen
         SDL_RenderPresent(getRenderer());
-        /*
-        SDL_Delay(2000);
-        SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // blue
-        SDL_RenderPresent(renderer);
-        SDL_Delay(2000);*/
-        
+       
+ 
     }
 }
-
-/*
-                SDL_Rect rect1 = { 100, 140, 400, 100 };
-                SDL_Rect rect2 = { 100, 240, 400, 100 };
-                SDL_Rect rect3 = { 100, 340, 300, 100 };
-                SDL_Color color = { 255, 0, 0, 255 };
-                //unnamed textures initd in vector?
-                //same surface can just be overwritten
-                SDL_Surface *surface1 = TTF_RenderText_Solid(font, "New Game", color);
-                SDL_Surface *surface2 = TTF_RenderText_Solid(font, "Load Game", color);
-                SDL_Surface *surface3 = TTF_RenderText_Solid(font, "Credits", color);
-                std::vector<SDL_Texture*> myTextTextures(3);
-                myTextTextures[0] = SDL_CreateTextureFromSurface(getRenderer(), surface1);
-                myTextTextures[1] = SDL_CreateTextureFromSurface(getRenderer(), surface2);
-                myTextTextures[2] = SDL_CreateTextureFromSurface(getRenderer(), surface3);
-                //SDL_Texture *texture1 = SDL_CreateTextureFromSurface(getRenderer(), surface1);
-                //SDL_Texture *texture2 = SDL_CreateTextureFromSurface(getRenderer(), surface2);
-                //SDL_Texture *texture3 = SDL_CreateTextureFromSurface(getRenderer(), surface3);
-                SDL_FreeSurface(surface1);
-                SDL_FreeSurface(surface2);
-                SDL_FreeSurface(surface3);
-                SDL_Surface *surfaceCursor = TTF_RenderText_Solid(font, ">", color);
-                SDL_Texture *textureCursor = SDL_CreateTextureFromSurface(getRenderer(), surfaceCursor);
-                SDL_FreeSurface(surfaceCursor);
-                SDL_RenderCopy(getRenderer(), myTextTextures[0], nullptr, &rect1);
-                SDL_RenderCopy(getRenderer(), myTextTextures[1], nullptr, &rect2);
-                SDL_RenderCopy(getRenderer(), myTextTextures[2], nullptr, &rect3);
-                //SDL_RenderCopy(getRenderer(), texture1, nullptr, &rect1);
-                //SDL_RenderCopy(getRenderer(), texture2, nullptr, &rect2);
-                //SDL_RenderCopy(getRenderer(), texture3, nullptr, &rect3);
-                SDL_RenderCopy(getRenderer(), textureCursor, nullptr, &cursor);
-                */
