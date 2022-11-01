@@ -14,6 +14,7 @@ public:
     void update(ParticipantsList pl);
     std::vector<GameCharacter> getParticipantsVector() const;
     void print();
+    GameCharacter operator[](int index);
 
 private:
     std::vector<GameCharacter> participantsVector;

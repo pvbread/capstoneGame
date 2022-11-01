@@ -91,11 +91,13 @@ int main(int argc, char const *argv[])
     ParticipantsVector roundOrder = pv;
     
     participantsVector.print();
-    //participantsVector.update(participantsList);
-    //participantsVector.print(); 
     setRoundTurns(roundOrder, setRoundTurnsFunc);
     roundOrder.print();
-    std::cout << "one of the two teams is alive: " << isTeamAlive(participantsVector);
+    std::cout << "one of the two teams is alive: " << isTeamAlive(participantsVector) << std::endl;
+    ParticipantsList temp = participantsVector.toPyList();
+    // segfault here
+    //participantsVector[0].doAction(0, 1, temp);
+
 
     /*
     while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):

@@ -37,3 +37,8 @@ void ParticipantsVector::print()
     }
     std::cout << std::endl;
 }
+
+GameCharacter ParticipantsVector::operator[](int index)
+{
+    return participantsVector[index];
+}
