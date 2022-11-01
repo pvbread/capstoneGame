@@ -95,6 +95,12 @@ ParticipantsList::ParticipantsList(std::vector<PyObject*> objsVector)
         }
     }
 }
+
+ParticipantsList::ParticipantsList(PyObject* rawVector)
+{
+    participantsList = rawVector;
+    sz = 8;
+}
                     
 
 PyObject* ParticipantsList::operator[](int index)

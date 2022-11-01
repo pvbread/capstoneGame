@@ -24,6 +24,11 @@ void ParticipantsVector::update(ParticipantsList pl)
     }
 }
 
+std::vector<GameCharacter> ParticipantsVector::getParticipantsVector() const
+{
+    return participantsVector;
+}
+
 void ParticipantsVector::print()
 {
     for (auto participant: participantsVector)

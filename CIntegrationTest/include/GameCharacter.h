@@ -21,6 +21,7 @@ public:
     PyObject* getChar() const;
     unsigned char* getName() const;
     void setChar(PyObject* newChar);
+    bool isAlive() const;
    
 /*
     ParticipantsList doAction(int moveIndex, 
@@ -30,6 +31,7 @@ public:
     std::vector<int> getValidMoves() const{};
 */
 
+//isAlive
     //getValidMoves
     //getActionAndTargets
     //validMovesAndRanges

@@ -62,3 +62,14 @@ void GameCharacter::setChar(PyObject* newChar)
 {
     characterInstance = newChar; 
 }
+
+bool GameCharacter::isAlive() const
+{
+    if (!characterInstance)
+    {
+        std::cout << "didn't exist";
+        return false;
+    }
+    PyObject* lifeState = PyObject_GetAttrString(characterInstance, "isAlive");
+    return PyObject_IsTrue(lifeState); 
+}
