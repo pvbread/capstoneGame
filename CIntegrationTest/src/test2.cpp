@@ -6,6 +6,25 @@
 #include "ParticipantsList.h"
 #include "ParticipantsVector.h"
 
+void setRoundTurns(ParticipantsVector& unorderedParticipants, PyObject* setRoundTurnsFunc)
+{
+    PyObject* participantsArg = PyTuple_New(1);
+    PyTuple_SetItem(participantsArg, 0, unorderedParticipants.toPyList().getParticipants());
+    PyObject* ordereredRoundRaw = PyObject_CallObject(setRoundTurnsFunc, participantsArg);
+    ParticipantsList ordereredRoundWrapper = ParticipantsList(ordereredRoundRaw);
+    unorderedParticipants.update(ordereredRoundWrapper);
+}
+
+bool isTeamAlive(const ParticipantsVector& team)
+{
+    for (auto participant: team.getParticipantsVector())
+    {
+        if (participant.isAlive())
+            return true;
+    }
+    return false;
+}
+
 int main(int argc, char const *argv[])
 {
     Py_Initialize();
@@ -30,6 +49,17 @@ int main(int argc, char const *argv[])
     GameCharacter drums = GameCharacter(dict, "Drums", "Drummer", 100, 2, 6, 10, 1, 1, 1);
     GameCharacter flute = GameCharacter(dict, "Flute", "Flutist", 100, 2, 6, 10, 1, 1, 1);
     GameCharacter conductor = GameCharacter(dict, "Conductor", "Maestro", 100, 2, 6, 10, 1, 1, 1);
+
+    PyObject* setRoundName = PyUnicode_DecodeFSDefault("setRoundTurns");
+    PyObject* setRoundTurnsModule = PyImport_Import(setRoundName);
+
+    if (!setRoundTurnsModule)
+    {
+        std::cout << "Error loading setRoundTurns.py";
+        exit(1);
+    }
+
+
     
     std::vector<GameCharacter> pv {
         flute,
@@ -55,80 +85,104 @@ int main(int argc, char const *argv[])
         coneheadBeta.getChar(),
         8
     );
+
+
+    PyObject* setRoundTurnsFunc = PyObject_GetAttrString(setRoundTurnsModule, "setRoundTurns");
+    ParticipantsVector roundOrder = pv;
     
     participantsVector.print();
-    participantsVector.update(participantsList);
-    participantsVector.print(); 
-
-    //PyObject* temp = participantsList[6];
-    //participantsVector[0].setChar(temp);
-   
+    setRoundTurns(roundOrder, setRoundTurnsFunc);
+    roundOrder.print();
+    std::cout << "one of the two teams is alive: " << isTeamAlive(participantsVector) << std::endl;
+    ParticipantsList temp = participantsVector.toPyList();
+    // segfault here
+    //participantsVector[0].doAction(0, 1, temp);
 
 
     /*
-    PyObject* baseCharClass = PyDict_GetItemString(dict, "Carl");
+    while isTeamAlive(playerCharacters) and isTeamAlive(enemyCharacters):
+    print(f"Round {roundNum}")
+    #gets the new round order
+    currentRoundOrder = setRoundTurns(participants)
+    #debug print
+    """
+    print(f"\nCurrent round order {currentRoundOrder}\n")
+    """
+    printTurnOrder(currentRoundOrder)
+    for i in range(len(currentRoundOrder)):
+        currentChar = currentRoundOrder[i]
+        
+        if currentChar.isAlive == False:
+            continue #formerly break #we could remove them from participants but may want to keep revive option
+        
+        sleep(2)
+        print(f"{currentChar.name} turn")
+        printCombatArray(participants)
+        
+        # enemy case scenario
 
-    PyObject* pArgs = PyTuple_New(8);
-    PyObject* stringArg = PyUnicode_FromString("Carl");
-    PyObject* numArg1 = PyLong_FromLong(3);
-    PyTuple_SetItem(pArgs, 0, stringArg);
-    PyTuple_SetItem(pArgs, 1, numArg1);
-    PyTuple_SetItem(pArgs, 2, numArg1);
-    PyTuple_SetItem(pArgs, 3, numArg1);
-    PyTuple_SetItem(pArgs, 4, numArg1);
-    PyTuple_SetItem(pArgs, 5, numArg1);
-    PyTuple_SetItem(pArgs, 6, numArg1);
-    PyTuple_SetItem(pArgs, 7, numArg1);
-    
-    PyObject* baseCharInstance = PyObject_CallObject(baseCharClass, pArgs);
-    if (!baseCharInstance)
-    {
-        std::cout << "Error instantiating class";
-    }
+        #get index to moveset (which is an array of action funciton) + targets
+        if currentChar in enemyCharacters:
+            actionAndTargets = currentChar.getActionAndTargets(playerCharacters,enemyCharacters,participants)
+        #actionAndTargets = currentChar.getActionAndTargets("NeuralNetwork")
+        #actionAndTargets = currentChar.getActionAndTargets("FuzzyLogic")
 
-    stringArg = PyUnicode_FromString("ConeHead");
-    PyTuple_SetItem(pArgs, 0, stringArg);
-    
-    PyObject* baseCharInstance2 = PyObject_CallObject(baseCharClass, pArgs);
-    if (!baseCharInstance)
-    {
-        std::cout << "Error instantiating class";
-    }
+        #function takes in all the characters, and 
+        #returns a copy of the character objects with the targets
+        #having been affected by the action
+            participants = currentChar.doAction(actionAndTargets[0], actionAndTargets[1], participants)
+            print("\n")
 
-    stringArg = PyUnicode_FromString("ConeHeadBeta");
-    PyTuple_SetItem(pArgs, 0, stringArg);
-    
-    PyObject* baseCharInstance3 = PyObject_CallObject(baseCharClass, pArgs);
-    if (!baseCharInstance)
-    {
-        std::cout << "Error instantiating class";
-    }
+        # player case scenario
+        
+        if currentChar in playerCharacters:
+            print("Select action")
+            print("0: attack")
+            print("1: buff")
+            print("2: debuff")
+            print("3: move")
+            action = int(input("Enter the number for the desired action: "))
+            while(action < 0 or action > 3):
+                action = int(input("Invalid command. Please enter the number for the desired action: "))
+            charIndex = participants.index(currentChar)
+            # if user selects attack, user will then choose the type of attack (for now it uses the relevant ranges as choices)
+            if action == 0:  
+                print("Your position is at", charIndex)
+                print("Relevent attack ranges")
+                print(currentChar.validMovesAndRanges)
+                ranges = int(input("Enter the associated number for valid attack range: "))
+                while(ranges < 0 or ranges > len(currentChar.validMovesAndRanges)-1):
+                    ranges = int(input("Invalid command. Please enter the number for the desired attack range: "))
+                validTargets = currentChar.getValidMoves(action, charIndex, playerCharacters, enemyCharacters, participants, ranges)
+            # if user selects anything else, prints the valid targets, then the user will choose a specific target
+            else: 
+                validTargets = currentChar.getValidMoves(action, charIndex, playerCharacters, enemyCharacters, participants)
+                for i in validTargets:
+                    print(i,":",participants[i].name, end='. ')
+                target = int(input("\nSelect target: "))
+                while (target not in validTargets):
+                    target = int(input("Invalid target. Select valid target: "))
+                validTargets = [target]
+            # commit player action
+            participants = currentChar.doAction(action, validTargets, participants)
+            print("\n")
+            
+             # checks if either team is not alive and breaks out of the game loop
+        if isTeamAlive(playerCharacters) == False or isTeamAlive(enemyCharacters) == False:
+            break
 
-    stringArg = PyUnicode_FromString("ConeHeadCharlie");
-    PyTuple_SetItem(pArgs, 0, stringArg);
-    
-    PyObject* baseCharInstance4 = PyObject_CallObject(baseCharClass, pArgs);
-    if (!baseCharInstance)
-    {
-        std::cout << "Error instantiating class";
-    }
+    printCombatArray(participants)
 
-    
-
-    //Macro form of PyList_SetItem() without error checking. This is normally only used to fill in new lists where there is no previous content.
-
-    PyObject* enemies = PyList_New(4);
-    PyList_SET_ITEM(enemies, 0, baseCharInstance);
-    PyList_SET_ITEM(enemies, 1, baseCharInstance2);
-    PyList_SET_ITEM(enemies, 2, baseCharInstance3);
-    PyList_SET_ITEM(enemies, 3, baseCharInstance4);
-
-
-
-    PyObject* name = PyObject_GetAttrString(baseCharInstance, "name");
-    unsigned char* cppName = PyUnicode_1BYTE_DATA(name); 
-
-    std::cout << "HIS NAME IS " << cppName;
+    print(f"End of round {roundNum}\n")
+    roundNum += 1
+    input("Press ENTER to continue\n")
+    ## think about, how are we going to read in event input
+    ## we're actually going to sit on a loop, doing nothing
+    ## once legal input action is selected, we process
+if isTeamAlive(playerCharacters):
+    print("Victory")
+if isTeamAlive(enemyCharacters):
+    print("Defeat")
     */
    
 

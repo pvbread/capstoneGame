@@ -21,14 +21,14 @@ public:
     PyObject* getChar() const;
     unsigned char* getName() const;
     void setChar(PyObject* newChar);
+    bool isAlive() const;
    
-/*
-    ParticipantsList doAction(int moveIndex, 
-                              std::vector<int> targetIdxs, 
-                              ParticipantsList participants);
+    void doAction(int moveIndex, 
+                  int charIndex, 
+                  ParticipantsList& participants
+    );
 
-    std::vector<int> getValidMoves() const{};
-*/
+    std::vector<int> getValidMoves() const;
 
     //getValidMoves
     //getActionAndTargets
@@ -37,4 +37,5 @@ public:
     //debug Log statements
 private:
     PyObject* characterInstance;
+    PyObject* doActionFunc;
 };
