@@ -138,15 +138,17 @@ void EscapeFromCapstone::runGameLoop()
         SDL_Rect temp = {(50+(i*100)), 200, 64, 64};
         charBoxes[i] = temp; 
     }
-    std::vector<SDL_Rect> orderBoxes(9);
+    std::vector<SDL_Rect> orderBoxes(8);
     for (int i = 0; i < orderBoxes.size(); i++)
     {
-        SDL_Rect temp = {750, 280+(i*50), 200, 30};
+        SDL_Rect temp = {750, 330+(i*50), 200, 30};
         orderBoxes[i] = temp; 
     }
 
+    SDL_Rect orderTitleBox = {750, 280, 200, 30};
+    std::string orderTitle = "ORDER        ";
+
     std::vector<std::string> tempCharNames {
-        "Order        ",
         "flute        ",
         "conductor    ",
         "drums        ",
@@ -156,6 +158,10 @@ void EscapeFromCapstone::runGameLoop()
         "coneheadTheta",
         "Carl         "
     };
+    //TODO account for dead chars in order
+    int currOrderNum = 0;
+
+    TTF_Font *orderFont = TTF_OpenFont("./Raleway-Medium.ttf", 50);
 
     int currMove = 0;
     std::vector<std::vector<int>> validMoves = {
@@ -254,6 +260,14 @@ void EscapeFromCapstone::runGameLoop()
                                     actionChosen = false;
                                 break;
                             }
+                            case SDLK_x:
+                            {
+                                currOrderNum++;
+                                //TODO makes this tied to a limit
+                                //and reroll order when down to 0 members
+                                if (currOrderNum > 7)
+                                    currOrderNum = 0;
+                            }
                         }
                     }
                 }
@@ -317,16 +331,26 @@ void EscapeFromCapstone::runGameLoop()
                     }
                 }
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
-                for (int i = 0; i < orderBoxes.size(); i++)
+                //TODO, render ORDER first
+                //TODO, pop off when x happens
+                SDL_RenderFillRect(getRenderer(), &orderTitleBox);
+                SDL_Color textColor = { 255, 0, 0, 255 };
+                std::stringstream titleStream;
+                titleStream << orderTitle;
+                SDL_Surface* surfaceTesting = TTF_RenderText_Solid(orderFont, titleStream.str().c_str(), textColor); //ttf surface  
+                SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
+                SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
+                
+                for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
+                    std::stringstream charNameStream;
                     SDL_RenderFillRect(getRenderer(), &orderBoxes[i]);
-                    SDL_Color textColor = { 255, 0, 0, 255 };
-                    std::stringstream myFavoriteStream;
-                    myFavoriteStream << tempCharNames[i];
-                    SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, myFavoriteStream.str().c_str(), textColor); //ttf surface  
-                    SDL_Texture *textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
+                    charNameStream << tempCharNames[i];
+                    surfaceTesting = TTF_RenderText_Solid(orderFont, charNameStream.str().c_str(), textColor); //ttf surface  
+                    textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
                 }
+                
                 
 
                 //test drawing text on a rectangle
