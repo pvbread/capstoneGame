@@ -138,6 +138,25 @@ void EscapeFromCapstone::runGameLoop()
         SDL_Rect temp = {(50+(i*100)), 200, 64, 64};
         charBoxes[i] = temp; 
     }
+    std::vector<SDL_Rect> orderBoxes(9);
+    for (int i = 0; i < orderBoxes.size(); i++)
+    {
+        SDL_Rect temp = {750, 280+(i*50), 200, 30};
+        orderBoxes[i] = temp; 
+    }
+
+    std::vector<std::string> tempCharNames {
+        "Order        ",
+        "flute        ",
+        "conductor    ",
+        "drums        ",
+        "bass         ",
+        "coneheadAlpha",
+        "coneheadBeta ",
+        "coneheadTheta",
+        "Carl         "
+    };
+
     int currMove = 0;
     std::vector<std::vector<int>> validMoves = {
         {1, 3},
@@ -297,6 +316,18 @@ void EscapeFromCapstone::runGameLoop()
                         SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
                     }
                 }
+                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
+                for (int i = 0; i < orderBoxes.size(); i++)
+                {
+                    SDL_RenderFillRect(getRenderer(), &orderBoxes[i]);
+                    SDL_Color textColor = { 255, 0, 0, 255 };
+                    std::stringstream myFavoriteStream;
+                    myFavoriteStream << tempCharNames[i];
+                    SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, myFavoriteStream.str().c_str(), textColor); //ttf surface  
+                    SDL_Texture *textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
+                    SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
+                }
+                
 
                 //test drawing text on a rectangle
 
