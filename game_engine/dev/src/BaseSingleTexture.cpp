@@ -30,3 +30,8 @@ void BaseSingleTexture::centerScreen(SDL_Rect& camera)
     if (camera.y > 960 - camera.h)
         camera.y = 960 - camera.h;
 }
+
+SDL_Rect BaseSingleTexture::getCollisionBox() const
+{
+    return collisionBox;
+}

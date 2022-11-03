@@ -12,7 +12,8 @@ public:
     virtual void runGameLoop();
     void stopGameLoop();
     bool loadTiles(std::vector<Tile*>& tileMap, 
-                   std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap, 
+                   std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
+                   std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,  
                    int TILE_COUNT, 
                    int TYPE_COUNT, 
                    int TILE_LENGTH

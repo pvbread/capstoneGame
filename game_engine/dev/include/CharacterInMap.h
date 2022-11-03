@@ -18,11 +18,22 @@ public:
     CharacterInMap(int mainVelocity, 
                    int velocityX, 
                    int velocityY, 
-                   SDL_Rect collisionBox); 
+                   SDL_Rect collisionBox
+    ); 
     bool isMoveValid(std::string direction, 
-                     std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap);
+                     std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap
+    );
+    void updateEvent(std::string& nextMapEvent,
+                     bool& boxOpen,
+                     std::pair<int, int> coordinates, 
+                     std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
+    );
     void onInput(SDL_Event& event,
-                 std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap);
+                 std::string& nextMapEvent,
+                 bool& boxOpen,
+                 std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
+                 std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
+    );
     void move(int xBoundary, 
               int yBoundary);
     void centerScreen(SDL_Rect& camera);
