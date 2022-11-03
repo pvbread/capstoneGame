@@ -24,6 +24,11 @@ void ParticipantsVector::update(ParticipantsList pl)
     }
 }
 
+std::vector<GameCharacter> ParticipantsVector::getParticipantsVector() const
+{
+    return participantsVector;
+}
+
 void ParticipantsVector::print()
 {
     for (auto participant: participantsVector)
@@ -31,4 +36,9 @@ void ParticipantsVector::print()
         std::cout << participant.getName() << " ";
     }
     std::cout << std::endl;
+}
+
+GameCharacter ParticipantsVector::operator[](int index)
+{
+    return participantsVector[index];
 }

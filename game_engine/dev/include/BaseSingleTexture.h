@@ -24,6 +24,7 @@ public:
     virtual void render(SDL_Renderer* renderer, 
                         const SDL_Rect& camera, 
                         TextureWrapper& debugControllerTexture) = 0;
+    SDL_Rect getCollisionBox() const;
 private:    
     int mainVelocity;
     int velocityX;

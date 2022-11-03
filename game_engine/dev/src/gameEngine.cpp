@@ -32,7 +32,7 @@ Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
         SDL_Log("Error creating window");
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     if (renderer == nullptr)
     {
@@ -69,8 +69,8 @@ void Phoenix::stopGameLoop()
 }
 
 bool Phoenix::loadTiles(std::vector<Tile*>& tileMap, 
-                        std::vector<SDL_Rect>& tilesClipped,
                         std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
+                        std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,
                         int TILE_COUNT, 
                         int TYPE_COUNT, 
                         int TILE_LENGTH)
@@ -105,7 +105,9 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
         {
             tileMap[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, (TileType)tileType);
             std::pair<int, int> coordinates = std::make_pair(x,y);
-            coordinateToTileTypeMap[coordinates] = (TileType)tileType; 
+            coordinateToTileTypeMap[coordinates] = (TileType)tileType;
+            if ((TileType)tileType != BLACK)
+            coordinateToEventTypeMap[coordinates] = "";
         }
         //TODO DON't HARD CODE THIS
         //MAP_WIDTH
@@ -118,37 +120,14 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
         }
        
     }
-
-    
-    //close file
     level.close();
 
-    //clip
-    //math is for 4 x 3 tile map 
-    //we have 240 x 160 if tile size is 80 (factor this away later)
-    //so iterate on the smaller y dimension and set the boundaries of the 
-    //rectangles accordingly
-    tileType = 0;
-    for (y = 0; y < 3; y++)
-    {
-        for (x = 0; x < 4; x++)
-        { 
-            tilesClipped[tileType].x = x*TILE_LENGTH;
-            tilesClipped[tileType].y = y*TILE_LENGTH;
-            tilesClipped[tileType].w = TILE_LENGTH;
-            tilesClipped[tileType].h = TILE_LENGTH;
-            tileType++;
-        }
-    }
-
     return true;
+
 }
 
 bool Phoenix::loadImageAssets(SDL_Renderer* renderer,  
-                              std::vector<Tile*>& tileMap, 
-                              std::vector<SDL_Rect>& tilesClipped,
-                              std::unordered_map<TextureWrapper*, std::string> textureFilePaths,
-                              std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
+                              std::unordered_map<TextureWrapper*, std::string> textureFilePaths)
 {
     for (auto [texturePtr, textureFilePath]: textureFilePaths)
     {
@@ -159,22 +138,36 @@ bool Phoenix::loadImageAssets(SDL_Renderer* renderer,
             return false;
         }
     }
-    
-    
-    //TODO this might have to be its own function
 
-    //level width 1280, level height 960
-    //divided by 80 is 16x12 = 192
-    const int TILE_COUNT = 192;
-    const int TILE_LENGTH = 80;
-    const int TYPE_COUNT = 12;
+    return true;
+}
 
-    if (!loadTiles(tileMap, tilesClipped, coordinateToTileTypeMap, TILE_COUNT, TYPE_COUNT, TILE_LENGTH))
+bool Phoenix::clipSheet(int ROWS,
+                        int COLS, 
+                        int BLOCK_LENGTH,
+                        int BLOCK_HEIGHT,
+                        int TYPE_COUNT,
+                        std::vector<SDL_Rect>& sheetClipped
+                       )
+{
+    int blockType = 0;
+    for (int r = 0; r < ROWS; r++)
     {
-        SDL_Log("Failed to load tile set");
-        return false;
-    }
-
+        for (int c = 0; c < COLS; c++)
+        { 
+            if (blockType == TYPE_COUNT)
+            {
+                SDL_Log("Error clipping");
+                return false;
+            }
+            //c and r might have to get flipped when not square
+            sheetClipped[blockType].x = c*BLOCK_LENGTH;
+            sheetClipped[blockType].y = r*BLOCK_HEIGHT;
+            sheetClipped[blockType].w = BLOCK_LENGTH;
+            sheetClipped[blockType].h = BLOCK_HEIGHT;
+            blockType++;
+        }
+    } 
     return true;
 }
 

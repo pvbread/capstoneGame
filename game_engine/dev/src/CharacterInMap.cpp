@@ -92,9 +92,38 @@ bool CharacterInMap::isMoveValid(std::string direction,
     return true;
 }
 
-void CharacterInMap::onInput(SDL_Event& event,
-                             std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap)
+void CharacterInMap::updateEvent(std::string& nextMapEvent,
+                                 bool& boxOpen,
+                                 std::pair<int, int> coordinates, 
+                                 std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
+                                )
 {
+    if (coordinateToEventTypeMap[coordinates] != "BLANKEVENT")
+    { 
+        nextMapEvent = coordinateToEventTypeMap[coordinates];
+        boxOpen = true;
+        std::cout << nextMapEvent << std::endl;    
+        coordinateToEventTypeMap[coordinates] = "BLANKEVENT"; 
+    }
+    else if (coordinateToEventTypeMap[coordinates] == "BLANKEVENT")
+    {
+        nextMapEvent = "BLANKEVENT";
+        boxOpen = false;
+        std::cout << nextMapEvent << std::endl; 
+    }
+}
+
+void CharacterInMap::onInput(SDL_Event& event, 
+                             std::string& nextMapEvent,
+                             bool& boxOpen,
+                             std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
+                             std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
+                            )
+{
+    
+    //std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
+                //TileType currentTileType = coordinateToTileTypeMap[coordinates];
+                          
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
     {
         switch (event.key.keysym.sym)
@@ -102,25 +131,41 @@ void CharacterInMap::onInput(SDL_Event& event,
             case SDLK_a:
             {
                 if (isMoveValid("left", coordinateToTileTypeMap))
+                {
                     collisionBox.x -= mainVelocity;
+                    std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
+                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap);  
+                }
                 break;
             }
             case SDLK_w:
             {
                 if (isMoveValid("up", coordinateToTileTypeMap))
+                {
                     collisionBox.y -= mainVelocity;
+                    std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
+                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap); 
+                }
                 break;
             }
             case SDLK_d:
             {
                 if (isMoveValid("right", coordinateToTileTypeMap))
+                {
                     collisionBox.x += mainVelocity;
+                    std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
+                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap); 
+                }
                 break;
             }
             case SDLK_s:
             {
                 if (isMoveValid("down", coordinateToTileTypeMap))
+                {
                     collisionBox.y += mainVelocity;
+                    std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
+                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap); 
+                }
                 break;
             }
         }

@@ -20,6 +20,7 @@ public:
                      int size
     );
     ParticipantsList(std::vector<PyObject*>);
+    ParticipantsList(PyObject* rawVector);
 
     //overload
     PyObject* operator[](int index);

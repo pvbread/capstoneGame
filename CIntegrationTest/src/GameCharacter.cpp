@@ -40,6 +40,10 @@ GameCharacter::GameCharacter(PyObject* moduleDict,
         //PyObject* name = PyObject_GetAttrString(characterInstance, "name");
         //std::cout << PyUnicode_1BYTE_DATA(name); 
     }
+    
+    //TODO test this doActionFunc first before adding more
+    PyObject* doActionFunc = PyObject_GetAttrString(characterClass, "doAction");
+    
 }
 
 PyObject* GameCharacter::getChar() const
@@ -61,4 +65,41 @@ unsigned char* GameCharacter::getName() const
 void GameCharacter::setChar(PyObject* newChar)
 {
     characterInstance = newChar; 
+}
+
+bool GameCharacter::isAlive() const
+{
+    if (!characterInstance)
+    {
+        std::cout << "didn't exist";
+        return false;
+    }
+    PyObject* lifeState = PyObject_GetAttrString(characterInstance, "isAlive");
+    return PyObject_IsTrue(lifeState); 
+}
+
+//6 inputs
+void GameCharacter::doAction(int moveIndex, 
+                             int charIndex, 
+                             ParticipantsList& participants
+                            )
+{
+    //need move idx, int target, players, enemies, participants
+    //verify the 6th argument
+    PyObject* args = PyTuple_New(5);
+    PyObject* moveIndexObj = PyLong_FromLong(moveIndex);
+    PyObject* charIndexObj = PyLong_FromLong(charIndex);
+    PyTuple_SetItem(args, 0, moveIndexObj);
+    PyTuple_SetItem(args, 1, charIndexObj);
+    PyTuple_SetItem(args, 2, participants.getPlayers());
+    PyTuple_SetItem(args, 3, participants.getEnemies());
+    PyTuple_SetItem(args, 4, participants.getParticipants());
+    PyObject* testCall = PyObject_CallObject(doActionFunc, args);
+
+}
+
+
+std::vector<int> GameCharacter::getValidMoves() const
+{
+    return {1};
 }
