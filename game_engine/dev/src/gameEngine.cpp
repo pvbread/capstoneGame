@@ -70,6 +70,7 @@ void Phoenix::stopGameLoop()
 
 bool Phoenix::loadTiles(std::vector<Tile*>& tileMap, 
                         std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
+                        std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,
                         int TILE_COUNT, 
                         int TYPE_COUNT, 
                         int TILE_LENGTH)
@@ -104,7 +105,9 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
         {
             tileMap[i] = new Tile(x, y, TILE_LENGTH, TILE_LENGTH, (TileType)tileType);
             std::pair<int, int> coordinates = std::make_pair(x,y);
-            coordinateToTileTypeMap[coordinates] = (TileType)tileType; 
+            coordinateToTileTypeMap[coordinates] = (TileType)tileType;
+            if ((TileType)tileType != BLACK)
+            coordinateToEventTypeMap[coordinates] = "";
         }
         //TODO DON't HARD CODE THIS
         //MAP_WIDTH

@@ -12,6 +12,8 @@ void EscapeFromCapstone::runGameLoop()
     Screen screen = INTRO;
     //temporary 
     TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
+    
+    
     //temp
     SDL_Rect cursor = { 45, 160, 50, 50 };
     //incredibly temp
@@ -90,13 +92,44 @@ void EscapeFromCapstone::runGameLoop()
     std::vector<Tile*> tileMap(TILE_COUNT);
     std::vector<SDL_Rect> tilesClipped(TILE_TYPE_COUNT);// this is the total tiles
     std::map<std::pair<int, int>, TileType> coordinateToTileTypeMap;
+    std::map<std::pair<int, int>, std::string> coordinateToEventTypeMap;
 
-    bool didTilesLoad = loadTiles(tileMap, coordinateToTileTypeMap, TILE_COUNT, TILE_TYPE_COUNT, TILE_LENGTH);
+    bool didTilesLoad = loadTiles(tileMap, 
+                                  coordinateToTileTypeMap, 
+                                  coordinateToEventTypeMap, 
+                                  TILE_COUNT, 
+                                  TILE_TYPE_COUNT, 
+                                  TILE_LENGTH
+    );
     if (!didTilesLoad)
     {
         SDL_Log("Error loading tiles");
         setToQuit();
     }
+
+    std::vector<std::string> eventList(6, "BLANKEVENT");
+    std::vector<std::string> eventsToAdd {
+        "BATTLE",
+        "BATTLE",
+        "HEAL",
+        "JOKE",
+        "ITEM"
+    };
+    for (auto event: eventsToAdd)
+        eventList.push_back(event);
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0,10); 
+
+    for (auto& [coordinate, event]: coordinateToEventTypeMap)
+    {
+        event = eventList[dist(gen)];  
+    }
+
+    std::string nextMapEvent = "";
+    SDL_Rect mapEventBox = {200, 200, 400, 100};
+    bool boxOpen = false;
 
     const int TILE_SHEET_ROWS = 3;
     const int TILE_SHEET_COLS = 4;
@@ -183,7 +216,18 @@ void EscapeFromCapstone::runGameLoop()
                     //this has a bug where movement
                     //keeps being read if key is not unpressed
                     debugController.onInput(event);
-                    characterController.onInput(event, coordinateToTileTypeMap);
+                    characterController.onInput(event, nextMapEvent, boxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_RETURN:
+                            {
+                                boxOpen = false;
+                                break;
+                            }
+                        }
+                    } 
                     break;
                 }
                 case COMBAT:
@@ -229,6 +273,17 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 debugController.render(getRenderer(), camera, debugControllerTexture);
                 characterController.render(getRenderer(), camera, characterInMapTexture);
+                if (boxOpen)
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 0, 0, 200, 255);
+                    SDL_RenderFillRect(getRenderer(), &mapEventBox);
+                    SDL_Color textColor = { 255, 0, 0, 255 };
+                    std::stringstream mapEventStream;
+                    mapEventStream << nextMapEvent;
+                    SDL_Surface* surfaceTesting = TTF_RenderText_Solid(font, mapEventStream.str().c_str(), textColor); //ttf surface  
+                    SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
+                    SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &mapEventBox); 
+                }
                 break;
             } 
             case COMBAT:
