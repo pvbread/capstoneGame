@@ -132,6 +132,46 @@ void EscapeFromCapstone::runGameLoop()
     SDL_Rect characterControllerHitbox = {30, 30, 80, 80};
     MapDebugController debugController(10, 0, 0, debugHitbox);
     CharacterInMap characterController(80, 0, 0, characterControllerHitbox);
+    std::vector<SDL_Rect> charBoxes(8);
+    for (int i = 0; i < charBoxes.size(); i++)
+    {
+        SDL_Rect temp = {(50+(i*100)), 200, 64, 64};
+        charBoxes[i] = temp; 
+    }
+    std::vector<SDL_Rect> orderBoxes(8);
+    for (int i = 0; i < orderBoxes.size(); i++)
+    {
+        SDL_Rect temp = {750, 330+(i*50), 200, 30};
+        orderBoxes[i] = temp; 
+    }
+
+    SDL_Rect orderTitleBox = {750, 280, 200, 30};
+    std::string orderTitle = "ORDER        ";
+
+    std::vector<std::string> tempCharNames {
+        "flute        ",
+        "conductor    ",
+        "drums        ",
+        "bass         ",
+        "coneheadAlpha",
+        "coneheadBeta ",
+        "coneheadTheta",
+        "Carl         "
+    };
+    //TODO account for dead chars in order
+    int currOrderNum = 0;
+
+    TTF_Font *orderFont = TTF_OpenFont("./Raleway-Medium.ttf", 50);
+
+    int currMove = 0;
+    std::vector<std::vector<int>> validMoves = {
+        {1, 3},
+        {2, 4},
+        {3, 5},
+        {4, 6},
+        {5, 7}
+    };
+    bool actionChosen = false;
 
     const int SCREEN_WIDTH = 960;
     const int SCREEN_HEIGHT = 720;
@@ -198,6 +238,36 @@ void EscapeFromCapstone::runGameLoop()
                                 testCounter++;
                                 break;
                             }
+                            case SDLK_LEFT:
+                            {
+                                currMove--;
+                                if (currMove < 0)
+                                    currMove = 0;
+                                break;
+                            }
+                            case SDLK_RIGHT:
+                            {
+                                currMove++;
+                                if (currMove == validMoves.size())
+                                    currMove = validMoves.size()-1;
+                                break;
+                            }
+                            case SDLK_RETURN:
+                            {
+                                if (!actionChosen)
+                                    actionChosen = true;
+                                else
+                                    actionChosen = false;
+                                break;
+                            }
+                            case SDLK_x:
+                            {
+                                currOrderNum++;
+                                //TODO makes this tied to a limit
+                                //and reroll order when down to 0 members
+                                if (currOrderNum > 7)
+                                    currOrderNum = 0;
+                            }
                         }
                     }
                 }
@@ -235,12 +305,57 @@ void EscapeFromCapstone::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
-                combatMenu.render(getRenderer());   
+                combatMenu.render(getRenderer());
+                
                 
                 SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
-                characterTestTexture.render(getRenderer(), 100, 100, currFrameRect);
+
+                //will be for loop (eventually)
+                characterTestTexture.render(getRenderer(), 50, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 150, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 250, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 350, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 450, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 550, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 650, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
+
+                SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
+                SDL_RenderFillRect(getRenderer(), &charBoxes[0]);
+                if (actionChosen)
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
+                    for (auto target: validMoves[currMove])
+                    {
+                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                    }
+                }
+                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
+                //TODO, render ORDER first
+                //TODO, pop off when x happens
+                SDL_RenderFillRect(getRenderer(), &orderTitleBox);
+                SDL_Color textColor = { 255, 0, 0, 255 };
+                std::stringstream titleStream;
+                titleStream << orderTitle;
+                SDL_Surface* surfaceTesting = TTF_RenderText_Solid(orderFont, titleStream.str().c_str(), textColor); //ttf surface  
+                SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
+                SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
+                
+                for (int i = currOrderNum; i < orderBoxes.size(); i++)
+                {
+                    std::stringstream charNameStream;
+                    SDL_RenderFillRect(getRenderer(), &orderBoxes[i]);
+                    charNameStream << tempCharNames[i];
+                    surfaceTesting = TTF_RenderText_Solid(orderFont, charNameStream.str().c_str(), textColor); //ttf surface  
+                    textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
+                    SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
+                }
+                
+                
 
                 //test drawing text on a rectangle
+
+                /*
                 SDL_Rect rectBlue = { 600, 240, 100, 100 };
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 255, 255); // blue
                 SDL_RenderFillRect(getRenderer(), &rectBlue);
@@ -251,7 +366,9 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, myFavoriteStream.str().c_str(), textColor); //ttf surface  
                 SDL_Texture *textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
                 SDL_FreeSurface(surfaceTesting); 
+                
                 SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &rectBlue);
+                */
                 break;
             }
         }
