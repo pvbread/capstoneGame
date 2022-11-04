@@ -130,7 +130,26 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
     }
 }
 
-int BaseCharacter::attack(BaseCharacter targetCharacter){}
+int BaseCharacter::attack(BaseCharacter targetCharacter)
+{
+    const float DODGE_SCALE = 0.02;
+    float dodgeChance = targetCharacter.getDodgeModifier() * DODGE_SCALE;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> floatDist(0,1);
+    float roll = floatDist(gen);
+    if (roll < dodgeChance)
+    {
+        return 0;
+    }
+    std::uniform_int_distribution<> intDist(1,4);
+    int weaponRoll = intDist(gen);
+    int damage = weaponRoll + hit;
+    float REDUCTION_SCALE = 0.05;
+    int reduction = int(damage * (targetCharacter.getArmor() * REDUCTION_SCALE));
+    damage -= reduction;
+    return damage;
+}
 int BaseCharacter::buff(BaseCharacter targetCharacter){}
 int BaseCharacter::debuff(BaseCharacter targetCharacter){}
 void BaseCharacter::moveSpots(int charIndex, int targetIndex, const std::vector<BaseCharacter>& participants){}
@@ -145,6 +164,16 @@ int BaseCharacter::getHp() const
 {
     return hp;
 } 
+
+int BaseCharacter::getDodgeModifier() const
+{
+    return dodgeModifier;
+}
+
+int BaseCharacter::getArmor() const
+{
+    return armor;
+}
 
 void BaseCharacter::setHp(int newHp)
 {

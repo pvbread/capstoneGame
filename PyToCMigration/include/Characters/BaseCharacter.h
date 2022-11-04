@@ -49,6 +49,8 @@ public:
     void moveSpots(int charIndex, int targetIndex, const std::vector<BaseCharacter>& participants);
     bool isAlive() const;
     int getHp() const;
+    int getDodgeModifier() const;
+    int getArmor() const;
     void setHp(int newHp);
     void setSpeedMod(int newSpeedMod);
     void changeLifeStatus();
