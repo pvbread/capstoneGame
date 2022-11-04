@@ -10,16 +10,13 @@ typedef std::tuple<IntFunctionPointer, IntFunctionPointer, IntFunctionPointer, V
 class BaseCharacter
 {
 public:
-    BaseCharacter(std::string name, int hp, int maxHp, int speed, 
+    BaseCharacter(std::string name, int hp, int speed, 
                   int hit, int armor, int itemModifier, int speedModifier, 
                   int dodgeModifier, bool enemy
     );
-    std::pair<int, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
-                                                         std::string decisionAlgo = "");
-    
-    std::vector<BaseCharacter> doAction(std::string actionType, 
-                                        std::vector<int> targets, 
-                                        const std::vector<BaseCharacter>& participants
+
+    std::pair<std::string, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
+                                                                 std::string decisionAlgo = ""
     );
 
     std::vector<int> getValidMoves(std::string actionType,
@@ -29,6 +26,11 @@ public:
 
     std::vector<int> getValidBuffTargets(std::string typeOfBuff, 
                                          const std::vector<BaseCharacter>& participants
+    );
+
+    std::vector<BaseCharacter> doAction(std::string actionType, 
+                                        std::vector<int> targets, 
+                                        const std::vector<BaseCharacter>& participants
     );
 
     int attack(BaseCharacter targetCharacter);
@@ -48,4 +50,11 @@ private:
     int dodgeModifier;
     bool enemy;
     bool isAlive;
+    std::vector<std::string> moveTypes = { "ATTACK", "BUFF", "DEBUFF", "MOVE" };
+    int participantsIndex;
+    std::vector<std::vector<int>> validMovesAndRanges = {
+        {1,2},
+        {3,4},
+        {5,6}
+    };
 };
