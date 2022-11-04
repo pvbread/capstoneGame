@@ -49,6 +49,7 @@ public:
     std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
                                          std::vector<BaseCharacter> participants
     );
+    std::string getName() const;
     bool isAlive() const;
     int getHp() const;
     int getMaxHp() const;

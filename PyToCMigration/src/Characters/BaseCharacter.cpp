@@ -28,6 +28,21 @@ std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dist(0,3);
         chosenMove = (ActionType)dist(gen);
+
+        // try to find index of current character in vector (unsure if this works, needs testing)
+        std::string key = name;
+        auto itr = find_if(participants.begin(),
+                            participants.end(),
+                            [&key] (const BaseCharacter& obj)
+                            {
+                                return obj.getName()==key;
+                            }
+        );
+        if (itr != participants.end())
+        {
+            auto participantsIndex = std::distance(participants.begin(),itr);
+        }
+
         targets = getValidMoves(chosenMove, participantsIndex, participants);
     }
 
@@ -76,12 +91,12 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
             //SPECIAL CASE, it's like a buff but we want to filter out character index
             validMoves = getValidBuffTargets(BUFF, participants);
             std::vector<int>::iterator adjustments;
-            int currCharIndex = participantsIndex; //needed for lambda to be happy
+            int currCharIndex = charIndex; //needed for lambda to be happy (changed lambda conditions)
             adjustments = remove_if(validMoves.begin(),
                                     validMoves.end(),
                                     [currCharIndex] (int index) 
                                     {
-                                        return index == currCharIndex;
+                                        return index != currCharIndex + 1 || index != currCharIndex - 1;
                                     }
             );
             validMoves.erase(adjustments, validMoves.end());
@@ -238,6 +253,10 @@ std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetInd
     return participants;
 }
 
+std::string BaseCharacter::getName() const
+{
+    return name;
+}
 
 bool BaseCharacter::isAlive() const
 {
