@@ -84,6 +84,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
                                         return index == currCharIndex;
                                     }
             );
+            validMoves.erase(adjustments, validMoves.end());
             break;
         }
     }
