@@ -82,22 +82,34 @@ void BaseCharacter::doAction(ActionType actionType,
 
         case BUFF:
         {
+            for (auto target: targets)
+            {
+                int newTargetHp = buff(participants[target]);
+                participants[target].setHp(newTargetHp);
+            }
             break;
         }
 
         case DEBUFF:
         {
+            for (auto target: targets)
+            {
+                int newTargetSpeedMod = debuff(participants[target]);
+                participants[target].setSpeedMod(newTargetSpeedMod);
+            }
             break;
         }
 
         case MOVE:
         {
+            int targetIndex = targets[0];
+            moveSpots(participantsIndex, targetIndex, participants);
             break;
         }
     }
 }
 
-void shiftDead(std::vector<BaseCharacter>& participants)
+void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
 {
     const int LIVE_BOUNDARY = 3;
     for (int i = 0; i < LIVE_BOUNDARY; i++)
@@ -118,6 +130,12 @@ void shiftDead(std::vector<BaseCharacter>& participants)
     }
 }
 
+int BaseCharacter::attack(BaseCharacter targetCharacter){}
+int BaseCharacter::buff(BaseCharacter targetCharacter){}
+int BaseCharacter::debuff(BaseCharacter targetCharacter){}
+void BaseCharacter::moveSpots(int charIndex, int targetIndex, const std::vector<BaseCharacter>& participants){}
+
+
 bool BaseCharacter::isAlive() const
 {
     return alive;
@@ -136,4 +154,9 @@ void BaseCharacter::setHp(int newHp)
 void BaseCharacter::changeLifeStatus()
 {
     alive = !alive;
+}
+
+void BaseCharacter::setSpeedMod(int newSpeedMod)
+{
+    speedModifier = newSpeedMod;
 }

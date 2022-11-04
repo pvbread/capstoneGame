@@ -50,6 +50,7 @@ public:
     bool isAlive() const;
     int getHp() const;
     void setHp(int newHp);
+    void setSpeedMod(int newSpeedMod);
     void changeLifeStatus();
 
 private:
