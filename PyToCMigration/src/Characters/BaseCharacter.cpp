@@ -14,7 +14,7 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     this->speedModifier = speedModifier;
     this->dodgeModifier = dodgeModifier;
     this->enemy = enemy;
-    isAlive = true;
+    alive = true;
 }
 
 std::pair<std::string, std::vector<int>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
@@ -36,14 +36,85 @@ std::pair<std::string, std::vector<int>> BaseCharacter::getActionAndTargets(cons
 
 //still have to think about userInputRanges
 std::vector<int> BaseCharacter::getValidMoves(std::string actionType,
-                                int charIndex,
-                                const std::vector<BaseCharacter>& participants)
+                                              int charIndex,
+                                              const std::vector<BaseCharacter>& participants)
 {
+    std::vector<int> validMoves;
+
     if (actionType == "ATTACK")
     {
+        if (!enemy)
+        {
+            ;
+        }
 
+        return validMoves;
     }
 
     return {};
 }
 
+void BaseCharacter::doAction(std::string actionType, 
+                             std::vector<int> targets, 
+                             std::vector<BaseCharacter>& participants)
+{
+    if (actionType == "ATTACK")
+    {
+        for (auto target: targets)
+        {
+            if (participants[target].isAlive())
+            {
+                int hit = attack(participants[target]);
+                int newHp = participants[target].getHp() - hit;
+                participants[target].setHp(newHp);
+                if (participants[target].getHp() <= 0)
+                {
+                    participants[target].changeLifeStatus();
+                    shiftDead(participants);
+                }
+            }
+        }
+    }
+    //TODO buff debuff move
+}
+
+void shiftDead(std::vector<BaseCharacter>& participants)
+{
+    const int LIVE_BOUNDARY = 3;
+    for (int i = 0; i < LIVE_BOUNDARY; i++)
+    {
+        for (int j = 0; j < LIVE_BOUNDARY; j++)
+        {
+            if (participants[j].isAlive() && !participants[j+1].isAlive())
+                std::swap(participants[j], participants[j+1]);
+        }
+    }
+    for (int i = 0; i < LIVE_BOUNDARY; i++)
+    {
+        for (int j = 0; j < LIVE_BOUNDARY; j++)
+        {
+            if (participants[j+5].isAlive() && !participants[j+4].isAlive())
+                std::swap(participants[j+5], participants[j+4]);
+        }
+    }
+}
+
+bool BaseCharacter::isAlive() const
+{
+    return alive;
+}
+
+int BaseCharacter::getHp() const
+{
+    return hp;
+} 
+
+void BaseCharacter::setHp(int newHp)
+{
+    hp = newHp;
+}
+
+void BaseCharacter::changeLifeStatus()
+{
+    alive = !alive;
+}

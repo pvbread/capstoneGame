@@ -28,15 +28,19 @@ public:
                                          const std::vector<BaseCharacter>& participants
     );
 
-    std::vector<BaseCharacter> doAction(std::string actionType, 
-                                        std::vector<int> targets, 
-                                        const std::vector<BaseCharacter>& participants
+    void doAction(std::string actionType, 
+                  std::vector<int> targets, 
+                  std::vector<BaseCharacter>& participants
     );
 
     int attack(BaseCharacter targetCharacter);
     int buff(BaseCharacter targetCharacter);
     int debuff(BaseCharacter targetCharacter);
     void moveSpots(int charIndex, int targetIndex, const std::vector<BaseCharacter>& participants);
+    bool isAlive() const;
+    int getHp() const;
+    void setHp(int newHp);
+    void changeLifeStatus();
 
 private:
     std::string name;
@@ -49,7 +53,7 @@ private:
     int speedModifier;
     int dodgeModifier;
     bool enemy;
-    bool isAlive;
+    bool alive;
     std::vector<std::string> moveTypes = { "ATTACK", "BUFF", "DEBUFF", "MOVE" };
     int participantsIndex;
     std::vector<std::vector<int>> validMovesAndRanges = {
