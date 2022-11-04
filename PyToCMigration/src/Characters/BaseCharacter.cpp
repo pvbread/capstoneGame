@@ -54,13 +54,12 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
     return {};
 }
 
-void BaseCharacter::doAction(ActionType actionType, 
-                             std::vector<int> targets, 
-                             std::vector<BaseCharacter>& participants)
+std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
+                                                   std::vector<int> targets, 
+                                                   std::vector<BaseCharacter> participants)
 {
     switch(actionType)
     {
-
         case ATTACK:
         {
             for (auto target: targets)
@@ -95,7 +94,7 @@ void BaseCharacter::doAction(ActionType actionType,
             for (auto target: targets)
             {
                 int newTargetSpeedMod = debuff(participants[target]);
-                participants[target].setSpeedMod(newTargetSpeedMod);
+                participants[target].setSpeedModifier(newTargetSpeedMod);
             }
             break;
         }
@@ -150,9 +149,31 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     damage -= reduction;
     return damage;
 }
-int BaseCharacter::buff(BaseCharacter targetCharacter){}
-int BaseCharacter::debuff(BaseCharacter targetCharacter){}
-void BaseCharacter::moveSpots(int charIndex, int targetIndex, const std::vector<BaseCharacter>& participants){}
+
+int BaseCharacter::buff(BaseCharacter targetCharacter)
+{
+    if (targetCharacter.getHp() >= targetCharacter.getMaxHp())
+        return 0;
+    if (!targetCharacter.isAlive())
+        return 0;
+    // the last case is that char is alive and doesn't have full health
+    int healAmount = ceil(float(targetCharacter.maxHp) * 0.1);
+    int newHp = targetCharacter.getHp() + healAmount;
+    return newHp;
+}
+
+int BaseCharacter::debuff(BaseCharacter targetCharacter)
+{
+    int newSpeedMod = targetCharacter.getSpeedModifier() - 1;
+    return newSpeedMod;
+}
+
+std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
+{
+    //note, this is pass by copy so we are not changing the overall state
+    std::swap(participants[charIndex], participants[targetIndex]);
+    return participants;
+}
 
 
 bool BaseCharacter::isAlive() const
@@ -165,6 +186,11 @@ int BaseCharacter::getHp() const
     return hp;
 } 
 
+int BaseCharacter::getMaxHp() const
+{
+    return maxHp;
+}
+
 int BaseCharacter::getDodgeModifier() const
 {
     return dodgeModifier;
@@ -173,6 +199,11 @@ int BaseCharacter::getDodgeModifier() const
 int BaseCharacter::getArmor() const
 {
     return armor;
+}
+
+int BaseCharacter::getSpeedModifier() const
+{
+    return speedModifier;
 }
 
 void BaseCharacter::setHp(int newHp)
@@ -185,7 +216,7 @@ void BaseCharacter::changeLifeStatus()
     alive = !alive;
 }
 
-void BaseCharacter::setSpeedMod(int newSpeedMod)
+void BaseCharacter::setSpeedModifier(int newSpeedMod)
 {
     speedModifier = newSpeedMod;
 }

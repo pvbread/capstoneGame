@@ -36,9 +36,9 @@ public:
                                          const std::vector<BaseCharacter>& participants
     );
 
-    void doAction(ActionType actionType, 
-                  std::vector<int> targets, 
-                  std::vector<BaseCharacter>& participants
+    std::vector<BaseCharacter> doAction(ActionType actionType, 
+                                        std::vector<int> targets, 
+                                        std::vector<BaseCharacter> participants
     );
 
     void shiftDead(std::vector<BaseCharacter>& participants);
@@ -46,13 +46,17 @@ public:
     int attack(BaseCharacter targetCharacter);
     int buff(BaseCharacter targetCharacter);
     int debuff(BaseCharacter targetCharacter);
-    void moveSpots(int charIndex, int targetIndex, const std::vector<BaseCharacter>& participants);
+    std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
+                                         std::vector<BaseCharacter> participants
+    );
     bool isAlive() const;
     int getHp() const;
+    int getMaxHp() const;
     int getDodgeModifier() const;
     int getArmor() const;
+    int getSpeedModifier() const;
     void setHp(int newHp);
-    void setSpeedMod(int newSpeedMod);
+    void setSpeedModifier(int newSpeedMod);
     void changeLifeStatus();
 
 private:
