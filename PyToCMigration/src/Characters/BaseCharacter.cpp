@@ -41,7 +41,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
 {
     std::vector<int> validMoves;
 
-    if (actionType == "ATTACK")
+    if (actionType == ATTACK)
     {
         if (!enemy)
         {
@@ -61,7 +61,7 @@ void BaseCharacter::doAction(ActionType actionType,
     switch(actionType)
     {
 
-        case "ATTACK":
+        case ATTACK:
         {
             for (auto target: targets)
             {
@@ -77,6 +77,22 @@ void BaseCharacter::doAction(ActionType actionType,
                     }
                 }
             }
+            break;
+        }
+
+        case BUFF:
+        {
+            break;
+        }
+
+        case DEBUFF:
+        {
+            break;
+        }
+
+        case MOVE:
+        {
+            break;
         }
     }
 }
