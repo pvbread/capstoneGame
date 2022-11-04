@@ -18,6 +18,7 @@ enum ActionType
 class BaseCharacter
 {
 public:
+    BaseCharacter() = default;
     BaseCharacter(std::string name, int hp, int speed, 
                   int hit, int armor, int itemModifier, int speedModifier, 
                   int dodgeModifier, bool enemy
@@ -67,7 +68,7 @@ public:
     int itemModifier;
 
 
-private:
+protected:
     std::string name;
     int maxHp; // do not currently have items that inc maxHp
     int speed;

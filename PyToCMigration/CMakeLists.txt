@@ -12,6 +12,9 @@ include_directories(include)
 add_executable(testingPython 
     "src/test.cpp"
     "src/Characters/BaseCharacter.cpp"
+    "src/Characters/Players/BasePlayer.cpp"
+    "src/Characters/Players/Bass.cpp"
     "src/Utility/setRoundTurns.cpp"
     "src/Utility/isTeamAlive.cpp"
+    
 )
