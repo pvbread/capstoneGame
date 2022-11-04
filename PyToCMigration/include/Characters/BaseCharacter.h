@@ -32,7 +32,7 @@ public:
                                    const std::vector<BaseCharacter>& participants
     );
 
-    std::vector<int> getValidBuffTargets(std::string typeOfBuff, 
+    std::vector<int> getValidBuffTargets(ActionType typeOfBuff, 
                                          const std::vector<BaseCharacter>& participants
     );
 
@@ -72,9 +72,10 @@ private:
     bool enemy;
     bool alive;
     int participantsIndex;
-    std::vector<std::vector<int>> validMovesAndRanges = {
-        {1,2},
-        {3,4},
-        {5,6}
+    //example validMoves and ranges
+    std::unordered_map<ActionType, std::vector<int>> validMovesAndRanges = {
+        {ATTACK, {2,4}},
+        {BUFF, {2}},
+        {DEBUFF, {5}}
     };
 };

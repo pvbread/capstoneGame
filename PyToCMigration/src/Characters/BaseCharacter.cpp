@@ -34,24 +34,85 @@ std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const
     return make_pair(chosenMove, targets);
 }
 
-//still have to think about userInputRanges
 std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
                                               int charIndex,
                                               const std::vector<BaseCharacter>& participants)
 {
     std::vector<int> validMoves;
 
-    if (actionType == ATTACK)
+    switch(actionType)
     {
-        if (!enemy)
+        case ATTACK:
         {
-            ;
+            if (!enemy)
+            {
+                for (auto position: validMovesAndRanges[ATTACK])
+                {
+                    int targetPosition = charIndex + position;
+                    if (targetPosition < participants.size())
+                        validMoves.push_back(targetPosition);
+                }
+            }
+            else
+            {
+                //it's an enemy
+                for (auto position: validMovesAndRanges[ATTACK])
+                {
+                    int targetPosition = charIndex - position;
+                    if (targetPosition >= 0)
+                        validMoves.push_back(targetPosition);
+                }
+            }
+            break;
         }
-
-        return validMoves;
+        case BUFF: case DEBUFF:
+        {
+            //this covers both the BUFF and DEBUFF cases
+            validMoves = getValidBuffTargets(actionType, participants);
+            break;
+        }
+        case MOVE:
+        {
+            //SPECIAL CASE, it's like a buff but we want to filter out character index
+            validMoves = getValidBuffTargets(BUFF, participants);
+            std::vector<int>::iterator adjustments;
+            int currCharIndex = participantsIndex; //needed for lambda to be happy
+            adjustments = remove_if(validMoves.begin(),
+                                    validMoves.end(),
+                                    [currCharIndex] (int index) 
+                                    {
+                                        return index == currCharIndex;
+                                    }
+            );
+            break;
+        }
     }
 
-    return {};
+    return validMoves;
+}
+
+std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff, 
+                                                    const std::vector<BaseCharacter>& participants)
+{
+    std::vector<int> validMoves;
+    const int TEAM_SIZE = 4;
+    if ( (!enemy && typeOfBuff == BUFF) || (enemy && typeOfBuff == DEBUFF) )
+    {
+        for (int i = 0; i < TEAM_SIZE; i++)
+        {
+            if (participants[i].isAlive())
+                validMoves.push_back(i);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < TEAM_SIZE; i++)
+        {
+            if (participants[i+4].isAlive())
+                validMoves.push_back(i+4);
+        }
+    }
+    return validMoves;
 }
 
 std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
@@ -106,6 +167,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
             break;
         }
     }
+    return participants;
 }
 
 void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
