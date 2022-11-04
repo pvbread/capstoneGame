@@ -77,7 +77,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
             validMoves = getValidBuffTargets(BUFF, participants);
             std::vector<int>::iterator adjustments;
             int currCharIndex = participantsIndex; //needed for lambda to be happy
-            adjustments = remove_if(validMoves.begin(),
+            adjustments = std::remove_if(validMoves.begin(),
                                     validMoves.end(),
                                     [currCharIndex] (int index) 
                                     {
