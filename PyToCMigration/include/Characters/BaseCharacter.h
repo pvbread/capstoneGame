@@ -7,6 +7,14 @@ typedef void(*VoidFunctionPointer)();
 typedef int(*IntFunctionPointer)();
 typedef std::tuple<IntFunctionPointer, IntFunctionPointer, IntFunctionPointer, VoidFunctionPointer> MoveSet;
 
+enum ActionType 
+{
+    ATTACK = 0,
+    BUFF = 1,
+    DEBUFF = 2,
+    MOVE = 3
+};
+
 class BaseCharacter
 {
 public:
@@ -15,11 +23,11 @@ public:
                   int dodgeModifier, bool enemy
     );
 
-    std::pair<std::string, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
+    std::pair<ActionType, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                  std::string decisionAlgo = ""
     );
 
-    std::vector<int> getValidMoves(std::string actionType,
+    std::vector<int> getValidMoves(ActionType actionType,
                                    int charIndex,
                                    const std::vector<BaseCharacter>& participants
     );
@@ -28,10 +36,12 @@ public:
                                          const std::vector<BaseCharacter>& participants
     );
 
-    void doAction(std::string actionType, 
+    void doAction(ActionType actionType, 
                   std::vector<int> targets, 
                   std::vector<BaseCharacter>& participants
     );
+
+    void shiftDead(std::vector<BaseCharacter>& participants);
 
     int attack(BaseCharacter targetCharacter);
     int buff(BaseCharacter targetCharacter);
@@ -54,7 +64,6 @@ private:
     int dodgeModifier;
     bool enemy;
     bool alive;
-    std::vector<std::string> moveTypes = { "ATTACK", "BUFF", "DEBUFF", "MOVE" };
     int participantsIndex;
     std::vector<std::vector<int>> validMovesAndRanges = {
         {1,2},

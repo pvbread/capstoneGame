@@ -17,17 +17,17 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     alive = true;
 }
 
-std::pair<std::string, std::vector<int>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
+std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
-    std::string chosenMove;
+    ActionType chosenMove;
     std::vector<int> targets;
     if (decisionAlgo == "")
     {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dist(0,3);
-        chosenMove = moveTypes[dist(gen)];
+        chosenMove = (ActionType)dist(gen);
         targets = getValidMoves(chosenMove, participantsIndex, participants);
     }
 
@@ -35,7 +35,7 @@ std::pair<std::string, std::vector<int>> BaseCharacter::getActionAndTargets(cons
 }
 
 //still have to think about userInputRanges
-std::vector<int> BaseCharacter::getValidMoves(std::string actionType,
+std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
                                               int charIndex,
                                               const std::vector<BaseCharacter>& participants)
 {
@@ -54,28 +54,31 @@ std::vector<int> BaseCharacter::getValidMoves(std::string actionType,
     return {};
 }
 
-void BaseCharacter::doAction(std::string actionType, 
+void BaseCharacter::doAction(ActionType actionType, 
                              std::vector<int> targets, 
                              std::vector<BaseCharacter>& participants)
 {
-    if (actionType == "ATTACK")
+    switch(actionType)
     {
-        for (auto target: targets)
+
+        case "ATTACK":
         {
-            if (participants[target].isAlive())
+            for (auto target: targets)
             {
-                int hit = attack(participants[target]);
-                int newHp = participants[target].getHp() - hit;
-                participants[target].setHp(newHp);
-                if (participants[target].getHp() <= 0)
+                if (participants[target].isAlive())
                 {
-                    participants[target].changeLifeStatus();
-                    shiftDead(participants);
+                    int hit = attack(participants[target]);
+                    int newHp = participants[target].getHp() - hit;
+                    participants[target].setHp(newHp);
+                    if (participants[target].getHp() <= 0)
+                    {
+                        participants[target].changeLifeStatus();
+                        shiftDead(participants);
+                    }
                 }
             }
         }
     }
-    //TODO buff debuff move
 }
 
 void shiftDead(std::vector<BaseCharacter>& participants)
