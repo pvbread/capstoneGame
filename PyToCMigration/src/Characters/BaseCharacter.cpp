@@ -283,6 +283,11 @@ int BaseCharacter::getArmor() const
     return armor;
 }
 
+int BaseCharacter::getSpeed() const
+{
+    return speed;
+}
+
 int BaseCharacter::getSpeedModifier() const
 {
     return speedModifier;

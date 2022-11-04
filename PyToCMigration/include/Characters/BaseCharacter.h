@@ -55,24 +55,27 @@ public:
     int getMaxHp() const;
     int getDodgeModifier() const;
     int getArmor() const;
+    int getSpeed() const;
     int getSpeedModifier() const;
     void setHp(int newHp);
     void setSpeedModifier(int newSpeedMod);
     void changeLifeStatus();
+    int speedModifier;
+    int hp;
+    bool alive;
+    int participantsIndex;
+    int itemModifier;
+
 
 private:
     std::string name;
-    int hp;
     int maxHp; // do not currently have items that inc maxHp
     int speed;
     int hit;
     int armor;
-    int itemModifier;
-    int speedModifier;
     int dodgeModifier;
     bool enemy;
-    bool alive;
-    int participantsIndex;
+    
     //example validMoves and ranges
     std::unordered_map<ActionType, std::vector<int>> validMovesAndRanges = {
         {ATTACK, {2,4}},
