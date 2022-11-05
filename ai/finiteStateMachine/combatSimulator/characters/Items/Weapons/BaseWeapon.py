@@ -2,10 +2,12 @@ from .. import BaseItem
 import random
 
 class Weapon(BaseItem.BaseItem):
+    @staticmethod
     def __init__(self, name, tempS, swiftness, healNum, statEffect, rarity):
         super().__init__(self, name, tempS, swiftness, healNum, statEffect)
 
         self.rarity=rarity
+        
 
     def weaponPrint(self):
         print("This instrument is called ", self.name, " with a rarity of ", self.rarity, ".")

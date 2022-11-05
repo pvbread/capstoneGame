@@ -3,11 +3,8 @@ from unicodedata import name
 
 
 class BaseItem:
-    def __init__(self, name, evasion, defense, agility, tempS, swiftness, healNum, statEffect):
+    def __init__(self, name, tempS, swiftness, healNum, statEffect):
         self.name=name
-        self.evasion=evasion
-        self.defense=defense
-        self.agility=agility
         self.tempS=tempS
         self.swiftness=swiftness
         self.healNum=healNum        #for Healing

@@ -1,4 +1,7 @@
 
+from opcode import stack_effect
+from characters.Items.Weapons import BaseWeapon
+from characters.Items.Weapons.BaseWeapon import Weapon
 from characters.Moves.Attack_moves import shove
 from utility.setRoundTurns import setRoundTurns
 from utility.isTeamAlive import isTeamAlive 
@@ -11,6 +14,7 @@ from characters.Player.Conductor import Conductor
 from characters.Player.Drums import Drums
 from characters.Player.Flute import Flute
 from characters.Items.Weapons.better_flute import Better_Flute
+from characters.Moves.Attack_moves import shove
 
 #name = className("print name", hp, speed, hit, armor, itemModifier, speedModifier, dodgeModifier)
 carl = Carl(name ="Carl", hp= 50, speed=0, hit= 3, armor= 5,itemModifier= 3,speedModifier= 3,dodgeModifier= 1)
@@ -81,7 +85,44 @@ carl.move(bass, participants)
 print("move is not concerned with legality, that is the concren of checkValidMoves")
 printCombatArray(participants)
 
-shove(bass, drums)
+print("\n")
+carl.shove(bass, participants)
+print("shove teset")
+printCombatArray(participants)
+#shove(bass, drums)
 
-flute_test=Better_Flute(name="Flute of Bacon", tempS=0, swiftness=0, healNum=0, statEffect=0,rarity="common")
+flute_test=BaseWeapon.Weapon
+flute_test.name="Flute-of-Bacon"
+flute_test.tempS=0, 
+flute_test.swiftness=0, 
+flute_test.healNum=0, 
+flute_test.statEffect=0,  
+flute_test.rarity="common"
 Better_Flute.weaponPrint(flute_test)
+#print(flute_test.__dict__)
+
+
+#flute_test2=Better_Flute(name="Flute-of-Bacon", tempS=0, swiftness=0, healNum=0, statEffect=0,  rarity="common")
+att_mod =2
+x = Better_Flute.calculateAttack(flute_test, att_mod)
+y = Better_Flute.calculateAttack(flute_test, att_mod)
+z = Better_Flute.calculateAttack(flute_test, att_mod)
+w = Better_Flute.calculateAttack(flute_test, att_mod)
+print(x, y ,z ,w)
+
+flute_testL=BaseWeapon.Weapon
+flute_testL.name="Flute-of-Bacon"
+flute_testL.tempS=0, 
+flute_testL.swiftness=0, 
+flute_testL.healNum=0, 
+flute_testL.statEffect=0,  
+flute_testL.rarity="legendary"
+
+
+Better_Flute.weaponPrint(flute_testL)
+att_mod =2
+x = Better_Flute.calculateAttack(flute_testL, att_mod)
+y = Better_Flute.calculateAttack(flute_testL, att_mod)
+z = Better_Flute.calculateAttack(flute_testL, att_mod)
+w = Better_Flute.calculateAttack(flute_testL, att_mod)
+print(x, y ,z ,w)

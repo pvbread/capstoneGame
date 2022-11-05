@@ -1,6 +1,6 @@
 import math
-from shutil import move
-
+from .. import BaseCharacter
+from BaseCharacter import move
 ## check for weapon
 
 def backendsAttOther(self, targetCharacter, participants):
