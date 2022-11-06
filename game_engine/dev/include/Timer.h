@@ -5,21 +5,23 @@
 class Timer
 {
 public:
-    static Timer* Instance();
-    static void Release();
+    static Timer* instance();
+    static void release();
 
-    void Reset();
-    float DeltaTimer();
+    void reset();
+    float deltaTimer();//gives back delta time
 
-    void TimerScale(float t);
-    float TimerScale();
+    void timerScale(float t);//for setting timescale
+    float timerScale();//returns timescale
 
-    void Update();
+    void update();//timer update
+
+    bool timePassed(countdownTime);
 
 private:
     static Timer* sInstance;
 
-    unsigned int mStartTicks;
+    unsigned int mStartTicks;//where SDL_GETTICKS gets from beginning of program
     unsigned int mElapsedTicks;
     float mDeltaTimer;
     float mTimerScale;
