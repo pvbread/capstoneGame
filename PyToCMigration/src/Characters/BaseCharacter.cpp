@@ -273,6 +273,11 @@ int BaseCharacter::getMaxHp() const
     return maxHp;
 }
 
+int BaseCharacter::getHit() const
+{
+    return hit;
+}
+
 int BaseCharacter::getDodgeModifier() const
 {
     return dodgeModifier;
@@ -330,7 +335,7 @@ void BaseCharacter::setArmor(int armor)
 
 void BaseCharacter::setMaxHp(int hp)
 {
-    this->hp = hp;
+    this->maxHp = hp;
 }
 
 void BaseCharacter::setDodgeModifier(int dodgeModifier)
@@ -338,9 +343,19 @@ void BaseCharacter::setDodgeModifier(int dodgeModifier)
     this->dodgeModifier = dodgeModifier;
 }
 
+void BaseCharacter::setItemModifier(int itemModifier)
+{
+    this->itemModifier = itemModifier;
+}
+
 void BaseCharacter::changeLifeStatus(bool alive)
 {
     this->alive = alive;
+}
+
+void BaseCharacter::setSpeed(int speed)
+{
+    this->speed = speed;
 }
 
 void BaseCharacter::setSpeedModifier(int newSpeedMod)

@@ -53,6 +53,7 @@ public:
     bool isAlive() const;
     int getHp() const;
     int getMaxHp() const;
+    int getHit() const;
     int getDodgeModifier() const;
     int getArmor() const;
     int getSpeed() const;
@@ -65,8 +66,10 @@ public:
     void setHit(int hit);
     void setArmor(int armor);
     void setMaxHp(int hp);
+    void setSpeed(int speed);
     void setDodgeModifier(int dodgeModifier);
     void setSpeedModifier(int newSpeedMod);
+    void setItemModifier(int itemModifier);
     void changeLifeStatus(bool alive);
     void setAsPlayerOrEnemy(bool enemy);
     void setNewParticipantsIndex(int newIndex);
