@@ -18,7 +18,6 @@ enum ActionType
 class BaseCharacter
 {
 public:
-    BaseCharacter() = default;
     BaseCharacter(std::string name, int hp, int speed, 
                   int hit, int armor, int itemModifier, int speedModifier, 
                   int dodgeModifier, bool enemy
@@ -58,15 +57,19 @@ public:
     int getArmor() const;
     int getSpeed() const;
     int getSpeedModifier() const;
+    int getItemModifier() const;
+    int getParticipantsIndex() const;
+    bool isEnemy() const;
     void setHp(int newHp);
+    void setName(const std::string& name);
+    void setHit(int hit);
+    void setArmor(int armor);
+    void setMaxHp(int hp);
+    void setDodgeModifier(int dodgeModifier);
     void setSpeedModifier(int newSpeedMod);
-    void changeLifeStatus();
-    int speedModifier;
-    int hp;
-    bool alive;
-    int participantsIndex;
-    int itemModifier;
-
+    void changeLifeStatus(bool alive);
+    void setAsPlayerOrEnemy(bool enemy);
+    void setNewParticipantsIndex(int newIndex);
 
 protected:
     std::string name;
@@ -76,6 +79,11 @@ protected:
     int armor;
     int dodgeModifier;
     bool enemy;
+    int speedModifier;
+    int hp;
+    bool alive;
+    int participantsIndex;
+    int itemModifier;
     
     //example validMoves and ranges
     std::unordered_map<ActionType, std::vector<int>> validMovesAndRanges = {

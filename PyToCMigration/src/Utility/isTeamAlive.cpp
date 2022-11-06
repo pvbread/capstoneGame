@@ -1,10 +1,11 @@
 #include "Characters/BaseCharacter.h"
 
+/*
 bool isTeamAlive(std::vector<BaseCharacter> team )
 {
     for (int i = 0; i < team.size(); i++)
     {
-        if (team[i].alive == true)
+        if (team[i].isAlive() == true)
         {
             return true;
         }
@@ -12,3 +13,4 @@ bool isTeamAlive(std::vector<BaseCharacter> team )
     }
     return false;
 }
+*/

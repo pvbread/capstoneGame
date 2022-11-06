@@ -148,7 +148,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
                     participants[target].setHp(newHp);
                     if (participants[target].getHp() <= 0)
                     {
-                        participants[target].changeLifeStatus();
+                        participants[target].changeLifeStatus(false);
                         shiftDead(participants);
                     }
                 }
@@ -293,17 +293,67 @@ int BaseCharacter::getSpeedModifier() const
     return speedModifier;
 }
 
+bool BaseCharacter::isEnemy() const
+{
+    return enemy;
+}
+
+int BaseCharacter::getItemModifier() const
+{
+    return itemModifier;
+}
+
+int BaseCharacter::getParticipantsIndex() const
+{
+    return participantsIndex;
+}
+
 void BaseCharacter::setHp(int newHp)
 {
     hp = newHp;
 }
 
-void BaseCharacter::changeLifeStatus()
+void BaseCharacter::setName(const std::string& name)
 {
-    alive = !alive;
+    this->name = name;
+}
+
+void BaseCharacter::setHit(int hit)
+{
+    this->hit = hit;
+}
+
+void BaseCharacter::setArmor(int armor)
+{
+    this->armor = armor;
+}
+
+void BaseCharacter::setMaxHp(int hp)
+{
+    this->hp = hp;
+}
+
+void BaseCharacter::setDodgeModifier(int dodgeModifier)
+{
+    this->dodgeModifier = dodgeModifier;
+}
+
+void BaseCharacter::changeLifeStatus(bool alive)
+{
+    this->alive = alive;
 }
 
 void BaseCharacter::setSpeedModifier(int newSpeedMod)
 {
     speedModifier = newSpeedMod;
+}
+
+void BaseCharacter::setAsPlayerOrEnemy(bool enemy)
+{
+    this->enemy = enemy;
+}
+
+void BaseCharacter::setNewParticipantsIndex(int newIndex)
+{
+    participantsIndex = newIndex;
 }
