@@ -3,7 +3,8 @@ set(HEADER_FILES
 )
 
 set(SOURCE_FILES	
-	test.cpp
+	BasePlayerTest.cpp
+	testOutline.cpp
 )
 
 set(LIBRARY_NAME pythonMigration)

@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SOURCE_FILES
     src/test.cpp
+    src/test.cpp
     src/Characters/BaseCharacter.cpp
     src/Characters/Players/BasePlayer.cpp
     src/Characters/Players/Bass.cpp
