@@ -225,17 +225,20 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     float REDUCTION_SCALE = 0.05;
     int reduction = int(damage * (targetCharacter.getArmor() * REDUCTION_SCALE));
     damage -= reduction;
+    if (damage < 0)
+        return 0;
     return damage;
 }
 
+// returns the newHp of the targetCharacter after buff
 int BaseCharacter::buff(BaseCharacter targetCharacter)
 {
     if (targetCharacter.getHp() >= targetCharacter.getMaxHp())
-        return 0;
+        return targetCharacter.getHp();
     if (!targetCharacter.isAlive())
         return 0;
     // the last case is that char is alive and doesn't have full health
-    int healAmount = ceil(float(targetCharacter.maxHp) * 0.1);
+    int healAmount = ceil(float(targetCharacter.getMaxHp()) * 0.1);
     int newHp = targetCharacter.getHp() + healAmount;
     return newHp;
 }
@@ -243,12 +246,18 @@ int BaseCharacter::buff(BaseCharacter targetCharacter)
 int BaseCharacter::debuff(BaseCharacter targetCharacter)
 {
     int newSpeedMod = targetCharacter.getSpeedModifier() - 1;
+    if (newSpeedMod < 0)
+        return 0;
     return newSpeedMod;
 }
 
 std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
 {
-    //note, this is pass by copy so we are not changing the overall state
+    if (
+        ( participants[charIndex].isEnemy() && !participants[targetIndex].isEnemy() ) ||
+        ( participants[targetIndex].isEnemy() && !participants[charIndex].isEnemy() )
+       )
+        return participants;
     std::swap(participants[charIndex], participants[targetIndex]);
     return participants;
 }

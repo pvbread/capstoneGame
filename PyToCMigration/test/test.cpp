@@ -4,6 +4,99 @@
 #include "catch.hpp"
 
 #include "Characters/Players/BasePlayer.h"
+#include "Characters/BaseCharacter.h"
+#include <vector>
+
+TEST_CASE("Test attack method")
+{
+    BasePlayer p1 = BasePlayer("p1", 30, 1, 3, 0, 4, 5, 6);
+    BasePlayer p2 = BasePlayer("p2", 30, 1, 3, 0, 4, 5, 6);
+    BasePlayer pNoDodgeNoArmor = BasePlayer("p2", 30, 1, 3, 0, 4, 5, 0);
+    BasePlayer incredibleArmor = BasePlayer("p2", 30, 1, 3, INT_MAX, 4, 5, 0);   
+    SECTION("Check attack returns a positive int")
+    {
+        REQUIRE(p1.attack(p2) >= 0);
+    }
+    SECTION("Check attack against 0 dodge 0 armor is successful")
+    {
+        int minAttack = INT_MAX;
+        for (int i = 0; i < 1000; i++)
+        {
+            minAttack = std::min(minAttack, p1.attack(pNoDodgeNoArmor));
+        }
+        REQUIRE(minAttack > 0);
+    }
+    SECTION("Check attack GOD armor is not sucessful")
+    {
+        int maxAttack = INT_MIN;
+        for (int i = 0; i < 1000; i++)
+        {
+            maxAttack = std::max(maxAttack, p1.attack(incredibleArmor));
+        }
+        REQUIRE(maxAttack == 0);
+    }
+}
+
+TEST_CASE("Test buff")
+{
+    BasePlayer p1 = BasePlayer("p1", 30, 1, 3, 0, 4, 5, 6);
+    BasePlayer p2 = BasePlayer("p2", 30, 1, 3, 0, 4, 5, 6);
+    BasePlayer dead = BasePlayer("p1", 0, 1, 3, 0, 4, 5, 6);
+    dead.changeLifeStatus(false);
+    BasePlayer loweredHp = BasePlayer("p2", 30, 1, 3, 0, 4, 5, 6);
+    loweredHp.setHp(20); //lowers it below its max
+
+    SECTION("Healing a fully healed char")
+    {
+        int oldHp = p2.getHp();
+        REQUIRE(p1.buff(p2) == oldHp);
+    }
+    SECTION("Healing a dead char")
+    {
+        REQUIRE(p1.buff(dead) == 0);
+    }
+    SECTION("Healing a wounded char")
+    {
+        int oldHp = loweredHp.getHp();
+        REQUIRE(p1.buff(loweredHp) > oldHp);
+    }
+}
+
+TEST_CASE("Test debuff")
+{
+    BasePlayer p1 = BasePlayer("p1", 30, 1, 3, 0, 4, 5, 6);
+    BasePlayer zeroSpeed = BasePlayer("p2", 30, 1, 3, 0, 4, 0, 6);
+    BasePlayer p2 = BasePlayer("p2", 30, 1, 3, 0, 4, 2, 6);
+
+    //SECTION("Debuffing a player with 0 speedMod")  
+    SECTION("Testing to check effect of normal debuff")
+    {
+        int oldSpeedMod = p2.getSpeedModifier();
+        REQUIRE(p1.debuff(p2) < oldSpeedMod);
+    }
+}
+
+TEST_CASE("Test moveSpots")
+{
+    BasePlayer p1 = BasePlayer("p1", 30, 1, 3, 0, 4, 5, 6);
+    BaseCharacter p2 = BaseCharacter("p2", 30, 1, 3, 0, 4, 0, 6, false);
+
+    std::vector<BaseCharacter> v{p1, p2};
+
+    SECTION("Check that swap with self has no effect")
+    {
+        std::vector<BaseCharacter> res = p1.moveSpots(0, 0, v);
+        bool noSwap = res[0].getName() == "p1" && res[1].getName() == "p2";
+        REQUIRE(noSwap);
+    }
+    SECTION("Check that normal swap works")
+    { 
+        std::vector<BaseCharacter> res = p1.moveSpots(0, 1, v);
+        bool swapped = res[0].getName() == "p2" && res[1].getName() == "p1";
+        REQUIRE(swapped);
+    }
+    //TODO check that you can't swap with enemy
+}
 
 TEST_CASE("Check that stats are set for BasePlayer properly") 
 {

@@ -9,11 +9,20 @@ int main()
 
     //BasePlayers are instantiated as !enemy by default
     BasePlayer baseP = BasePlayer("BaseP", 30, 1, 3, 0, 3, 3, 3);
-    std::string name = baseP.getName();
-    std::cout << name << std::endl;
-    Bass bass = Bass("Bassist", 30, 1, 3, 0, 3, 3, 3);
-    name = bass.getName();
-    std::cout << name << std::endl; 
+    Bass bass = Bass("Bass", 30, 1, 3, 0, 3, 3, 3);
+    std::vector<BaseCharacter> participants{baseP, bass};
+    for (auto el: participants)
+        {
+            std::cout << el.getName() << " ";
+        }
+    std::cout << std::endl;
+    std::vector<BaseCharacter> res = baseP.moveSpots(0, 1, participants);
+    for (auto el: res)
+        {
+            std::cout << el.getName() << " ";
+        }
+    std::cout << std::endl;
+
     return 0;
 
 }

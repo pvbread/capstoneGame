@@ -5,4 +5,4 @@ Bass::Bass(std::string name, int hp, int speed,
                              int speedModifier, int dodgeModifier) :
                                     BasePlayer(name, hp, speed, hit, armor, 
                                                itemModifier, speedModifier, 
-                                               dodgeModifier, enemy) {}
+                                               dodgeModifier) {}
