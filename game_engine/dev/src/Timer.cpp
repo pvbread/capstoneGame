@@ -58,8 +58,11 @@ void Timer::update()
     mDeltaTimer = mElapsedTicks * 0.001f;//converts back to seconds
 }
 
-bool Timer::timePassed(int countdownTime)
+bool Timer::timePassed(int countdownTime, int currentTime)
 {
+    if(currentTime >= currentTime + countdownTime){
+        return true;
+    }
     //will be used to count down from a time
     //need to check if instance of when timer starts will be equal to timer start + countdown
     //when it is return true

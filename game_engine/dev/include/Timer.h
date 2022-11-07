@@ -16,7 +16,7 @@ public:
 
     void update();//timer update
 
-    bool timePassed(countdownTime);
+    bool timePassed(int countdownTime, int currentTime);
 
 private:
     static Timer* sInstance;
