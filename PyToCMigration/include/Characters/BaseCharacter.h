@@ -49,6 +49,9 @@ public:
     std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
                                          std::vector<BaseCharacter> participants
     );
+
+    friend std::vector<BaseCharacter> setRoundTurns(std::vector<BaseCharacter> characters);
+
     std::string getName() const;
     bool isAlive() const;
     int getHp() const;

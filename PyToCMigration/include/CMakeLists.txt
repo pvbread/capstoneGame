@@ -3,6 +3,7 @@ set(HEADER_FILES
     ./Characters/Players/BasePlayer.h
     ./Characters/Players/Bass.h
     ./pch.h
+    ./setRoundTurns.h
 )
 
 set(SOURCE_FILES
@@ -10,7 +11,6 @@ set(SOURCE_FILES
     ../src/Characters/BaseCharacter.cpp
     ../src/Characters/Players/BasePlayer.cpp
     ../src/Characters/Players/Bass.cpp
-    ../src/Utility/setRoundTurns.cpp
     ../src/Utility/isTeamAlive.cpp
 )
 
