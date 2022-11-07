@@ -32,8 +32,9 @@ def pathMaker(length):
         for dx, dy in directions:
             # checks if taking that one additional step leads to a position not visited before
             if (x[-1] + dx, y[-1] + dy) not in positions_visited:
-                # if the position have not been visited before, add it to the possible_directions list
-                possible_directions.append((dx,dy))
+                # if the position have not been visited before and the values are not negative, add it to the possible_directions list
+                if ((x[-1] + dx) >= 0 and (y[-1] + dy) >= 0):
+                    possible_directions.append((dx,dy))
         # if there is a direction avaliable (meaning there's at least one array in the list)       
         if len(possible_directions) > 0:
             # choose a direction at random among available ones 
@@ -76,14 +77,16 @@ def branchMaker(x, y, length, positions_visited):
         directions = [(1,0), (0,1), (-1,0), (0,-1)]
         possible_directions = []
         for dx, dy in directions:
-            if (x_branch[-1] + dx, y_branch[-1] + dy) not in positions_visited:  
-                possible_directions.append((dx,dy))
+            if (x_branch[-1] + dx, y_branch[-1] + dy) not in positions_visited:
+                # if the position have not been visited before and the values are not negative, add it to the possible_directions list
+                if ((x_branch[-1] + dx) >= 0 and (y_branch[-1] + dy) >= 0):
+                    possible_directions.append((dx,dy))
         #if there is a direction avaliable, select a direction at random and add new coordinates to the lists
         if len(possible_directions) > 0:  
             dx, dy = random.choice(possible_directions) 
             positions_visited.add((x_branch[-1] + dx, y_branch[-1] + dy))
             x_branch.append(x_branch[-1] + dx)
-            y_branch.append(y_branch[-1] + dy)    
+            y_branch.append(y_branch[-1] + dy)
         #if there are no avaliable directions from the start of creating a new branch, creates a new branch of n steps away from midpoint
         elif ((len(x_branch) == 1 and len(y_branch) == 1)):
             # remove midpoint coordinates from the lists
@@ -104,6 +107,20 @@ def branchMaker(x, y, length, positions_visited):
             
     return x_branch, y_branch, positions_visited
 
+
+# create matrix from coordinates and save matrix in text file
+def createMatrix(coordinates):
+    # create matrix filled with zeros
+    matrix = np.zeros((40,40))
+    
+    # itterate through coordinates (i = x-cord, j = y-cord) 
+    for i, j in coordinates:
+        matrix[i][j] = 1
+
+    # save matrix in textfile
+    np.savetxt('output.txt', matrix, fmt='%d')
+   
+
 """
 Draw the paths with visualization using matplotlib
 """
@@ -112,7 +129,7 @@ def plotWalk(path_length):
     x, y, positions_visited = pathMaker(path_length)
     plt.figure(figsize = (8, 8))
     plt.plot(x, y, 'bo-', linewidth = 1)
-    plt.plot(0, 0, 'go', ms = 12, label = 'Start')
+    plt.plot(x[0], y[0], 'go', ms = 12, label = 'Start')
     plt.plot(x[-1], y[-1], 'ro', ms = 12, label = 'End')
     
     # store the actual length of inital path since the path might not always be the desired length due to being stuck 
@@ -123,12 +140,21 @@ def plotWalk(path_length):
         x_branch, y_branch, positions_visited = branchMaker(x, y, new_length, positions_visited)
         plt.plot(x_branch, y_branch, 'bo-', linewidth = 1)
         plt.plot(x_branch[-1], y_branch[-1], 'ro', ms = 12)
-        # append the branches to the x and y coordinates list that will be used for the tile mapping  
+        # append the branches to the x and y coordinates list that will be used to convert to matrix (not including duplicate of midpoint value)   
         x = x + x_branch[1:]
         y = y + y_branch[1:]
     plt.axis('equal')
     plt.legend()
+    plt.savefig("map.png")
     plt.show()
+    # coordinates is the list of array of the (x,y) coordinates
+    coordinates=[]
+    # append coordinates to the list
+    for i in range(len(x)):
+        coordinates.append((x[i],y[i]))
+    # call function to create matrix with coordinates and save as textfile
+    createMatrix(coordinates)
+    
 
 """
 You can change the number in the parameter to change the length of the branches.
