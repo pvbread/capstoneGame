@@ -5,7 +5,7 @@ Timer* Timer::sInstance = nullptr;//dont do this way Timer::sInstance
 Timer* Timer::instance() 
 {
     if(sInstance == nullptr)
-        sInstance = new Timer();
+        sInstance = new Timer();//This is our Init
 
     return sInstance;
 }
@@ -33,7 +33,7 @@ void Timer::reset()
 {
     mStartTicks = SDL_GetTicks();
     mElapsedTicks = 0;
-    mDelataTime = 0.0f;
+    mDeltaTimer = 0.0f;
 }
 
 float Timer::deltaTimer()
@@ -63,6 +63,7 @@ bool Timer::timePassed(int countdownTime, int currentTime)
     if(currentTime >= currentTime + countdownTime){
         return true;
     }
+    return false;
     //will be used to count down from a time
     //need to check if instance of when timer starts will be equal to timer start + countdown
     //when it is return true

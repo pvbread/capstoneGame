@@ -8,6 +8,7 @@ EscapeFromCapstone::EscapeFromCapstone(Uint32 flags,
 
 void EscapeFromCapstone::runGameLoop()
 {
+    
     // temporary place for this
     Screen screen = INTRO;
     //temporary 
@@ -210,6 +211,8 @@ void EscapeFromCapstone::runGameLoop()
     const int SCREEN_HEIGHT = 720;
     SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
+    int countdownTime = 5;
+    int currentTime = SDL_GetTicks();
     //double degrees = 0;
     //SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
@@ -249,6 +252,13 @@ void EscapeFromCapstone::runGameLoop()
                 case INTRO:
                 {
                     introMenu.onInput(event, SelectMusic);
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        case SDLK_DOWN:
+                        {
+
+                        }
+                    }
                     break;
                 }
                 case MAP:
