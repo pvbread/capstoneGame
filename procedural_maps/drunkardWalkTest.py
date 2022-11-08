@@ -111,12 +111,51 @@ def branchMaker(x, y, length, positions_visited):
 # create matrix from coordinates and save matrix in text file
 def createMatrix(coordinates):
     # create matrix filled with zeros
-    matrix = np.zeros((40,40))
-    
+    matrix = np.full((20,20), 3)
+
     # itterate through coordinates (i = x-cord, j = y-cord) 
     for i, j in coordinates:
         matrix[i][j] = 1
-
+    for row in range(20):
+        for col in range(20):
+            if matrix[row][col] != 3:
+                if matrix[row+1][col] != 3 and matrix[row-1][col] != 3 and matrix[row][col+1] != 3 and matrix [row][col-1] != 3:
+                    matrix[row][col] = 11
+                elif matrix[row+1][col] != 3 and matrix[row-1][col] == 3 and matrix[row][col+1] == 3 and matrix [row][col-1] != 3:
+                    matrix[row][col] = 10
+                elif matrix[row+1][col] == 3 and matrix[row-1][col] != 3 and matrix[row][col+1] == 3 and matrix [row][col-1] != 3:
+                    matrix[row][col] = 9
+                elif matrix[row+1][col] == 3 and matrix[row-1][col] == 3 and matrix[row][col+1] != 3 and matrix [row][col-1] != 3:
+                    matrix[row][col] = 8
+                elif matrix[row+1][col] not in [7,3] and matrix[row-1][col] == 3 and matrix[row][col+1] not in [7,3] and matrix [row][col-1] not in [7,3]:
+                    matrix[row][col] = 7
+                elif matrix[row+1][col] != 3 and matrix[row-1][col] == 3 and matrix[row][col+1] != 3 and matrix [row][col-1] == 3:
+                    matrix[row][col] = 6
+                elif matrix[row+1][col] != 3 and matrix[row-1][col] != 3 and matrix[row][col+1] == 3 and matrix [row][col-1] == 3:
+                    matrix[row][col] = 5 
+                elif matrix[row+1][col] == 3 and matrix[row-1][col] not in [4,3] and matrix[row][col+1] not in [4,3] and matrix [row][col-1] not in [4,3]:
+                    matrix[row][col] = 4
+                elif matrix[row+1][col] == 3 and matrix[row-1][col] != 3 and matrix[row][col+1] != 3 and matrix [row][col-1] == 3:
+                    matrix[row][col] = 2
+                elif matrix[row+1][col] not in [1,3] and matrix[row-1][col] not in [1,3] and matrix[row][col+1] == 3 and matrix [row][col-1] not in [1,3]:
+                    matrix[row][col] = 1
+                elif matrix[row+1][col] not in [0,3] and matrix[row-1][col] not in [0,3] and matrix[row][col+1] not in [0,3] and matrix [row][col-1] == 3:
+                    matrix[row][col] = 0
+            else:
+                matrix[row][col] = 3
+        
+    #     TRIGHT = 0,
+    #     TLEFT = 1,
+    #     UPRIGHT = 2,
+    #     BLACK = 3,
+    #     TUP = 4,
+    #     UPDOWN = 5,
+    #     DOWNRIGHT = 6,
+    #     TDOWN = 7,
+    #     LEFTRIGHT = 8,
+    #     LEFTUP = 9,
+    #     LEFTDOWN = 10,
+    #     FOURWAY = 11
     # save matrix in textfile
     np.savetxt('output.txt', matrix, fmt='%d')
    
