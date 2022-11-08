@@ -18,6 +18,7 @@ enum ActionType
 class BaseCharacter
 {
 public:
+    BaseCharacter() = default;
     BaseCharacter(std::string name, int hp, int speed, 
                   int hit, int armor, int itemModifier, int speedModifier, 
                   int dodgeModifier, bool enemy
@@ -49,6 +50,9 @@ public:
     std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
                                          std::vector<BaseCharacter> participants
     );
+
+    friend std::vector<BaseCharacter> setRoundTurns(std::vector<BaseCharacter> characters);
+
     std::string getName() const;
     bool isAlive() const;
     int getHp() const;
