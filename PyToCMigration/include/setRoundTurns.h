@@ -12,7 +12,7 @@ struct greater_prefer_ally
             return true;
         if (rhs.first < lhs.first)
             return false; 
-        return lhs.second > rhs.second;
+        return lhs.second.first > rhs.second.first;
     }
 };
 
@@ -20,31 +20,36 @@ std::vector<BaseCharacter> setRoundTurns(std::vector<BaseCharacter> characters)
 {   
     
     std::vector<BaseCharacter> roundOrder;
-    
-    
     // map to keep track of what speed score corresponds to which character
-    std::unordered_map<int, BaseCharacter> speedMap;
+    std::unordered_map<int, std::vector<BaseCharacter>> speedMap;
 
-    std::priority_queue<std::pair<int, bool>, std::vector<std::pair<int, bool>>,
-                    greater_prefer_ally> provisionalOrder;
-    //std::priority_queue<int, std::vector<int>, std::greater<int>> provisionalOrder;
+    std::priority_queue<std::pair<int, std::pair<bool, BaseCharacter*>>, 
+                        std::vector<std::pair<int, std::pair<bool, BaseCharacter*>>>,
+                        greater_prefer_ally> newOrderQueue;
+    
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> intDist(1,6);
 
     for (int i = 0; i < characters.size(); i++) 
     {
+        if (!characters[i].isAlive())
+            continue;
         int initiativeRoll = intDist(gen);
         int totalSpeedScore = characters[i].getSpeed() + characters[i].getSpeedModifier() + initiativeRoll;
-
-        if (characters[i].isAlive())
-        {
-            if (speedMap.find(totalSpeedScore) == speedMap.end())
-            {
-                speedMap[totalSpeedScore] = characters[i];
-            }
-        }
+        //tuple of form (bool isEnemy, BaseChar*)
+        auto enemyCharPtrTuple = std::make_pair(characters[i].isEnemy(), &characters[i]);
+        auto speedScoreCharTuple = std::make_pair(totalSpeedScore, enemyCharPtrTuple); 
+        newOrderQueue.push(speedScoreCharTuple);
     }
+
+    while(!newOrderQueue.empty())
+    {
+        auto curr = newOrderQueue.top();
+        roundOrder.push_back(*curr.second.second);
+        newOrderQueue.pop();
+    }
+
     return roundOrder;
 
 }
