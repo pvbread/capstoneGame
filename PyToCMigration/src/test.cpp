@@ -2,7 +2,7 @@
 #include "Characters/BaseCharacter.h"
 #include "Characters/Players/Bass.h"
 #include "Characters/Players/BasePlayer.h"
-#include "setRoundTurns.h"
+#include "Utility/setRoundTurns.h"
 
 int main()
 {
@@ -23,12 +23,12 @@ int main()
         std::cout << el.getName() << " ";
     }
     std::cout << std::endl;
+    std::vector<BaseCharacter*> roundOrder;
+    roundOrder = setRoundTurns(participants);
 
-    participants = setRoundTurns(participants);
-
-    for (auto el: participants)
+    for (auto el: roundOrder)
     {
-        std::cout << el.getName() << " ";
+        std::cout << el->getName() << " ";
     }
     std::cout << std::endl; 
 

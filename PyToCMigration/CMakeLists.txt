@@ -13,7 +13,6 @@ set(SOURCE_FILES
     src/Characters/BaseCharacter.cpp
     src/Characters/Players/BasePlayer.cpp
     src/Characters/Players/Bass.cpp
-    src/Utility/isTeamAlive.cpp
 )
 
 set(LIBRARY_NAME pythonMigration)
