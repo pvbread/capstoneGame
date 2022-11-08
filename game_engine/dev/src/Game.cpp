@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "Game/Utility/isTeamAlive.h"
+#include "Game/Utility/setRoundTurns.h"
 
 EscapeFromCapstone::EscapeFromCapstone(Uint32 flags, 
                        const char* title, 
@@ -8,6 +10,33 @@ EscapeFromCapstone::EscapeFromCapstone(Uint32 flags,
 
 void EscapeFromCapstone::runGameLoop()
 {
+
+    ////////// START CHARACTER INIT ////////
+    BasePlayer conductor = BasePlayer("Conductor", 30, 3, 3, 0, 3, 3, 3);
+    BasePlayer drum = BasePlayer("Drummer", 50, 2, 1, 0, 3, 3, 3);
+    BasePlayer flute = BasePlayer("Flutist", 20, 6, 1, 0, 3, 3, 3);
+    Bass bass = Bass("Bassist", 60, 1, 3, 0, 3, 3, 3);
+    std::vector<BaseCharacter> team{flute, conductor, bass, drum};
+
+    ///////// END CHARACTER INIT //////
+
+    /////////// START INIT STATES ///////
+
+    // When new game is selected, set to false
+    // when team dies, set back to true (or if you quite from in-game menu)
+    bool STATE_gameOver = true;
+    bool STATE_newGameSelected = false;
+    bool STATE_battle = false;
+    bool STATE_enemiesSet = false;
+    bool STATE_isPlayerTurn = false; // also functions as inverse (isComputerTurn)
+    bool STATE_combatMenuItemSelected = false;
+    bool STATE_combatMenuTargetSelected = false;
+    bool STATE_roundsSet = false;
+    bool STATE_roundOver = false;
+    bool STATE_mapEventboxOpen = false;
+
+    /////////// END INIT STATES /////// 
+
     // temporary place for this
     Screen screen = INTRO;
     //temporary 
@@ -17,7 +46,9 @@ void EscapeFromCapstone::runGameLoop()
     //temp
     SDL_Rect cursor = { 45, 160, 50, 50 };
     //incredibly temp
-    int testCounter = 0;
+
+    //////////// START MENUS INIT ///////////////
+
     const std::vector<const char*> introOptions = {
         "New Game ",
         "Load Game",
@@ -49,11 +80,15 @@ void EscapeFromCapstone::runGameLoop()
                                    getRenderer()
     );
 
+    //////////// END MENUS INIT ///////////////
+
+
+    //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1);
-    int played;
+    Mix_PlayMusic(SelectOST, -1); 
 
+    //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
@@ -64,15 +99,10 @@ void EscapeFromCapstone::runGameLoop()
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"}
-    };
-    
-    //this is temporary
+    }; 
     
     //so there's going to be a couple of these per char
     //maybe a map would do well here?
-
-    
-
 
     //TODO in the destructor, clean this up
     //maybe better to have a dedicated function to map the coordinate tiles?
@@ -85,6 +115,9 @@ void EscapeFromCapstone::runGameLoop()
         setToQuit();
     }
 
+    //////////// END TEXTURE LOADING /////////////
+
+    //////////// START TILE LOADING /////////////
     const int TILE_COUNT = 192;
     const int TILE_LENGTH = 80;
     const int TILE_TYPE_COUNT = 12;
@@ -106,30 +139,6 @@ void EscapeFromCapstone::runGameLoop()
         SDL_Log("Error loading tiles");
         setToQuit();
     }
-
-    std::vector<std::string> eventList(6, "BLANKEVENT");
-    std::vector<std::string> eventsToAdd {
-        "BATTLE",
-        "BATTLE",
-        "HEAL",
-        "JOKE",
-        "ITEM"
-    };
-    for (auto event: eventsToAdd)
-        eventList.push_back(event);
-    
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(0,10); 
-
-    for (auto& [coordinate, event]: coordinateToEventTypeMap)
-    {
-        event = eventList[dist(gen)];  
-    }
-
-    std::string nextMapEvent = "";
-    SDL_Rect mapEventBox = {200, 200, 400, 100};
-    bool boxOpen = false;
 
     const int TILE_SHEET_ROWS = 3;
     const int TILE_SHEET_COLS = 4;
@@ -158,6 +167,37 @@ void EscapeFromCapstone::runGameLoop()
     {
         setToQuit();
     }
+
+    //////////// END TILE LOADING /////////////
+
+    //////////// START MAP EVENT GENERATION ////////
+
+    std::vector<std::string> eventList(6, "BLANKEVENT");
+    std::vector<std::string> eventsToAdd {
+        "BATTLE",
+        "BATTLE",
+        "HEAL",
+        "JOKE",
+        "ITEM"
+    };
+    for (auto event: eventsToAdd)
+        eventList.push_back(event);
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0,10); 
+
+    for (auto& [coordinate, event]: coordinateToEventTypeMap)
+    {
+        event = eventList[dist(gen)];  
+    }
+
+    std::string nextMapEvent = "";
+    SDL_Rect mapEventBox = {200, 200, 400, 100};
+
+    //////////// END MAP EVENT GENERATION //////// 
+
+    /////////// START  CAMERA AND MAP CHARACTER INIT ///////
     //set this to 0 whenever we want a clear debug controller
     debugControllerTexture.setAlpha(0);
 
@@ -165,6 +205,15 @@ void EscapeFromCapstone::runGameLoop()
     SDL_Rect characterControllerHitbox = {30, 30, 80, 80};
     MapDebugController debugController(10, 0, 0, debugHitbox);
     CharacterInMap characterController(80, 0, 0, characterControllerHitbox);
+
+    const int SCREEN_WIDTH = 960;
+    const int SCREEN_HEIGHT = 720;
+    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
+    /////////// END CAMERA AND MAP CHARACTER INIT ///////
+
+
+
     std::vector<SDL_Rect> charBoxes(8);
     for (int i = 0; i < charBoxes.size(); i++)
     {
@@ -206,9 +255,7 @@ void EscapeFromCapstone::runGameLoop()
     };
     bool actionChosen = false;
 
-    const int SCREEN_WIDTH = 960;
-    const int SCREEN_HEIGHT = 720;
-    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    
 
     //double degrees = 0;
     //SDL_RendererFlip flipType = SDL_FLIP_NONE;
@@ -256,14 +303,14 @@ void EscapeFromCapstone::runGameLoop()
                     //this has a bug where movement
                     //keeps being read if key is not unpressed
                     debugController.onInput(event);
-                    characterController.onInput(event, nextMapEvent, boxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
+                    characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
                         {
                             case SDLK_RETURN:
                             {
-                                boxOpen = false;
+                                STATE_mapEventboxOpen = false;
                                 break;
                             }
                         }
@@ -277,11 +324,7 @@ void EscapeFromCapstone::runGameLoop()
                     {
                         switch (event.key.keysym.sym)
                         {
-                            case SDLK_4:
-                            {
-                                testCounter++;
-                                break;
-                            }
+                            
                             case SDLK_LEFT:
                             {
                                 currMove--;
@@ -343,7 +386,7 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 debugController.render(getRenderer(), camera, debugControllerTexture);
                 characterController.render(getRenderer(), camera, characterInMapTexture);
-                if (boxOpen)
+                if (STATE_mapEventboxOpen)
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 0, 0, 200, 255);
                     SDL_RenderFillRect(getRenderer(), &mapEventBox);
