@@ -198,7 +198,7 @@ enum TileType
     FOURWAY = 11
 };
 """
-def decodeTBranches(matrix,path,rMidPt,cMidPt,rStep,cStep):
+def encodeTBranches(matrix,path,rMidPt,cMidPt,rStep,cStep):
     # Case: TDOWN
     if ((matrix[rMidPt][cMidPt] == 8 and rMidPt + 1 == rStep and cMidPt == cStep) or \
            (matrix[rMidPt][cMidPt] == 2 and rMidPt == rStep and cMidPt - 1 == cStep) or \
@@ -260,7 +260,7 @@ def createMatrix(path1, path2, path3):
     rStep, cStep = path2[1]
 
     # calls function to encode the branch tile
-    matrix = decodeTBranches(matrix, path2, rMidPt, cMidPt, rStep, cStep)
+    matrix = encodeTBranches(matrix, path2, rMidPt, cMidPt, rStep, cStep)
         
     # calls function to encode the second path
     matrix = encodePath(matrix, path2)
@@ -283,7 +283,7 @@ def createMatrix(path1, path2, path3):
         matrix[rMidPt][cMidPt] = 11
     # else replace with a T-shaped tile
     else:
-        matrix = decodeTBranches(matrix, path3, rMidPt, cMidPt, rStep, cStep)
+        matrix = encodeTBranches(matrix, path3, rMidPt, cMidPt, rStep, cStep)
 
 
     # calls function to encode the third path
