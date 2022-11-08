@@ -22,7 +22,7 @@ std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const
 {
     ActionType chosenMove;
     std::vector<int> targets;
-    if (decisionAlgo == "")
+    if (decisionAlgo == "RANDOM")
     {
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -61,7 +61,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
         {
             if (!enemy)
             {
-                for (auto position: validMovesAndRanges[ATTACK])
+                for (auto position: movesAndRanges[ATTACK])
                 {
                     int targetPosition = charIndex + position;
                     if (targetPosition < participants.size())
@@ -71,7 +71,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
             else
             {
                 //it's an enemy
-                for (auto position: validMovesAndRanges[ATTACK])
+                for (auto position: movesAndRanges[ATTACK])
                 {
                     int targetPosition = charIndex - position;
                     if (targetPosition >= 0)
@@ -107,6 +107,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
     return validMoves;
 }
 
+//BUFFS, DEBUFFS, MOVES allowed on any living character on correct team
 std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff, 
                                                     const std::vector<BaseCharacter>& participants)
 {
@@ -320,6 +321,11 @@ int BaseCharacter::getItemModifier() const
 int BaseCharacter::getParticipantsIndex() const
 {
     return participantsIndex;
+}
+
+std::unordered_map<ActionType, std::vector<int>> BaseCharacter::getMovesAndRanges() const
+{
+    return movesAndRanges;
 }
 
 void BaseCharacter::setHp(int newHp)

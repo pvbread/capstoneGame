@@ -25,7 +25,7 @@ public:
     );
 
     std::pair<ActionType, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
-                                                                 std::string decisionAlgo = ""
+                                                                 std::string decisionAlgo = "RANDOM"
     );
 
     std::vector<int> getValidMoves(ActionType actionType,
@@ -65,6 +65,7 @@ public:
     int getSpeedModifier() const;
     int getItemModifier() const;
     int getParticipantsIndex() const;
+    std::unordered_map<ActionType, std::vector<int>> getMovesAndRanges() const;
     bool isEnemy() const;
     void setHp(int newHp);
     void setName(const std::string& name);
@@ -78,6 +79,7 @@ public:
     void changeLifeStatus(bool alive);
     void setAsPlayerOrEnemy(bool enemy);
     void setNewParticipantsIndex(int newIndex);
+
 
 protected:
     std::string name;
@@ -94,9 +96,9 @@ protected:
     int itemModifier;
     
     //example validMoves and ranges
-    std::unordered_map<ActionType, std::vector<int>> validMovesAndRanges = {
+    std::unordered_map<ActionType, std::vector<int>> movesAndRanges = {
         {ATTACK, {2,4}},
-        {BUFF, {2}},
-        {DEBUFF, {5}}
+        {BUFF, {1,2}},
+        {DEBUFF, {4}}
     };
 };
