@@ -52,6 +52,7 @@ public:
     );
 
     friend std::vector<BaseCharacter> setRoundTurns(std::vector<BaseCharacter> characters);
+    friend bool isTeamAlive(const std::vector<BaseCharacter>& participants, bool enemy);
 
     std::string getName() const;
     bool isAlive() const;

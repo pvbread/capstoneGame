@@ -20,9 +20,6 @@ std::vector<BaseCharacter> setRoundTurns(std::vector<BaseCharacter> characters)
 {   
     
     std::vector<BaseCharacter> roundOrder;
-    // map to keep track of what speed score corresponds to which character
-    std::unordered_map<int, std::vector<BaseCharacter>> speedMap;
-
     std::priority_queue<std::pair<int, std::pair<bool, BaseCharacter*>>, 
                         std::vector<std::pair<int, std::pair<bool, BaseCharacter*>>>,
                         greater_prefer_ally> newOrderQueue;
