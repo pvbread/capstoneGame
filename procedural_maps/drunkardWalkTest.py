@@ -101,9 +101,12 @@ def branchMaker(x, y, length, positions_visited):
             # increment the number of steps by one in case the next point also had no avaliable directions
             step+=1
         # otherwise, backtrack by one step by popping the x and y coordinates from the branches  
-        else:  
-            x_branch.pop()
-            y_branch.pop()
+        else:
+            # tries to prevent making a short branch unless the procedural generation is stuck no matter how many itterations
+            if len(x_branch) > length//4:
+                x_branch.pop()
+                y_branch.pop()
+    
             
     return x_branch, y_branch, positions_visited
 
@@ -148,27 +151,74 @@ def encodePath(matrix, path):
         #Switch case to detemine the tile type: the AND conditions helps deterine the tile shape, the OR conditions determine the direction of the path
         
         # Case: LEFTRIGHT
-        if (rFirst == rMid and rLast == rMid and cFirst + 1 == cMid and cLast - 1 == cMid) or (rFirst == rMid and rLast == rMid and cFirst - 1 == cMid and cLast + 1 == cMid):
+        if (rFirst == rMid and rLast == rMid and cFirst + 1 == cMid and cLast - 1 == cMid) or \
+                (rFirst == rMid and rLast == rMid and cFirst - 1 == cMid and cLast + 1 == cMid):
             matrix[rMid][cMid] = 8
         # Case: UPDOWN
-        elif (rFirst + 1 == rMid and rLast - 1 == rMid and cFirst == cMid and cLast == cMid) or (rFirst - 1 == rMid and rLast + 1 == rMid and cFirst == cMid and cLast == cMid):
+        elif (rFirst + 1 == rMid and rLast - 1 == rMid and cFirst == cMid and cLast == cMid) or \
+                (rFirst - 1 == rMid and rLast + 1 == rMid and cFirst == cMid and cLast == cMid):
             matrix[rMid][cMid] = 5
         # Case: DOWNRIGHT
-        elif (rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or (rFirst == rMid and rLast + 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
+        elif (rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
+                (rFirst == rMid and rLast + 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
             matrix[rMid][cMid] = 6
         # Case: LEFTDOWN
-        elif(rFirst == rMid and rLast - 1 == rMid and cFirst + 1 == cMid and cLast == cMid) or (rFirst - 1 == rMid and rLast == rMid and cFirst == cMid and cLast + 1 == cMid):
+        elif(rFirst == rMid and rLast - 1 == rMid and cFirst + 1 == cMid and cLast == cMid) or \
+                (rFirst - 1 == rMid and rLast == rMid and cFirst == cMid and cLast + 1 == cMid):
             matrix[rMid][cMid] = 10
         # Case: LEFTUP  
-        elif(rFirst == rMid and rLast + 1 == rMid and cFirst + 1 == cMid and cLast == cMid) or (rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast + 1 == cMid):
+        elif(rFirst == rMid and rLast + 1 == rMid and cFirst + 1 == cMid and cLast == cMid) or \
+                (rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast + 1 == cMid):
             matrix[rMid][cMid] = 9
         # Case: UPRIGHT
-        elif(rFirst - 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or (rFirst  == rMid and rLast - 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
+        elif(rFirst - 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
+                (rFirst  == rMid and rLast - 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
             matrix[rMid][cMid] = 2
         # the number 12 will represent the end point of the path
         matrix[rLast][cLast] = 12
 
     # return an updated version of the matrix
+    return matrix
+"""
+encodes the the branching tile into one of the T-shaped tiles
+
+enum TileType
+{
+    TRIGHT = 0,
+    TLEFT = 1,
+    UPRIGHT = 2,
+    BLACK = 3,
+    TUP = 4,
+    UPDOWN = 5,
+    DOWNRIGHT = 6,
+    TDOWN = 7,
+    LEFTRIGHT = 8,
+    LEFTUP = 9,
+    LEFTDOWN = 10,
+    FOURWAY = 11
+};
+"""
+def decodeTBranches(matrix,path,rMidPt,cMidPt,rStep,cStep):
+    # Case: TDOWN
+    if ((matrix[rMidPt][cMidPt] == 8 and rMidPt + 1 == rStep and cMidPt == cStep) or \
+           (matrix[rMidPt][cMidPt] == 2 and rMidPt == rStep and cMidPt - 1 == cStep) or \
+           (matrix[rMidPt][cMidPt] == 10 and rMidPt == rStep and cMidPt + 1 == cStep)):
+        matrix[rMidPt][cMidPt] = 7
+    # Case: TUP
+    elif ((matrix[rMidPt][cMidPt] == 8 and rMidPt - 1 == rStep and cMidPt == cStep) or \
+            (matrix[rMidPt][cMidPt] == 9 and rMidPt == rStep and cMidPt + 1 == cStep) or \
+            (matrix[rMidPt][cMidPt] == 6 and rMidPt == rStep and cMidPt - 1 == cStep)):
+        matrix[rMidPt][cMidPt] = 4
+    # Case: TRIGHT
+    elif ((matrix[rMidPt][cMidPt] == 5 and rMidPt == rStep and cMidPt + 1 == cStep) or \
+            (matrix[rMidPt][cMidPt] == 2 and rMidPt - 1 == rStep and cMidPt == cStep) or \
+            (matrix[rMidPt][cMidPt] == 6 and rMidPt + 1 == rStep and cMidPt == cStep)):
+        matrix[rMidPt][cMidPt] = 0
+    # Case: TLEFT
+    elif ((matrix[rMidPt][cMidPt] == 5 and rMidPt == rStep and cMidPt - 1 == cStep) or \
+            (matrix[rMidPt][cMidPt] == 10 and rMidPt - 1 == rStep and cMidPt == cStep) or \
+            (matrix[rMidPt][cMidPt] == 9 and rMidPt + 1 == rStep and cMidPt == cStep)):
+        matrix[rMidPt][cMidPt] = 1
     return matrix
 
 """
@@ -205,55 +255,43 @@ def createMatrix(path1, path2, path3):
     """
 
     # the first coordinate of the branching paths always start with a point somewhere in the middle of the first path
-    rMidpoint, cMidpoint = path2[0]
+    rMidPt, cMidPt = path2[0]
     # need to see the next step to figure out what T-shaped tile should be replaced for the branching path (T-shaped tiles only used to add a branching path)
     rStep, cStep = path2[1]
 
-    # Case: TDOWN
-    if rMidpoint + 1 == rStep and cMidpoint == cStep:
-        matrix[rMidpoint][cMidpoint] = 7
-    # Case: TUP
-    elif rMidpoint - 1 == rStep and cMidpoint == cStep:
-        matrix[rMidpoint][cMidpoint] = 4
-    # Case: TRIGHT
-    elif rMidpoint == rStep and cMidpoint + 1 == cStep:
-        matrix[rMidpoint][cMidpoint] = 0
-    # Case: TLEFT
-    elif rMidpoint == rStep and cMidpoint - 1 == cStep:
-        matrix[rMidpoint][cMidpoint] = 1
+    # calls function to encode the branch tile
+    matrix = decodeTBranches(matrix, path2, rMidPt, cMidPt, rStep, cStep)
         
     # calls function to encode the second path
     matrix = encodePath(matrix, path2)
+
+    # Rare case: if there's only two elements in the path list thus making the previous function returns the matrix unchanged, then the second element will be the endpoint
+    if len(path2)==2:
+        matrix[rStep][cStep] = 12
 
     """
     encode third path
     """
 
     # now find the start of the third path which will also start somewhere in the middle of the first path
-    rMidpoint, cMidpoint = path3[0]
+    rMidPt, cMidPt = path3[0]
     # need to see the next step to figure out if either a T-shaped tile or a FOURWAY tile is needed to represent branching path in the matrix
     rStep, cStep = path3[1]
 
     # if the second path and the third path has the same starting point, replace the point with a FOURWAY tile
     if path2[0] == path3[0]:
-        matrix[rMidpoint][cMidpoint] = 11
+        matrix[rMidPt][cMidPt] = 11
     # else replace with a T-shaped tile
     else:
-        # Case: TDOWN
-        if rMidpoint + 1 == rStep and cMidpoint == cStep:
-            matrix[rMidpoint][cMidpoint] = 7
-        # Case: TUP
-        elif rMidpoint - 1 == rStep and cMidpoint == cStep:
-            matrix[rMidpoint][cMidpoint] = 4
-        # Case: TRIGHT
-        elif rMidpoint == rStep and cMidpoint + 1 == cStep:
-            matrix[rMidpoint][cMidpoint] = 0
-        # Case: TLEFT
-        elif rMidpoint == rStep and cMidpoint - 1 == cStep:
-            matrix[rMidpoint][cMidpoint] = 1
+        matrix = decodeTBranches(matrix, path3, rMidPt, cMidPt, rStep, cStep)
+
 
     # calls function to encode the third path
     matrix = encodePath(matrix, path3)
+    
+    # Rare case: if there's only two elements in the path list thus making the previous function returns the matrix unchanged, then the second element will be the endpoint
+    if len(path3)==2:
+        matrix[rStep][cStep] = 12
 
     # save matrix in textfile, format as whole number digits
     np.savetxt('output.txt', matrix, fmt='%d')
@@ -294,7 +332,7 @@ def plotWalk(path_length):
     path3 = []
     
     # append coordinates to its corresponding path list
-
+    
     # first initial path
     for i in range(len(x1)):
         path1.append((x1[i], y1[i]))
