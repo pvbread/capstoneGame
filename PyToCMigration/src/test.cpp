@@ -23,12 +23,12 @@ int main()
         std::cout << el.getName() << " ";
     }
     std::cout << std::endl;
+    std::vector<BaseCharacter*> roundOrder;
+    roundOrder = setRoundTurns(participants);
 
-    participants = setRoundTurns(participants);
-
-    for (auto el: participants)
+    for (auto el: roundOrder)
     {
-        std::cout << el.getName() << " ";
+        std::cout << el->getName() << " ";
     }
     std::cout << std::endl; 
 

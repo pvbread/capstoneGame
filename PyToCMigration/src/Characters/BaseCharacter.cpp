@@ -325,6 +325,10 @@ int BaseCharacter::getParticipantsIndex() const
 void BaseCharacter::setHp(int newHp)
 {
     hp = newHp;
+    if (hp <= 0)
+        changeLifeStatus(false);
+    if (!alive && hp > 0)
+        changeLifeStatus(true);
 }
 
 void BaseCharacter::setName(const std::string& name)

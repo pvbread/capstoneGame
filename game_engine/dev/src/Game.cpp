@@ -60,7 +60,7 @@ void EscapeFromCapstone::runGameLoop()
     TextureWrapper characterTestTexture;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
-        {&tileTexture, "../../assets/image/tilesDraft.png"},
+        {&tileTexture, "../../assets/image/sprite_tiled.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"}
