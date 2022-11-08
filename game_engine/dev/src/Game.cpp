@@ -20,6 +20,54 @@ void EscapeFromCapstone::runGameLoop()
 
     ///////// END CHARACTER INIT //////
 
+    
+
+    // temporary place for this
+    Screen screen = INTRO;
+    //temporary 
+    TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
+    
+    
+    //temp
+    SDL_Rect cursor = { 45, 160, 50, 50 };
+    //incredibly temp
+
+    //////////// START MENUS INIT ///////////////
+
+    const std::vector<std::string> introOptions = {
+        "New Game ",
+        "Load Game",
+        "Credits  "
+    };
+
+    const char* railwayFontPath = "./Raleway-Medium.ttf";
+    SDL_Color introMenuColor = { 255, 0, 0, 255 };
+    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100, 
+                                  introOptions.size(), 
+                                  introOptions, 
+                                  railwayFontPath, 
+                                  introMenuColor, 
+                                  getRenderer()
+    );
+
+    const std::vector<std::string> combatOptionsStrings = {
+        "Attack",
+        "Buff",
+        "Debuff",
+        "Move"
+    };
+
+    SDL_Color combatMenuColor = { 0, 0, 255, 255 };
+    BaseMenu combatMenu = BaseMenu(25, 520, 200, 50, 100, 
+                                   combatOptionsStrings.size(), 
+                                   combatOptionsStrings, 
+                                   railwayFontPath, 
+                                   combatMenuColor, 
+                                   getRenderer()
+    );
+
+    //////////// END MENUS INIT ///////////////
+
     /////////// START INIT STATES ///////
 
     // When new game is selected, set to false
@@ -34,54 +82,11 @@ void EscapeFromCapstone::runGameLoop()
     bool STATE_roundsSet = false;
     bool STATE_roundOver = false;
     bool STATE_mapEventboxOpen = false;
+    std::string STATE_introSelectedOption = "NONE";
+    std::string STATE_helpMenuSelectedOption = "NONE";
+    std::string STATE_combatSelectedOption = "NONE";
 
     /////////// END INIT STATES /////// 
-
-    // temporary place for this
-    Screen screen = INTRO;
-    //temporary 
-    TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
-    
-    
-    //temp
-    SDL_Rect cursor = { 45, 160, 50, 50 };
-    //incredibly temp
-
-    //////////// START MENUS INIT ///////////////
-
-    const std::vector<const char*> introOptions = {
-        "New Game ",
-        "Load Game",
-        "Credits  "
-    };
-    const char* railwayFontPath = "./Raleway-Medium.ttf";
-    SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100, 
-                                  introOptions.size(), 
-                                  introOptions, 
-                                  railwayFontPath, 
-                                  introMenuColor, 
-                                  getRenderer()
-    );
-
-    const std::vector<const char*> combatOptions = {
-        "Attack ",
-        "Buff   ",
-        "Debuff ",
-        "Move   "
-    };
-
-    SDL_Color combatMenuColor = { 0, 0, 255, 255 };
-    BaseMenu combatMenu = BaseMenu(25, 520, 200, 50, 100, 
-                                   combatOptions.size(), 
-                                   combatOptions, 
-                                   railwayFontPath, 
-                                   combatMenuColor, 
-                                   getRenderer()
-    );
-
-    //////////// END MENUS INIT ///////////////
-
 
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
@@ -294,8 +299,8 @@ void EscapeFromCapstone::runGameLoop()
             switch (screen)
             {
                 case INTRO:
-                {
-                    introMenu.onInput(event, SelectMusic);
+                { 
+                    introMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
                     break;
                 }
                 case MAP:
@@ -319,7 +324,7 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 case COMBAT:
                 {
-                    combatMenu.onInput(event, SelectMusic);
+                    combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
