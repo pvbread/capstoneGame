@@ -5,7 +5,7 @@
 class Timer
 {
 public:
-    static Timer* instance();
+    static Timer* Instance();
     static void release();
 
     void reset();

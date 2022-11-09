@@ -9,6 +9,14 @@ EscapeFromCapstone::EscapeFromCapstone(Uint32 flags,
 void EscapeFromCapstone::runGameLoop()
 {
     
+    Timer* gameTimer = Timer::Instance();
+    gameTimer->deltaTimer();
+    //gameTimer->mElapsedTicks();
+    std::cout << gameTimer->deltaTimer() << std::endl;
+    gameTimer->timePassed(5, 5000);
+    //gameTimer = Timer::Instacne();
+    //std::cout << gameTimer << std::endl;
+
     // temporary place for this
     Screen screen = INTRO;
     //temporary 
@@ -219,6 +227,8 @@ void EscapeFromCapstone::runGameLoop()
     SDL_Event event;
     while (!getQuit())
     {
+        gameTimer->update();
+        //this updates ideration of while loop
         while(SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -441,6 +451,8 @@ void EscapeFromCapstone::runGameLoop()
         
         //Update screen
         SDL_RenderPresent(getRenderer());
+
+        gameTimer->reset();
        
  
     }

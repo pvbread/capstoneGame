@@ -2,7 +2,7 @@
 
 Timer* Timer::sInstance = nullptr;//dont do this way Timer::sInstance
 
-Timer* Timer::instance() 
+Timer* Timer::Instance() 
 {
     if(sInstance == nullptr)
         sInstance = new Timer();//This is our Init

@@ -53,11 +53,14 @@ Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
         SDL_Log("Load Mixer Error: %s", Mix_GetError()); 
 
-    Timer* gameTimer = Timer::instance();
+    //Timer* gameTimer = Timer::Instance();
 }
 
 Phoenix::~Phoenix()
 {
+    //Timer::release();
+    //gameTimer = NULL;
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "TileType.h"
 #include "Tile.h"
+#include "Timer.h"
 
 class Phoenix
 {
@@ -40,4 +41,5 @@ private:
     bool quit = false;
     int width;
     int height;
+    
 };

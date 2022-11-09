@@ -11,6 +11,7 @@
 //#include "loadMedia.h"
 #include "Screen.h"
 #include "BaseMenu.h"
+//#include "Timer.h"
 
 class EscapeFromCapstone : public Phoenix
 {
@@ -20,4 +21,5 @@ public:
                        const char* title, 
                        int x, int y, 
                        int w, int h);
+
 };
