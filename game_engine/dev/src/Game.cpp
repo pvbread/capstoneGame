@@ -93,7 +93,7 @@ void EscapeFromCapstone::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1); 
+    //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
@@ -348,8 +348,10 @@ void EscapeFromCapstone::runGameLoop()
                         STATE_battle = true;
                         //setRoundOrder
                         roundOrder = setRoundTurns(combatParticipants);
+                        STATE_roundsSet = true;
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
+
                     }
                     if (event.type == SDL_KEYDOWN)
                     {
@@ -408,7 +410,9 @@ void EscapeFromCapstone::runGameLoop()
                         if (STATE_combatSelectedOption == "Attack")
                         {
                             STATE_combatSelectedOption = "NONE";
-                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants);   
+                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            currOrderNum = (currOrderNum + 1) % 8; 
                         }
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
