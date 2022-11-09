@@ -31,7 +31,7 @@ std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const
 
         // try to find index of current character in vector (unsure if this works, needs testing)
         std::string key = name;
-        auto itr = find_if(participants.begin(),
+        auto itr = std::find_if(participants.begin(),
                             participants.end(),
                             [&key] (const BaseCharacter& obj)
                             {
@@ -92,7 +92,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
             validMoves = getValidBuffTargets(BUFF, participants);
             std::vector<int>::iterator adjustments;
             int currCharIndex = charIndex; //needed for lambda to be happy (changed lambda conditions)
-            adjustments = remove_if(validMoves.begin(),
+            adjustments = std::remove_if(validMoves.begin(),
                                     validMoves.end(),
                                     [currCharIndex] (int index) 
                                     {
