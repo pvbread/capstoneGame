@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "Game/Utility/isTeamAlive.h"
+#include "Game/Utility/setRoundTurns.h"
 
 EscapeFromCapstone::EscapeFromCapstone(Uint32 flags, 
                        const char* title, 
@@ -8,6 +10,20 @@ EscapeFromCapstone::EscapeFromCapstone(Uint32 flags,
 
 void EscapeFromCapstone::runGameLoop()
 {
+
+    ////////// START CHARACTER INIT ////////
+    BasePlayer conductor = BasePlayer("Conductor", 30, 3, 3, 0, 3, 3, 3);
+    BasePlayer drum = BasePlayer("Drummer", 50, 2, 1, 0, 3, 3, 3);
+    BasePlayer flute = BasePlayer("Flutist", 20, 6, 1, 0, 3, 3, 3);
+    Bass bass = Bass("Bassist", 60, 1, 3, 0, 3, 3, 3);
+    std::vector<BaseCharacter> playerTeam{flute, conductor, bass, drum};
+    std::vector<BaseCharacter> enemies;
+    std::vector<BaseCharacter> combatParticipants;
+
+    ///////// END CHARACTER INIT //////
+
+    
+
     // temporary place for this
     Screen screen = INTRO;
     //temporary 
@@ -17,12 +33,15 @@ void EscapeFromCapstone::runGameLoop()
     //temp
     SDL_Rect cursor = { 45, 160, 50, 50 };
     //incredibly temp
-    int testCounter = 0;
-    const std::vector<const char*> introOptions = {
-        "New Game ",
+
+    //////////// START MENUS INIT ///////////////
+
+    const std::vector<std::string> introOptions = {
+        "New Game",
         "Load Game",
-        "Credits  "
+        "Credits"
     };
+
     const char* railwayFontPath = "./Raleway-Medium.ttf";
     SDL_Color introMenuColor = { 255, 0, 0, 255 };
     BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100, 
@@ -33,27 +52,50 @@ void EscapeFromCapstone::runGameLoop()
                                   getRenderer()
     );
 
-    const std::vector<const char*> combatOptions = {
-        "Attack ",
-        "Buff   ",
-        "Debuff ",
-        "Move   "
+    const std::vector<std::string> combatOptionsStrings = {
+        "Attack",
+        "Buff",
+        "Debuff",
+        "Move"
     };
 
     SDL_Color combatMenuColor = { 0, 0, 255, 255 };
     BaseMenu combatMenu = BaseMenu(25, 520, 200, 50, 100, 
-                                   combatOptions.size(), 
-                                   combatOptions, 
+                                   combatOptionsStrings.size(), 
+                                   combatOptionsStrings, 
                                    railwayFontPath, 
                                    combatMenuColor, 
                                    getRenderer()
     );
 
+    //////////// END MENUS INIT ///////////////
+
+    /////////// START INIT STATES ///////
+
+    // When new game is selected, set to false
+    // when team dies, set back to true (or if you quite from in-game menu)
+    bool STATE_gameOver = true;
+    bool STATE_newGameSelected = false;
+    bool STATE_battle = false;
+    bool STATE_enemiesSet = false;
+    bool STATE_isPlayerTurn = false; // also functions as inverse (isComputerTurn)
+    bool STATE_combatMenuItemSelected = false;
+    bool STATE_combatMenuTargetSelected = false;
+    bool STATE_roundsSet = false;
+    bool STATE_roundOver = false;
+    bool STATE_mapEventboxOpen = false;
+    std::string STATE_introSelectedOption = "NONE";
+    std::string STATE_helpMenuSelectedOption = "NONE";
+    std::string STATE_combatSelectedOption = "NONE";
+
+    /////////// END INIT STATES /////// 
+
+    //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1);
-    int played;
+    Mix_PlayMusic(SelectOST, -1); 
 
+    //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
@@ -64,15 +106,10 @@ void EscapeFromCapstone::runGameLoop()
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"}
-    };
-    
-    //this is temporary
+    }; 
     
     //so there's going to be a couple of these per char
     //maybe a map would do well here?
-
-    
-
 
     //TODO in the destructor, clean this up
     //maybe better to have a dedicated function to map the coordinate tiles?
@@ -85,6 +122,9 @@ void EscapeFromCapstone::runGameLoop()
         setToQuit();
     }
 
+    //////////// END TEXTURE LOADING /////////////
+
+    //////////// START TILE LOADING /////////////
     const int TILE_COUNT = 192;
     const int TILE_LENGTH = 80;
     const int TILE_TYPE_COUNT = 12;
@@ -106,30 +146,6 @@ void EscapeFromCapstone::runGameLoop()
         SDL_Log("Error loading tiles");
         setToQuit();
     }
-
-    std::vector<std::string> eventList(6, "BLANKEVENT");
-    std::vector<std::string> eventsToAdd {
-        "BATTLE",
-        "BATTLE",
-        "HEAL",
-        "JOKE",
-        "ITEM"
-    };
-    for (auto event: eventsToAdd)
-        eventList.push_back(event);
-    
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(0,10); 
-
-    for (auto& [coordinate, event]: coordinateToEventTypeMap)
-    {
-        event = eventList[dist(gen)];  
-    }
-
-    std::string nextMapEvent = "";
-    SDL_Rect mapEventBox = {200, 200, 400, 100};
-    bool boxOpen = false;
 
     const int TILE_SHEET_ROWS = 3;
     const int TILE_SHEET_COLS = 4;
@@ -158,6 +174,37 @@ void EscapeFromCapstone::runGameLoop()
     {
         setToQuit();
     }
+
+    //////////// END TILE LOADING /////////////
+
+    //////////// START MAP EVENT GENERATION ////////
+
+    std::vector<std::string> eventList(6, "BLANKEVENT");
+    std::vector<std::string> eventsToAdd {
+        "BATTLE",
+        "BATTLE",
+        "HEAL",
+        "JOKE",
+        "ITEM"
+    };
+    for (auto event: eventsToAdd)
+        eventList.push_back(event);
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0,10); 
+
+    for (auto& [coordinate, event]: coordinateToEventTypeMap)
+    {
+        event = eventList[dist(gen)];  
+    }
+
+    std::string nextMapEvent = "";
+    SDL_Rect mapEventBox = {200, 200, 400, 100};
+
+    //////////// END MAP EVENT GENERATION //////// 
+
+    /////////// START  CAMERA AND MAP CHARACTER INIT ///////
     //set this to 0 whenever we want a clear debug controller
     debugControllerTexture.setAlpha(0);
 
@@ -165,12 +212,24 @@ void EscapeFromCapstone::runGameLoop()
     SDL_Rect characterControllerHitbox = {30, 30, 80, 80};
     MapDebugController debugController(10, 0, 0, debugHitbox);
     CharacterInMap characterController(80, 0, 0, characterControllerHitbox);
+
+    const int SCREEN_WIDTH = 960;
+    const int SCREEN_HEIGHT = 720;
+    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
+    /////////// END CAMERA AND MAP CHARACTER INIT ///////
+
+
+
     std::vector<SDL_Rect> charBoxes(8);
     for (int i = 0; i < charBoxes.size(); i++)
     {
         SDL_Rect temp = {(50+(i*100)), 200, 64, 64};
         charBoxes[i] = temp; 
     }
+
+    ////////// START BATTLE ORDER INIT ///////////////
+
     std::vector<SDL_Rect> orderBoxes(8);
     for (int i = 0; i < orderBoxes.size(); i++)
     {
@@ -180,6 +239,10 @@ void EscapeFromCapstone::runGameLoop()
 
     SDL_Rect orderTitleBox = {750, 280, 200, 30};
     std::string orderTitle = "ORDER        ";
+    int currOrderNum = 0;
+    std::vector<BaseCharacter*> roundOrder;
+
+    ////////// END BATTLE ORDER INIT ///////////////
 
     std::vector<std::string> tempCharNames {
         "flute        ",
@@ -192,11 +255,11 @@ void EscapeFromCapstone::runGameLoop()
         "Carl         "
     };
     //TODO account for dead chars in order
-    int currOrderNum = 0;
+    
 
     TTF_Font *orderFont = TTF_OpenFont("./Raleway-Medium.ttf", 50);
 
-    int currMove = 0;
+    int currTarget = 0;
     std::vector<std::vector<int>> validMoves = {
         {1, 3},
         {2, 4},
@@ -206,9 +269,7 @@ void EscapeFromCapstone::runGameLoop()
     };
     bool actionChosen = false;
 
-    const int SCREEN_WIDTH = 960;
-    const int SCREEN_HEIGHT = 720;
-    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    
 
     //double degrees = 0;
     //SDL_RendererFlip flipType = SDL_FLIP_NONE;
@@ -216,6 +277,7 @@ void EscapeFromCapstone::runGameLoop()
     SDL_Event event;
     while (!getQuit())
     {
+        
         while(SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -247,8 +309,17 @@ void EscapeFromCapstone::runGameLoop()
             switch (screen)
             {
                 case INTRO:
-                {
-                    introMenu.onInput(event, SelectMusic);
+                { 
+                    introMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
+                    if (STATE_introSelectedOption != "NONE")
+                    {
+                        if (STATE_introSelectedOption == "New Game")
+                        {
+                            STATE_newGameSelected = true;
+                            STATE_gameOver = false;
+                            screen = MAP;
+                        }
+                    }
                     break;
                 }
                 case MAP:
@@ -256,14 +327,37 @@ void EscapeFromCapstone::runGameLoop()
                     //this has a bug where movement
                     //keeps being read if key is not unpressed
                     debugController.onInput(event);
-                    characterController.onInput(event, nextMapEvent, boxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
+                    characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
+                    if (nextMapEvent == "BATTLE")
+                    {
+                        //init enemy characters
+                        BaseCharacter e1 = BaseCharacter("ConeheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e2 = BaseCharacter("ConeheadBeta", 10, 6, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("ConeheadKappa", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("Carl", 20, 0, 1, 0, 3, 3, 3, true);
+                        //normally this will just get enemies from a randomly selected "PACK"
+                        std::vector<BaseCharacter> temp{e1, e2, e3, e4};
+                        //this might not be necessary
+                        enemies = temp;
+                        combatParticipants = playerTeam;
+                        combatParticipants.insert(std::end(combatParticipants), std::begin(enemies), std::end(enemies));
+
+                        //change enemiesSet state
+                        STATE_enemiesSet = true;
+                        //change battle state
+                        STATE_battle = true;
+                        //setRoundOrder
+                        roundOrder = setRoundTurns(combatParticipants);
+                        screen = COMBAT;
+                        nextMapEvent = "BLANKEVENT";
+                    }
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
                         {
                             case SDLK_RETURN:
                             {
-                                boxOpen = false;
+                                STATE_mapEventboxOpen = false;
                                 break;
                             }
                         }
@@ -272,48 +366,54 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 case COMBAT:
                 {
-                    combatMenu.onInput(event, SelectMusic);
-                    if (event.type == SDL_KEYDOWN)
+                    
+                    if (STATE_combatSelectedOption != "NONE")
                     {
-                        switch (event.key.keysym.sym)
+                        
+                        if (event.type == SDL_KEYDOWN)
                         {
-                            case SDLK_4:
+                            switch (event.key.keysym.sym)
                             {
-                                testCounter++;
-                                break;
+                                case SDLK_LEFT:
+                                {
+                                    currTarget--;
+                                    if (currTarget < 0)
+                                        currTarget = 0;
+                                    break;
+                                }
+                                case SDLK_RIGHT:
+                                {
+                                    currTarget++;
+                                    if (currTarget == validMoves.size())
+                                        currTarget = validMoves.size()-1;
+                                    break;
+                                }
+                                case SDLK_RETURN:
+                                {
+                                    STATE_combatMenuTargetSelected = true;
+
+                                    break;
+                                }
                             }
-                            case SDLK_LEFT:
-                            {
-                                currMove--;
-                                if (currMove < 0)
-                                    currMove = 0;
-                                break;
-                            }
-                            case SDLK_RIGHT:
-                            {
-                                currMove++;
-                                if (currMove == validMoves.size())
-                                    currMove = validMoves.size()-1;
-                                break;
-                            }
-                            case SDLK_RETURN:
-                            {
-                                if (!actionChosen)
-                                    actionChosen = true;
-                                else
-                                    actionChosen = false;
-                                break;
-                            }
-                            case SDLK_x:
-                            {
-                                currOrderNum++;
-                                //TODO makes this tied to a limit
-                                //and reroll order when down to 0 members
-                                if (currOrderNum > 7)
-                                    currOrderNum = 0;
-                            }
-                        }
+                        } 
+                        
                     }
+
+                    if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
+                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+
+                    if (STATE_combatMenuTargetSelected)
+                    {
+                        //do thing;
+                        if (STATE_combatSelectedOption == "Attack")
+                        {
+                            STATE_combatSelectedOption = "NONE";
+                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants);   
+                        }
+                        STATE_combatMenuTargetSelected = false;
+                        currTarget = 0;
+                    }
+                   
                 }
             }
             
@@ -343,7 +443,7 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 debugController.render(getRenderer(), camera, debugControllerTexture);
                 characterController.render(getRenderer(), camera, characterInMapTexture);
-                if (boxOpen)
+                if (STATE_mapEventboxOpen)
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 0, 0, 200, 255);
                     SDL_RenderFillRect(getRenderer(), &mapEventBox);
@@ -377,10 +477,12 @@ void EscapeFromCapstone::runGameLoop()
 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
                 SDL_RenderFillRect(getRenderer(), &charBoxes[0]);
-                if (actionChosen)
+
+                //targetBoxes
+                if (STATE_combatSelectedOption == "Attack")
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
-                    for (auto target: validMoves[currMove])
+                    for (auto target: validMoves[currTarget])
                     {
                         SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
                     }
@@ -405,25 +507,6 @@ void EscapeFromCapstone::runGameLoop()
                     textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
                 }
-                
-                
-
-                //test drawing text on a rectangle
-
-                /*
-                SDL_Rect rectBlue = { 600, 240, 100, 100 };
-                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 255, 255); // blue
-                SDL_RenderFillRect(getRenderer(), &rectBlue);
-                SDL_Rect textRec = { 600, 240, 100, 100 };
-                SDL_Color textColor = { 255, 0, 0, 255 };
-                std::stringstream myFavoriteStream;
-                myFavoriteStream << testCounter;
-                SDL_Surface *surfaceTesting = TTF_RenderText_Solid(font, myFavoriteStream.str().c_str(), textColor); //ttf surface  
-                SDL_Texture *textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
-                SDL_FreeSurface(surfaceTesting); 
-                
-                SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &rectBlue);
-                */
                 break;
             }
         }

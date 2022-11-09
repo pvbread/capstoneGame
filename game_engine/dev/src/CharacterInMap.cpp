@@ -101,15 +101,13 @@ void CharacterInMap::updateEvent(std::string& nextMapEvent,
     if (coordinateToEventTypeMap[coordinates] != "BLANKEVENT")
     { 
         nextMapEvent = coordinateToEventTypeMap[coordinates];
-        boxOpen = true;
-        std::cout << nextMapEvent << std::endl;    
+        boxOpen = true;  
         coordinateToEventTypeMap[coordinates] = "BLANKEVENT"; 
     }
     else if (coordinateToEventTypeMap[coordinates] == "BLANKEVENT")
     {
         nextMapEvent = "BLANKEVENT";
         boxOpen = false;
-        std::cout << nextMapEvent << std::endl; 
     }
 }
 
