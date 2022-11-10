@@ -27,6 +27,9 @@ if(APPLE)
     "src/MapDebugController.cpp"
     "src/CharacterInMap.cpp"
     "src/BaseMenu.cpp"
+    "src/Game/Characters/BaseCharacter.cpp"
+    "src/Game/Characters/Players/BasePlayer.cpp"
+    "src/Game/Characters/Players/Bass.cpp"
   )
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
   target_precompile_headers(capstoneGame PRIVATE "include/pch.h")
@@ -50,6 +53,9 @@ if(MINGW)
     "src/MapDebugController.cpp"
     "src/CharacterInMap.cpp"
     "src/BaseMenu.cpp"
+    "src/Game/Characters/BaseCharacter.cpp"
+    "src/Game/Characters/Players/BasePlayer.cpp"
+    "src/Game/Characters/Players/Bass.cpp"
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")

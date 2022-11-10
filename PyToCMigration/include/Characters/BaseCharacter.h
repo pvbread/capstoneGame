@@ -18,13 +18,14 @@ enum ActionType
 class BaseCharacter
 {
 public:
+    BaseCharacter() = default;
     BaseCharacter(std::string name, int hp, int speed, 
                   int hit, int armor, int itemModifier, int speedModifier, 
                   int dodgeModifier, bool enemy
     );
 
     std::pair<ActionType, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
-                                                                 std::string decisionAlgo = ""
+                                                                 std::string decisionAlgo = "RANDOM"
     );
 
     std::vector<int> getValidMoves(ActionType actionType,
@@ -49,6 +50,10 @@ public:
     std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
                                          std::vector<BaseCharacter> participants
     );
+
+    friend std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter> characters);
+    friend bool isTeamAlive(const std::vector<BaseCharacter>& participants, bool enemy);
+
     std::string getName() const;
     bool isAlive() const;
     int getHp() const;
@@ -60,6 +65,7 @@ public:
     int getSpeedModifier() const;
     int getItemModifier() const;
     int getParticipantsIndex() const;
+    std::unordered_map<ActionType, std::vector<int>> getMovesAndRanges() const;
     bool isEnemy() const;
     void setHp(int newHp);
     void setName(const std::string& name);
@@ -73,6 +79,7 @@ public:
     void changeLifeStatus(bool alive);
     void setAsPlayerOrEnemy(bool enemy);
     void setNewParticipantsIndex(int newIndex);
+
 
 protected:
     std::string name;
@@ -89,9 +96,9 @@ protected:
     int itemModifier;
     
     //example validMoves and ranges
-    std::unordered_map<ActionType, std::vector<int>> validMovesAndRanges = {
+    std::unordered_map<ActionType, std::vector<int>> movesAndRanges = {
         {ATTACK, {2,4}},
-        {BUFF, {2}},
-        {DEBUFF, {5}}
+        {BUFF, {1,2}},
+        {DEBUFF, {4}}
     };
 };

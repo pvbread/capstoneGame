@@ -11,6 +11,9 @@
 //#include "loadMedia.h"
 #include "Screen.h"
 #include "BaseMenu.h"
+#include "Game/Characters/BaseCharacter.h"
+#include "Game/Characters/Players/BasePlayer.h"
+#include "Game/Characters/Players/Bass.h"
 
 class EscapeFromCapstone : public Phoenix
 {

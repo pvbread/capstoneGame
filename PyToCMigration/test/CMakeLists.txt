@@ -4,6 +4,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES	
 	BasePlayerTest.cpp
+	isTeamAliveTest.cpp
 	testOutline.cpp
 )
 
