@@ -547,9 +547,31 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 break;
             }
-            case SANDBOX:
+            case SANDBOX:           
             {
-                sandbox.render(getRenderer());
+                SDL_Rect combatPane = {0, 0, 720, 600};
+                SDL_Color colCombat = Color::navy;
+                SDL_SetRenderDrawColor(getRenderer(), colCombat.r, colCombat.g, colCombat.b, 0);
+                SDL_RenderFillRect(getRenderer(), &combatPane);
+                SDL_Rect statusPane = {0, 600, 720, 120};
+                SDL_Color colStatus = Color::cyan;
+                SDL_SetRenderDrawColor(getRenderer(), colStatus.r, colStatus.g, colStatus.b, 0);
+                SDL_RenderFillRect(getRenderer(), &statusPane);
+                /*
+                SDL_Rect combatPane = {0, 0, 720, 600};
+                SDL_Color colPane = Color::navy;
+                SDL_SetRenderDrawColor(getRenderer(), colPane.r, colPane.g, colPane.b, 0);
+                SDL_RenderFillRect(getRenderer(), &combatPane);
+                SDL_Rect combatPane = {0, 0, 720, 600};
+                SDL_Color colPane = Color::navy;
+                SDL_SetRenderDrawColor(getRenderer(), colPane.r, colPane.g, colPane.b, 0);
+                SDL_RenderFillRect(getRenderer(), &combatPane);
+                SDL_Rect combatPane = {0, 0, 720, 600};
+                SDL_Color colPane = Color::navy;
+                SDL_SetRenderDrawColor(getRenderer(), colPane.r, colPane.g, colPane.b, 0);
+                SDL_RenderFillRect(getRenderer(), &combatPane);
+                */
+                //sandbox.render(getRenderer());
                 break;
             }
         }
