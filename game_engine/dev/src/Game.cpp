@@ -42,13 +42,12 @@ void EscapeFromCapstone::runGameLoop()
         "Credits"
     };
 
-    const char* railwayFontPath = "./Raleway-Medium.ttf";
+    //const char* railwayFontPath = "./Raleway-Medium.ttf";
     SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100, 
-                                  introOptions.size(), 
+    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100,  
                                   introOptions, 
-                                  railwayFontPath, 
-                                  introMenuColor, 
+                                  Font::raleway, 
+                                  Color::red, 
                                   getRenderer()
     );
 
@@ -61,14 +60,14 @@ void EscapeFromCapstone::runGameLoop()
 
     SDL_Color combatMenuColor = { 0, 0, 255, 255 };
     BaseMenu combatMenu = BaseMenu(25, 520, 200, 50, 100, 
-                                   combatOptionsStrings.size(), 
                                    combatOptionsStrings, 
-                                   railwayFontPath, 
-                                   combatMenuColor, 
+                                   Font::raleway, 
+                                   Color::red, 
                                    getRenderer()
     );
 
     //////////// END MENUS INIT ///////////////
+ 
 
     /////////// START INIT STATES ///////
 
@@ -440,7 +439,7 @@ void EscapeFromCapstone::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
-                introMenu.render(getRenderer());   
+                introMenu.render(getRenderer()); 
                 break;
             }
             case MAP:
