@@ -3,18 +3,18 @@
 
 BaseMenu::BaseMenu(int x, int y, int w, int h, 
            int fontSize, 
-           int numTextures,
            const std::vector<std::string>& optionNames,
-           const char* fontPath, 
+           std::string fontPath, 
            SDL_Color fontColor,
            SDL_Renderer* renderer)
 {
+    int numTextures = optionNames.size(); 
     startX = x;
     startY = y;
     optionWidth = w;
     optionHeight = h;
     menuTextures = std::vector<SDL_Texture*>(numTextures);
-    TTF_Font *menuFont = TTF_OpenFont(fontPath, fontSize);
+    TTF_Font *menuFont = TTF_OpenFont(fontPath.c_str(), fontSize);
     //TODO add error checking
 
     std::vector<std::string> optionsStringsPadded = padMenuStrings(optionNames);

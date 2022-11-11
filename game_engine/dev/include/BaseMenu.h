@@ -7,9 +7,8 @@ class BaseMenu
 public:
     BaseMenu(int x, int y, int w, int h, 
          int fontSize, 
-         int numTextures,
          const std::vector<std::string>& optionNames,
-         const char* fontPath,
+         std::string fontPath,
          SDL_Color fontColor,
          SDL_Renderer* renderer);
     //might need to do a combatMenu with extra onInput behavior
