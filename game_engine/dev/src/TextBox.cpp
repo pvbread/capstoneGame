@@ -4,7 +4,7 @@ TextBox::TextBox(std::string text,
                  int fontSize,
                  int x, int y,
                  int w, int h,
-                 std::string inputFont, 
+                 std::string fontPath, 
                  SDL_Color textColor, 
                  SDL_Color backgroundColor)
 {
@@ -13,10 +13,7 @@ TextBox::TextBox(std::string text,
     this->textBox = {x, y, w, h};
     this->textColor = textColor;
     this->backgroundColor = backgroundColor;
-    std::string prefix = "./";
-    std::string suffix = ".ttf";
-    const char* filePath = (prefix + inputFont + suffix).c_str();
-    font = TTF_OpenFont(filePath, fontSize);
+    font = TTF_OpenFont(fontPath.c_str(), fontSize);
 }
 
 void TextBox::render(SDL_Renderer* renderer)

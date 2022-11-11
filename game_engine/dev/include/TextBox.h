@@ -10,7 +10,7 @@ public:
             int fontSize,
             int x, int y,
             int w, int h, 
-            std::string inputFont = "Raleway-Medium",
+            std::string inputFont = "../../assets/fonts/Roboto-Medium.ttf",
             SDL_Color textColor = {255, 0, 0, 255}, 
             SDL_Color backgroundColor = {0, 0, 0, 0}
     );

@@ -8,7 +8,6 @@
 #include "Tile.h"
 #include "CharacterInMap.h"
 #include "MapDebugController.h"
-//#include "loadMedia.h"
 #include "Screen.h"
 #include "BaseMenu.h"
 #include "Game/Characters/BaseCharacter.h"

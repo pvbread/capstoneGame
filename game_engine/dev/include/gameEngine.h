@@ -5,6 +5,7 @@
 #include "Tile.h"
 #include "TextBox.h"
 #include "Color.h"
+#include "Font.h"
 
 class Phoenix
 {
