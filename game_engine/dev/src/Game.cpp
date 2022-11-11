@@ -69,6 +69,7 @@ void EscapeFromCapstone::runGameLoop()
     );
 
     //////////// END MENUS INIT ///////////////
+    
 
     /////////// START INIT STATES ///////
 
@@ -428,7 +429,7 @@ void EscapeFromCapstone::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
-                introMenu.render(getRenderer());   
+                introMenu.render(getRenderer());
                 break;
             }
             case MAP:

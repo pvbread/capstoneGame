@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "TileType.h"
 #include "Tile.h"
+#include "TextBox.h"
 
 class Phoenix
 {
