@@ -275,6 +275,11 @@ void EscapeFromCapstone::runGameLoop()
     };
     bool actionChosen = false;
 
+    ///////// BEGIN SANDBOX ///////////
+    
+    TextBox sandbox = TextBox("hello", 100, 50, 50, 80, 100, Font::roboto, Color::blue, Color::white);
+
+    ///////// END SANDBOX ///////////
     
 
     //double degrees = 0;
@@ -308,6 +313,11 @@ void EscapeFromCapstone::runGameLoop()
                     case SDLK_3:
                     {
                         screen = COMBAT;
+                        break;
+                    }
+                    case SDLK_4:
+                    {
+                        screen = SANDBOX;
                         break;
                     }
                 }
@@ -417,12 +427,16 @@ void EscapeFromCapstone::runGameLoop()
                         {
                             //WAS the round order properly set??
                             STATE_combatSelectedOption = "NONE";
-                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
+                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants);
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            currOrderNum = (currOrderNum + 1) % 8; 
+                            currOrderNum = (currOrderNum + 1) % 8;
                         }
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
+                    }
+                    case SANDBOX:
+                    {
+                        break;
                     }
                    
                 }
@@ -531,6 +545,11 @@ void EscapeFromCapstone::runGameLoop()
                     textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
                 }
+                break;
+            }
+            case SANDBOX:
+            {
+                sandbox.render(getRenderer());
                 break;
             }
         }
