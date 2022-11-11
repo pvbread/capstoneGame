@@ -5,6 +5,7 @@
 class TextBox
 {
 public:
+    //TODO add overloaded constructors that allow for typing of typical colors
     TextBox(std::string text,
             int fontSize,
             int x, int y,
@@ -14,6 +15,11 @@ public:
             SDL_Color backgroundColor = {0, 0, 0, 0}
     );
     void render(SDL_Renderer* renderer);
+    void changeText(std::string text);
+    void changeDimensions(int w, int h);
+    void changePosition(int x, int y);
+    void changeTextColor(SDL_Color color);
+    void changeBackgroundColor(SDL_Color color);
 private:
     std::string text;
     TTF_Font *font;

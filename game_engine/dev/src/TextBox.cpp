@@ -29,3 +29,27 @@ void TextBox::render(SDL_Renderer* renderer)
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface); 
     SDL_RenderCopy(renderer, texture, nullptr, &textBox); 
 }
+
+void TextBox::changeText(std::string text)
+{
+    this->text = text;
+}
+
+void TextBox::changeDimensions(int w, int h)
+{
+    textBox.w = w;
+    textBox.h = h;
+}
+void TextBox::changePosition(int x, int y)
+{
+    textBox.x = x;
+    textBox.y = y;
+}
+void TextBox::changeTextColor(SDL_Color color)
+{
+    textColor = color;
+}
+void TextBox::changeBackgroundColor(SDL_Color color)
+{
+    backgroundColor = color;
+}
