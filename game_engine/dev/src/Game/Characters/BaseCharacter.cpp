@@ -150,6 +150,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
                     if (participants[target].getHp() <= 0)
                     {
                         participants[target].changeLifeStatus(false);
+                        participants[target].setHp(0); 
                         shiftDead(participants);
                     }
                 }
@@ -224,7 +225,7 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     int weaponRoll = intDist(gen);
     int damage = weaponRoll + hit;
     float REDUCTION_SCALE = 0.05;
-    int reduction = int(damage * (targetCharacter.getArmor() * REDUCTION_SCALE));
+    int reduction = int(damage * targetCharacter.getArmor() * REDUCTION_SCALE);
     damage -= reduction;
     if (damage < 0)
         return 0;

@@ -93,7 +93,7 @@ void EscapeFromCapstone::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1); 
+    //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
@@ -228,6 +228,13 @@ void EscapeFromCapstone::runGameLoop()
         charBoxes[i] = temp; 
     }
 
+    std::vector<SDL_Rect> hpBoxes(8);
+    for (int i = 0; i < hpBoxes.size(); i++)
+    {
+        SDL_Rect temp = {(50+(i*100)), 30, 64, 64};
+        hpBoxes[i] = temp; 
+    }
+
     ////////// START BATTLE ORDER INIT ///////////////
 
     std::vector<SDL_Rect> orderBoxes(8);
@@ -348,8 +355,10 @@ void EscapeFromCapstone::runGameLoop()
                         STATE_battle = true;
                         //setRoundOrder
                         roundOrder = setRoundTurns(combatParticipants);
+                        STATE_roundsSet = true;
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
+
                     }
                     if (event.type == SDL_KEYDOWN)
                     {
@@ -407,8 +416,11 @@ void EscapeFromCapstone::runGameLoop()
                         //do thing;
                         if (STATE_combatSelectedOption == "Attack")
                         {
+                            //WAS the round order properly set??
                             STATE_combatSelectedOption = "NONE";
-                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants);   
+                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            currOrderNum = (currOrderNum + 1) % 8; 
                         }
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
@@ -478,6 +490,19 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
                 SDL_RenderFillRect(getRenderer(), &charBoxes[0]);
 
+                //hpBoxes
+                for (int i = 0;  i < hpBoxes.size(); i++)
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 0, 0, 170, 255);
+                    SDL_RenderFillRect(getRenderer(), &hpBoxes[i]); 
+                    SDL_Color textColor = { 255, 0, 0, 255 };
+                    std::stringstream hpStream;
+                    hpStream << combatParticipants[i].getHp();
+                    SDL_Surface* surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
+                    SDL_Texture* texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
+                    SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
+                }
+                
                 //targetBoxes
                 if (STATE_combatSelectedOption == "Attack")
                 {

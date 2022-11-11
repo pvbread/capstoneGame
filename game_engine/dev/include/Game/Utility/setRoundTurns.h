@@ -16,7 +16,7 @@ struct greater_prefer_ally
     }
 };
 
-std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter> characters)
+std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters)
 {   
     
     std::vector<BaseCharacter*> roundOrder;
