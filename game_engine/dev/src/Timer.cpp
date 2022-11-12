@@ -47,7 +47,7 @@ void Timer::timerScale(float t)
     mTimerScale = t;
 }
 
-float Timer::timerScale()
+float Timer::getTimerScale()
 {
     return mTimerScale;
 }
