@@ -20,6 +20,7 @@ public:
     void changePosition(int x, int y);
     void changeTextColor(SDL_Color color);
     void changeBackgroundColor(SDL_Color color);
+    SDL_Rect getTextBox() const;
 private:
     std::string text;
     TTF_Font *font;

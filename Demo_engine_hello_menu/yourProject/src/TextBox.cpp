@@ -50,3 +50,8 @@ void TextBox::changeBackgroundColor(SDL_Color color)
 {
     backgroundColor = color;
 }
+
+SDL_Rect TextBox::getTextBox() const
+{
+    return textBox;
+}
