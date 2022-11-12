@@ -19,6 +19,7 @@ void YourGame::runGameLoop()
     SDL_Event event;
     while (!getQuit())
     {
+        timer->update();
         //////////// INPUT EVENT HANDLING //////////////
         while(SDL_PollEvent(&event))
         {
@@ -41,6 +42,7 @@ void YourGame::runGameLoop()
         //menu.render(getRenderer());
         //if (whatHappened != "")
         //    myText.changeText(whatHappened);
+        myText.changeText(timer->)
         myText.render(getRenderer());
         
         //////////////// END RENDER EVENTS ///////////////////
