@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Color.h"
 
 class BaseMenu
 {

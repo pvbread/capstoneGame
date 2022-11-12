@@ -39,7 +39,7 @@ BaseMenu::BaseMenu(int x, int y, int w, int h,
     //cursor initialization
     cursorRectangle = { x-(optionHeight/2), y+(optionHeight/5), optionHeight/2, optionHeight/2 };
     initialCursorHeight = y+(optionHeight/5);
-    surface = TTF_RenderText_Solid(menuFont, ">", fontColor);
+    surface = TTF_RenderText_Solid(menuFont, ">", Color::yellow);
     SDL_Texture* menuCursorTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
     optionRectangles.push_back(cursorRectangle);

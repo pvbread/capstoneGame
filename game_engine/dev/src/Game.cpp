@@ -276,8 +276,24 @@ void EscapeFromCapstone::runGameLoop()
     bool actionChosen = false;
 
     ///////// BEGIN SANDBOX ///////////
+
+    //char b = '\u0444';
     
-    TextBox sandbox = TextBox("hello", 100, 50, 50, 80, 100, Font::roboto, Color::blue, Color::white);
+    TextBox sandboxText = TextBox("\u1D11E", 100, 50, 50, 80, 100, Font::roboto, Color::blue, Color::white);
+    const std::vector<std::string> sandboxOptionsStrings = {
+        "Attack",
+        "Buff",
+        "Debuff",
+        "Move"
+    };
+
+    BaseMenu sandboxMenu = BaseMenu(755, 500, 200, 50, 100, 
+                                   sandboxOptionsStrings, 
+                                   Font::openSans, 
+                                   Color::white, 
+                                   getRenderer()
+    );
+
 
     ///////// END SANDBOX ///////////
     
@@ -553,25 +569,29 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Color colCombat = Color::navy;
                 SDL_SetRenderDrawColor(getRenderer(), colCombat.r, colCombat.g, colCombat.b, 0);
                 SDL_RenderFillRect(getRenderer(), &combatPane);
+
                 SDL_Rect statusPane = {0, 600, 720, 120};
                 SDL_Color colStatus = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), colStatus.r, colStatus.g, colStatus.b, 0);
                 SDL_RenderFillRect(getRenderer(), &statusPane);
-                /*
-                SDL_Rect combatPane = {0, 0, 720, 600};
-                SDL_Color colPane = Color::navy;
-                SDL_SetRenderDrawColor(getRenderer(), colPane.r, colPane.g, colPane.b, 0);
-                SDL_RenderFillRect(getRenderer(), &combatPane);
-                SDL_Rect combatPane = {0, 0, 720, 600};
-                SDL_Color colPane = Color::navy;
-                SDL_SetRenderDrawColor(getRenderer(), colPane.r, colPane.g, colPane.b, 0);
-                SDL_RenderFillRect(getRenderer(), &combatPane);
-                SDL_Rect combatPane = {0, 0, 720, 600};
-                SDL_Color colPane = Color::navy;
-                SDL_SetRenderDrawColor(getRenderer(), colPane.r, colPane.g, colPane.b, 0);
-                SDL_RenderFillRect(getRenderer(), &combatPane);
-                */
-                //sandbox.render(getRenderer());
+
+                SDL_Rect orderPane = {720, 0, 240, 600};
+                SDL_Color colOrder = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), colOrder.r, colOrder.g, colOrder.b, 0);
+                SDL_RenderFillRect(getRenderer(), &orderPane);
+                SDL_Rect menuPane = {720, 600, 720, 120};
+                SDL_Color colMenu = Color::maroon;
+                SDL_SetRenderDrawColor(getRenderer(), colMenu.r, colMenu.g, colMenu.b, 0);
+                SDL_RenderFillRect(getRenderer(), &menuPane);
+                
+                SDL_Rect recentAttackPane = {0, 540, 500, 60};
+                SDL_Color colRecentAttack = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), colRecentAttack.r, colRecentAttack.g, colRecentAttack.b, 0);
+                SDL_RenderFillRect(getRenderer(), &recentAttackPane);
+                sandboxMenu.render(getRenderer());
+                
+                
+                sandboxText.render(getRenderer());
                 break;
             }
         }
