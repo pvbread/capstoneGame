@@ -6,6 +6,7 @@
 #include "TextureWrapper.h"
 #include "Tile.h"
 #include "BaseMenu.h"
+#include "Timer.h"
 
 class YourGame : public Archimedes
 {

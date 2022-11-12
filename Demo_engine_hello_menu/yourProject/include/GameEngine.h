@@ -6,6 +6,7 @@
 #include "TextBox.h"
 #include "Color.h"
 #include "Font.h"
+#include "Timer.h"
 
 class Archimedes
 {

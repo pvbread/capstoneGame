@@ -9,6 +9,7 @@ YourGame::YourGame(Uint32 flags,
 void YourGame::runGameLoop()
 {
     ////////////// INITIALIZE VARIABLES HERE ///////////////////////////
+    Timer* timer = Timer::instance();
     std::vector<std::string> options{"op1", "op2", "op3","op4"};
     BaseMenu menu = BaseMenu(100, 20, 400, 100, 600, options, Font::lato, Color::gray, getRenderer());
     std::string whatHappened;
@@ -37,9 +38,9 @@ void YourGame::runGameLoop()
 
         /////////////// RENDER EVENTS HERE ///////////////////
         
-        menu.render(getRenderer());
-        if (whatHappened != "")
-            myText.changeText(whatHappened);
+        //menu.render(getRenderer());
+        //if (whatHappened != "")
+        //    myText.changeText(whatHappened);
         myText.render(getRenderer());
         
         //////////////// END RENDER EVENTS ///////////////////

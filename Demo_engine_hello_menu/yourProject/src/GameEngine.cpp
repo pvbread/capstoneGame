@@ -47,7 +47,7 @@ Archimedes::Archimedes(Uint32 flags, const char* title, int x, int y, int w, int
         SDL_Log("TTF Init error!");
 
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-        SDL_Log("Load Mixer Error: %s", Mix_GetError());  
+        SDL_Log("Load Mixer Error: %s", Mix_GetError());
 }
 
 Archimedes::~Archimedes()

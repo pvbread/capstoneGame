@@ -26,6 +26,7 @@ if(APPLE)
     "src/BaseSingleTexture.cpp"
     "src/BaseMenu.cpp"
     "src/TextBox.cpp"
+    "src/Timer.cpp"
   )
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
   target_precompile_headers(capstoneGame PRIVATE "include/pch.h")
@@ -41,6 +42,7 @@ if(MINGW)
     "src/BaseSingleTexture.cpp"
     "src/BaseMenu.cpp"
     "src/TextBox.cpp"
+    "src/Timer.cpp"
   )
   set(SDL2_DIR "C:/dev/SDL2-2.24.0/cmake")
   set(SDL2_image_DIR "C:/dev/SDL2_image-2.6.2/cmake")
