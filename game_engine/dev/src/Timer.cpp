@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-Timer* Timer::sInstance = nullptr;//dont do this way Timer::sInstance
+Timer* Timer::sInstance = nullptr; //what does this do???
 
 Timer* Timer::instance() 
 {
@@ -26,14 +26,14 @@ Timer::Timer()
 
 Timer::~Timer()
 {
-    //timer deconstructor
+    release();
 }
 
 void Timer::reset()
 {
     mStartTicks = SDL_GetTicks();
     mElapsedTicks = 0;
-    mDelataTime = 0.0f;
+    mDeltaTimer = 0.0f;
 }
 
 float Timer::deltaTimer()
@@ -63,8 +63,5 @@ bool Timer::timePassed(int countdownTime, int currentTime)
     if(currentTime >= currentTime + countdownTime){
         return true;
     }
-    //will be used to count down from a time
-    //need to check if instance of when timer starts will be equal to timer start + countdown
-    //when it is return true
-    //!!!!!NO FOR OR WHILE LOOPS!!!!
+    return false;
 }
