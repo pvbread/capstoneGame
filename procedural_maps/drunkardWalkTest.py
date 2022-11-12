@@ -229,23 +229,23 @@ def createMatrix(path1, path2, path3, x_max, y_max):
     # create the dimensions of the matrix based on the maximum values of x and y
     # default dimensions 12 x 16 matrix
 
-    # if the highest x value is less than 12, set x_max to 12
+    # if the highest x value is less than 12, set height to 12
     if x_max < 12:
-        x_max = 12
-    # else set x_max to itself plus 2 for extra spacing
+        height = 12
+    # else set height to x_max plus 2 for extra spacing
     else:
-        x_max = x_max + 2
+        height = x_max + 2
 
-    # if the highest y value is less than 16, set y_max to 16
+    # if the highest y value is less than 16, set width to 16
     if y_max < 16:
-        y_max = 16
-    # else set y_max to itself plus 2 for extra spacing
+        width = 16
+    # else set width to y_max plus 2 for extra spacing
     else:
-        y_max = y_max + 2
+        width = y_max + 2
     
     
     # create matrix filled with threes
-    matrix = np.full((x_max, y_max),3)
+    matrix = np.full((height, width),3)
 
     # variables that start with 'r' represents the row, variables that start with 'c' represents the col
 
