@@ -11,6 +11,8 @@ EscapeFromCapstone::EscapeFromCapstone(Uint32 flags,
 void EscapeFromCapstone::runGameLoop()
 {
 
+    Timer* timer = Timer::instance();
+
     ////////// START CHARACTER INIT ////////
     BasePlayer conductor = BasePlayer("Conductor", 30, 3, 3, 0, 3, 3, 3);
     BasePlayer drum = BasePlayer("Drummer", 50, 2, 1, 0, 3, 3, 3);

@@ -12,7 +12,7 @@ public:
     float deltaTimer();//gives back delta time
 
     void timerScale(float t);//for setting timescale
-    float timerScale();//returns timescale
+    float getTimerScale();//returns timescale
 
     void update();//timer update
 
