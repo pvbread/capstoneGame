@@ -83,8 +83,10 @@ TEST_CASE("Test moveSpots")
 {
     BasePlayer p1 = BasePlayer("p1", 30, 1, 3, 0, 4, 5, 6);
     BaseCharacter p2 = BaseCharacter("p2", 30, 1, 3, 0, 4, 0, 6, false);
+    BaseCharacter e1 = BaseCharacter("e1", 30, 1, 3, 0, 4, 5, 6, true);
 
-    std::vector<BaseCharacter> v{p1, p2};
+
+    std::vector<BaseCharacter> v{p1, p2, e1};
 
     SECTION("Check that swap with self has no effect")
     {
@@ -99,7 +101,82 @@ TEST_CASE("Test moveSpots")
         REQUIRE(swapped);
     }
     //TODO check that you can't swap with enemy
+    SECTION("Check that you can't swap with enemy")
+    {
+        std::vector<BaseCharacter> res = p2.moveSpots(1, 2, v);
+        bool noSwap = res[1].isEnemy() != true && res[2].isEnemy();
+        REQUIRE(noSwap);
+    }
+    SECTION("Check that an enemy can't swap with a player")
+    {
+        std::vector<BaseCharacter> res = e1.moveSpots(2, 1, v);
+        bool noSwap = res[1].isEnemy() != true && res[2].isEnemy();
+        REQUIRE(noSwap);
+    }
 }
+
+TEST_CASE("test getValidMoves")
+{
+    BasePlayer p1 = BasePlayer("p1", 30, 1, 3, 0, 4, 5, 6);
+    BaseCharacter p2 = BaseCharacter("p2", 30, 1, 3, 0, 4, 0, 6, false);
+    BaseCharacter p3 = BaseCharacter("p2", 30, 1, 3, 0, 4, 0, 6, false);
+    BaseCharacter e1 = BaseCharacter("e1", 30, 1, 3, 0, 4, 5, 6, true);
+    BaseCharacter e2 = BaseCharacter("e2", 30, 1, 3, 0, 4, 5, 6, true);
+    BaseCharacter e3 = BaseCharacter("e3", 30, 1, 3, 0, 4, 5, 6, true);
+
+    std::vector<BaseCharacter> v{p1,p2,p2,p3,e1,e2,e3,e2};
+
+    SECTION("get valid moves for buff for player")
+    {
+        std::vector<int> validMoves = p1.getValidMoves(BUFF, 0, v);
+        bool legalMove = validMoves.size() == 4 && validMoves[0] == 0;
+        REQUIRE(legalMove);
+    }
+    SECTION("get valid moves for buff for enemies")
+    {
+        std::vector<int> validMoves = e1.getValidMoves(BUFF, 0, v);
+        bool legalMove = validMoves.size() == 4 && validMoves[0] == 4;
+        REQUIRE(legalMove);
+    }
+    SECTION("get valid moves for debuff for enemies")
+    {
+        std::vector<int> validMoves = e1.getValidMoves(DEBUFF, 0, v);
+        bool legalMove = validMoves.size() == 4 && validMoves[0] == 0;
+        REQUIRE(legalMove);
+    }
+    SECTION("get valid moves for debuff for enemies")
+    {
+        std::vector<int> validMoves = p1.getValidMoves(DEBUFF, 0, v);
+        bool legalMove = validMoves.size() == 4 && validMoves[0] == 4;
+        REQUIRE(legalMove);
+    }
+    SECTION("get valid moves for player moving positions")
+    {
+        std::vector<int> validMoves = p1.getValidMoves(MOVE, 0, v);
+        bool legalMove = validMoves.size() == 1 && validMoves[0] == 1;
+        REQUIRE(legalMove);
+    }
+    SECTION("get valid moves for enemy moving positions")
+    {
+        std::vector<int> validMoves = e3.getValidMoves(MOVE, 6, v);
+        bool legalMove = validMoves.size() == 2 && validMoves[0] == 5 && validMoves[1] == 7;
+        REQUIRE(legalMove); 
+    }
+    SECTION("get valid moves for player to not enter enemy zone")
+    {
+        std::vector<int> validMoves = p3.getValidMoves(MOVE, 3, v);
+        bool legalMove = validMoves.size() == 1 && validMoves[0] == 2;
+        REQUIRE(legalMove);
+    }
+    SECTION("get valid moves for enemy tonot enter player zone")
+    {
+        std::vector<int> validMoves = e1.getValidMoves(MOVE, 4, v);
+        bool legalMove = validMoves.size() == 1 && validMoves[0] == 5;
+        REQUIRE(legalMove); 
+    }
+
+}
+
 
 TEST_CASE("Check that stats are set for BasePlayer properly") 
 {
