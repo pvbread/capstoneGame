@@ -22,10 +22,10 @@ void EscapeFromCapstone::runGameLoop()
     std::vector<BaseCharacter> enemies;
     std::vector<BaseCharacter> combatParticipants;
     // set player index
-    flute.setNewParticipantsIndex(0);
-    conductor.setNewParticipantsIndex(1);
-    bass.setNewParticipantsIndex(2);
-    drum.setNewParticipantsIndex(3);
+    playerTeam[0].setNewParticipantsIndex(0);
+    playerTeam[1].setNewParticipantsIndex(1);
+    playerTeam[2].setNewParticipantsIndex(2);
+    playerTeam[3].setNewParticipantsIndex(3);
 
     ///////// END CHARACTER INIT //////
 
@@ -282,6 +282,14 @@ void EscapeFromCapstone::runGameLoop()
     };
     bool actionChosen = false;
 
+
+    //////// DEBUGGER /////
+
+    TextBox statusRoundOrderSize = TextBox(".", 100, 20, 20, 50, 50, Font::satisfy, Color::red, Color::white);
+    TextBox statusCurrOrderNum = TextBox(".", 100, 80, 20, 50, 50, Font::satisfy, Color::red, Color::white);
+    TextBox statusGetParticipantsIndex = TextBox(".", 100, 140, 20, 50, 50, Font::satisfy, Color::red, Color::white);
+
+    ///////////////////////
     
 
     //double degrees = 0;
@@ -349,11 +357,12 @@ void EscapeFromCapstone::runGameLoop()
                         BaseCharacter e3 = BaseCharacter("ConeheadKappa", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("Carl", 20, 0, 1, 0, 3, 3, 3, true);
                         //normally this will just get enemies from a randomly selected "PACK"
-                        std::vector<BaseCharacter> temp{e1, e2, e3, e4};
                         e1.setNewParticipantsIndex(4);
                         e2.setNewParticipantsIndex(5);
                         e3.setNewParticipantsIndex(6);
                         e4.setNewParticipantsIndex(7);
+                        std::vector<BaseCharacter> temp{e1, e2, e3, e4};
+                        
                         //this might not be necessary
                         enemies = temp;
                         combatParticipants = playerTeam;
@@ -437,18 +446,30 @@ void EscapeFromCapstone::runGameLoop()
                             };
                             combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            currOrderNum = (currOrderNum + 1) % 8; 
+                            
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (!combatParticipants[currOrderNum].isAlive());
                         }
 
                         if (STATE_combatSelectedOption == "Buff")
                         {
+
                             //WAS the round order properly set??
                             STATE_combatSelectedOption = "NONE";
-                            validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            //look at roundOrder
+                            //validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
                             combatParticipants = roundOrder[currOrderNum]->doAction(BUFF, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            currOrderNum = (currOrderNum + 1) % 8; 
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (!combatParticipants[currOrderNum].isAlive());
                         }
+                        //TODO get end state for battle
 
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
@@ -516,7 +537,9 @@ void EscapeFromCapstone::runGameLoop()
                 characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
-                SDL_RenderFillRect(getRenderer(), &charBoxes[0]);
+                //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
+                int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
+                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
 
                 //hpBoxes
                 for (int i = 0;  i < hpBoxes.size(); i++)
@@ -551,8 +574,16 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 if (STATE_combatSelectedOption == "Buff")
                 {
-                    SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
+                    
                     // rerender bug if I don't update validMoves
+                    statusRoundOrderSize.changeText(std::to_string(roundOrder.size()));
+                    statusCurrOrderNum.changeText(std::to_string(currOrderNum));
+                    statusGetParticipantsIndex.changeText(std::to_string(roundOrder[currOrderNum]->getParticipantsIndex()));
+                    statusCurrOrderNum.render(getRenderer());
+                    statusGetParticipantsIndex.render(getRenderer());
+                    statusRoundOrderSize.render(getRenderer());
+                    SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
+                    
                     validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
                     for (auto target: validMoves[currTarget])
                     {

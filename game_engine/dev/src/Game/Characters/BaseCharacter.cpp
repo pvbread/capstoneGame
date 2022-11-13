@@ -86,9 +86,9 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
         {
             //this covers both the BUFF and DEBUFF cases
             targets = getValidBuffTargets(actionType, participants);
-            for(int i; i < targets.size(); i++)
+            for(int i = 0; i < targets.size(); i++)
             {
-                std::vector<int> temp = {i};
+                std::vector<int> temp = {targets[i]};
                 validMoves.push_back(temp);
             }
             break;
