@@ -78,7 +78,7 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
     int x = 0;
     int y = 0;
 
-    std::ifstream level("testLevel.map");
+    std::ifstream level("../../assets/maps/testLevel.map");
 
     if (level.fail())
     {

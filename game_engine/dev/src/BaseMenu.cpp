@@ -1,23 +1,27 @@
 #include "BaseMenu.h"
+#include "padMenuStrings.h"
 
 BaseMenu::BaseMenu(int x, int y, int w, int h, 
            int fontSize, 
-           int numTextures,
-           const std::vector<const char*>& optionNames,
-           const char* fontPath, 
+           const std::vector<std::string>& optionNames,
+           std::string fontPath, 
            SDL_Color fontColor,
            SDL_Renderer* renderer)
 {
+    int numTextures = optionNames.size(); 
     startX = x;
     startY = y;
     optionWidth = w;
     optionHeight = h;
     menuTextures = std::vector<SDL_Texture*>(numTextures);
-    TTF_Font *menuFont = TTF_OpenFont(fontPath, fontSize);
+    TTF_Font *menuFont = TTF_OpenFont(fontPath.c_str(), fontSize);
     //TODO add error checking
+
+    std::vector<std::string> optionsStringsPadded = padMenuStrings(optionNames);
 
     //Rectangles
     optionRectangles = std::vector<SDL_Rect>(numTextures);
+    this->optionNames = optionNames;
     SDL_Surface *surface;
 
     //set the textures
@@ -28,12 +32,13 @@ BaseMenu::BaseMenu(int x, int y, int w, int h,
                                 optionWidth,
                                 optionHeight
                               };
-        surface = TTF_RenderText_Solid(menuFont, optionNames[i], fontColor);
+        surface = TTF_RenderText_Solid(menuFont, optionsStringsPadded[i].c_str(), fontColor);
         menuTextures[i] = SDL_CreateTextureFromSurface(renderer, surface); 
     }
 
     //cursor initialization
     cursorRectangle = { x-(optionHeight/2), y+(optionHeight/5), optionHeight/2, optionHeight/2 };
+    initialCursorHeight = y+(optionHeight/5);
     surface = TTF_RenderText_Solid(menuFont, ">", fontColor);
     SDL_Texture* menuCursorTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
@@ -42,7 +47,7 @@ BaseMenu::BaseMenu(int x, int y, int w, int h,
     
 }
 
-void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic)
+void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& optionSelected)
 {
     int played;
     if (event.type == SDL_KEYDOWN)
@@ -82,8 +87,14 @@ void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic)
                 {
                     cursor.y -= (optionRectangles.size()-1) * optionHeight;
                 }
+                break;
             }
-            break;
+            case SDLK_RETURN:
+            {
+                int selectedIndex = getOptionSelectedIndex();
+                optionSelected = optionNames[selectedIndex];
+                break;
+            }
         }
     }
 }
@@ -97,4 +108,21 @@ void BaseMenu::render(SDL_Renderer* renderer)
         SDL_RenderCopy(renderer, menuTextures[i], nullptr, &optionRectangles[i]);
     }
     //SDL_RenderCopy(renderer, menuCursorTexture, nullptr, &cursor);
+}
+
+int BaseMenu::getOptionSelectedIndex()
+{
+    // The logic is this:
+    // we have an initial cursor height, say 70
+    // the extra options can only be below it,
+    // and the cursor only moves by OPTIONHEIGHT distance at a time
+    // if OPTIONHEIGHT is 100, we'd have 70, 170, 270 etc
+    // to retrieve the index of the given option
+    // we take the difference of the current height and the initial height
+    // and divide by option height
+    SDL_Rect & cursor = optionRectangles.back(); 
+    int difference = cursor.y - initialCursorHeight;
+    int selectedIndex = difference / optionHeight;
+    return selectedIndex;
+    
 }
