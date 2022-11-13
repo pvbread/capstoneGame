@@ -316,10 +316,17 @@ void EscapeFromCapstone::runGameLoop()
     
     //Status///////////////////////////////////
     //std::vector<TextBox> StatusRow;
-    TextBox statBass = TextBox("bass", 30, 50, 730, 150, 100, Font::roboto, Color::blue, Color::red);
-    TextBox statDrum = TextBox("drum", 30, 200, 730, 150, 100);
-    TextBox statFlute = TextBox("flute", 30, 350, 730, 150, 100);
-    TextBox statConductor = TextBox("conductor", 30, 500, 730, 150, 100);
+    TextBox statBass = TextBox("bass     ", 500, 50, 630, 150, 30);
+    TextBox statBassHP = TextBox("Hp:       ", 500, 50, 660, 150, 30);
+
+    TextBox statDrum = TextBox("drum     ", 500, 200, 630, 150, 30);
+    TextBox statDrumHP = TextBox("Hp:       ", 500, 200, 660, 150, 30);
+
+    TextBox statFlute = TextBox("flute   ", 500, 350, 630, 150, 30);
+    TextBox statFluteHP = TextBox("Hp:        ", 500, 350, 660, 150, 30);
+    
+    TextBox statConductor = TextBox("conductor", 500, 500, 630, 150, 30);
+    TextBox statConductorHP = TextBox("Hp:          ", 500, 500, 660, 150, 30);
 
     std::vector<TextBox> statusRow{statBass, statDrum, statFlute, statConductor};
 
@@ -643,11 +650,15 @@ void EscapeFromCapstone::runGameLoop()
                     
                 }
                 */
-               statBass.render(getRenderer());
-               statFlute.render(getRenderer());
-               statDrum.render(getRenderer());
-               statConductor.render(getRenderer());
+                statBass.render(getRenderer());
+                statFlute.render(getRenderer());
+                statDrum.render(getRenderer());
+                statConductor.render(getRenderer());
 
+                statBassHP.render(getRenderer());
+                statFluteHP.render(getRenderer());
+                statDrumHP.render(getRenderer());
+                statConductorHP.render(getRenderer());
                 
                 break;
             }
