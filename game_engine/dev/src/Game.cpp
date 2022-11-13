@@ -275,11 +275,14 @@ void EscapeFromCapstone::runGameLoop()
     };
     bool actionChosen = false;
 
+    ///////////////////////////////////
     ///////// BEGIN SANDBOX ///////////
+    ///////////////////////////////////
 
     //char b = '\u0444';
     
-    TextBox sandboxText = TextBox("\u1D11E", 100, 50, 50, 80, 100, Font::roboto, Color::blue, Color::white);
+    //Menu///////////////////////////////////
+
     const std::vector<std::string> sandboxOptionsStrings = {
         "Attack",
         "Buff",
@@ -287,12 +290,38 @@ void EscapeFromCapstone::runGameLoop()
         "Move"
     };
 
-    BaseMenu sandboxMenu = BaseMenu(755, 500, 200, 50, 100, 
+    BaseMenu sandboxMenu = BaseMenu(750, 500, 200, 50, 100, 
                                    sandboxOptionsStrings, 
                                    Font::openSans, 
                                    Color::white, 
                                    getRenderer()
     );
+
+    //Order///////////////////////////////////
+
+    int initialOrderHeight = 50;
+    std::vector<TextBox> sandboxQue;
+    std::vector<TextBox> sandboxQueIcons;
+
+    for (int i = 0; i < 8; i++)
+        {
+            TextBox orderRect = TextBox("-->", 50, 750, (initialOrderHeight + (i*50)),
+             80, 50, Font::roboto, Color::blue, Color::white);
+            sandboxQue.push_back(orderRect);
+            //Icons
+            TextBox orderIcons = TextBox("X", 50, 830, (initialOrderHeight + (i*50)),
+             50, 50, Font::roboto, Color::blue, Color::red);
+            sandboxQueIcons.push_back(orderIcons);
+        }
+    
+    //Status///////////////////////////////////
+    //std::vector<TextBox> StatusRow;
+    TextBox statBass = TextBox("bass", 30, 50, 730, 150, 100, Font::roboto, Color::blue, Color::red);
+    TextBox statDrum = TextBox("drum", 30, 200, 730, 150, 100);
+    TextBox statFlute = TextBox("flute", 30, 350, 730, 150, 100);
+    TextBox statConductor = TextBox("conductor", 30, 500, 730, 150, 100);
+
+    std::vector<TextBox> statusRow{statBass, statDrum, statFlute, statConductor};
 
 
     ///////// END SANDBOX ///////////
@@ -565,25 +594,31 @@ void EscapeFromCapstone::runGameLoop()
             }
             case SANDBOX:           
             {
+                //Combat Pane
                 SDL_Rect combatPane = {0, 0, 720, 600};
                 SDL_Color colCombat = Color::navy;
                 SDL_SetRenderDrawColor(getRenderer(), colCombat.r, colCombat.g, colCombat.b, 0);
                 SDL_RenderFillRect(getRenderer(), &combatPane);
 
+                //Status Pane
                 SDL_Rect statusPane = {0, 600, 720, 120};
                 SDL_Color colStatus = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), colStatus.r, colStatus.g, colStatus.b, 0);
                 SDL_RenderFillRect(getRenderer(), &statusPane);
 
-                SDL_Rect orderPane = {720, 0, 240, 600};
+                //Order Pane
+                SDL_Rect orderPane = {720, 0, 240, 480};
                 SDL_Color colOrder = Color::gray;
                 SDL_SetRenderDrawColor(getRenderer(), colOrder.r, colOrder.g, colOrder.b, 0);
                 SDL_RenderFillRect(getRenderer(), &orderPane);
-                SDL_Rect menuPane = {720, 600, 720, 120};
+
+                //Menu Pane
+                SDL_Rect menuPane = {720, 480, 720, 240};
                 SDL_Color colMenu = Color::maroon;
                 SDL_SetRenderDrawColor(getRenderer(), colMenu.r, colMenu.g, colMenu.b, 0);
                 SDL_RenderFillRect(getRenderer(), &menuPane);
                 
+                //Recent Attack Pane
                 SDL_Rect recentAttackPane = {0, 540, 500, 60};
                 SDL_Color colRecentAttack = Color::gray;
                 SDL_SetRenderDrawColor(getRenderer(), colRecentAttack.r, colRecentAttack.g, colRecentAttack.b, 0);
@@ -591,7 +626,29 @@ void EscapeFromCapstone::runGameLoop()
                 sandboxMenu.render(getRenderer());
                 
                 
-                sandboxText.render(getRenderer());
+                
+                // list
+                for (int i = 0; i < 8; i++)
+                {
+                    sandboxQue[i].render(getRenderer());
+                    sandboxQueIcons[i].render(getRenderer());
+                    
+                }
+
+                //stat
+                /*
+                for (int i = 0; i < 4; i++)
+                {
+                    statusRow[i].render(getRenderer());
+                    
+                }
+                */
+               statBass.render(getRenderer());
+               statFlute.render(getRenderer());
+               statDrum.render(getRenderer());
+               statConductor.render(getRenderer());
+
+                
                 break;
             }
         }
