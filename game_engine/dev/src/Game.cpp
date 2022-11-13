@@ -21,6 +21,11 @@ void EscapeFromCapstone::runGameLoop()
     std::vector<BaseCharacter> playerTeam{flute, conductor, bass, drum};
     std::vector<BaseCharacter> enemies;
     std::vector<BaseCharacter> combatParticipants;
+    // set player index
+    flute.setNewParticipantsIndex(0);
+    conductor.setNewParticipantsIndex(1);
+    bass.setNewParticipantsIndex(2);
+    drum.setNewParticipantsIndex(3);
 
     ///////// END CHARACTER INIT //////
 
@@ -345,6 +350,10 @@ void EscapeFromCapstone::runGameLoop()
                         BaseCharacter e4 = BaseCharacter("Carl", 20, 0, 1, 0, 3, 3, 3, true);
                         //normally this will just get enemies from a randomly selected "PACK"
                         std::vector<BaseCharacter> temp{e1, e2, e3, e4};
+                        e1.setNewParticipantsIndex(4);
+                        e2.setNewParticipantsIndex(5);
+                        e3.setNewParticipantsIndex(6);
+                        e4.setNewParticipantsIndex(7);
                         //this might not be necessary
                         enemies = temp;
                         combatParticipants = playerTeam;
@@ -413,16 +422,34 @@ void EscapeFromCapstone::runGameLoop()
                         combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
 
                     if (STATE_combatMenuTargetSelected)
-                    {
+                    {   
                         //do thing;
                         if (STATE_combatSelectedOption == "Attack")
                         {
                             //WAS the round order properly set??
                             STATE_combatSelectedOption = "NONE";
+                            validMoves = {
+                                  {1, 3},
+                                  {2, 4},
+                                  {3, 5},
+                                  {4, 6},
+                                  {5, 7}
+                            };
                             combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             currOrderNum = (currOrderNum + 1) % 8; 
                         }
+
+                        if (STATE_combatSelectedOption == "Buff")
+                        {
+                            //WAS the round order properly set??
+                            STATE_combatSelectedOption = "NONE";
+                            validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            combatParticipants = roundOrder[currOrderNum]->doAction(BUFF, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            currOrderNum = (currOrderNum + 1) % 8; 
+                        }
+
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
                     }
@@ -504,15 +531,37 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
                 }
                 
+                
                 //targetBoxes
                 if (STATE_combatSelectedOption == "Attack")
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
+                    // rerender bug if I don't update validMoves
+                    validMoves = {
+                                  {1, 3},
+                                  {2, 4},
+                                  {3, 5},
+                                  {4, 6},
+                                  {5, 7}
+                    };
                     for (auto target: validMoves[currTarget])
                     {
                         SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
                     }
                 }
+                if (STATE_combatSelectedOption == "Buff")
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
+                    // rerender bug if I don't update validMoves
+                    validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                    for (auto target: validMoves[currTarget])
+                    {
+                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                    }
+                    
+                }
+                
+
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
                 //TODO, render ORDER first
                 //TODO, pop off when x happens

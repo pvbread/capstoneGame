@@ -24,11 +24,11 @@ public:
                   int dodgeModifier, bool enemy
     );
 
-    std::pair<ActionType, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
+    std::pair<ActionType, std::vector<std::vector<int>>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                  std::string decisionAlgo = "RANDOM"
     );
 
-    std::vector<int> getValidMoves(ActionType actionType,
+    std::vector<std::vector<int>> getValidMoves(ActionType actionType,
                                    int charIndex,
                                    const std::vector<BaseCharacter>& participants
     );
@@ -53,6 +53,7 @@ public:
 
     friend std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters);
     friend bool isTeamAlive(const std::vector<BaseCharacter>& participants, bool enemy);
+    
 
     std::string getName() const;
     bool isAlive() const;

@@ -17,11 +17,11 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     alive = true;
 }
 
-std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
+std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
     ActionType chosenMove;
-    std::vector<int> targets;
+    std::vector<std::vector<int>> targets;
     if (decisionAlgo == "RANDOM")
     {
         std::random_device rd;
@@ -49,11 +49,12 @@ std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const
     return make_pair(chosenMove, targets);
 }
 
-std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
+std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType,
                                               int charIndex,
                                               const std::vector<BaseCharacter>& participants)
 {
-    std::vector<int> validMoves;
+    std::vector<int> targets;
+    std::vector<std::vector<int>> validMoves;
 
     switch(actionType)
     {
@@ -65,7 +66,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
                 {
                     int targetPosition = charIndex + position;
                     if (targetPosition < participants.size())
-                        validMoves.push_back(targetPosition);
+                        targets.push_back(targetPosition);
                 }
             }
             else
@@ -75,31 +76,42 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
                 {
                     int targetPosition = charIndex - position;
                     if (targetPosition >= 0)
-                        validMoves.push_back(targetPosition);
+                        targets.push_back(targetPosition);
                 }
             }
+            validMoves.push_back(targets);
             break;
         }
         case BUFF: case DEBUFF:
         {
             //this covers both the BUFF and DEBUFF cases
-            validMoves = getValidBuffTargets(actionType, participants);
+            targets = getValidBuffTargets(actionType, participants);
+            for(int i; i < targets.size(); i++)
+            {
+                std::vector<int> temp = {i};
+                validMoves.push_back(temp);
+            }
             break;
         }
         case MOVE:
         {
             //SPECIAL CASE, it's like a buff but we want to filter out character index
-            validMoves = getValidBuffTargets(BUFF, participants);
+            targets = getValidBuffTargets(BUFF, participants);
             std::vector<int>::iterator adjustments;
             int currCharIndex = charIndex; //needed for lambda to be happy (changed lambda conditions)
-            adjustments = std::remove_if(validMoves.begin(),
-                                    validMoves.end(),
+            adjustments = std::remove_if(targets.begin(),
+                                    targets.end(),
                                     [currCharIndex] (int index) 
                                     {
-                                        return index != currCharIndex + 1 || index != currCharIndex - 1;
+                                        return index != currCharIndex + 1 && index != currCharIndex - 1;
                                     }
             );
-            validMoves.erase(adjustments, validMoves.end());
+            targets.erase(adjustments, targets.end());
+            for(int i; i < targets.size(); i++)
+            {
+                std::vector<int> temp = {i};
+                validMoves.push_back(temp);
+            }
             break;
         }
     }
@@ -197,6 +209,8 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         {
             if (participants[j].isAlive() && !participants[j+1].isAlive())
                 std::swap(participants[j], participants[j+1]);
+                participants[j].setNewParticipantsIndex(j+1);
+                participants[j+1].setNewParticipantsIndex(j);
         }
     }
     for (int i = 0; i < LIVE_BOUNDARY; i++)
@@ -205,6 +219,8 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         {
             if (participants[j+5].isAlive() && !participants[j+4].isAlive())
                 std::swap(participants[j+5], participants[j+4]);
+                participants[j+5].setNewParticipantsIndex(j+4);
+                participants[j+4].setNewParticipantsIndex(j+5);
         }
     }
 }
@@ -261,6 +277,8 @@ std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetInd
        )
         return participants;
     std::swap(participants[charIndex], participants[targetIndex]);
+    participants[charIndex].setNewParticipantsIndex(targetIndex);
+    participants[targetIndex].setNewParticipantsIndex(charIndex);
     return participants;
 }
 
