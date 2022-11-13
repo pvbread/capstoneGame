@@ -486,11 +486,10 @@ void EscapeFromCapstone::runGameLoop()
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
                     }
-                    case SANDBOX:
-                    {
-                        break;
-                    }
-                   
+                }
+                case SANDBOX:
+                {
+                    break;
                 }
             }
             
