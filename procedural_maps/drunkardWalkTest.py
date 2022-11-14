@@ -311,9 +311,11 @@ def createMatrix(path1, path2, path3, x_max, y_max):
     if len(path3)==2:
         matrix[rStep][cStep] = 12
 
-    # save matrix in textfile, format as whole number digits
-    np.savetxt('testLevel.map', matrix, fmt='%d')
-    np.savetxt('testLevel.txt', matrix, fmt='%d')
+    # save matrix in textfile
+    #first line prints height and width and format matrix as whole number digits
+    with open('testLevel.txt', 'w') as f:
+        f.write(str(height)+ " " + str(width) + "\n")
+        np.savetxt(f, matrix, fmt='%d')
 
    
 
