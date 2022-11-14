@@ -33,13 +33,13 @@ void Timer::reset()
 {
     mStartTicks = SDL_GetTicks();
     mElapsedTicks = 0;
-    mDeltaTimer = 0.0f;
+    mDeltaTime = 0.0f;
 }
 
-float Timer::deltaTimer()
+float Timer::deltaTime()
 {
     //timer getter to return deltaTimer
-    return mDeltaTimer;
+    return mDeltaTime;
 }
 
 void Timer::timerScale(float t)
@@ -55,7 +55,7 @@ float Timer::getTimerScale()
 void Timer::update()
 {
     mElapsedTicks = SDL_GetTicks() - mStartTicks;
-    mDeltaTimer = mElapsedTicks * 0.001f;//converts back to seconds
+    mDeltaTime = mElapsedTicks * 0.001f;//converts back to seconds
 }
 
 bool Timer::timePassed(int countdownTime, int currentTime)
