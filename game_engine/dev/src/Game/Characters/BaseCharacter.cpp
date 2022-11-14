@@ -132,10 +132,12 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
     return validMoves;
 }
 
-std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
+std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
+                                                   std::vector<int>& effectOfAction, 
                                                    std::vector<int> targets, 
                                                    std::vector<BaseCharacter> participants)
 {
+    effectOfAction.clear();
     switch(actionType)
     {
         case ATTACK:
@@ -145,6 +147,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
                 if (participants[target].isAlive())
                 {
                     int hit = attack(participants[target]);
+                    effectOfAction.push_back(hit);
                     int newHp = participants[target].getHp() - hit;
                     participants[target].setHp(newHp);
                     if (participants[target].getHp() <= 0)
@@ -162,8 +165,10 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
         {
             for (auto target: targets)
             {
-                int newTargetHp = buff(participants[target]);
-                participants[target].setHp(newTargetHp);
+                int healAmount = buff(participants[target]);
+                effectOfAction.push_back(healAmount);
+                int newHp = participants[target].getHp() + healAmount;
+                participants[target].setHp(newHp);
             }
             break;
         }
@@ -173,6 +178,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
             for (auto target: targets)
             {
                 int newTargetSpeedMod = debuff(participants[target]);
+                effectOfAction.push_back(newTargetSpeedMod); 
                 participants[target].setSpeedModifier(newTargetSpeedMod);
             }
             break;
@@ -232,17 +238,16 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     return damage;
 }
 
-// returns the newHp of the targetCharacter after buff
+// returns the how much hp to heal 
 int BaseCharacter::buff(BaseCharacter targetCharacter)
 {
     if (targetCharacter.getHp() >= targetCharacter.getMaxHp())
-        return targetCharacter.getHp();
+        return 0;
     if (!targetCharacter.isAlive())
         return 0;
     // the last case is that char is alive and doesn't have full health
     int healAmount = ceil(float(targetCharacter.getMaxHp()) * 0.1);
-    int newHp = targetCharacter.getHp() + healAmount;
-    return newHp;
+    return healAmount;
 }
 
 int BaseCharacter::debuff(BaseCharacter targetCharacter)
