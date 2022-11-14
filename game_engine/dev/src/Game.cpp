@@ -85,6 +85,8 @@ void EscapeFromCapstone::runGameLoop()
     bool STATE_roundsSet = false;
     bool STATE_roundOver = false;
     bool STATE_mapEventboxOpen = false;
+    bool STATE_timerStarted = false;
+    float STATE_timerCount;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
     std::string STATE_combatSelectedOption = "NONE";
@@ -252,6 +254,12 @@ void EscapeFromCapstone::runGameLoop()
 
     ////////// END BATTLE ORDER INIT ///////////////
 
+    ////////// START BATTLE NOTIFICATION //////////
+
+    TextBox battleNotification = TextBox("", 200, 5, 400, 700, 100);
+
+    /////////  END BATTLE NOTIFICATION ///////////
+
     std::vector<std::string> tempCharNames {
         "flute        ",
         "conductor    ",
@@ -285,7 +293,7 @@ void EscapeFromCapstone::runGameLoop()
     SDL_Event event;
     while (!getQuit())
     {
-        
+        timer->update();
         while(SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -418,10 +426,30 @@ void EscapeFromCapstone::runGameLoop()
                         if (STATE_combatSelectedOption == "Attack")
                         {
                             //WAS the round order properly set??
+                            std::vector<int> attackDamage;
                             STATE_combatSelectedOption = "NONE";
-                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
+                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            currOrderNum = (currOrderNum + 1) % 8; 
+                            currOrderNum = (currOrderNum + 1) % 8;
+                            std::string attackNotification;
+                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            {
+                                if (i == 0)
+                                {
+                                    attackNotification += std::to_string(attackDamage[i]);
+                                    attackNotification += " dmg dealt to ";
+                                    attackNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    continue;
+                                }
+                                attackNotification += " *** ";
+                                attackNotification += std::to_string(attackDamage[i]);
+                                attackNotification += " dmg dealt to ";
+                                attackNotification += combatParticipants[validMoves[currTarget][i]].getName();
+
+                            }
+                            battleNotification.changeText(attackNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
                         }
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
@@ -502,6 +530,15 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_Surface* surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
                     SDL_Texture* texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
                     SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
+                }
+
+                if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
+                {
+                    battleNotification.render(getRenderer());
+                }
+                if (timer->deltaTime() > STATE_timerCount)
+                {
+                    STATE_timerStarted = false; 
                 }
                 
                 //targetBoxes

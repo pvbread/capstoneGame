@@ -37,7 +37,8 @@ public:
                                          const std::vector<BaseCharacter>& participants
     );
 
-    std::vector<BaseCharacter> doAction(ActionType actionType, 
+    std::vector<BaseCharacter> doAction(ActionType actionType,
+                                        std::vector<int>& effectOfAction, 
                                         std::vector<int> targets, 
                                         std::vector<BaseCharacter> participants
     );
