@@ -25,6 +25,9 @@ void TextBox::render(SDL_Renderer* renderer)
     SDL_Surface* surface = TTF_RenderText_Solid(font, textStream.str().c_str(), textColor); 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface); 
     SDL_RenderCopy(renderer, texture, nullptr, &textBox); 
+
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
 }
 
 void TextBox::changeText(std::string text)

@@ -372,6 +372,11 @@ void EscapeFromCapstone::runGameLoop()
                         screen = SANDBOX;
                         break;
                     }
+                    case SDLK_5:
+                    {
+                        screen = STATUS_MENU;
+                        break;
+                    }
                 }
             }
             switch (screen)
@@ -392,6 +397,7 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 case MAP:
                 {
+                    
                     //this has a bug where movement
                     //keeps being read if key is not unpressed
                     debugController.onInput(event);
@@ -428,6 +434,11 @@ void EscapeFromCapstone::runGameLoop()
                             case SDLK_RETURN:
                             {
                                 STATE_mapEventboxOpen = false;
+                                break;
+                            }
+                            case SDLK_e:
+                            {
+                                screen = STATUS_MENU;
                                 break;
                             }
                         }
@@ -491,6 +502,22 @@ void EscapeFromCapstone::runGameLoop()
                 {
                     break;
                 }
+                case STATUS_MENU:
+                {
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_e:
+                            {
+                                screen = MAP;
+                                break;
+                            }
+                        }
+                    } 
+
+                    break;
+                }
             }
             
         }
@@ -529,6 +556,8 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_Surface* surfaceTesting = TTF_RenderText_Solid(font, mapEventStream.str().c_str(), textColor); //ttf surface  
                     SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &mapEventBox); 
+                    SDL_FreeSurface(surfaceTesting);
+                    SDL_DestroyTexture(textureTesting);
                 }
                 break;
             } 
@@ -565,6 +594,8 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_Surface* surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
                     SDL_Texture* texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
                     SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
+                    SDL_FreeSurface(surface);
+                    SDL_DestroyTexture(texture);
                 }
                 
                 //targetBoxes
@@ -586,7 +617,9 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Surface* surfaceTesting = TTF_RenderText_Solid(orderFont, titleStream.str().c_str(), textColor); //ttf surface  
                 SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
                 SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
-                
+                SDL_FreeSurface(surfaceTesting);
+                SDL_DestroyTexture(textureTesting);
+
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
                     std::stringstream charNameStream;
@@ -595,7 +628,11 @@ void EscapeFromCapstone::runGameLoop()
                     surfaceTesting = TTF_RenderText_Solid(orderFont, charNameStream.str().c_str(), textColor); //ttf surface  
                     textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
+                    SDL_FreeSurface(surfaceTesting);
+                    SDL_DestroyTexture(textureTesting);
                 }
+
+
                 break;
             }
             case SANDBOX:           
@@ -631,7 +668,7 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_RenderFillRect(getRenderer(), &recentAttackPane);
                 sandboxMenu.render(getRenderer());
                 
-                
+                sandboxQue[4].render(getRenderer());
                 
                 // list
                 for (int i = 0; i < 8; i++)
@@ -658,9 +695,25 @@ void EscapeFromCapstone::runGameLoop()
                 statFluteHP.render(getRenderer());
                 statDrumHP.render(getRenderer());
                 statConductorHP.render(getRenderer());
-                
+
                 break;
             }
+            case STATUS_MENU:
+            {
+                SDL_Rect backgroundPane1 = {0, 0, 960, 730};
+                SDL_Color backgroundMenu1 = Color::navy;
+                SDL_SetRenderDrawColor(getRenderer(), backgroundMenu1.r, backgroundMenu1.g, backgroundMenu1.b, 0);
+                SDL_RenderFillRect(getRenderer(), &backgroundPane1);
+                SDL_Rect backgroundPane2 = {10, 10, 940, 700};
+                SDL_Color backgroundMenu2 = Color::teal;
+                SDL_SetRenderDrawColor(getRenderer(), backgroundMenu2.r, backgroundMenu2.g, backgroundMenu2.b, 0);
+                SDL_RenderFillRect(getRenderer(), &backgroundPane2);
+
+                //SDL_FreeSurface(surface);
+                //SDL_DestroyTexture(texture);
+                break;
+            }
+            
         }
 
         
