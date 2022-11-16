@@ -50,7 +50,7 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
         {   
             // change valid moves for attacks one character at a time
             const int TEAM_SIZE = 4;
-            if (this->enemy == false)
+            if (!enemy)
             {
                 for (int i = 0; i < TEAM_SIZE; i++)
                     {
@@ -130,7 +130,7 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
 {
     std::vector<int> validMoves;
     const int TEAM_SIZE = 4;
-    if ( (this->enemy == false && typeOfBuff == BUFF) || (this->enemy && typeOfBuff == DEBUFF) )
+    if ( (!enemy && typeOfBuff == BUFF) || (enemy && typeOfBuff == DEBUFF) )
     {
         for (int i = 0; i < TEAM_SIZE; i++)
         {
