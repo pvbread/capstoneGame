@@ -14,9 +14,9 @@ void EscapeFromCapstone::runGameLoop()
     Timer* timer = Timer::instance();
 
     ////////// START CHARACTER INIT ////////
-    BasePlayer conductor = BasePlayer("conductor    ", 50, 3, 3, 0, 3, 3, 3);
+    BasePlayer conductor = BasePlayer("conductor    ", 30, 3, 3, 0, 3, 3, 3);
     BasePlayer drum = BasePlayer("drummer      ", 50, 2, 1, 0, 3, 3, 3);
-    BasePlayer flute = BasePlayer("flutist      ", 50, 6, 1, 0, 3, 3, 3);
+    BasePlayer flute = BasePlayer("flutist      ", 20, 6, 1, 0, 3, 3, 3);
     Bass bass = Bass("bassist      ", 60, 1, 3, 0, 3, 3, 3);
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
@@ -353,10 +353,10 @@ void EscapeFromCapstone::runGameLoop()
                     if (nextMapEvent == "BATTLE")
                     {
                         //init enemy characters
-                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 50, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 50, 6, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e3 = BaseCharacter("coneheadKappa", 50, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e4 = BaseCharacter("Carl         ", 50, 0, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("coneheadKappa", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("Carl         ", 20, 0, 1, 0, 3, 3, 3, true);
                         //normally this will just get enemies from a randomly selected "PACK"
                         e1.setNewParticipantsIndex(4);
                         e2.setNewParticipantsIndex(5);
@@ -432,6 +432,7 @@ void EscapeFromCapstone::runGameLoop()
                         } 
                         
                     }
+                    /*
                     // state for when a round
                     if ((currOrderNum + 1) == roundOrder.size() && STATE_combatMenuTargetSelected)
                             {
@@ -448,7 +449,7 @@ void EscapeFromCapstone::runGameLoop()
                         STATE_roundsSet = true;
                         STATE_roundOver = false;
                     }
-
+                    */
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
                         combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
                     
