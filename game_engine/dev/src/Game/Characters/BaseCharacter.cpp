@@ -29,20 +29,8 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
         std::uniform_int_distribution<> dist(0,3);
         chosenMove = (ActionType)dist(gen);
 
-        // try to find index of current character in vector (unsure if this works, needs testing)
-        std::string key = name;
-        auto itr = std::find_if(participants.begin(),
-                            participants.end(),
-                            [&key] (const BaseCharacter& obj)
-                            {
-                                return obj.getName()==key;
-                            }
-        );
-        if (itr != participants.end())
-        {
-            auto participantsIndex = std::distance(participants.begin(),itr);
-        }
-
+        
+        int participantsIndex = this->getParticipantsIndex();
         targets = getValidMoves(chosenMove, participantsIndex, participants);
     }
 
@@ -59,27 +47,44 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
     switch(actionType)
     {
         case ATTACK:
-        {
-            if (!enemy)
+        {   
+            // change valid moves for attacks one character at a time
+            const int TEAM_SIZE = 4;
+            if (this->enemy == false)
             {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i+4].isAlive())
+                            validMoves.push_back({i+4});
+                    }
+                /*
                 for (auto position: movesAndRanges[ATTACK])
                 {
                     int targetPosition = charIndex + position;
                     if (targetPosition < participants.size())
-                        targets.push_back(targetPosition);
+                        targets = {targetPosition};
+                    validMoves.push_back(targets);
                 }
+                */
             }
             else
             {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i].isAlive())
+                            validMoves.push_back({i});
+                    }
                 //it's an enemy
+                /*
                 for (auto position: movesAndRanges[ATTACK])
                 {
                     int targetPosition = charIndex - position;
                     if (targetPosition >= 0)
-                        targets.push_back(targetPosition);
+                        targets = {targetPosition};
+                    validMoves.push_back(targets);
                 }
+                */
             }
-            validMoves.push_back(targets);
             break;
         }
         case BUFF: case DEBUFF:
@@ -125,7 +130,7 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
 {
     std::vector<int> validMoves;
     const int TEAM_SIZE = 4;
-    if ( (!enemy && typeOfBuff == BUFF) || (enemy && typeOfBuff == DEBUFF) )
+    if ( (this->enemy == false && typeOfBuff == BUFF) || (this->enemy && typeOfBuff == DEBUFF) )
     {
         for (int i = 0; i < TEAM_SIZE; i++)
         {
@@ -239,7 +244,7 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     }
     std::uniform_int_distribution<> intDist(1,4);
     int weaponRoll = intDist(gen);
-    int damage = weaponRoll + hit;
+    int damage = weaponRoll + targetCharacter.getHit();
     float REDUCTION_SCALE = 0.05;
     int reduction = int(damage * targetCharacter.getArmor() * REDUCTION_SCALE);
     damage -= reduction;

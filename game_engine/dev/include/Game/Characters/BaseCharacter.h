@@ -98,8 +98,8 @@ protected:
     
     //example validMoves and ranges
     std::unordered_map<ActionType, std::vector<int>> movesAndRanges = {
-        {ATTACK, {2,4}},
-        {BUFF, {1,2}},
-        {DEBUFF, {4}}
+        {ATTACK, {1,2,3,4,5,6,7}},
+        {BUFF, {1}},
+        {DEBUFF, {1}}
     };
 };
