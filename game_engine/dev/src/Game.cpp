@@ -362,10 +362,9 @@ void EscapeFromCapstone::runGameLoop()
                         e2.setNewParticipantsIndex(5);
                         e3.setNewParticipantsIndex(6);
                         e4.setNewParticipantsIndex(7);
-                        std::vector<BaseCharacter> temp{e1, e2, e3, e4};
+                        std::vector<BaseCharacter> enemies{e1, e2, e3, e4};
                         
                         //this might not be necessary
-                        enemies = temp;
                         combatParticipants = playerTeam;
                         combatParticipants.insert(std::end(combatParticipants), std::begin(enemies), std::end(enemies));
 
@@ -487,11 +486,12 @@ void EscapeFromCapstone::runGameLoop()
                                 currOrderNum = (currOrderNum + 1) % roundOrder.size();
                             }
                             while (!combatParticipants[currOrderNum].isAlive());
+
                         }
                         //TODO get end state for battle
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
-                        
+
 
                         
                     }
@@ -560,11 +560,11 @@ void EscapeFromCapstone::runGameLoop()
                 characterTestTexture.render(getRenderer(), 650, 100, currFrameRect);
                 characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
 
-                SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
+                //SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
                 //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
                 //TODO Something wrong with the rendering of currPlayer
-                int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
-                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                //int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
+                //SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
 
                 //hpBoxes
                 for (int i = 0;  i < hpBoxes.size(); i++)
