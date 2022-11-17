@@ -332,6 +332,19 @@ void EscapeFromCapstone::runGameLoop()
 
 
     ///////// END SANDBOX ///////////
+    //////// CHARACTER STATS ////////
+    int startBoxHeight = 100;
+    std::vector<TextBox> characterStatsName;
+    for (int i = 0; i < 8; i++)
+    {
+        TextBox orderRect = TextBox("-->", 100, 100, (startBoxHeight + (i*150)),
+         100, 100, Font::roboto, Color::blue, Color::white);
+        characterStatsName.push_back(orderRect);
+    }   
+    TextBox statBass2 = TextBox("bass     ", 100, 50, 130, 150, 30);
+    TextBox statBassHP2 = TextBox("Hp:       ", 100, 50, 160, 150, 30);
+    
+    ////// END CHARACTER STATS //////
     
 
     //double degrees = 0;
@@ -709,6 +722,37 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), backgroundMenu2.r, backgroundMenu2.g, backgroundMenu2.b, 0);
                 SDL_RenderFillRect(getRenderer(), &backgroundPane2);
 
+                //------
+                /*
+                SDL_Rect testRec1 = {100, 100, 100, 100};
+                SDL_Color testCol1 = Color::maroon;
+                SDL_SetRenderDrawColor(getRenderer(), testCol1.r, testCol1.g, testCol1.b, 0);
+                SDL_RenderFillRect(getRenderer(), &testRec1);
+
+                SDL_Rect testRec2 = {100, 250, 100, 100};
+                SDL_Color testCol2 = Color::maroon;
+                SDL_SetRenderDrawColor(getRenderer(), testCol2.r, testCol2.g, testCol2.b, 0);
+                SDL_RenderFillRect(getRenderer(), &testRec2);
+
+                SDL_Rect testRec3 = {100, 400, 100, 100};
+                SDL_Color testCol3 = Color::maroon;
+                SDL_SetRenderDrawColor(getRenderer(), testCol3.r, testCol3.g, testCol3.b, 0);
+                SDL_RenderFillRect(getRenderer(), &testRec3);
+
+                SDL_Rect testRec4 = {100, 550, 100, 100};
+                SDL_Color testCol4 = Color::maroon;
+                SDL_SetRenderDrawColor(getRenderer(), testCol4.r, testCol4.g, testCol4.b, 0);
+                SDL_RenderFillRect(getRenderer(), &testRec4);
+                //-----
+                */
+
+                for (int i = 0; i < 4; i++)
+                {
+                    characterStatsName[i].render(getRenderer());
+                }
+
+                statBass2.render(getRenderer());
+                statBassHP2.render(getRenderer());
                 //SDL_FreeSurface(surface);
                 //SDL_DestroyTexture(texture);
                 break;
