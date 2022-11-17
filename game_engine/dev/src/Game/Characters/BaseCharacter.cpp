@@ -17,6 +17,45 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     alive = true;
 }
 
+/*
+//copy constructor
+BaseCharacter::BaseCharacter(const BaseCharacter& rhs)
+{
+    name = rhs.name;
+    maxHp = rhs.maxHp; 
+    speed = rhs.speed;
+    hit = rhs.hit;
+    armor = rhs.armor;
+    dodgeModifier = rhs.dodgeModifier;
+    enemy = rhs.enemy;
+    speedModifier = rhs.speedModifier;
+    hp = rhs.hp;
+    alive = rhs.alive;
+    participantsIndex = rhs.participantsIndex;
+    itemModifier = rhs.itemModifier;
+}
+
+BaseCharacter& BaseCharacter::operator= (const BaseCharacter& rhs)
+{
+    if (this != &rhs)
+    {
+        name = rhs.name;
+        maxHp = rhs.maxHp; 
+        speed = rhs.speed;
+        hit = rhs.hit;
+        armor = rhs.armor;
+        dodgeModifier = rhs.dodgeModifier;
+        enemy = rhs.enemy;
+        speedModifier = rhs.speedModifier;
+        hp = rhs.hp;
+        alive = rhs.alive;
+        participantsIndex = rhs.participantsIndex;
+        itemModifier = rhs.itemModifier;
+    }
+    return *this;
+}
+*/
+
 std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
@@ -149,14 +188,15 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
     return validMoves;
 }
 
-std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
+void BaseCharacter::doAction(ActionType actionType, 
                                                    std::vector<int> targets, 
-                                                   std::vector<BaseCharacter> participants)
+                                                   std::vector<BaseCharacter>& participants)
 {
     switch(actionType)
     {
         case ATTACK:
         {
+        
             for (auto target: targets)
             {
                 if (participants[target].isAlive())
@@ -172,6 +212,8 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
                     }
                 }
             }
+
+            
             break;
         }
 
@@ -202,7 +244,6 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
             break;
         }
     }
-    return participants;
 }
 
 void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)

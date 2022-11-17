@@ -462,7 +462,7 @@ void EscapeFromCapstone::runGameLoop()
                             //WAS the round order properly set??
                             STATE_combatSelectedOption = "NONE";
                             validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
+                            roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             
                             do 
@@ -479,7 +479,7 @@ void EscapeFromCapstone::runGameLoop()
                             STATE_combatSelectedOption = "NONE";
                             //look at roundOrder
                             validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            combatParticipants = roundOrder[currOrderNum]->doAction(BUFF, validMoves[currTarget], combatParticipants); 
+                            roundOrder[currOrderNum]->doAction(BUFF, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             do 
                             {
@@ -560,13 +560,15 @@ void EscapeFromCapstone::runGameLoop()
                 characterTestTexture.render(getRenderer(), 650, 100, currFrameRect);
                 characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
 
-                //SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
+                SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
                 //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
                 //TODO Something wrong with the rendering of currPlayer
-                //int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
-                //SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
+                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
 
                 //hpBoxes
+                SDL_Surface* surface;
+                SDL_Texture* texture;
                 for (int i = 0;  i < hpBoxes.size(); i++)
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 0, 0, 170, 255);
@@ -574,10 +576,12 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_Color textColor = { 255, 0, 0, 255 };
                     std::stringstream hpStream;
                     hpStream << combatParticipants[i].getHp();
-                    SDL_Surface* surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
-                    SDL_Texture* texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
+                    surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
+                    texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
                     SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
                 }
+                SDL_FreeSurface(surface);
+                SDL_DestroyTexture(texture);
                 
                 
                 //targetBoxes
@@ -632,6 +636,8 @@ void EscapeFromCapstone::runGameLoop()
                     textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
                 }
+                SDL_FreeSurface(surfaceTesting);
+                SDL_DestroyTexture(textureTesting);
                 break;
             }
         }
