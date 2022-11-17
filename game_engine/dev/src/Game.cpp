@@ -668,7 +668,7 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_RenderFillRect(getRenderer(), &recentAttackPane);
                 sandboxMenu.render(getRenderer());
                 
-                sandboxQue[4].render(getRenderer());
+                
                 
                 // list
                 for (int i = 0; i < 8; i++)
