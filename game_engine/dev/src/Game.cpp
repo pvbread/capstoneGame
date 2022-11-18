@@ -333,16 +333,15 @@ void EscapeFromCapstone::runGameLoop()
 
     ///////// END SANDBOX ///////////
     //////// CHARACTER STATS ////////
-    int startBoxHeight = 100;
-    std::vector<TextBox> characterStatsName;
-    for (int i = 0; i < 8; i++)
+    int startBoxWidth = 100;
+    std::vector<TextBox> characterStatsHP;
+    for (int i = 0; i < 4; i++)
     {
-        TextBox orderRect = TextBox("-->", 100, 100, (startBoxHeight + (i*150)),
-         100, 100, Font::roboto, Color::blue, Color::white);
-        characterStatsName.push_back(orderRect);
+        TextBox orderRect = TextBox("HP: ", 100, 200, (startBoxWidth + (i*150)),
+         100, 100, Font::roboto, Color::blue, Color::cyan);
+        characterStatsHP.push_back(orderRect);
     }   
-    TextBox statBass2 = TextBox("bass     ", 100, 50, 130, 150, 30);
-    TextBox statBassHP2 = TextBox("Hp:       ", 100, 50, 160, 150, 30);
+    
     
     ////// END CHARACTER STATS //////
     
@@ -713,6 +712,7 @@ void EscapeFromCapstone::runGameLoop()
             }
             case STATUS_MENU:
             {
+                //////Background Color////////
                 SDL_Rect backgroundPane1 = {0, 0, 960, 730};
                 SDL_Color backgroundMenu1 = Color::navy;
                 SDL_SetRenderDrawColor(getRenderer(), backgroundMenu1.r, backgroundMenu1.g, backgroundMenu1.b, 0);
@@ -721,38 +721,70 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Color backgroundMenu2 = Color::teal;
                 SDL_SetRenderDrawColor(getRenderer(), backgroundMenu2.r, backgroundMenu2.g, backgroundMenu2.b, 0);
                 SDL_RenderFillRect(getRenderer(), &backgroundPane2);
+                //////End Background Color////////
 
-                //------
-                /*
-                SDL_Rect testRec1 = {100, 100, 100, 100};
-                SDL_Color testCol1 = Color::maroon;
-                SDL_SetRenderDrawColor(getRenderer(), testCol1.r, testCol1.g, testCol1.b, 0);
-                SDL_RenderFillRect(getRenderer(), &testRec1);
+                ///////Background under the text////////
+                
+                SDL_Rect StatMenuBackground1 = {100, 100, 750, 100};
+                SDL_Color StatMenuColor1 = Color::cyan;
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor1.r, StatMenuColor1.g, StatMenuColor1.b, 0);
+                SDL_RenderFillRect(getRenderer(), &StatMenuBackground1);
 
-                SDL_Rect testRec2 = {100, 250, 100, 100};
-                SDL_Color testCol2 = Color::maroon;
-                SDL_SetRenderDrawColor(getRenderer(), testCol2.r, testCol2.g, testCol2.b, 0);
-                SDL_RenderFillRect(getRenderer(), &testRec2);
+                SDL_Rect StatMenuBackground2 = {100, 250, 750, 100};
+                SDL_Color StatMenuColor2 = Color::cyan;
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor2.r, StatMenuColor2.g, StatMenuColor2.b, 0);
+                SDL_RenderFillRect(getRenderer(), &StatMenuBackground2);
 
-                SDL_Rect testRec3 = {100, 400, 100, 100};
-                SDL_Color testCol3 = Color::maroon;
-                SDL_SetRenderDrawColor(getRenderer(), testCol3.r, testCol3.g, testCol3.b, 0);
-                SDL_RenderFillRect(getRenderer(), &testRec3);
+                SDL_Rect StatMenuBackground3 = {100, 400, 750, 100};
+                SDL_Color StatMenuColor3 = Color::cyan;
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor3.r, StatMenuColor3.g, StatMenuColor3.b, 0);
+                SDL_RenderFillRect(getRenderer(), &StatMenuBackground3);
 
-                SDL_Rect testRec4 = {100, 550, 100, 100};
-                SDL_Color testCol4 = Color::maroon;
-                SDL_SetRenderDrawColor(getRenderer(), testCol4.r, testCol4.g, testCol4.b, 0);
-                SDL_RenderFillRect(getRenderer(), &testRec4);
-                //-----
-                */
+                SDL_Rect StatMenuBackground4 = {100, 550, 750, 100};
+                SDL_Color StatMenuColor4 = Color::cyan;
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor4.r, StatMenuColor4.g, StatMenuColor4.b, 0);
+                SDL_RenderFillRect(getRenderer(), &StatMenuBackground4);
+                ///////End Background under the text////////
 
+                ///////Stat Names////////
                 for (int i = 0; i < 4; i++)
                 {
-                    characterStatsName[i].render(getRenderer());
+                    characterStatsHP[i].render(getRenderer());
                 }
 
-                statBass2.render(getRenderer());
-                statBassHP2.render(getRenderer());
+                //TextBox HP = TextBox("HP: ", 40, 200, 100, 100, 100, Font::lato, Color::blue, Color::cyan);
+                //HP.render(getRenderer());
+
+                ///////End Stat Names////////
+
+                ///////Base Stats/////////
+                TextBox baseName = TextBox("Bass||", 40, 100, 115, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                baseName.render(getRenderer());
+                ///////End Base Stats/////////
+
+                ///////Drum Stats/////////
+                TextBox drumName = TextBox("Drum||", 40, 100, 265, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                drumName.render(getRenderer());
+                ///////End Drum Stats/////////
+
+                ///////Flute Stats/////////
+                TextBox fluteName = TextBox("Flute||", 40, 100, 415, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                fluteName.render(getRenderer());
+                ///////End Flute Stats/////////
+
+                ///////Conductor Stats/////////
+                TextBox conductorName = TextBox("Conductor||", 40, 100, 570, 100, 60, Font::roboto, Color::blue, Color::cyan);
+                conductorName.render(getRenderer());
+                ///////End Conductor Stats/////////
+
+
+                //for (int i = 0; i < 4; i++)
+                //{
+                //    characterStatsName[i].render(getRenderer());
+                //}
+
+                //statBass2.render(getRenderer());
+                //statBassHP2.render(getRenderer());
                 //SDL_FreeSurface(surface);
                 //SDL_DestroyTexture(texture);
                 break;
