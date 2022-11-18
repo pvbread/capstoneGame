@@ -435,26 +435,38 @@ void EscapeFromCapstone::runGameLoop()
                         } 
                         
                     }
-                    /*
-                    // state for when a round
-                    if ((currOrderNum + 1) == roundOrder.size() && STATE_combatMenuTargetSelected)
+                    
+                    
+                    // create new round and set round turns
+                    if(!STATE_roundsSet && STATE_roundOver)
+                    {
+                        // get new round turn order
+                        roundOrder.clear();
+                        roundOrder = setRoundTurns(combatParticipants);
+                        // update turn order for rendering
+                        tempCharNames.clear();
+                        for(int i = 0; i < roundOrder.size(); i++)
+                            tempCharNames[i] = roundOrder[i]->getName();
+                        // TODO: figure out how to remove names when character dies
+                        for (int i = roundOrder.size(); i < tempCharNames.size();i++)
+                            tempCharNames.pop_back();
+                        STATE_roundsSet = true;
+                        STATE_roundOver = false;
+                    }
+                    
+                    
+                    
+
+                    if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
+                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+                    
+
+                    // state for when a round ends
+                    if ((currOrderNum + 1) == roundOrder.size() && STATE_combatSelectedOption!= "None" && STATE_combatMenuTargetSelected)
                             {
                                 STATE_roundOver = true;
                                 STATE_roundsSet = false;
                             }
-                    // create new round and set round turns
-                    if(STATE_roundsSet == false && STATE_roundOver == true)
-                    {
-                        roundOrder = setRoundTurns(combatParticipants);
-                        tempCharNames.clear();
-                        for(int i = 0; i < roundOrder.size(); i++)
-                            tempCharNames[i] = roundOrder[i]->getName();
-                        STATE_roundsSet = true;
-                        STATE_roundOver = false;
-                    }
-                    */
-                    if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
-                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
                     
                     
                     
@@ -467,6 +479,9 @@ void EscapeFromCapstone::runGameLoop()
                             STATE_combatSelectedOption = "NONE";
                             std::vector<int> attackDamage;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            // in case when a character dies, preserve target index's name before performing action 
+                            std::string targetNotification;
+                            targetNotification += combatParticipants[validMoves[currTarget][0]].getName();
                             roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             
@@ -482,7 +497,7 @@ void EscapeFromCapstone::runGameLoop()
                                 {
                                     attackNotification += std::to_string(attackDamage[i]);
                                     attackNotification += " dmg dealt to ";
-                                    attackNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    attackNotification += targetNotification;
                                     continue;
                                 }
                                 attackNotification += " *** ";
@@ -536,13 +551,7 @@ void EscapeFromCapstone::runGameLoop()
                         //TODO get end state for battle
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
-
-
-                        
                     }
-                    
-                    
-                    
                    
                 }
             }

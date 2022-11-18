@@ -261,8 +261,10 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         {
             if (participants[j].isAlive() && !participants[j+1].isAlive())
                 std::swap(participants[j], participants[j+1]);
-                participants[j].setNewParticipantsIndex(j+1);
-                participants[j+1].setNewParticipantsIndex(j);
+                // once swapped, update participant index
+                participants[j].setNewParticipantsIndex(j);
+                participants[j+1].setNewParticipantsIndex(j+1);
+                
         }
     }
     for (int i = 0; i < LIVE_BOUNDARY; i++)
@@ -271,8 +273,10 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         {
             if (participants[j+5].isAlive() && !participants[j+4].isAlive())
                 std::swap(participants[j+5], participants[j+4]);
-                participants[j+5].setNewParticipantsIndex(j+4);
-                participants[j+4].setNewParticipantsIndex(j+5);
+                // once swapped, update participant index
+                participants[j+4].setNewParticipantsIndex(j+4);
+                participants[j+5].setNewParticipantsIndex(j+5);
+                
         }
     }
 }
@@ -327,9 +331,11 @@ std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetInd
         ( participants[targetIndex].isEnemy() && !participants[charIndex].isEnemy() )
        )
         return participants;
+    
     std::swap(participants[charIndex], participants[targetIndex]);
-    participants[charIndex].setNewParticipantsIndex(targetIndex);
-    participants[targetIndex].setNewParticipantsIndex(charIndex);
+    // once swapped, update participant index
+    participants[charIndex].setNewParticipantsIndex(charIndex);
+    participants[targetIndex].setNewParticipantsIndex(targetIndex);
     return participants;
 }
 
