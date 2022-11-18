@@ -139,6 +139,26 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
         }
         case MOVE:
         {
+            const int TEAM_SIZE = 4;
+            if (!enemy)
+            {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i].isAlive() && i != charIndex)
+                            validMoves.push_back({i});
+                    }
+            }
+            else
+            {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i+4].isAlive() && i+4 != charIndex)
+                            validMoves.push_back({i+4});
+                    }
+            }
+
+            // FOR SOME REASON THERE"S A SEGFAULT WITHIN THIS LAMBDA FUNCTION SOMETHING TO DO WITH THE ITERATORS
+            /*
             //SPECIAL CASE, it's like a buff but we want to filter out character index
             targets = getValidBuffTargets(BUFF, participants);
             std::vector<int>::iterator adjustments;
@@ -156,6 +176,7 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
                 std::vector<int> temp = {targets[i]};
                 validMoves.push_back(temp);
             }
+            */
             break;
         }
     }
@@ -326,7 +347,7 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
     return newSpeedMod;
 }
 
-void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
+void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter>& participants)
 {
  
     std::swap(participants[charIndex], participants[targetIndex]);

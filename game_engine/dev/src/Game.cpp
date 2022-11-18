@@ -584,6 +584,10 @@ void EscapeFromCapstone::runGameLoop()
                             //look at roundOrder
                             std::vector<int> nothing;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            std::string currPlayerName = combatParticipants[charIndex].getName();
+                            currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                            std::string targetName = combatParticipants[validMoves[currTarget][0]].getName();
                             roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             do 
@@ -592,20 +596,10 @@ void EscapeFromCapstone::runGameLoop()
                             }
                             while (roundOrder[currOrderNum]->isAlive()==false);
                             std::string healNotification;
-                            int charIndex;
-                            std::string currName;
-                            for (int i = 0; i < validMoves[currTarget].size(); i++)
-                            {
-                                if (i == 0)
-                                {
-                                    charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
-                                    currName = combatParticipants[charIndex].getName();
-                                    healNotification += currName;
-                                    healNotification += " switch places with ";
-                                    healNotification += combatParticipants[validMoves[currTarget][i]].getName();
-                                }
-                
-                            }
+                            healNotification += currPlayerName;
+                            healNotification += " switch places with ";
+                            healNotification += targetName;
+                            
                             battleNotification.changeText(healNotification);
                             STATE_timerStarted = true;
                             STATE_timerCount = timer->deltaTime() + 3;

@@ -58,7 +58,7 @@ public:
     int buff(BaseCharacter targetCharacter);
     int debuff(BaseCharacter targetCharacter);
     void moveSpots(int charIndex, int targetIndex, 
-                                         std::vector<BaseCharacter> participants
+                                         std::vector<BaseCharacter>& participants
     );
 
     friend std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters);
