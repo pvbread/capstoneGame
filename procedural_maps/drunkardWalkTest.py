@@ -313,7 +313,7 @@ def createMatrix(path1, path2, path3, x_max, y_max):
 
     # save matrix in textfile
     #first line prints height and width and format matrix as whole number digits
-    with open('testLevel.txt', 'w') as f:
+    with open('testLevel.map', 'w') as f:
         f.write(str(height)+ " " + str(width) + "\n")
         np.savetxt(f, matrix, fmt='%d')
 

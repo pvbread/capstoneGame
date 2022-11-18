@@ -36,7 +36,7 @@ public:
     );
     void move(int xBoundary, 
               int yBoundary);
-    void centerScreen(SDL_Rect& camera);
+    void centerScreen(SDL_Rect& camera, int xBoundary, int yBoundary);
     void render(SDL_Renderer* renderer, 
                 const SDL_Rect& camera, 
                 TextureWrapper& debugControllerTexture);

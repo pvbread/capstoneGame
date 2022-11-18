@@ -105,7 +105,7 @@ void EscapeFromCapstone::runGameLoop()
     TextureWrapper characterTestTexture;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
-        {&tileTexture, "../../assets/image/sprite_tiled.png"},
+        {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"}
@@ -128,9 +128,15 @@ void EscapeFromCapstone::runGameLoop()
     //////////// END TEXTURE LOADING /////////////
 
     //////////// START TILE LOADING /////////////
-    const int TILE_COUNT = 192;
+
+    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevel2.map");
+    const int MAP_COLS = levelInfo[1];
+    const int MAP_ROWS = levelInfo[0]; 
+    const int TILE_COUNT = MAP_COLS * MAP_ROWS;
+    const int MAP_WIDTH = levelInfo[1] * 80;
+    const int MAP_HEIGHT = levelInfo[0] * 80; 
     const int TILE_LENGTH = 80;
-    const int TILE_TYPE_COUNT = 12;
+    const int TILE_TYPE_COUNT = 16;
 
     std::vector<Tile*> tileMap(TILE_COUNT);
     std::vector<SDL_Rect> tilesClipped(TILE_TYPE_COUNT);// this is the total tiles
@@ -138,6 +144,7 @@ void EscapeFromCapstone::runGameLoop()
     std::map<std::pair<int, int>, std::string> coordinateToEventTypeMap;
 
     bool didTilesLoad = loadTiles(tileMap, 
+                                  levelInfo,
                                   coordinateToTileTypeMap, 
                                   coordinateToEventTypeMap, 
                                   TILE_COUNT, 
@@ -150,7 +157,7 @@ void EscapeFromCapstone::runGameLoop()
         setToQuit();
     }
 
-    const int TILE_SHEET_ROWS = 3;
+    const int TILE_SHEET_ROWS = 4;
     const int TILE_SHEET_COLS = 4;
     //clip tiles
     bool didClip = clipSheet(TILE_SHEET_ROWS, TILE_SHEET_COLS, TILE_LENGTH, TILE_LENGTH, TILE_TYPE_COUNT, tilesClipped);
@@ -474,15 +481,15 @@ void EscapeFromCapstone::runGameLoop()
             }
             case MAP:
             {
-                debugController.move(1280, 960);
-                characterController.move(1280, 960);
+                //debugController.move(MAP_WIDTH, MAP_HEIGHT);
+                characterController.move(MAP_WIDTH, MAP_HEIGHT);
                 //debugController.centerScreen(camera);
-                characterController.centerScreen(camera);
+                characterController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
                 for(int i = 0; i < tileMap.size(); i++)
                 {
                     tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
                 }
-                debugController.render(getRenderer(), camera, debugControllerTexture);
+                //debugController.render(getRenderer(), camera, debugControllerTexture);
                 characterController.render(getRenderer(), camera, characterInMapTexture);
                 if (STATE_mapEventboxOpen)
                 {

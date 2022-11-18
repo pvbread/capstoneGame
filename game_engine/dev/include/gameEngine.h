@@ -16,6 +16,7 @@ public:
     virtual void runGameLoop();
     void stopGameLoop();
     bool loadTiles(std::vector<Tile*>& tileMap, 
+                   const std::vector<int>& levelInfo,
                    std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                    std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,  
                    int TILE_COUNT, 
@@ -34,10 +35,12 @@ public:
     );
     SDL_Window* getWindow() const;
     SDL_Renderer* getRenderer() const;
+    std::vector<int> convertMapToVector(std::string pathName);
     bool getQuit() const;
     int getWidth() const;
     int getHeight() const;
     void setToQuit();
+
 private:
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
