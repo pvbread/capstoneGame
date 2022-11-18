@@ -19,6 +19,7 @@ class BaseCharacter
 {
 public:
     BaseCharacter() = default;
+    ~BaseCharacter() = default;
     BaseCharacter(std::string name, int hp, int speed, 
                   int hit, int armor, int itemModifier, int speedModifier, 
                   int dodgeModifier, bool enemy
@@ -46,6 +47,7 @@ public:
     );
 
     void doAction(ActionType actionType, 
+                                        std::vector<int>& effectOfAction,
                                         std::vector<int> targets, 
                                         std::vector<BaseCharacter>& participants
     );

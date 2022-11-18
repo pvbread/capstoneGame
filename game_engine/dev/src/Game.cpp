@@ -91,6 +91,8 @@ void EscapeFromCapstone::runGameLoop()
     bool STATE_roundsSet = false;
     bool STATE_roundOver = false;
     bool STATE_mapEventboxOpen = false;
+    bool STATE_timerStarted = false;
+    float STATE_timerCount;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
     std::string STATE_combatSelectedOption = "NONE";
@@ -258,6 +260,13 @@ void EscapeFromCapstone::runGameLoop()
 
     ////////// END BATTLE ORDER INIT ///////////////
 
+    ////////// START BATTLE NOTIFICATION //////////
+
+    TextBox battleNotification = TextBox("", 200, 5, 400, 700, 100);
+
+    /////////  END BATTLE NOTIFICATION ///////////
+
+
     std::vector<std::string> tempCharNames {
         "flute        ",
         "conductor    ",
@@ -274,13 +283,7 @@ void EscapeFromCapstone::runGameLoop()
     TTF_Font *orderFont = TTF_OpenFont("./Raleway-Medium.ttf", 50);
 
     int currTarget = 0;
-    std::vector<std::vector<int>> validMoves = {
-        {1, 3},
-        {2, 4},
-        {3, 5},
-        {4, 6},
-        {5, 7}
-    };
+    std::vector<std::vector<int>> validMoves;
     bool actionChosen = false;
 
 
@@ -299,7 +302,7 @@ void EscapeFromCapstone::runGameLoop()
     SDL_Event event;
     while (!getQuit())
     {
-        
+        timer->update();
         while(SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -378,6 +381,7 @@ void EscapeFromCapstone::runGameLoop()
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
                         // update setRoundTurns display
+                        tempCharNames.clear();
                         for(int i = 0; i < roundOrder.size(); i++)
                             tempCharNames[i] = roundOrder[i]->getName();
 
@@ -461,8 +465,9 @@ void EscapeFromCapstone::runGameLoop()
                         {
                             //WAS the round order properly set??
                             STATE_combatSelectedOption = "NONE";
+                            std::vector<int> attackDamage;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            roundOrder[currOrderNum]->doAction(ATTACK, validMoves[currTarget], combatParticipants); 
+                            roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             
                             do 
@@ -470,22 +475,62 @@ void EscapeFromCapstone::runGameLoop()
                                 currOrderNum = (currOrderNum + 1) % roundOrder.size();
                             }
                             while (!combatParticipants[currOrderNum].isAlive());
+                            std::string attackNotification;
+                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            {
+                                if (i == 0)
+                                {
+                                    attackNotification += std::to_string(attackDamage[i]);
+                                    attackNotification += " dmg dealt to ";
+                                    attackNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    continue;
+                                }
+                                attackNotification += " *** ";
+                                attackNotification += std::to_string(attackDamage[i]);
+                                attackNotification += " dmg dealt to ";
+                                attackNotification += combatParticipants[validMoves[currTarget][i]].getName();
+
+                            }
+                            battleNotification.changeText(attackNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
                         }
 
                         if (STATE_combatSelectedOption == "Buff")
                         {
 
                             //WAS the round order properly set??
+                            
                             STATE_combatSelectedOption = "NONE";
                             //look at roundOrder
+                            std::vector<int> healAmount;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            roundOrder[currOrderNum]->doAction(BUFF, validMoves[currTarget], combatParticipants); 
+                            roundOrder[currOrderNum]->doAction(BUFF, healAmount, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             do 
                             {
                                 currOrderNum = (currOrderNum + 1) % roundOrder.size();
                             }
                             while (!combatParticipants[currOrderNum].isAlive());
+                            std::string healNotification;
+                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            {
+                                if (i == 0)
+                                {
+                                    healNotification += std::to_string(healAmount[i]);
+                                    healNotification += " healed for ";
+                                    healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    continue;
+                                }
+                                healNotification += " *** ";
+                                healNotification += std::to_string(healAmount[i]);
+                                healNotification += " dmg dealt to ";
+                                healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+
+                            }
+                            battleNotification.changeText(healNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
 
                         }
                         //TODO get end state for battle
@@ -538,6 +583,8 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_Surface* surfaceTesting = TTF_RenderText_Solid(font, mapEventStream.str().c_str(), textColor); //ttf surface  
                     SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &mapEventBox); 
+                    SDL_FreeSurface(surfaceTesting);
+                    SDL_DestroyTexture(textureTesting);
                 }
                 break;
             } 
@@ -582,6 +629,15 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 SDL_FreeSurface(surface);
                 SDL_DestroyTexture(texture);
+
+                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
+                {
+                    battleNotification.render(getRenderer());
+                }
+                if (timer->deltaTime() > STATE_timerCount)
+                {
+                    STATE_timerStarted = false; 
+                }
                 
                 
                 //targetBoxes
@@ -626,7 +682,8 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Surface* surfaceTesting = TTF_RenderText_Solid(orderFont, titleStream.str().c_str(), textColor); //ttf surface  
                 SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
                 SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
-                
+                SDL_FreeSurface(surfaceTesting);
+                SDL_DestroyTexture(textureTesting);
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
                     std::stringstream charNameStream;

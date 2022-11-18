@@ -101,7 +101,7 @@ TEST_CASE("Test moveSpots")
         REQUIRE(swapped);
     }
     //TODO check that you can't swap with enemy
-    SECTION("Check that you can't swap with enemy")
+    SECTION("Check that a player can't swap with enemy")
     {
         std::vector<BaseCharacter> res = p2.moveSpots(1, 2, v);
         bool noSwap = res[1].isEnemy() != true && res[2].isEnemy();
