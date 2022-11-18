@@ -57,7 +57,7 @@ public:
     int attack(BaseCharacter targetCharacter);
     int buff(BaseCharacter targetCharacter);
     int debuff(BaseCharacter targetCharacter);
-    std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
+    void moveSpots(int charIndex, int targetIndex, 
                                          std::vector<BaseCharacter> participants
     );
 

@@ -153,7 +153,7 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
             targets.erase(adjustments, targets.end());
             for(int i; i < targets.size(); i++)
             {
-                std::vector<int> temp = {i};
+                std::vector<int> temp = {targets[i]};
                 validMoves.push_back(temp);
             }
             break;
@@ -260,11 +260,12 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         for (int j = 0; j < LIVE_BOUNDARY; j++)
         {
             if (participants[j].isAlive() && !participants[j+1].isAlive())
+            {
                 std::swap(participants[j], participants[j+1]);
                 // once swapped, update participant index
                 participants[j].setNewParticipantsIndex(j);
                 participants[j+1].setNewParticipantsIndex(j+1);
-                
+            }   
         }
     }
     for (int i = 0; i < LIVE_BOUNDARY; i++)
@@ -272,11 +273,12 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         for (int j = 0; j < LIVE_BOUNDARY; j++)
         {
             if (participants[j+5].isAlive() && !participants[j+4].isAlive())
+            {
                 std::swap(participants[j+5], participants[j+4]);
                 // once swapped, update participant index
                 participants[j+4].setNewParticipantsIndex(j+4);
                 participants[j+5].setNewParticipantsIndex(j+5);
-                
+            }   
         }
     }
 }
@@ -324,19 +326,14 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
     return newSpeedMod;
 }
 
-std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
+void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
 {
-    if (
-        ( participants[charIndex].isEnemy() && !participants[targetIndex].isEnemy() ) ||
-        ( participants[targetIndex].isEnemy() && !participants[charIndex].isEnemy() )
-       )
-        return participants;
-    
+ 
     std::swap(participants[charIndex], participants[targetIndex]);
     // once swapped, update participant index
     participants[charIndex].setNewParticipantsIndex(charIndex);
     participants[targetIndex].setNewParticipantsIndex(targetIndex);
-    return participants;
+    
 }
 
 std::string BaseCharacter::getName() const

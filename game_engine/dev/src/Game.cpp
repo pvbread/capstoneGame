@@ -381,7 +381,6 @@ void EscapeFromCapstone::runGameLoop()
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
                         // update setRoundTurns display
-                        tempCharNames.clear();
                         for(int i = 0; i < roundOrder.size(); i++)
                             tempCharNames[i] = roundOrder[i]->getName();
 
@@ -401,8 +400,7 @@ void EscapeFromCapstone::runGameLoop()
                     break;
                 }
                 case COMBAT:
-                { 
-                    
+                {   
                     
                     if (STATE_combatSelectedOption != "NONE")
                     {
@@ -443,13 +441,7 @@ void EscapeFromCapstone::runGameLoop()
                         // get new round turn order
                         roundOrder.clear();
                         roundOrder = setRoundTurns(combatParticipants);
-                        // update turn order for rendering
-                        tempCharNames.clear();
-                        for(int i = 0; i < roundOrder.size(); i++)
-                            tempCharNames[i] = roundOrder[i]->getName();
-                        // TODO: figure out how to remove names when character dies
-                        for (int i = roundOrder.size(); i < tempCharNames.size();i++)
-                            tempCharNames.pop_back();
+                        
                         STATE_roundsSet = true;
                         STATE_roundOver = false;
                     }
@@ -489,7 +481,7 @@ void EscapeFromCapstone::runGameLoop()
                             {
                                 currOrderNum = (currOrderNum + 1) % roundOrder.size();
                             }
-                            while (!combatParticipants[currOrderNum].isAlive());
+                            while (roundOrder[currOrderNum]->isAlive()==false);
                             std::string attackNotification;
                             for (int i = 0; i < validMoves[currTarget].size(); i++)
                             {
@@ -526,7 +518,7 @@ void EscapeFromCapstone::runGameLoop()
                             {
                                 currOrderNum = (currOrderNum + 1) % roundOrder.size();
                             }
-                            while (!combatParticipants[currOrderNum].isAlive());
+                            while (roundOrder[currOrderNum]->isAlive()==false);
                             std::string healNotification;
                             for (int i = 0; i < validMoves[currTarget].size(); i++)
                             {
@@ -539,7 +531,7 @@ void EscapeFromCapstone::runGameLoop()
                                 }
                                 healNotification += " *** ";
                                 healNotification += std::to_string(healAmount[i]);
-                                healNotification += " dmg dealt to ";
+                                healNotification += " healed for ";
                                 healNotification += combatParticipants[validMoves[currTarget][i]].getName();
 
                             }
@@ -548,6 +540,77 @@ void EscapeFromCapstone::runGameLoop()
                             STATE_timerCount = timer->deltaTime() + 3;
 
                         }
+
+                        if (STATE_combatSelectedOption == "Debuff")
+                        {
+                            //WAS the round order properly set??
+                            STATE_combatSelectedOption = "NONE";
+                            //look at roundOrder
+                            std::vector<int> newSpeed;
+                            validMoves = roundOrder[currOrderNum]->getValidMoves(DEBUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            roundOrder[currOrderNum]->doAction(DEBUFF, newSpeed, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (roundOrder[currOrderNum]->isAlive()==false);
+                            std::string healNotification;
+                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            {
+                                if (i == 0)
+                                {
+                                    healNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
+                                    healNotification += " is the new speed for ";
+                                    healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    continue;
+                                }
+                                healNotification += " *** ";
+                                healNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
+                                healNotification += " is the new speed for ";
+                                healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+
+                            }
+                            battleNotification.changeText(healNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
+                        }
+
+                        if (STATE_combatSelectedOption == "Move")
+                        {
+                            int x = 5;
+                            //WAS the round order properly set??
+                            STATE_combatSelectedOption = "NONE";
+                            //look at roundOrder
+                            std::vector<int> nothing;
+                            validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (roundOrder[currOrderNum]->isAlive()==false);
+                            std::string healNotification;
+                            int charIndex;
+                            std::string currName;
+                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            {
+                                if (i == 0)
+                                {
+                                    charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                                    currName = combatParticipants[charIndex].getName();
+                                    healNotification += currName;
+                                    healNotification += " switch places with ";
+                                    healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                }
+                
+                            }
+                            battleNotification.changeText(healNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
+                        }
+
                         //TODO get end state for battle
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
@@ -664,12 +727,12 @@ void EscapeFromCapstone::runGameLoop()
                 {
                     
                     // rerender bug if I don't update validMoves
-                    statusRoundOrderSize.changeText(std::to_string(roundOrder.size()));
-                    statusCurrOrderNum.changeText(std::to_string(currOrderNum));
-                    statusGetParticipantsIndex.changeText(std::to_string(roundOrder[currOrderNum]->getParticipantsIndex()));
-                    statusCurrOrderNum.render(getRenderer());
-                    statusGetParticipantsIndex.render(getRenderer());
-                    statusRoundOrderSize.render(getRenderer());
+                    //statusRoundOrderSize.changeText(std::to_string(roundOrder.size()));
+                    //statusCurrOrderNum.changeText(std::to_string(currOrderNum));
+                    //statusGetParticipantsIndex.changeText(std::to_string(roundOrder[currOrderNum]->getParticipantsIndex()));
+                    //statusCurrOrderNum.render(getRenderer());
+                    //statusGetParticipantsIndex.render(getRenderer());
+                    //statusRoundOrderSize.render(getRenderer());
                     SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                     
                     validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
@@ -678,6 +741,28 @@ void EscapeFromCapstone::runGameLoop()
                         SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
                     }
                     
+                }
+
+                if (STATE_combatSelectedOption == "Debuff")
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
+                    // rerender bug if I don't update validMoves
+                    validMoves = roundOrder[currOrderNum]->getValidMoves(DEBUFF, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                    for (auto target: validMoves[currTarget])
+                    {
+                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                    }
+                }
+
+                if (STATE_combatSelectedOption == "Move")
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
+                    // rerender bug if I don't update validMoves
+                    validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                    for (auto target: validMoves[currTarget])
+                    {
+                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                    }
                 }
                 
 
@@ -693,6 +778,18 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
                 SDL_FreeSurface(surfaceTesting);
                 SDL_DestroyTexture(textureTesting);
+
+                // update turn order for rendering
+                for(int i = 0; i < roundOrder.size(); i++)
+                {
+                    tempCharNames[i] = roundOrder[i]->getName();
+                }
+                // TODO: figure out how to remove names when character dies
+                for (int i = roundOrder.size(); i < orderBoxes.size();i++)
+                {
+                    orderBoxes.pop_back();
+                }
+
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
                     std::stringstream charNameStream;
