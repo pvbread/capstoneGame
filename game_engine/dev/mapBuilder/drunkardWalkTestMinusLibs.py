@@ -1,5 +1,4 @@
 import random
-import numpy as np
 
 """
 You can change the value of length at the last line.

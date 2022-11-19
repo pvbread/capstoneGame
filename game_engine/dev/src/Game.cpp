@@ -1,8 +1,6 @@
 #include "Game.h"
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
-#define PY_SSIZE_T_CLEAN
-#include <Python.h>
 
 
 EscapeFromCapstone::EscapeFromCapstone(Uint32 flags, 
@@ -132,16 +130,15 @@ void EscapeFromCapstone::runGameLoop()
     //////////// END TEXTURE LOADING /////////////
 
     //////////// START RANDOM MAP GEN /////////////
-    Py_Initialize();
-    FILE* file = fopen("../mapBuilder/drunkardWalkTestMinusLibs.py", "r");
-    PyRun_SimpleFileEx(file, "drunkardWalkTestMinusLibs.py", 1);
-    Py_Finalize();
+    
+    system("python ../mapBuilder/drunkardWalkTestMinusLibs.py");
+    
 
     //////////// END RANDOM MAP GEN /////////////
 
     //////////// START TILE LOADING /////////////
 
-    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevel7.map");
+    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevelIntegration.map");
     const int MAP_COLS = levelInfo[1];
     const int MAP_ROWS = levelInfo[0]; 
     const int TILE_COUNT = MAP_COLS * MAP_ROWS;
