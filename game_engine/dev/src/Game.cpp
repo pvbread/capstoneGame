@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
-#include <unistd.h>
+
 
 
 
@@ -139,17 +139,11 @@ void EscapeFromCapstone::runGameLoop()
         commandCalls.push_back(commandCall + std::to_string(i));
     }
     system("python ./mapBuilder/drunkardWalkTestMinusLibs.py 1");
-    int pid;
     for (auto call: commandCalls)
     {
-        pid = fork();
         system(call.c_str()); 
     }
-    //kill the children
-    if (pid == 0)
-    {
-        exit(0);
-    }
+
 
     //////////// END RANDOM MAP GEN /////////////
 
