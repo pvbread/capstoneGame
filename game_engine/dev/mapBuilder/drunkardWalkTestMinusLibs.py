@@ -1,4 +1,5 @@
 import random
+import sys
 
 """
 You can change the value of length at the last line.
@@ -329,7 +330,8 @@ def createMatrix(path1, path2, path3, x_max, y_max):
             else:
                 text += " 0" + str(col) 
         text += "\n"
-    with open('../../assets/maps/testLevelIntegration.map', 'w') as f:
+    file_path = "../assets/maps/testLevelIntegration" + sys.argv[1] + ".map"
+    with open(file_path, 'w') as f:
         f.write(text)
         
 

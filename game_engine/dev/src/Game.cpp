@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
+#include <unistd.h>
+
 
 
 EscapeFromCapstone::EscapeFromCapstone(Uint32 flags, 
@@ -130,15 +132,30 @@ void EscapeFromCapstone::runGameLoop()
     //////////// END TEXTURE LOADING /////////////
 
     //////////// START RANDOM MAP GEN /////////////
-    
-    system("python ../mapBuilder/drunkardWalkTestMinusLibs.py");
-    
+    std::string commandCall = "python ./mapBuilder/drunkardWalkTestMinusLibs.py ";
+    std::vector<std::string> commandCalls;
+    for (int i = 2; i < 6; i++)
+    {
+        commandCalls.push_back(commandCall + std::to_string(i));
+    }
+    system("python ./mapBuilder/drunkardWalkTestMinusLibs.py 1");
+    int pid;
+    for (auto call: commandCalls)
+    {
+        pid = fork();
+        system(call.c_str()); 
+    }
+    //kill the children
+    if (pid == 0)
+    {
+        exit(0);
+    }
 
     //////////// END RANDOM MAP GEN /////////////
 
     //////////// START TILE LOADING /////////////
 
-    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevelIntegration.map");
+    std::vector<int> levelInfo = convertMapToVector("../assets/maps/testLevelIntegration1.map");
     const int MAP_COLS = levelInfo[1];
     const int MAP_ROWS = levelInfo[0]; 
     const int TILE_COUNT = MAP_COLS * MAP_ROWS;
