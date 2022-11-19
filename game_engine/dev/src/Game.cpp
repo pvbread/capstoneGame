@@ -1,6 +1,9 @@
 #include "Game.h"
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
 
 EscapeFromCapstone::EscapeFromCapstone(Uint32 flags, 
                        const char* title, 
@@ -86,6 +89,7 @@ void EscapeFromCapstone::runGameLoop()
     bool STATE_roundOver = false;
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
+    bool STATE_debug = false;
     float STATE_timerCount;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
@@ -127,9 +131,17 @@ void EscapeFromCapstone::runGameLoop()
 
     //////////// END TEXTURE LOADING /////////////
 
+    //////////// START RANDOM MAP GEN /////////////
+    Py_Initialize();
+    FILE* file = fopen("../mapBuilder/drunkardWalkTestMinusLibs.py", "r");
+    PyRun_SimpleFileEx(file, "drunkardWalkTestMinusLibs.py", 1);
+    Py_Finalize();
+
+    //////////// END RANDOM MAP GEN /////////////
+
     //////////// START TILE LOADING /////////////
 
-    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevel2.map");
+    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevel7.map");
     const int MAP_COLS = levelInfo[1];
     const int MAP_ROWS = levelInfo[0]; 
     const int TILE_COUNT = MAP_COLS * MAP_ROWS;
@@ -347,10 +359,15 @@ void EscapeFromCapstone::runGameLoop()
                 }
                 case MAP:
                 {
-                    //this has a bug where movement
-                    //keeps being read if key is not unpressed
-                    debugController.onInput(event);
-                    characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        if (event.key.keysym.sym == SDLK_9)
+                            STATE_debug = !STATE_debug;
+                    }
+                    if (STATE_debug)
+                        debugController.onInput(event);
+                    else
+                        characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
                     if (nextMapEvent == "BATTLE")
                     {
                         //init enemy characters
@@ -481,16 +498,25 @@ void EscapeFromCapstone::runGameLoop()
             }
             case MAP:
             {
-                //debugController.move(MAP_WIDTH, MAP_HEIGHT);
-                characterController.move(MAP_WIDTH, MAP_HEIGHT);
-                //debugController.centerScreen(camera);
-                characterController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
+                //write macro for this eventually
+                if (STATE_debug)
+                {
+                    debugController.move(MAP_WIDTH, MAP_HEIGHT);
+                    debugController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
+                }
+                else
+                {
+                    characterController.move(MAP_WIDTH, MAP_HEIGHT);
+                    characterController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
+                }
                 for(int i = 0; i < tileMap.size(); i++)
                 {
                     tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
                 }
-                //debugController.render(getRenderer(), camera, debugControllerTexture);
-                characterController.render(getRenderer(), camera, characterInMapTexture);
+                if (STATE_debug)
+                    debugController.render(getRenderer(), camera, debugControllerTexture);
+                else
+                    characterController.render(getRenderer(), camera, characterInMapTexture);
                 if (STATE_mapEventboxOpen)
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 0, 0, 200, 255);

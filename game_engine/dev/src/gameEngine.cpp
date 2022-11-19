@@ -11,6 +11,8 @@
 #include "pch.h"
 
 
+
+
 Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
     this->height = h;

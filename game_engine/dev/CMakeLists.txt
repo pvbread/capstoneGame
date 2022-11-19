@@ -5,6 +5,8 @@ project(PhoenixEngine)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+find_package(Python3 REQUIRED COMPONENTS Development)
+
 include_directories(include)
 
 if(APPLE)
@@ -16,7 +18,7 @@ if(APPLE)
   find_library(SDL2_IMAGE_LIBRARY SDL2_image REQUIRED)
   find_library(SDL2_TTF_LIBRARY SDL2_ttf REQUIRED)
   find_library(SDL2_MIXER_LIBRARY SDL2_mixer REQUIRED)
-  include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE} ${SDL2_TTF_INCLUDE} ${SDL2_MIXER_INCLUDE})
+  include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE} ${SDL2_TTF_INCLUDE} ${SDL2_MIXER_INCLUDE} ${Python3_INCLUDE_DIRS})
   add_executable(capstoneGame
     "src/main.cpp"
     "src/GameEngine.cpp"
@@ -33,7 +35,9 @@ if(APPLE)
     "src/Game/Characters/Players/BasePlayer.cpp"
     "src/Game/Characters/Players/Bass.cpp"
   )
-  target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
+  #figure this out for windows
+  #include_directories(capstoneGame ${Python3_INCLUDE_DIRS})
+  target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY} ${Python3_LIBRARIES})
   target_precompile_headers(capstoneGame PRIVATE "include/pch.h")
   #file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
   #file(COPY dot.bmp DESTINATION ${CMAKE_BINARY_DIR})
@@ -73,7 +77,7 @@ if(MINGW)
   if(TARGET SDL2::SDL2main)
     target_link_libraries(capstoneGame PRIVATE SDL2::SDL2main)
   endif()
-
+  #${Python3_LIBRARIES} figure out how to link this in windows
   target_link_libraries(capstoneGame PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY dot.bmp DESTINATION ${CMAKE_BINARY_DIR})
@@ -88,3 +92,4 @@ if(MINGW)
   file(COPY "C:/dev/SDL2_mixer-2.6.2/x86_64-w64-mingw32/bin/SDL2_mixer.dll" DESTINATION ${CMAKE_BINARY_DIR})
   
 endif(MINGW)
+

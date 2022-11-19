@@ -79,13 +79,13 @@ void MapDebugController::move(int xBoundary, int yBoundary)
 {
     // TODO update to not be hard coded
     collisionBox.x += velocityX;
-    if(collisionBox.x < 0 || collisionBox.x > 1280)
+    if(collisionBox.x < 0 || collisionBox.x > xBoundary)
     {
         collisionBox.x -= velocityX;
     }
 
     collisionBox.y += velocityY;
-    if(collisionBox.y < 0 || collisionBox.y > 960)
+    if(collisionBox.y < 0 || collisionBox.y > yBoundary)
     {
         collisionBox.y -= velocityY;
     }
@@ -100,7 +100,7 @@ void MapDebugController::render(SDL_Renderer* renderer,
 }
 
 
-void MapDebugController::centerScreen(SDL_Rect& camera)
+void MapDebugController::centerScreen(SDL_Rect& camera, int xBoundary, int yBoundary)
 {
     camera.x = collisionBox.x - (camera.w/2);
     camera.y = collisionBox.y - (camera.w/2);
@@ -109,9 +109,9 @@ void MapDebugController::centerScreen(SDL_Rect& camera)
         camera.x = 0;
     if (camera.y < 0)
         camera.y = 0;
-    if (camera.x > 1280 - camera.w)
-        camera.x = 1280 - camera.w;
-    if (camera.y > 960 - camera.h)
-        camera.y = 960 - camera.h;
+    if (camera.x > xBoundary - camera.w)
+        camera.x = xBoundary - camera.w;
+    if (camera.y > yBoundary - camera.h)
+        camera.y = yBoundary - camera.h;
     
 }
