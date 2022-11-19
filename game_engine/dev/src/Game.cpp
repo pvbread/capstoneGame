@@ -139,10 +139,13 @@ void EscapeFromCapstone::runGameLoop()
         commandCalls.push_back(commandCall + std::to_string(i));
     }
     system("python ./mapBuilder/drunkardWalkTestMinusLibs.py 1");
+    
+    /*
     for (auto call: commandCalls)
     {
         system(call.c_str()); 
     }
+    */
 
 
     //////////// END RANDOM MAP GEN /////////////
