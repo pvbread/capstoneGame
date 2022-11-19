@@ -21,7 +21,7 @@ void EscapeFromCapstone::runGameLoop()
     std::vector<BaseCharacter> combatParticipants;
 
     ///////// END CHARACTER INIT //////
-
+    
     
 
     // temporary place for this
@@ -335,13 +335,33 @@ void EscapeFromCapstone::runGameLoop()
     //////// CHARACTER STATS ////////
     int startBoxWidth = 100;
     std::vector<TextBox> characterStatsHP;
-    for (int i = 0; i < 4; i++)
+    std::vector<TextBox> characterStatsSpeed;
+    std::vector<TextBox> characterStatsHit;
+    std::vector<TextBox> characterStatsArmor;
+    std::vector<TextBox> characterStatsDodge;
+    for (int i = 0; i < 20; i++)
     {
-        TextBox orderRect = TextBox("HP: ", 100, 200, (startBoxWidth + (i*150)),
-         100, 100, Font::roboto, Color::blue, Color::cyan);
-        characterStatsHP.push_back(orderRect);
+        TextBox statsHP = TextBox("HP  ||", 100, 200, (startBoxWidth + (i*150)),
+         100, 50, Font::roboto, Color::blue, Color::cyan);
+        characterStatsHP.push_back(statsHP);
+        
+        TextBox statsSpeed = TextBox("Speed  ||", 100, 325, (startBoxWidth + (i*150)),
+         100, 50, Font::roboto, Color::blue, Color::cyan);
+        characterStatsHP.push_back(statsSpeed);
+
+        TextBox statsHit = TextBox("Hit  ||", 100, 450, (startBoxWidth + (i*150)),
+         100, 50, Font::roboto, Color::blue, Color::cyan);
+        characterStatsHP.push_back(statsHit);
+
+        TextBox statsArmor = TextBox("Armor  ||", 100, 575, (startBoxWidth + (i*150)),
+         100, 50, Font::roboto, Color::blue, Color::cyan);
+        characterStatsHP.push_back(statsArmor);
+        
+        TextBox statsDodge = TextBox("Dodge ", 100, 700, (startBoxWidth + (i*150)),
+         100, 50, Font::roboto, Color::blue, Color::cyan);
+        characterStatsHP.push_back(statsDodge);
+        
     }   
-    
     
     ////// END CHARACTER STATS //////
     
@@ -689,6 +709,7 @@ void EscapeFromCapstone::runGameLoop()
                     sandboxQueIcons[i].render(getRenderer());
                     
                 }
+                
 
                 //stat
                 /*
@@ -744,12 +765,22 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Color StatMenuColor4 = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor4.r, StatMenuColor4.g, StatMenuColor4.b, 0);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground4);
+
+                SDL_Rect StatMenuBackground5 = {800, 60, 150, 630};
+                SDL_Color StatMenuColor5 = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor5.r, StatMenuColor5.g, StatMenuColor5.b, 0);
+                SDL_RenderFillRect(getRenderer(), &StatMenuBackground5);
                 ///////End Background under the text////////
 
                 ///////Stat Names////////
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     characterStatsHP[i].render(getRenderer());
+                    //characterStatsSpeed[i].render(getRenderer());
+                    //characterStatsHit[i].render(getRenderer());
+                    //characterStatsArmor[i].render(getRenderer());
+                    //characterStatsDodge[i].render(getRenderer());
+
                 }
 
                 //TextBox HP = TextBox("HP: ", 40, 200, 100, 100, 100, Font::lato, Color::blue, Color::cyan);
