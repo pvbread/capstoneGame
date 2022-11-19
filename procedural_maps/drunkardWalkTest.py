@@ -201,18 +201,18 @@ enum TileType
 def encodeTBranches(matrix,path,rMidPt,cMidPt,rStep,cStep):
     # Case: TDOWN
     if ((matrix[rMidPt][cMidPt] == 8 and rMidPt + 1 == rStep and cMidPt == cStep) or \
-           (matrix[rMidPt][cMidPt] == 2 and rMidPt == rStep and cMidPt - 1 == cStep) or \
+           (matrix[rMidPt][cMidPt] == 6 and rMidPt == rStep and cMidPt - 1 == cStep) or \
            (matrix[rMidPt][cMidPt] == 10 and rMidPt == rStep and cMidPt + 1 == cStep)):
         matrix[rMidPt][cMidPt] = 7
     # Case: TUP
     elif ((matrix[rMidPt][cMidPt] == 8 and rMidPt - 1 == rStep and cMidPt == cStep) or \
             (matrix[rMidPt][cMidPt] == 9 and rMidPt == rStep and cMidPt + 1 == cStep) or \
-            (matrix[rMidPt][cMidPt] == 6 and rMidPt == rStep and cMidPt - 1 == cStep)):
+            (matrix[rMidPt][cMidPt] == 2 and rMidPt == rStep and cMidPt - 1 == cStep)):
         matrix[rMidPt][cMidPt] = 4
     # Case: TRIGHT
     elif ((matrix[rMidPt][cMidPt] == 5 and rMidPt == rStep and cMidPt + 1 == cStep) or \
-            (matrix[rMidPt][cMidPt] == 2 and rMidPt - 1 == rStep and cMidPt == cStep) or \
-            (matrix[rMidPt][cMidPt] == 6 and rMidPt + 1 == rStep and cMidPt == cStep)):
+            (matrix[rMidPt][cMidPt] == 2 and rMidPt + 1 == rStep and cMidPt == cStep) or \
+            (matrix[rMidPt][cMidPt] == 6 and rMidPt - 1 == rStep and cMidPt == cStep)):
         matrix[rMidPt][cMidPt] = 0
     # Case: TLEFT
     elif ((matrix[rMidPt][cMidPt] == 5 and rMidPt == rStep and cMidPt - 1 == cStep) or \
