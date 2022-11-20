@@ -774,10 +774,10 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor4.r, StatMenuColor4.g, StatMenuColor4.b, 0);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground4);
 
-                SDL_Rect StatMenuBackground5 = {800, 60, 150, 630};
-                SDL_Color StatMenuColor5 = Color::gray;
-                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor5.r, StatMenuColor5.g, StatMenuColor5.b, 0);
-                SDL_RenderFillRect(getRenderer(), &StatMenuBackground5);
+                //SDL_Rect StatMenuBackground5 = {800, 60, 150, 630};
+                //SDL_Color StatMenuColor5 = Color::gray;
+                //SDL_SetRenderDrawColor(getRenderer(), StatMenuColor5.r, StatMenuColor5.g, StatMenuColor5.b, 0);
+                //SDL_RenderFillRect(getRenderer(), &StatMenuBackground5);
 
                 ///////End Background under the text////////
 
@@ -830,6 +830,7 @@ void EscapeFromCapstone::runGameLoop()
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[2].getHp());
                 TextBox bassHPName = TextBox(statMenuDisplayStr, 40, 200, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                bassHPName.changeText(statMenuDisplayStr);
                 bassHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[2].getMaxHp());
@@ -860,6 +861,7 @@ void EscapeFromCapstone::runGameLoop()
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[3].getHp());
                 TextBox drumHPName = TextBox(statMenuDisplayStr, 40, 200, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                drumHPName.changeText(statMenuDisplayStr);
                 drumHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[3].getMaxHp());
@@ -890,6 +892,7 @@ void EscapeFromCapstone::runGameLoop()
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[0].getHp());
                 TextBox fluteHPName = TextBox(statMenuDisplayStr, 40, 200, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                fluteHPName.changeText(statMenuDisplayStr);
                 fluteHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[0].getMaxHp());
@@ -920,6 +923,7 @@ void EscapeFromCapstone::runGameLoop()
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[1].getHp());
                 TextBox conductorHPName = TextBox(statMenuDisplayStr, 40, 200, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                conductorHPName.changeText(statMenuDisplayStr);
                 conductorHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[1].getMaxHp());
