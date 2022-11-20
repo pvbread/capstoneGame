@@ -21,7 +21,7 @@ void EscapeFromCapstone::runGameLoop()
     std::vector<BaseCharacter> combatParticipants;
 
     ///////// END CHARACTER INIT //////
-    
+
     
 
     // temporary place for this
@@ -334,32 +334,38 @@ void EscapeFromCapstone::runGameLoop()
     ///////// END SANDBOX ///////////
     //////// CHARACTER STATS ////////
     int startBoxWidth = 100;
+    int slashBoxWidth = 150;
     std::vector<TextBox> characterStatsHP;
     std::vector<TextBox> characterStatsSpeed;
     std::vector<TextBox> characterStatsHit;
     std::vector<TextBox> characterStatsArmor;
     std::vector<TextBox> characterStatsDodge;
-    for (int i = 0; i < 20; i++)
+    std::vector<TextBox> characterStatSlash;
+    for (int i = 0; i < 4; i++)
     {
-        TextBox statsHP = TextBox("HP  ||", 100, 200, (startBoxWidth + (i*150)),
+        TextBox statsHP = TextBox("HP  ", 100, 200, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsHP.push_back(statsHP);
         
-        TextBox statsSpeed = TextBox("Speed  ||", 100, 325, (startBoxWidth + (i*150)),
+        TextBox statsSpeed = TextBox("Speed  ", 100, 325, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
-        characterStatsHP.push_back(statsSpeed);
+        characterStatsSpeed.push_back(statsSpeed);
 
-        TextBox statsHit = TextBox("Hit  ||", 100, 450, (startBoxWidth + (i*150)),
+        TextBox statsHit = TextBox("Hit  ", 100, 450, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
-        characterStatsHP.push_back(statsHit);
+        characterStatsHit.push_back(statsHit);
 
-        TextBox statsArmor = TextBox("Armor  ||", 100, 575, (startBoxWidth + (i*150)),
+        TextBox statsArmor = TextBox("Armor  ", 100, 575, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
-        characterStatsHP.push_back(statsArmor);
+        characterStatsArmor.push_back(statsArmor);
         
         TextBox statsDodge = TextBox("Dodge ", 100, 700, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
-        characterStatsHP.push_back(statsDodge);
+        characterStatsDodge.push_back(statsDodge);
+
+        TextBox justASlash = TextBox("/", 100, 240, (slashBoxWidth + (i*150)),
+         10, 50, Font::roboto, Color::blue, Color::cyan);
+        characterStatSlash.push_back(justASlash);
         
     }   
     
@@ -733,6 +739,8 @@ void EscapeFromCapstone::runGameLoop()
             }
             case STATUS_MENU:
             {
+                std::string statMenuDisplayStr;
+
                 //////Background Color////////
                 SDL_Rect backgroundPane1 = {0, 0, 960, 730};
                 SDL_Color backgroundMenu1 = Color::navy;
@@ -770,52 +778,171 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Color StatMenuColor5 = Color::gray;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor5.r, StatMenuColor5.g, StatMenuColor5.b, 0);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground5);
+
                 ///////End Background under the text////////
 
+                ///////Lines that split the screen//////////
+                
+                SDL_Rect splitLine1 = {195, 100, 5, 550};
+                SDL_Color splitLineColor1 = Color::teal;
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor1.r, splitLineColor1.g, splitLineColor1.b, 0);
+                SDL_RenderFillRect(getRenderer(), &splitLine1);
+                
+                SDL_Rect splitLine2 = {300, 100, 5, 550};
+                SDL_Color splitLineColor2 = Color::teal;
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor2.r, splitLineColor2.g, splitLineColor2.b, 0);
+                SDL_RenderFillRect(getRenderer(), &splitLine2);
+
+                SDL_Rect splitLine3 = {430, 100, 5, 550};
+                SDL_Color splitLineColor3 = Color::teal;
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor3.r, splitLineColor3.g, splitLineColor3.b, 0);
+                SDL_RenderFillRect(getRenderer(), &splitLine3);
+
+                SDL_Rect splitLine4 = {550, 100, 5, 550};
+                SDL_Color splitLineColor4 = Color::teal;
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor4.r, splitLineColor4.g, splitLineColor4.b, 0);
+                SDL_RenderFillRect(getRenderer(), &splitLine4);
+
+                SDL_Rect splitLine5 = {680, 100, 5, 550};
+                SDL_Color splitLineColor5 = Color::teal;
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor5.r, splitLineColor5.g, splitLineColor5.b, 0);
+                SDL_RenderFillRect(getRenderer(), &splitLine5);
+                
+                ///////End Lines that split the screen//////////
+
                 ///////Stat Names////////
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     characterStatsHP[i].render(getRenderer());
-                    //characterStatsSpeed[i].render(getRenderer());
-                    //characterStatsHit[i].render(getRenderer());
-                    //characterStatsArmor[i].render(getRenderer());
-                    //characterStatsDodge[i].render(getRenderer());
+                    characterStatsSpeed[i].render(getRenderer());
+                    characterStatsHit[i].render(getRenderer());
+                    characterStatsArmor[i].render(getRenderer());
+                    characterStatsDodge[i].render(getRenderer());
+                    characterStatSlash[i].render(getRenderer());
 
                 }
-
-                //TextBox HP = TextBox("HP: ", 40, 200, 100, 100, 100, Font::lato, Color::blue, Color::cyan);
-                //HP.render(getRenderer());
-
                 ///////End Stat Names////////
 
                 ///////Base Stats/////////
-                TextBox baseName = TextBox("Bass||", 40, 100, 115, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                //name
+                TextBox baseName = TextBox("Bass  ", 40, 100, 115, 100, 70, Font::roboto, Color::blue, Color::cyan);
                 baseName.render(getRenderer());
+                //HP
+                statMenuDisplayStr = std::to_string(playerTeam[2].getHp());
+                TextBox bassHPName = TextBox(statMenuDisplayStr, 40, 200, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                bassHPName.render(getRenderer());
+                //Max HP
+                statMenuDisplayStr = std::to_string(playerTeam[2].getMaxHp());
+                TextBox bassMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                bassMaxHPName.render(getRenderer());
+                //Speed
+                statMenuDisplayStr = std::to_string(playerTeam[2].getSpeed());
+                TextBox bassSpeedName = TextBox(statMenuDisplayStr, 40, 355, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                bassSpeedName.render(getRenderer());
+                //Hit
+                statMenuDisplayStr = std::to_string(playerTeam[2].getHit());
+                TextBox bassHitName = TextBox(statMenuDisplayStr, 40, 470, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                bassHitName.render(getRenderer());
+                //Armor
+                statMenuDisplayStr = std::to_string(playerTeam[2].getArmor());
+                TextBox bassArmorName = TextBox(statMenuDisplayStr, 40, 600, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                bassArmorName.render(getRenderer());
+                //Dodge
+                statMenuDisplayStr = std::to_string(playerTeam[2].getDodgeModifier());
+                TextBox bassDodgeName = TextBox(statMenuDisplayStr, 40, 730, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                bassDodgeName.render(getRenderer());
                 ///////End Base Stats/////////
 
                 ///////Drum Stats/////////
-                TextBox drumName = TextBox("Drum||", 40, 100, 265, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                //name
+                TextBox drumName = TextBox("Drum  ", 40, 100, 265, 100, 70, Font::roboto, Color::blue, Color::cyan);
                 drumName.render(getRenderer());
+                //HP
+                statMenuDisplayStr = std::to_string(playerTeam[3].getHp());
+                TextBox drumHPName = TextBox(statMenuDisplayStr, 40, 200, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                drumHPName.render(getRenderer());
+                //Max HP
+                statMenuDisplayStr = std::to_string(playerTeam[3].getMaxHp());
+                TextBox drumMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                drumMaxHPName.render(getRenderer());
+                //Speed
+                statMenuDisplayStr = std::to_string(playerTeam[3].getSpeed());
+                TextBox drumSpeedName = TextBox(statMenuDisplayStr, 40, 355, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                drumSpeedName.render(getRenderer());
+                //Hit
+                statMenuDisplayStr = std::to_string(playerTeam[3].getHit());
+                TextBox drumHitName = TextBox(statMenuDisplayStr, 40, 470, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                drumHitName.render(getRenderer());
+                //Armor
+                statMenuDisplayStr = std::to_string(playerTeam[3].getArmor());
+                TextBox drumArmorName = TextBox(statMenuDisplayStr, 40, 600, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                drumArmorName.render(getRenderer());
+                //Dodge
+                statMenuDisplayStr = std::to_string(playerTeam[3].getDodgeModifier());
+                TextBox drumDodgeName = TextBox(statMenuDisplayStr, 40, 730, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                drumDodgeName.render(getRenderer());
                 ///////End Drum Stats/////////
 
                 ///////Flute Stats/////////
-                TextBox fluteName = TextBox("Flute||", 40, 100, 415, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                //name
+                TextBox fluteName = TextBox("Flute  ", 40, 100, 415, 100, 70, Font::roboto, Color::blue, Color::cyan);
                 fluteName.render(getRenderer());
+                //HP
+                statMenuDisplayStr = std::to_string(playerTeam[0].getHp());
+                TextBox fluteHPName = TextBox(statMenuDisplayStr, 40, 200, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                fluteHPName.render(getRenderer());
+                //Max HP
+                statMenuDisplayStr = std::to_string(playerTeam[0].getMaxHp());
+                TextBox fluteMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                fluteMaxHPName.render(getRenderer());
+                //Speed
+                statMenuDisplayStr = std::to_string(playerTeam[0].getSpeed());
+                TextBox fluteSpeedName = TextBox(statMenuDisplayStr, 40, 355, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                fluteSpeedName.render(getRenderer());
+                //Hit
+                statMenuDisplayStr = std::to_string(playerTeam[0].getHit());
+                TextBox fluteHitName = TextBox(statMenuDisplayStr, 40, 470, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                fluteHitName.render(getRenderer());
+                //Armor
+                statMenuDisplayStr = std::to_string(playerTeam[0].getArmor());
+                TextBox fluteArmorName = TextBox(statMenuDisplayStr, 40, 600, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                fluteArmorName.render(getRenderer());
+                //Dodge
+                statMenuDisplayStr = std::to_string(playerTeam[0].getDodgeModifier());
+                TextBox fluteDodgeName = TextBox(statMenuDisplayStr, 40, 730, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                fluteDodgeName.render(getRenderer());
                 ///////End Flute Stats/////////
 
                 ///////Conductor Stats/////////
-                TextBox conductorName = TextBox("Conductor||", 40, 100, 570, 100, 60, Font::roboto, Color::blue, Color::cyan);
+                //name
+                TextBox conductorName = TextBox("Conductor  ", 40, 100, 570, 100, 60, Font::roboto, Color::blue, Color::cyan);
                 conductorName.render(getRenderer());
+                //HP
+                statMenuDisplayStr = std::to_string(playerTeam[1].getHp());
+                TextBox conductorHPName = TextBox(statMenuDisplayStr, 40, 200, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                conductorHPName.render(getRenderer());
+                //Max HP
+                statMenuDisplayStr = std::to_string(playerTeam[1].getMaxHp());
+                TextBox conductorMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                conductorMaxHPName.render(getRenderer());
+                //Speed
+                statMenuDisplayStr = std::to_string(playerTeam[1].getSpeed());
+                TextBox conductorSpeedName = TextBox(statMenuDisplayStr, 40, 355, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                conductorSpeedName.render(getRenderer());
+                //Hit
+                statMenuDisplayStr = std::to_string(playerTeam[1].getHit());
+                TextBox conductorHitName = TextBox(statMenuDisplayStr, 40, 470, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                conductorHitName.render(getRenderer());
+                //Armor
+                statMenuDisplayStr = std::to_string(playerTeam[1].getArmor());
+                TextBox conductorArmorName = TextBox(statMenuDisplayStr, 40, 600, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                conductorArmorName.render(getRenderer());
+                //Dodge
+                statMenuDisplayStr = std::to_string(playerTeam[1].getDodgeModifier());
+                TextBox conductorDodgeName = TextBox(statMenuDisplayStr, 40, 730, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                conductorDodgeName.render(getRenderer());
                 ///////End Conductor Stats/////////
 
-
-                //for (int i = 0; i < 4; i++)
-                //{
-                //    characterStatsName[i].render(getRenderer());
-                //}
-
-                //statBass2.render(getRenderer());
-                //statBassHP2.render(getRenderer());
                 //SDL_FreeSurface(surface);
                 //SDL_DestroyTexture(texture);
                 break;
