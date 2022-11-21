@@ -193,6 +193,7 @@ cython_debug/
 !setting.json
 !.setting.json
 !./setting.json
+!.\setting.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
