@@ -192,7 +192,6 @@ cython_debug/
 .vscode/*
 !setting.json
 !.setting.json
-!./setting.json
 !.\setting.json
 !.vscode/settings.json
 !.vscode/tasks.json
