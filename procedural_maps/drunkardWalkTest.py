@@ -159,8 +159,8 @@ def encodePath(matrix, path):
                 (rFirst - 1 == rMid and rLast + 1 == rMid and cFirst == cMid and cLast == cMid):
             matrix[rMid][cMid] = 5
         # Case: DOWNRIGHT
-        elif (rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
-                (rFirst == rMid and rLast + 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
+        elif (rFirst - 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
+                (rFirst == rMid and rLast - 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
             matrix[rMid][cMid] = 6
         # Case: LEFTDOWN
         elif(rFirst == rMid and rLast - 1 == rMid and cFirst + 1 == cMid and cLast == cMid) or \
@@ -171,8 +171,8 @@ def encodePath(matrix, path):
                 (rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast + 1 == cMid):
             matrix[rMid][cMid] = 9
         # Case: UPRIGHT
-        elif(rFirst - 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
-                (rFirst  == rMid and rLast - 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
+        elif(rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
+                (rFirst  == rMid and rLast + 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
             matrix[rMid][cMid] = 2
         # the number 12 will represent the end point of the path
         matrix[rLast][cLast] = 12
@@ -224,10 +224,28 @@ def encodeTBranches(matrix,path,rMidPt,cMidPt,rStep,cStep):
 """
 creates a matrix from coordinates of the three paths and save matrix in text file (x -> row, y -> col)
 """
-def createMatrix(path1, path2, path3):
+def createMatrix(path1, path2, path3, x_max, y_max):
+
+    # create the dimensions of the matrix based on the maximum values of x and y
+    # default dimensions 12 x 16 matrix
+
+    # if the highest x value is less than 12, set height to 12
+    if x_max < 12:
+        height = 12
+    # else set height to x_max plus 2 for extra spacing
+    else:
+        height = x_max + 2
+
+    # if the highest y value is less than 16, set width to 16
+    if y_max < 16:
+        width = 16
+    # else set width to y_max plus 2 for extra spacing
+    else:
+        width = y_max + 2
     
-    # create 30x30 matrix filled with threes
-    matrix = np.full((30,30),3)
+    
+    # create matrix filled with threes
+    matrix = np.full((height, width),3)
 
     # variables that start with 'r' represents the row, variables that start with 'c' represents the col
 
@@ -293,8 +311,12 @@ def createMatrix(path1, path2, path3):
     if len(path3)==2:
         matrix[rStep][cStep] = 12
 
-    # save matrix in textfile, format as whole number digits
-    np.savetxt('output.txt', matrix, fmt='%d')
+    # save matrix in textfile
+    #first line prints height and width and format matrix as whole number digits
+    with open('testLevel.txt', 'w') as f:
+        f.write(str(height)+ " " + str(width) + "\n")
+        np.savetxt(f, matrix, fmt='%d')
+
    
 
 """
@@ -325,6 +347,21 @@ def plotWalk(path_length):
     plt.legend()
     plt.savefig("map.png")
     plt.show()
+
+    # get max value for x for the height of the matrix
+    x_max = max(x1)
+    if x_max < max(x2):
+        x_max = max(x2)
+    if x_max < max(x3):
+        x_max = max(x3)
+
+    # get max value for y for the width of the matrrix
+    y_max = max(y1)
+    if y_max < max(y2):
+        y_max = max(y2)
+    if y_max < max(y3):
+        y_max = max(y3)
+
     
     # these variables will store a list of array of the (x,y) coordinates of the 3 branching paths in order to draw the matrix
     path1 = []
@@ -344,7 +381,7 @@ def plotWalk(path_length):
         path3.append((x3[i], y3[i]))
     
     # call function to create matrix with coordinates and save as textfile
-    createMatrix(path1, path2, path3)
+    createMatrix(path1, path2, path3, x_max, y_max)
     
 
 """
