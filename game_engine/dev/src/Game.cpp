@@ -555,23 +555,23 @@ void EscapeFromCapstone::runGameLoop()
                                 currOrderNum = (currOrderNum + 1) % roundOrder.size();
                             }
                             while (roundOrder[currOrderNum]->isAlive()==false);
-                            std::string healNotification;
+                            std::string debuffNotification;
                             for (int i = 0; i < validMoves[currTarget].size(); i++)
                             {
                                 if (i == 0)
                                 {
-                                    healNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
-                                    healNotification += " is the new speed for ";
-                                    healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    debuffNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
+                                    debuffNotification += " is the new speed for ";
+                                    debuffNotification += combatParticipants[validMoves[currTarget][i]].getName();
                                     continue;
                                 }
-                                healNotification += " *** ";
-                                healNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
-                                healNotification += " is the new speed for ";
-                                healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                debuffNotification += " *** ";
+                                debuffNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
+                                debuffNotification += " is the new speed for ";
+                                debuffNotification += combatParticipants[validMoves[currTarget][i]].getName();
 
                             }
-                            battleNotification.changeText(healNotification);
+                            battleNotification.changeText(debuffNotification);
                             STATE_timerStarted = true;
                             STATE_timerCount = timer->deltaTime() + 3;
                         }
@@ -595,12 +595,12 @@ void EscapeFromCapstone::runGameLoop()
                                 currOrderNum = (currOrderNum + 1) % roundOrder.size();
                             }
                             while (roundOrder[currOrderNum]->isAlive()==false);
-                            std::string healNotification;
-                            healNotification += currPlayerName;
-                            healNotification += " switch places with ";
-                            healNotification += targetName;
+                            std::string moveNotification;
+                            moveNotification += currPlayerName;
+                            moveNotification += " switch places with ";
+                            moveNotification += targetName;
                             
-                            battleNotification.changeText(healNotification);
+                            battleNotification.changeText(moveNotification);
                             STATE_timerStarted = true;
                             STATE_timerCount = timer->deltaTime() + 3;
                         }
