@@ -8,13 +8,26 @@
 #include "Font.h"
 #include "Timer.h"
 
-class Phoenix
+/// @brief Where the engine gets implemented
+class Archimedes
 {
 public:
-    Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h);
-    ~Phoenix();
+    Archimedes(Uint32 flags, const char* title, int x, int y, int w, int h);
+    ~Archimedes();
     virtual void runGameLoop();
+
+    /// @brief Quits the game
     void stopGameLoop();
+
+    /// @brief loads tiles into tileMap. 
+    /// Additionally we have it loading coordinates and event maps.
+    /// @param tileMap 
+    /// @param coordinateToTileTypeMap 
+    /// @param coordinateToEventTypeMap 
+    /// @param TILE_COUNT 
+    /// @param TYPE_COUNT 
+    /// @param TILE_LENGTH 
+    /// @return 
     bool loadTiles(std::vector<Tile*>& tileMap, 
                    std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                    std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,  
@@ -22,9 +35,23 @@ public:
                    int TYPE_COUNT, 
                    int TILE_LENGTH
     );
+
+    /// @brief Loads the image assets
+    /// @param renderer 
+    /// @param textureFilePaths 
+    /// @return bool of success or failure
     bool loadImageAssets(SDL_Renderer* renderer, 
                          std::unordered_map<TextureWrapper*, std::string> textureFilePaths
     );
+
+    /// @brief Given the sheet specs, will clip the sheet into SDL rectangles.
+    /// @param ROWS 
+    /// @param COLS 
+    /// @param BLOCK_LENGTH 
+    /// @param BLOCK_HEIGHT 
+    /// @param TYPE_COUNT 
+    /// @param sheetClipped 
+    /// @return 
     bool clipSheet(int ROWS,
                    int COLS, 
                    int BLOCK_LENGTH,
@@ -32,8 +59,17 @@ public:
                    int TYPE_COUNT,
                    std::vector<SDL_Rect>& sheetClipped
     );
+
+    /// @brief the public method to access the window object pointer
+    /// @return pointer to the engine's SDL_Window instance
     SDL_Window* getWindow() const;
+
+    /// @brief the public method to access the renderer object pointer
+    /// @return pointer to the engine's SDL_Renderer instance
     SDL_Renderer* getRenderer() const;
+
+    /// @brief checks if the game state is quit
+    /// @return 
     bool getQuit() const;
     int getWidth() const;
     int getHeight() const;

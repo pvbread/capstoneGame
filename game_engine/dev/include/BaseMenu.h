@@ -2,9 +2,13 @@
 
 #include "pch.h"
 
+/// @brief Creates a menu. Just specify a font size, some dimensions,
+/// a list of options, font path and color, and a renderer.
+/// Additionally it keeps track of which option was selected.
 class BaseMenu
 {
 public:
+
     BaseMenu(int fontSize, 
              int x, int y, int w, int h, 
              const std::vector<std::string>& optionNames,
@@ -17,6 +21,7 @@ public:
     void onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& optionSelected);
     void render(SDL_Renderer* renderer);  
     void updateHighlight(int prevIdx, int currIdx);
+
 
 private:
     int startX;

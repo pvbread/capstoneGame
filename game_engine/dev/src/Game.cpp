@@ -2,13 +2,13 @@
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
 
-EscapeFromCapstone::EscapeFromCapstone(Uint32 flags, 
+DashDaCapo::DashDaCapo(Uint32 flags, 
                        const char* title, 
                        int x, int y, 
                        int w, int h) : 
-    Phoenix(flags, title, x, y, w, h){}
+    Archimedes(flags, title, x, y, w, h){}
 
-void EscapeFromCapstone::runGameLoop()
+void DashDaCapo::runGameLoop()
 {
 
     Timer* timer = Timer::instance();
