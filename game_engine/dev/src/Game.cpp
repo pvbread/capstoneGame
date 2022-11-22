@@ -52,10 +52,11 @@ void EscapeFromCapstone::runGameLoop()
 
     //const char* railwayFontPath = "./Raleway-Medium.ttf";
     SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100,  
+    BaseMenu introMenu = BaseMenu(100, 100, 140, 400, 100,  
                                   introOptions, 
                                   Font::raleway, 
-                                  Color::red, 
+                                  Color::red,
+                                  Color::maroon,
                                   getRenderer()
     );
 
@@ -67,10 +68,11 @@ void EscapeFromCapstone::runGameLoop()
     };
 
     SDL_Color combatMenuColor = { 0, 0, 255, 255 };
-    BaseMenu combatMenu = BaseMenu(25, 520, 200, 50, 100, 
+    BaseMenu combatMenu = BaseMenu(50, 25, 520, 200, 50, 
                                    combatOptionsStrings, 
                                    Font::raleway, 
-                                   Color::red, 
+                                   Color::red,
+                                   Color::maroon, 
                                    getRenderer()
     );
 
@@ -262,7 +264,7 @@ void EscapeFromCapstone::runGameLoop()
 
     ////////// START BATTLE NOTIFICATION //////////
 
-    TextBox battleNotification = TextBox("", 200, 5, 400, 700, 100);
+    TextBox battleNotification = TextBox("", 25, 5, 400, 700, 100);
 
     /////////  END BATTLE NOTIFICATION ///////////
 
