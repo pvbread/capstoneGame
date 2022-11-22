@@ -132,6 +132,7 @@ void EscapeFromCapstone::runGameLoop()
     //////////// END TEXTURE LOADING /////////////
 
     //////////// START RANDOM MAP GEN /////////////
+    /*
     std::string commandCall = "python ./mapBuilder/drunkardWalkTestMinusLibs.py ";
     std::vector<std::string> commandCalls;
     for (int i = 2; i < 6; i++)
@@ -139,7 +140,7 @@ void EscapeFromCapstone::runGameLoop()
         commandCalls.push_back(commandCall + std::to_string(i));
     }
     system("python ./mapBuilder/drunkardWalkTestMinusLibs.py 1");
-    
+    */
     /*
     for (auto call: commandCalls)
     {
@@ -152,7 +153,7 @@ void EscapeFromCapstone::runGameLoop()
 
     //////////// START TILE LOADING /////////////
 
-    std::vector<int> levelInfo = convertMapToVector("../assets/maps/testLevelIntegration1.map");
+    std::vector<int> levelInfo = convertMapToVector("../assets/maps/testLevel2.map");
     const int MAP_COLS = levelInfo[1];
     const int MAP_ROWS = levelInfo[0]; 
     const int TILE_COUNT = MAP_COLS * MAP_ROWS;

@@ -133,13 +133,21 @@ enum TileType
     LEFTRIGHT = 8,
     LEFTUP = 9,
     LEFTDOWN = 10,
-    FOURWAY = 11
+    FOURWAY = 11,
+    ENDUP = 12,
+    ENDRIGHT = 13,
+    ENDDOWN = 14,
+    ENDLEFT = 15
 };
 """
 def encodePath(matrix, path):
 
     # variables that start with 'r' represents the row, variables that start with 'c' represents the col
 
+    # in case the length of the path equals 2
+    if len(path) == 2:
+        rMid, cMid = path[0]
+        rLast, cLast = path[1]
     # itterate through the path list and encode the path with the proper tile type within the matrix
     for i in range(len(path)-2):
         
@@ -181,8 +189,19 @@ def encodePath(matrix, path):
         elif(rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
                 (rFirst  == rMid and rLast + 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
             matrix[rMid][cMid] = 2
-        # the number 12 will represent the end point of the path
+    # assign the last point of path with an endpoint tile
+    #ENDUP
+    if (rMid + 1 == rLast and cMid == cLast):
         matrix[rLast][cLast] = 12
+    #ENDRIGHT
+    elif (rMid == rLast and cMid - 1 == cLast):
+        matrix[rLast][cLast] = 13
+    #ENDDOWN
+    elif (rMid - 1 == rLast and cMid == cLast):
+        matrix[rLast][cLast] = 14
+    #ENDLEFT
+    elif (rMid == rLast and cMid + 1 == cLast):
+        matrix[rLast][cLast] = 15
 
     # return an updated version of the matrix
     return matrix
@@ -202,24 +221,28 @@ enum TileType
     LEFTRIGHT = 8,
     LEFTUP = 9,
     LEFTDOWN = 10,
-    FOURWAY = 11
+    FOURWAY = 11,
+    ENDUP = 12,
+    ENDRIGHT = 13,
+    ENDDOWN = 14,
+    ENDLEFT = 15
 };
 """
 def encodeTBranches(matrix,path,rMidPt,cMidPt,rStep,cStep):
     # Case: TDOWN
     if ((matrix[rMidPt][cMidPt] == 8 and rMidPt + 1 == rStep and cMidPt == cStep) or \
-           (matrix[rMidPt][cMidPt] == 2 and rMidPt == rStep and cMidPt - 1 == cStep) or \
+           (matrix[rMidPt][cMidPt] == 6 and rMidPt == rStep and cMidPt - 1 == cStep) or \
            (matrix[rMidPt][cMidPt] == 10 and rMidPt == rStep and cMidPt + 1 == cStep)):
         matrix[rMidPt][cMidPt] = 7
     # Case: TUP
     elif ((matrix[rMidPt][cMidPt] == 8 and rMidPt - 1 == rStep and cMidPt == cStep) or \
             (matrix[rMidPt][cMidPt] == 9 and rMidPt == rStep and cMidPt + 1 == cStep) or \
-            (matrix[rMidPt][cMidPt] == 6 and rMidPt == rStep and cMidPt - 1 == cStep)):
+            (matrix[rMidPt][cMidPt] == 2 and rMidPt == rStep and cMidPt - 1 == cStep)):
         matrix[rMidPt][cMidPt] = 4
     # Case: TRIGHT
     elif ((matrix[rMidPt][cMidPt] == 5 and rMidPt == rStep and cMidPt + 1 == cStep) or \
-            (matrix[rMidPt][cMidPt] == 2 and rMidPt - 1 == rStep and cMidPt == cStep) or \
-            (matrix[rMidPt][cMidPt] == 6 and rMidPt + 1 == rStep and cMidPt == cStep)):
+            (matrix[rMidPt][cMidPt] == 2 and rMidPt + 1 == rStep and cMidPt == cStep) or \
+            (matrix[rMidPt][cMidPt] == 6 and rMidPt - 1 == rStep and cMidPt == cStep)):
         matrix[rMidPt][cMidPt] = 0
     # Case: TLEFT
     elif ((matrix[rMidPt][cMidPt] == 5 and rMidPt == rStep and cMidPt - 1 == cStep) or \
@@ -315,9 +338,7 @@ def createMatrix(path1, path2, path3, x_max, y_max):
     # calls function to encode the third path
     matrix = encodePath(matrix, path3)
     
-    # Rare case: if there's only two elements in the path list thus making the previous function returns the matrix unchanged, then the second element will be the endpoint
-    if len(path3)==2:
-        matrix[rStep][cStep] = 12
+    
 
     # save matrix in textfile
     #first line prints height and width and format matrix as whole number digits

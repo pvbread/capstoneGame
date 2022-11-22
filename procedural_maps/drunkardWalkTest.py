@@ -137,6 +137,10 @@ def encodePath(matrix, path):
 
     # variables that start with 'r' represents the row, variables that start with 'c' represents the col
 
+    # in case the length of the path equals 2
+    if len(path) == 2:
+        rMid, cMid = path[0]
+        rLast, cLast = path[1]
     # itterate through the path list and encode the path with the proper tile type within the matrix
     for i in range(len(path)-2):
         
@@ -327,9 +331,7 @@ def createMatrix(path1, path2, path3, x_max, y_max):
     # calls function to encode the third path
     matrix = encodePath(matrix, path3)
     
-    # Rare case: if there's only two elements in the path list thus making the previous function returns the matrix unchanged, then the second element will be the endpoint
-    if len(path3)==2:
-        matrix[rStep][cStep] = 12
+    
 
     # save matrix in textfile
     #first line prints height and width and format matrix as whole number digits
