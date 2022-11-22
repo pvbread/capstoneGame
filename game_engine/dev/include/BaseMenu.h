@@ -15,8 +15,7 @@ public:
     );
     //might need to do a combatMenu with extra onInput behavior
     void onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& optionSelected);
-    void render(SDL_Renderer* renderer);
-    int getOptionSelectedIndex();
+    void render(SDL_Renderer* renderer);  
     void updateHighlight(int prevIdx, int currIdx);
 
 private:
@@ -25,8 +24,11 @@ private:
     int optionWidth;
     int optionHeight;
     int initialCursorHeight;
+    int cursorIndex;
     std::vector<SDL_Texture*> menuTextures;
     std::vector<SDL_Rect> optionRectangles;
+    std::vector<SDL_Texture*> cursorTextures;
+    std::vector<SDL_Rect> cursorRectangles;
     std::vector<std::string> optionNames;
     SDL_Color fontColor;
     SDL_Color highlightColor;
