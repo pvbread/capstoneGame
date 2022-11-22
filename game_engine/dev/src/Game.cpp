@@ -468,7 +468,9 @@ void EscapeFromCapstone::runGameLoop()
                         if (STATE_combatSelectedOption == "Attack")
                         {
                             //WAS the round order properly set??
+                            std::vector<int> attackDamage;
                             STATE_combatSelectedOption = "NONE";
+
                             std::vector<int> attackDamage;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
                             // in case when a character dies, preserve target index's name before performing action 
@@ -520,10 +522,12 @@ void EscapeFromCapstone::runGameLoop()
                             }
                             while (roundOrder[currOrderNum]->isAlive()==false);
                             std::string healNotification;
+
                             for (int i = 0; i < validMoves[currTarget].size(); i++)
                             {
                                 if (i == 0)
                                 {
+
                                     healNotification += std::to_string(healAmount[i]);
                                     healNotification += " healed for ";
                                     healNotification += combatParticipants[validMoves[currTarget][i]].getName();
@@ -538,6 +542,7 @@ void EscapeFromCapstone::runGameLoop()
                             battleNotification.changeText(healNotification);
                             STATE_timerStarted = true;
                             STATE_timerCount = timer->deltaTime() + 3;
+
 
                         }
 
@@ -693,10 +698,12 @@ void EscapeFromCapstone::runGameLoop()
                     texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
                     SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
                 }
+
                 SDL_FreeSurface(surface);
                 SDL_DestroyTexture(texture);
 
                  if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
+
                 {
                     battleNotification.render(getRenderer());
                 }
@@ -704,7 +711,7 @@ void EscapeFromCapstone::runGameLoop()
                 {
                     STATE_timerStarted = false; 
                 }
-                
+
                 
                 //targetBoxes
                 if (STATE_combatSelectedOption == "Attack")

@@ -10,7 +10,7 @@ void YourGame::runGameLoop()
 {
     ////////////// INITIALIZE VARIABLES HERE ///////////////////////////
     Timer* timer = Timer::instance();
-    float timeMarker = 2;
+    
     std::vector<std::string> options{"op1", "op2", "op3","op4"};
     BaseMenu menu = BaseMenu(100, 20, 400, 100, 600, options, Font::lato, Color::gray, getRenderer());
     std::string whatHappened;
@@ -18,6 +18,10 @@ void YourGame::runGameLoop()
     TextBox myText2 = TextBox("they were bored to death by the mindless                  ", 600, 100, 700, 700, 100, Font::openSans, Color::white, Color::navy);
     TextBox myText3 = TextBox("gigs they had to always play                              ", 600, 100, 800, 700, 100, Font::openSans, Color::white, Color::navy);
     TextBox myText4 = TextBox("plus, the deli by the rehearsal hall suckeddddd           ", 600, 100, 900, 700, 100, Font::openSans, Color::white, Color::navy);
+
+    TextBox testTimer = TextBox("Show for 3 seconds", 600, 100, 200, 700, 100, Font::openSans, Color::white, Color::navy);
+    bool timerStarted = false;
+    float countTime;
     ////////////// END SECTION OF INITIALIZING VARIABLES ///////////////
     
     SDL_Event event;
@@ -32,7 +36,12 @@ void YourGame::runGameLoop()
                 setToQuit();
                 break;
             }
-            menu.onInput(event, whatHappened);     
+            menu.onInput(event, whatHappened);
+            if (!timerStarted && event.type == SDL_KEYDOWN)
+            {
+                timerStarted = true;
+                countTime = timer->deltaTimer() + 3;
+            }   
         }
         /////////////// END INPUT EVENT HANDLING //////////////
 
@@ -61,8 +70,15 @@ void YourGame::runGameLoop()
             myText3.render(getRenderer());
             myText4.render(getRenderer());
         }
-        
-        
+        if (timerStarted && timer->deltaTimer() < countTime)
+        {
+            testTimer.render(getRenderer());
+        }
+        if (timer->deltaTimer() > countTime)
+        {
+           timerStarted = false; 
+        }
+
         //////////////// END RENDER EVENTS ///////////////////
         
         //Update screen (generally goes last)

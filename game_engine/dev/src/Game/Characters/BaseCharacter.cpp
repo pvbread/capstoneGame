@@ -209,6 +209,7 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
     return validMoves;
 }
 
+
 void BaseCharacter::doAction(ActionType actionType, 
                                                    std::vector<int>& effectOfAction,
                                                    std::vector<int> targets, 
@@ -327,7 +328,9 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     return damage;
 }
 
+
 // returns the hp to heal
+
 int BaseCharacter::buff(BaseCharacter targetCharacter)
 {
     if (targetCharacter.getHp() >= targetCharacter.getMaxHp())
