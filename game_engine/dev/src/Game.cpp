@@ -471,7 +471,7 @@ void EscapeFromCapstone::runGameLoop()
                             std::vector<int> attackDamage;
                             STATE_combatSelectedOption = "NONE";
 
-                            std::vector<int> attackDamage;
+                            //std::vector<int> attackDamage;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
                             // in case when a character dies, preserve target index's name before performing action 
                             std::string targetNotification;
