@@ -2,9 +2,6 @@
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
 
- 
-
-
 
 
 DashDaCapo::DashDaCapo(Uint32 flags, 
@@ -157,13 +154,21 @@ void DashDaCapo::runGameLoop()
         system(call.c_str()); 
     }
     */
-
+   
 
     //////////// END RANDOM MAP GEN /////////////
 
     //////////// START TILE LOADING /////////////
+    
+    // load random map
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> intDist(0,4);
+    int mapRandom = intDist(gen);
+    std::vector<std::string> tests = {"testLevel.map", "testLevel2.map", "testLevel3.map", "testLevel4.map", "testLevel5.map"};
+    std::string testLevel = tests[mapRandom]; 
 
-    std::vector<int> levelInfo = convertMapToVector("../assets/maps/testLevel2.map");
+    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/" + testLevel);
     const int MAP_COLS = levelInfo[1];
     const int MAP_ROWS = levelInfo[0]; 
     const int TILE_COUNT = MAP_COLS * MAP_ROWS;
@@ -234,8 +239,6 @@ void DashDaCapo::runGameLoop()
     for (auto event: eventsToAdd)
         eventList.push_back(event);
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0,10); 
 
     for (auto& [coordinate, event]: coordinateToEventTypeMap)

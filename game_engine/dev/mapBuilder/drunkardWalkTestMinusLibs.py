@@ -351,7 +351,7 @@ def createMatrix(path1, path2, path3, x_max, y_max):
             else:
                 text += " 0" + str(col) 
         text += "\n"
-    file_path = "../assets/maps/testLevelIntegration" + sys.argv[1] + ".map"
+    file_path = "../../assets/maps/testLevelIntegration.map"
     with open(file_path, 'w') as f:
         f.write(text)
         
