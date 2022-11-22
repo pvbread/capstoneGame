@@ -126,7 +126,11 @@ enum TileType
     LEFTRIGHT = 8,
     LEFTUP = 9,
     LEFTDOWN = 10,
-    FOURWAY = 11
+    FOURWAY = 11,
+    ENDUP = 12,
+    ENDRIGHT = 13,
+    ENDDOWN = 14,
+    ENDLEFT = 15
 };
 """
 def encodePath(matrix, path):
@@ -174,8 +178,20 @@ def encodePath(matrix, path):
         elif(rFirst + 1 == rMid and rLast == rMid and cFirst == cMid and cLast - 1 == cMid) or \
                 (rFirst  == rMid and rLast + 1 == rMid and cFirst - 1 == cMid and cLast == cMid):
             matrix[rMid][cMid] = 2
-        # the number 12 will represent the end point of the path
+    # assign the last point of path with an endpoint tile
+    #ENDUP
+    if (rMid + 1 == rLast and cMid == cLast):
         matrix[rLast][cLast] = 12
+    #ENDRIGHT
+    elif (rMid == rLast and cMid - 1 == cLast):
+        matrix[rLast][cLast] = 13
+    #ENDDOWN
+    elif (rMid - 1 == rLast and cMid == cLast):
+        matrix[rLast][cLast] = 14
+    #ENDLEFT
+    elif (rMid == rLast and cMid + 1 == cLast):
+        matrix[rLast][cLast] = 15
+        
 
     # return an updated version of the matrix
     return matrix
@@ -195,7 +211,11 @@ enum TileType
     LEFTRIGHT = 8,
     LEFTUP = 9,
     LEFTDOWN = 10,
-    FOURWAY = 11
+    FOURWAY = 11,
+    ENDUP = 12,
+    ENDRIGHT = 13,
+    ENDDOWN = 14,
+    ENDLEFT = 15
 };
 """
 def encodeTBranches(matrix,path,rMidPt,cMidPt,rStep,cStep):
