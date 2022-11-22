@@ -2,6 +2,9 @@
 
 #include "pch.h"
 
+/// @brief Creates a menu. Just specify a font size, some dimensions,
+/// a list of options, font path and color, and a renderer.
+/// Additionally it keeps track of which option was selected.
 class BaseMenu
 {
 public:
@@ -11,9 +14,19 @@ public:
          std::string fontPath,
          SDL_Color fontColor,
          SDL_Renderer* renderer);
-    //might need to do a combatMenu with extra onInput behavior
+    /// @brief Processes input (goes in the event reading loop).
+    /// @param event 
+    /// @param SelectMusic Customize which sounds the menu will make
+    /// @param optionSelected Updates to which option was selected
     void onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& optionSelected);
+
+    /// @brief Renders the menu, goes in the render part of the game loop.
+    /// @param renderer
+    /// E.g. myMenu.render(getRenderer())
     void render(SDL_Renderer* renderer);
+
+    /// @brief Helper function to get the selected index
+    /// @return the index of the option that the user selected
     int getOptionSelectedIndex();
 
 private:

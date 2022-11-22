@@ -2,6 +2,7 @@
 
 #include "pch.h"
 
+/// @brief Provides static access to the string paths to the fonts we provide
 class Font
 {
 public:

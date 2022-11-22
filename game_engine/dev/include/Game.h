@@ -14,11 +14,13 @@
 #include "Game/Characters/Players/BasePlayer.h"
 #include "Game/Characters/Players/Bass.h"
 
-class EscapeFromCapstone : public Phoenix
+/// @brief Where the game gets implemented
+class DashDaCapo : public Archimedes
 {
 public:
+    /// @brief Game loop override's the engine's loop
     void runGameLoop() override;
-    EscapeFromCapstone(Uint32 flags, 
+    DashDaCapo(Uint32 flags, 
                        const char* title, 
                        int x, int y, 
                        int w, int h);
