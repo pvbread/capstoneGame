@@ -2,28 +2,36 @@
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
 
+ 
 
 
 
-EscapeFromCapstone::EscapeFromCapstone(Uint32 flags, 
+
+DashDaCapo::DashDaCapo(Uint32 flags, 
                        const char* title, 
                        int x, int y, 
                        int w, int h) : 
-    Phoenix(flags, title, x, y, w, h){}
+    Archimedes(flags, title, x, y, w, h){}
 
-void EscapeFromCapstone::runGameLoop()
+void DashDaCapo::runGameLoop()
 {
 
     Timer* timer = Timer::instance();
 
     ////////// START CHARACTER INIT ////////
-    BasePlayer conductor = BasePlayer("Conductor", 30, 3, 3, 0, 3, 3, 3);
-    BasePlayer drum = BasePlayer("Drummer", 50, 2, 1, 0, 3, 3, 3);
-    BasePlayer flute = BasePlayer("Flutist", 20, 6, 1, 0, 3, 3, 3);
-    Bass bass = Bass("Bassist", 60, 1, 3, 0, 3, 3, 3);
+    BasePlayer conductor = BasePlayer("conductor    ", 30, 3, 3, 0, 3, 3, 3);
+    BasePlayer drum = BasePlayer("drummer      ", 50, 2, 1, 0, 3, 3, 3);
+    BasePlayer flute = BasePlayer("flutist      ", 20, 6, 1, 0, 3, 3, 3);
+    Bass bass = Bass("bassist      ", 60, 1, 3, 0, 3, 3, 3);
+    flute.setNewParticipantsIndex(0);
+    conductor.setNewParticipantsIndex(1);
+    bass.setNewParticipantsIndex(2);
+    drum.setNewParticipantsIndex(3);
     std::vector<BaseCharacter> playerTeam{flute, conductor, bass, drum};
     std::vector<BaseCharacter> enemies;
     std::vector<BaseCharacter> combatParticipants;
+    // set player index
+    
 
     ///////// END CHARACTER INIT //////
 
@@ -49,10 +57,11 @@ void EscapeFromCapstone::runGameLoop()
 
     //const char* railwayFontPath = "./Raleway-Medium.ttf";
     SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 140, 400, 100, 100,  
+    BaseMenu introMenu = BaseMenu(100, 100, 140, 400, 100,  
                                   introOptions, 
                                   Font::raleway, 
-                                  Color::red, 
+                                  Color::red,
+                                  Color::maroon,
                                   getRenderer()
     );
 
@@ -64,10 +73,11 @@ void EscapeFromCapstone::runGameLoop()
     };
 
     SDL_Color combatMenuColor = { 0, 0, 255, 255 };
-    BaseMenu combatMenu = BaseMenu(25, 520, 200, 50, 100, 
+    BaseMenu combatMenu = BaseMenu(50, 25, 520, 200, 50, 
                                    combatOptionsStrings, 
                                    Font::raleway, 
-                                   Color::red, 
+                                   Color::red,
+                                   Color::maroon, 
                                    getRenderer()
     );
 
@@ -287,9 +297,10 @@ void EscapeFromCapstone::runGameLoop()
 
     ////////// START BATTLE NOTIFICATION //////////
 
-    TextBox battleNotification = TextBox("", 200, 5, 400, 700, 100);
+    TextBox battleNotification = TextBox("", 25, 5, 400, 700, 100);
 
     /////////  END BATTLE NOTIFICATION ///////////
+
 
     std::vector<std::string> tempCharNames {
         "flute        ",
@@ -307,15 +318,17 @@ void EscapeFromCapstone::runGameLoop()
     TTF_Font *orderFont = TTF_OpenFont("./Raleway-Medium.ttf", 50);
 
     int currTarget = 0;
-    std::vector<std::vector<int>> validMoves = {
-        {1, 3},
-        {2, 4},
-        {3, 5},
-        {4, 6},
-        {5, 7}
-    };
+    std::vector<std::vector<int>> validMoves;
     bool actionChosen = false;
 
+
+    //////// DEBUGGER /////
+
+    TextBox statusRoundOrderSize = TextBox(".", 100, 20, 20, 50, 50, Font::satisfy, Color::red, Color::white);
+    TextBox statusCurrOrderNum = TextBox(".", 100, 80, 20, 50, 50, Font::satisfy, Color::red, Color::white);
+    TextBox statusGetParticipantsIndex = TextBox(".", 100, 140, 20, 50, 50, Font::satisfy, Color::red, Color::white);
+
+    ///////////////////////
     
 
     //double degrees = 0;
@@ -383,14 +396,18 @@ void EscapeFromCapstone::runGameLoop()
                     if (nextMapEvent == "BATTLE")
                     {
                         //init enemy characters
-                        BaseCharacter e1 = BaseCharacter("ConeheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e2 = BaseCharacter("ConeheadBeta", 10, 6, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e3 = BaseCharacter("ConeheadKappa", 10, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e4 = BaseCharacter("Carl", 20, 0, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("coneheadKappa", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("Carl         ", 20, 0, 1, 0, 3, 3, 3, true);
                         //normally this will just get enemies from a randomly selected "PACK"
-                        std::vector<BaseCharacter> temp{e1, e2, e3, e4};
+                        e1.setNewParticipantsIndex(4);
+                        e2.setNewParticipantsIndex(5);
+                        e3.setNewParticipantsIndex(6);
+                        e4.setNewParticipantsIndex(7);
+                        std::vector<BaseCharacter> enemies{e1, e2, e3, e4};
+                        
                         //this might not be necessary
-                        enemies = temp;
                         combatParticipants = playerTeam;
                         combatParticipants.insert(std::end(combatParticipants), std::begin(enemies), std::end(enemies));
 
@@ -403,6 +420,10 @@ void EscapeFromCapstone::runGameLoop()
                         STATE_roundsSet = true;
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
+                        // update setRoundTurns display
+                        for(int i = 0; i < roundOrder.size(); i++)
+                            tempCharNames[i] = roundOrder[i]->getName();
+
 
                     }
                     if (event.type == SDL_KEYDOWN)
@@ -419,7 +440,7 @@ void EscapeFromCapstone::runGameLoop()
                     break;
                 }
                 case COMBAT:
-                {
+                {   
                     
                     if (STATE_combatSelectedOption != "NONE")
                     {
@@ -452,21 +473,57 @@ void EscapeFromCapstone::runGameLoop()
                         } 
                         
                     }
+                    
+                    
+                    // create new round and set round turns
+                    if(!STATE_roundsSet && STATE_roundOver)
+                    {
+                        // get new round turn order
+                        roundOrder.clear();
+                        roundOrder = setRoundTurns(combatParticipants);
+                        
+                        STATE_roundsSet = true;
+                        STATE_roundOver = false;
+                    }
+                    
+                    
+                    
 
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
                         combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+                    
 
+                    // state for when a round ends
+                    if ((currOrderNum + 1) == roundOrder.size() && STATE_combatSelectedOption!= "None" && STATE_combatMenuTargetSelected)
+                            {
+                                STATE_roundOver = true;
+                                STATE_roundsSet = false;
+                            }
+                    
+                    
+                    
                     if (STATE_combatMenuTargetSelected)
-                    {
+                    {   
                         //do thing;
                         if (STATE_combatSelectedOption == "Attack")
                         {
                             //WAS the round order properly set??
                             std::vector<int> attackDamage;
                             STATE_combatSelectedOption = "NONE";
-                            combatParticipants = roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
+
+                            //std::vector<int> attackDamage;
+                            validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            // in case when a character dies, preserve target index's name before performing action 
+                            std::string targetNotification;
+                            targetNotification += combatParticipants[validMoves[currTarget][0]].getName();
+                            roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            currOrderNum = (currOrderNum + 1) % 8;
+                            
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (roundOrder[currOrderNum]->isAlive()==false);
                             std::string attackNotification;
                             for (int i = 0; i < validMoves[currTarget].size(); i++)
                             {
@@ -474,7 +531,7 @@ void EscapeFromCapstone::runGameLoop()
                                 {
                                     attackNotification += std::to_string(attackDamage[i]);
                                     attackNotification += " dmg dealt to ";
-                                    attackNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    attackNotification += targetNotification;
                                     continue;
                                 }
                                 attackNotification += " *** ";
@@ -487,6 +544,113 @@ void EscapeFromCapstone::runGameLoop()
                             STATE_timerStarted = true;
                             STATE_timerCount = timer->deltaTime() + 3;
                         }
+
+                        if (STATE_combatSelectedOption == "Buff")
+                        {
+
+                            //WAS the round order properly set??
+                            
+                            STATE_combatSelectedOption = "NONE";
+                            //look at roundOrder
+                            std::vector<int> healAmount;
+                            validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            roundOrder[currOrderNum]->doAction(BUFF, healAmount, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (roundOrder[currOrderNum]->isAlive()==false);
+                            std::string healNotification;
+
+                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            {
+                                if (i == 0)
+                                {
+
+                                    healNotification += std::to_string(healAmount[i]);
+                                    healNotification += " healed for ";
+                                    healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    continue;
+                                }
+                                healNotification += " *** ";
+                                healNotification += std::to_string(healAmount[i]);
+                                healNotification += " healed for ";
+                                healNotification += combatParticipants[validMoves[currTarget][i]].getName();
+
+                            }
+                            battleNotification.changeText(healNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
+
+
+                        }
+
+                        if (STATE_combatSelectedOption == "Debuff")
+                        {
+                            //WAS the round order properly set??
+                            STATE_combatSelectedOption = "NONE";
+                            //look at roundOrder
+                            std::vector<int> newSpeed;
+                            validMoves = roundOrder[currOrderNum]->getValidMoves(DEBUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            roundOrder[currOrderNum]->doAction(DEBUFF, newSpeed, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (roundOrder[currOrderNum]->isAlive()==false);
+                            std::string debuffNotification;
+                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            {
+                                if (i == 0)
+                                {
+                                    debuffNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
+                                    debuffNotification += " is the new speed for ";
+                                    debuffNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    continue;
+                                }
+                                debuffNotification += " *** ";
+                                debuffNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
+                                debuffNotification += " is the new speed for ";
+                                debuffNotification += combatParticipants[validMoves[currTarget][i]].getName();
+
+                            }
+                            battleNotification.changeText(debuffNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
+                        }
+
+                        if (STATE_combatSelectedOption == "Move")
+                        {
+                            int x = 5;
+                            //WAS the round order properly set??
+                            STATE_combatSelectedOption = "NONE";
+                            //look at roundOrder
+                            std::vector<int> nothing;
+                            validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            std::string currPlayerName = combatParticipants[charIndex].getName();
+                            currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                            std::string targetName = combatParticipants[validMoves[currTarget][0]].getName();
+                            roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants); 
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            do 
+                            {
+                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            }
+                            while (roundOrder[currOrderNum]->isAlive()==false);
+                            std::string moveNotification;
+                            moveNotification += currPlayerName;
+                            moveNotification += " switch places with ";
+                            moveNotification += targetName;
+                            
+                            battleNotification.changeText(moveNotification);
+                            STATE_timerStarted = true;
+                            STATE_timerCount = timer->deltaTime() + 3;
+                        }
+
+                        //TODO get end state for battle
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
                     }
@@ -539,6 +703,8 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_Surface* surfaceTesting = TTF_RenderText_Solid(font, mapEventStream.str().c_str(), textColor); //ttf surface  
                     SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &mapEventBox); 
+                    SDL_FreeSurface(surfaceTesting);
+                    SDL_DestroyTexture(textureTesting);
                 }
                 break;
             } 
@@ -562,9 +728,14 @@ void EscapeFromCapstone::runGameLoop()
                 characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
-                SDL_RenderFillRect(getRenderer(), &charBoxes[0]);
+                //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
+                //TODO Something wrong with the rendering of currPlayer
+                int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
+                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
 
                 //hpBoxes
+                SDL_Surface* surface;
+                SDL_Texture* texture;
                 for (int i = 0;  i < hpBoxes.size(); i++)
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 0, 0, 170, 255);
@@ -572,12 +743,16 @@ void EscapeFromCapstone::runGameLoop()
                     SDL_Color textColor = { 255, 0, 0, 255 };
                     std::stringstream hpStream;
                     hpStream << combatParticipants[i].getHp();
-                    SDL_Surface* surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
-                    SDL_Texture* texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
+                    surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
+                    texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
                     SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
                 }
 
-                if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
+                SDL_FreeSurface(surface);
+                SDL_DestroyTexture(texture);
+
+                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
+
                 {
                     battleNotification.render(getRenderer());
                 }
@@ -585,16 +760,62 @@ void EscapeFromCapstone::runGameLoop()
                 {
                     STATE_timerStarted = false; 
                 }
+
                 
                 //targetBoxes
                 if (STATE_combatSelectedOption == "Attack")
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
+                    // rerender bug if I don't update validMoves
+                    validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
                     for (auto target: validMoves[currTarget])
                     {
                         SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
                     }
                 }
+                if (STATE_combatSelectedOption == "Buff")
+                {
+                    
+                    // rerender bug if I don't update validMoves
+                    //statusRoundOrderSize.changeText(std::to_string(roundOrder.size()));
+                    //statusCurrOrderNum.changeText(std::to_string(currOrderNum));
+                    //statusGetParticipantsIndex.changeText(std::to_string(roundOrder[currOrderNum]->getParticipantsIndex()));
+                    //statusCurrOrderNum.render(getRenderer());
+                    //statusGetParticipantsIndex.render(getRenderer());
+                    //statusRoundOrderSize.render(getRenderer());
+                    SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
+                    
+                    validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                    for (auto target: validMoves[currTarget])
+                    {
+                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                    }
+                    
+                }
+
+                if (STATE_combatSelectedOption == "Debuff")
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
+                    // rerender bug if I don't update validMoves
+                    validMoves = roundOrder[currOrderNum]->getValidMoves(DEBUFF, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                    for (auto target: validMoves[currTarget])
+                    {
+                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                    }
+                }
+
+                if (STATE_combatSelectedOption == "Move")
+                {
+                    SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
+                    // rerender bug if I don't update validMoves
+                    validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                    for (auto target: validMoves[currTarget])
+                    {
+                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                    }
+                }
+                
+
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
                 //TODO, render ORDER first
                 //TODO, pop off when x happens
@@ -605,7 +826,20 @@ void EscapeFromCapstone::runGameLoop()
                 SDL_Surface* surfaceTesting = TTF_RenderText_Solid(orderFont, titleStream.str().c_str(), textColor); //ttf surface  
                 SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
                 SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
-                
+                SDL_FreeSurface(surfaceTesting);
+                SDL_DestroyTexture(textureTesting);
+
+                // update turn order for rendering
+                for(int i = 0; i < roundOrder.size(); i++)
+                {
+                    tempCharNames[i] = roundOrder[i]->getName();
+                }
+                // TODO: figure out how to remove names when character dies
+                for (int i = roundOrder.size(); i < orderBoxes.size();i++)
+                {
+                    orderBoxes.pop_back();
+                }
+
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
                     std::stringstream charNameStream;
@@ -615,6 +849,8 @@ void EscapeFromCapstone::runGameLoop()
                     textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
                     SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
                 }
+                SDL_FreeSurface(surfaceTesting);
+                SDL_DestroyTexture(textureTesting);
                 break;
             }
         }

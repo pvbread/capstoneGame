@@ -11,9 +11,8 @@
 #include "pch.h"
 
 
-
-
-Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
+ 
+Archimedes::Archimedes(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
     this->height = h;
     this->width = w;
@@ -55,22 +54,23 @@ Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
         SDL_Log("Load Mixer Error: %s", Mix_GetError());  
 }
 
-Phoenix::~Phoenix()
+Archimedes::~Archimedes()
 {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
-void Phoenix::runGameLoop()
+void Archimedes::runGameLoop()
 {}
 
-void Phoenix::stopGameLoop()
+void Archimedes::stopGameLoop()
 {
     quit = true;
 }
 
-bool Phoenix::loadTiles(std::vector<Tile*>& tileMap, 
+
+bool Archimedes::loadTiles(std::vector<Tile*>& tileMap, 
                         const std::vector<int>& levelInfo,
                         std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                         std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,
@@ -132,7 +132,7 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
 
 }
 
-bool Phoenix::loadImageAssets(SDL_Renderer* renderer,  
+bool Archimedes::loadImageAssets(SDL_Renderer* renderer,  
                               std::unordered_map<TextureWrapper*, std::string> textureFilePaths)
 {
     for (auto [texturePtr, textureFilePath]: textureFilePaths)
@@ -148,7 +148,7 @@ bool Phoenix::loadImageAssets(SDL_Renderer* renderer,
     return true;
 }
 
-bool Phoenix::clipSheet(int ROWS,
+bool Archimedes::clipSheet(int ROWS,
                         int COLS, 
                         int BLOCK_LENGTH,
                         int BLOCK_HEIGHT,
@@ -177,17 +177,18 @@ bool Phoenix::clipSheet(int ROWS,
     return true;
 }
 
-SDL_Window* Phoenix::getWindow() const
+SDL_Window* Archimedes::getWindow() const
 {
     return window;
 }
 
-SDL_Renderer* Phoenix::getRenderer() const
+SDL_Renderer* Archimedes::getRenderer() const
 {
     return renderer;
 }
 
-std::vector<int> Phoenix::convertMapToVector(std::string pathName)
+
+std::vector<int> Archimedes::convertMapToVector(std::string pathName)
 {
     std::ifstream level(pathName);
     std::vector<int> levelData;
@@ -211,22 +212,23 @@ std::vector<int> Phoenix::convertMapToVector(std::string pathName)
     return levelData;
 }
 
-bool Phoenix::getQuit() const
+bool Archimedes::getQuit() const
+
 {
     return quit;
 }
     
-int Phoenix::getWidth() const
+int Archimedes::getWidth() const
 {
     return width;
 }
     
-int Phoenix::getHeight() const
+int Archimedes::getHeight() const
 {
     return height;
 }
 
-void Phoenix::setToQuit()
+void Archimedes::setToQuit()
 {
     quit = !quit;
 }
