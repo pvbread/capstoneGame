@@ -96,7 +96,7 @@ std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
                                     validMoves.end(),
                                     [currCharIndex] (int index) 
                                     {
-                                        return index != currCharIndex + 1 || index != currCharIndex - 1;
+                                        return index != currCharIndex + 1 && index != currCharIndex - 1;
                                     }
             );
             validMoves.erase(adjustments, validMoves.end());
@@ -224,7 +224,7 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     int weaponRoll = intDist(gen);
     int damage = weaponRoll + hit;
     float REDUCTION_SCALE = 0.05;
-    int reduction = int(damage * (targetCharacter.getArmor() * REDUCTION_SCALE));
+    int reduction = int(damage * targetCharacter.getArmor() * REDUCTION_SCALE);
     damage -= reduction;
     if (damage < 0)
         return 0;
