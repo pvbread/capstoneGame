@@ -258,7 +258,7 @@ void EscapeFromCapstone::runGameLoop()
 
     ////////// START BATTLE NOTIFICATION //////////
 
-    TextBox battleNotification = TextBox("", 200, 5, 400, 700, 100);
+    TextBox battleNotification = TextBox("", 25, 5, 400, 700, 100);
 
     /////////  END BATTLE NOTIFICATION ///////////
 
