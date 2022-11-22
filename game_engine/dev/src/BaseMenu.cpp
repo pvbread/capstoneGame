@@ -1,23 +1,27 @@
 #include "BaseMenu.h"
 #include "padMenuStrings.h"
 
-BaseMenu::BaseMenu(int x, int y, int w, int h, 
-           int fontSize, 
-           const std::vector<std::string>& optionNames,
-           std::string fontPath, 
-           SDL_Color fontColor,
-           SDL_Renderer* renderer)
+BaseMenu::BaseMenu(int fontSize,
+                   int x, int y, int w, int h,  
+                   const std::vector<std::string>& optionNames,
+                   std::string fontPath, 
+                   SDL_Color fontColor,
+                   SDL_Color fontHighlightColor,
+                   SDL_Renderer* renderer)
 {
     int numTextures = optionNames.size(); 
     startX = x;
     startY = y;
     optionWidth = w;
     optionHeight = h;
+    this->fontColor = fontColor;
+    this->highlightColor = fontHighlightColor;
+    this->renderer = renderer;
     menuTextures = std::vector<SDL_Texture*>(numTextures);
-    TTF_Font *menuFont = TTF_OpenFont(fontPath.c_str(), fontSize);
+    menuFont = TTF_OpenFont(fontPath.c_str(), fontSize);
     //TODO add error checking
 
-    std::vector<std::string> optionsStringsPadded = padMenuStrings(optionNames);
+    //std::vector<std::string> optionsStringsPadded = padMenuStrings(optionNames);
 
     //Rectangles
     optionRectangles = std::vector<SDL_Rect>(numTextures);
@@ -32,14 +36,19 @@ BaseMenu::BaseMenu(int x, int y, int w, int h,
                                 optionWidth,
                                 optionHeight
                               };
-        surface = TTF_RenderText_Solid(menuFont, optionsStringsPadded[i].c_str(), fontColor);
+        TTF_SizeText(menuFont, optionNames[i].c_str(), &optionRectangles[i].w, &optionRectangles[i].h);
+        if (i == 0)
+            surface = TTF_RenderUTF8_Blended(menuFont, optionNames[i].c_str(), highlightColor);
+        else
+            surface = TTF_RenderUTF8_Blended(menuFont, optionNames[i].c_str(), fontColor);
         menuTextures[i] = SDL_CreateTextureFromSurface(renderer, surface); 
     }
 
     //cursor initialization
     cursorRectangle = { x-(optionHeight/2), y+(optionHeight/5), optionHeight/2, optionHeight/2 };
+    std::string CURSOR = ">";
     initialCursorHeight = y+(optionHeight/5);
-    surface = TTF_RenderText_Solid(menuFont, ">", fontColor);
+    surface = TTF_RenderUTF8_Blended(menuFont, CURSOR.c_str(), fontColor);
     SDL_Texture* menuCursorTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
     optionRectangles.push_back(cursorRectangle);
@@ -50,6 +59,7 @@ BaseMenu::BaseMenu(int x, int y, int w, int h,
 void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& optionSelected)
 {
     int played;
+    int prevIdx, currIdx;
     if (event.type == SDL_KEYDOWN)
     {
         //alias to make code more readable
@@ -58,6 +68,7 @@ void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& op
         {
             case SDLK_UP:
             {
+                prevIdx = getOptionSelectedIndex();
                 //hack, see constructor and render method
                 //for notes on why i chose to do it
                 cursor.y -= optionHeight;
@@ -72,10 +83,13 @@ void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& op
                 {
                     cursor.y += (optionRectangles.size()-1) * optionHeight;
                 }
+                currIdx = getOptionSelectedIndex();
+                updateHighlight(prevIdx, currIdx); 
                 break;
             }
             case SDLK_DOWN:
             {
+                prevIdx = getOptionSelectedIndex(); 
                 optionRectangles.back().y += optionHeight;
                 played = Mix_PlayChannel(-1, SelectMusic, 0);
                 if (played == -1){
@@ -86,13 +100,17 @@ void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& op
                 if (cursor.y > optionRectangles.end()[-2].y + cursor.h)
                 {
                     cursor.y -= (optionRectangles.size()-1) * optionHeight;
+                    
                 }
+                currIdx = getOptionSelectedIndex();
+                updateHighlight(prevIdx, currIdx); 
                 break;
             }
             case SDLK_RETURN:
             {
                 int selectedIndex = getOptionSelectedIndex();
                 optionSelected = optionNames[selectedIndex];
+                //deselect(selectedIndex);
                 break;
             }
         }
@@ -125,4 +143,19 @@ int BaseMenu::getOptionSelectedIndex()
     int selectedIndex = difference / optionHeight;
     return selectedIndex;
     
+}
+
+void BaseMenu::updateHighlight(int prevIdx, int currIdx)
+{
+    SDL_DestroyTexture(menuTextures[currIdx]);
+    TTF_SizeText(menuFont, this->optionNames[currIdx].c_str(), &optionRectangles[currIdx].w, &optionRectangles[currIdx].h);
+    SDL_Surface* surface = TTF_RenderUTF8_Blended(menuFont, optionNames[currIdx].c_str(), highlightColor);
+    menuTextures[currIdx] = SDL_CreateTextureFromSurface(renderer, surface);
+
+    SDL_DestroyTexture(menuTextures[prevIdx]);
+    TTF_SizeText(menuFont, optionNames[prevIdx].c_str(), &optionRectangles[prevIdx].w, &optionRectangles[prevIdx].h);
+    surface = TTF_RenderUTF8_Blended(menuFont, optionNames[prevIdx].c_str(), fontColor);
+    menuTextures[prevIdx] = SDL_CreateTextureFromSurface(renderer, surface); 
+    
+    SDL_FreeSurface(surface); 
 }
