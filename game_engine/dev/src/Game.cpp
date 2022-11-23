@@ -425,7 +425,10 @@ void DashDaCapo::runGameLoop()
                         nextMapEvent = "BLANKEVENT";
                         // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
+                        {
                             tempCharNames[i] = roundOrder[i]->getName();
+                        }
+                        
 
 
                     }
@@ -516,6 +519,9 @@ void DashDaCapo::runGameLoop()
 
                             //std::vector<int> attackDamage;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            std::string currPlayerName = combatParticipants[charIndex].getName();
+                            currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                             // in case when a character dies, preserve target index's name before performing action 
                             std::string targetNotification;
                             targetNotification += combatParticipants[validMoves[currTarget][0]].getName();
@@ -532,6 +538,8 @@ void DashDaCapo::runGameLoop()
                             {
                                 if (i == 0)
                                 {
+                                    attackNotification += currPlayerName;
+                                    attackNotification += " attacks: ";
                                     attackNotification += std::to_string(attackDamage[i]);
                                     attackNotification += " dmg dealt to ";
                                     attackNotification += targetNotification;
@@ -729,12 +737,8 @@ void DashDaCapo::runGameLoop()
                 characterTestTexture.render(getRenderer(), 550, 100, currFrameRect);
                 characterTestTexture.render(getRenderer(), 650, 100, currFrameRect);
                 characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
-
-                SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
-                //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
-                //TODO Something wrong with the rendering of currPlayer
-                int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
-                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                
+                
 
                 //hpBoxes
                 SDL_Surface* surface;
@@ -818,6 +822,12 @@ void DashDaCapo::runGameLoop()
                     }
                 }
                 
+                SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
+                //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
+                //TODO Something wrong with the rendering of currPlayer
+                int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
+                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                
 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
                 //TODO, render ORDER first
@@ -833,15 +843,21 @@ void DashDaCapo::runGameLoop()
                 SDL_DestroyTexture(textureTesting);
 
                 // update turn order for rendering
+               
                 for(int i = 0; i < roundOrder.size(); i++)
                 {
-                    tempCharNames[i] = roundOrder[i]->getName();
+                    if(roundOrder[i]->isAlive())
+                    {
+                        tempCharNames[i] = roundOrder[i]->getName();
+                    }
+                    else
+                    {
+                        tempCharNames[i] = " ";
+                    }
                 }
-                // TODO: figure out how to remove names when character dies
-                for (int i = roundOrder.size(); i < orderBoxes.size();i++)
-                {
-                    orderBoxes.pop_back();
-                }
+                
+                
+                
 
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
