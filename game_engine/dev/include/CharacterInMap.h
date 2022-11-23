@@ -55,14 +55,8 @@ public:
     void move(int xBoundary, 
               int yBoundary);
 
-    /// @brief updates the camera state so it's centered on the character
-    /// @param camera 
-    void centerScreen(SDL_Rect& camera);
+    void centerScreen(SDL_Rect& camera, int xBoundary, int yBoundary);
 
-    /// @brief renders
-    /// @param renderer 
-    /// @param camera 
-    /// @param characterTexture 
     void render(SDL_Renderer* renderer, 
                 const SDL_Rect& camera, 
                 TextureWrapper& characterTexture);

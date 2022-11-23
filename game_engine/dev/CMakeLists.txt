@@ -33,6 +33,7 @@ if(APPLE)
     "src/Game/Characters/Players/BasePlayer.cpp"
     "src/Game/Characters/Players/Bass.cpp"
   )
+  
   target_link_libraries(capstoneGame ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
   target_precompile_headers(capstoneGame PRIVATE "include/pch.h")
   #file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
@@ -73,7 +74,7 @@ if(MINGW)
   if(TARGET SDL2::SDL2main)
     target_link_libraries(capstoneGame PRIVATE SDL2::SDL2main)
   endif()
-
+ 
   target_link_libraries(capstoneGame PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)
   file(COPY tilesDraft.png DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY dot.bmp DESTINATION ${CMAKE_BINARY_DIR})
@@ -88,3 +89,4 @@ if(MINGW)
   file(COPY "C:/dev/SDL2_mixer-2.6.2/x86_64-w64-mingw32/bin/SDL2_mixer.dll" DESTINATION ${CMAKE_BINARY_DIR})
   
 endif(MINGW)
+

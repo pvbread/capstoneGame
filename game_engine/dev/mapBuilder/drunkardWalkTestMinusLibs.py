@@ -1,6 +1,5 @@
 import random
-import numpy as np
-import matplotlib.pyplot as plt
+import sys
 
 """
 You can change the value of length at the last line.
@@ -50,6 +49,14 @@ def pathMaker(length):
             y.pop()
             
     return x, y, positions_visited
+
+"""
+Takes a matrix as input and fills it with threes
+Returns the matrix filled with threes
+"""
+def fillWithThrees(width, height):
+    matrix = [[3 for c in range(width)] for row in range(height)]
+    return matrix
 
 """
 Creates a branching path from halfway point of original path.
@@ -195,7 +202,6 @@ def encodePath(matrix, path):
     #ENDLEFT
     elif (rMid == rLast and cMid + 1 == cLast):
         matrix[rLast][cLast] = 15
-        
 
     # return an updated version of the matrix
     return matrix
@@ -269,7 +275,8 @@ def createMatrix(path1, path2, path3, x_max, y_max):
     
     
     # create matrix filled with threes
-    matrix = np.full((height, width),3)
+
+    matrix = fillWithThrees(width, height)
 
     # variables that start with 'r' represents the row, variables that start with 'c' represents the col
 
@@ -335,9 +342,19 @@ def createMatrix(path1, path2, path3, x_max, y_max):
 
     # save matrix in textfile
     #first line prints height and width and format matrix as whole number digits
-    with open('testLevel.map', 'w') as f:
-        f.write(str(height)+ " " + str(width) + "\n")
-        np.savetxt(f, matrix, fmt='%d')
+    text = ""
+    text += str(height)+ " " + str(width) + "\n"
+    for row in matrix:
+        for col in row:
+            if col > 9:
+                text += " " + str(col)
+            else:
+                text += " 0" + str(col) 
+        text += "\n"
+    file_path = "../../assets/maps/testLevelIntegration.map"
+    with open(file_path, 'w') as f:
+        f.write(text)
+        
 
    
 
@@ -347,28 +364,15 @@ Draw the paths with visualization using matplotlib
 def plotWalk(path_length):
     # draw the first self avoiding walk path (the original first path)
     x1, y1, positions_visited = pathMaker(path_length)
-    plt.figure(figsize = (8, 8))
-    plt.plot(x1, y1, 'bo-', linewidth = 1)
-    plt.plot(x1[0], y1[0], 'go', ms = 12, label = 'Start')
-    plt.plot(x1[-1], y1[-1], 'ro', ms = 12, label = 'End')
     
     # store the actual length of inital path since the path might not always be the desired length due to being stuck 
     new_length = len(x1)
     
     # draw a branch somewhere on the original path (the second path)
     x2, y2, positions_visited = branchMaker(x1, y1, new_length, positions_visited)
-    plt.plot(x2, y2, 'bo-', linewidth = 1)
-    plt.plot(x2[-1], y2[-1], 'ro', ms = 12)
     
     # draw another branch somewhere on the original path (the third path)
     x3, y3, positions_visited = branchMaker(x1, y1, new_length, positions_visited)
-    plt.plot(x3, y3, 'bo-', linewidth = 1)
-    plt.plot(x3[-1], y3[-1], 'ro', ms = 12)
-    
-    plt.axis('equal')
-    plt.legend()
-    plt.savefig("map.png")
-    plt.show()
 
     # get max value for x for the height of the matrix
     x_max = max(x1)

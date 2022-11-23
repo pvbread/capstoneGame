@@ -11,6 +11,7 @@
 #include "pch.h"
 
 
+ 
 Archimedes::Archimedes(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
     this->height = h;
@@ -68,7 +69,9 @@ void Archimedes::stopGameLoop()
     quit = true;
 }
 
+
 bool Archimedes::loadTiles(std::vector<Tile*>& tileMap, 
+                        const std::vector<int>& levelInfo,
                         std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                         std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,
                         int TILE_COUNT, 
@@ -78,26 +81,31 @@ bool Archimedes::loadTiles(std::vector<Tile*>& tileMap,
     int x = 0;
     int y = 0;
 
-    std::ifstream level("../../assets/maps/testLevel.map");
-
+    //std::ifstream level("../../assets/maps/testLevel.map");
+    /*
     if (level.fail())
     {
         SDL_Log("Failure loading level");
         return false;
-    }
+    }*/
 
     //tyle type
     int tileType;
+    const int LEVEL_WIDTH = levelInfo[1]*80;
 
+    //start at index 2 (because first 2 are the dimensions)
     for (int i = 0; i < TILE_COUNT; i++)
     {
-        level >> tileType;
-
+        //level >> tileType;
+        /*
         if (level.fail())
         {
             SDL_Log("Error with level read at %d", i);
             return false;
         }
+        */
+        //need to offset the 2 dimensions
+        tileType = levelInfo[i+2];
 
         //need to cast tileType here otherwise
         //it can't read it in right
@@ -109,18 +117,16 @@ bool Archimedes::loadTiles(std::vector<Tile*>& tileMap,
             if ((TileType)tileType != BLACK)
             coordinateToEventTypeMap[coordinates] = "";
         }
-        //TODO DON't HARD CODE THIS
-        //MAP_WIDTH
+        
         x += TILE_LENGTH;
 
-        if (x >= 1280)
+        if (x >= LEVEL_WIDTH)
         {
             x = 0;
             y += TILE_LENGTH;
         }
        
     }
-    level.close();
 
     return true;
 
@@ -181,7 +187,33 @@ SDL_Renderer* Archimedes::getRenderer() const
     return renderer;
 }
 
+
+std::vector<int> Archimedes::convertMapToVector(std::string pathName)
+{
+    std::ifstream level(pathName);
+    std::vector<int> levelData;
+    int rows;
+    int cols;
+    int element;
+
+    level >> rows;
+    level >> cols;
+
+    levelData.push_back(rows);
+    levelData.push_back(cols);  
+
+    for (int i = 0; i < rows * cols; i++)
+    {
+        level >> element;
+        levelData.push_back(element);
+    }
+    level.close();
+
+    return levelData;
+}
+
 bool Archimedes::getQuit() const
+
 {
     return quit;
 }

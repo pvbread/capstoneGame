@@ -29,6 +29,7 @@ public:
     /// @param TILE_LENGTH 
     /// @return 
     bool loadTiles(std::vector<Tile*>& tileMap, 
+                   const std::vector<int>& levelInfo,
                    std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                    std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,  
                    int TILE_COUNT, 
@@ -68,12 +69,13 @@ public:
     /// @return pointer to the engine's SDL_Renderer instance
     SDL_Renderer* getRenderer() const;
 
-    /// @brief checks if the game state is quit
-    /// @return 
+    std::vector<int> convertMapToVector(std::string pathName);
+
     bool getQuit() const;
     int getWidth() const;
     int getHeight() const;
     void setToQuit();
+
 private:
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;

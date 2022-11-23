@@ -2,6 +2,8 @@
 #include "Game/Utility/isTeamAlive.h"
 #include "Game/Utility/setRoundTurns.h"
 
+
+
 DashDaCapo::DashDaCapo(Uint32 flags, 
                        const char* title, 
                        int x, int y, 
@@ -94,6 +96,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_roundOver = false;
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
+    bool STATE_debug = false;
     float STATE_timerCount;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
@@ -113,7 +116,7 @@ void DashDaCapo::runGameLoop()
     TextureWrapper characterTestTexture;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
-        {&tileTexture, "../../assets/image/sprite_tiled.png"},
+        {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"}
@@ -135,10 +138,44 @@ void DashDaCapo::runGameLoop()
 
     //////////// END TEXTURE LOADING /////////////
 
+    //////////// START RANDOM MAP GEN /////////////
+    /*
+    std::string commandCall = "python ./mapBuilder/drunkardWalkTestMinusLibs.py ";
+    std::vector<std::string> commandCalls;
+    for (int i = 2; i < 6; i++)
+    {
+        commandCalls.push_back(commandCall + std::to_string(i));
+    }
+    system("python ./mapBuilder/drunkardWalkTestMinusLibs.py 1");
+    */
+    /*
+    for (auto call: commandCalls)
+    {
+        system(call.c_str()); 
+    }
+    */
+   
+
+    //////////// END RANDOM MAP GEN /////////////
+
     //////////// START TILE LOADING /////////////
-    const int TILE_COUNT = 192;
+    
+    // load random map
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> intDist(0,4);
+    int mapRandom = intDist(gen);
+    std::vector<std::string> tests = {"testLevel.map", "testLevel2.map", "testLevel3.map", "testLevel4.map", "testLevel5.map"};
+    std::string testLevel = tests[mapRandom]; 
+
+    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/" + testLevel);
+    const int MAP_COLS = levelInfo[1];
+    const int MAP_ROWS = levelInfo[0]; 
+    const int TILE_COUNT = MAP_COLS * MAP_ROWS;
+    const int MAP_WIDTH = levelInfo[1] * 80;
+    const int MAP_HEIGHT = levelInfo[0] * 80; 
     const int TILE_LENGTH = 80;
-    const int TILE_TYPE_COUNT = 12;
+    const int TILE_TYPE_COUNT = 16;
 
     std::vector<Tile*> tileMap(TILE_COUNT);
     std::vector<SDL_Rect> tilesClipped(TILE_TYPE_COUNT);// this is the total tiles
@@ -146,6 +183,7 @@ void DashDaCapo::runGameLoop()
     std::map<std::pair<int, int>, std::string> coordinateToEventTypeMap;
 
     bool didTilesLoad = loadTiles(tileMap, 
+                                  levelInfo,
                                   coordinateToTileTypeMap, 
                                   coordinateToEventTypeMap, 
                                   TILE_COUNT, 
@@ -158,7 +196,7 @@ void DashDaCapo::runGameLoop()
         setToQuit();
     }
 
-    const int TILE_SHEET_ROWS = 3;
+    const int TILE_SHEET_ROWS = 4;
     const int TILE_SHEET_COLS = 4;
     //clip tiles
     bool didClip = clipSheet(TILE_SHEET_ROWS, TILE_SHEET_COLS, TILE_LENGTH, TILE_LENGTH, TILE_TYPE_COUNT, tilesClipped);
@@ -201,8 +239,6 @@ void DashDaCapo::runGameLoop()
     for (auto event: eventsToAdd)
         eventList.push_back(event);
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0,10); 
 
     for (auto& [coordinate, event]: coordinateToEventTypeMap)
@@ -351,10 +387,15 @@ void DashDaCapo::runGameLoop()
                 }
                 case MAP:
                 {
-                    //this has a bug where movement
-                    //keeps being read if key is not unpressed
-                    debugController.onInput(event);
-                    characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        if (event.key.keysym.sym == SDLK_9)
+                            STATE_debug = !STATE_debug;
+                    }
+                    if (STATE_debug)
+                        debugController.onInput(event);
+                    else
+                        characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
                     if (nextMapEvent == "BATTLE")
                     {
                         //init enemy characters
@@ -636,16 +677,25 @@ void DashDaCapo::runGameLoop()
             }
             case MAP:
             {
-                debugController.move(1280, 960);
-                characterController.move(1280, 960);
-                //debugController.centerScreen(camera);
-                characterController.centerScreen(camera);
+                //write macro for this eventually
+                if (STATE_debug)
+                {
+                    debugController.move(MAP_WIDTH, MAP_HEIGHT);
+                    debugController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
+                }
+                else
+                {
+                    characterController.move(MAP_WIDTH, MAP_HEIGHT);
+                    characterController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
+                }
                 for(int i = 0; i < tileMap.size(); i++)
                 {
                     tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
                 }
-                debugController.render(getRenderer(), camera, debugControllerTexture);
-                characterController.render(getRenderer(), camera, characterInMapTexture);
+                if (STATE_debug)
+                    debugController.render(getRenderer(), camera, debugControllerTexture);
+                else
+                    characterController.render(getRenderer(), camera, characterInMapTexture);
                 if (STATE_mapEventboxOpen)
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 0, 0, 200, 255);
