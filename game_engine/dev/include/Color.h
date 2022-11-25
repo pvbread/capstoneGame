@@ -21,4 +21,5 @@ public:
     static constexpr SDL_Color purple = {128, 0, 128, 0};
     static constexpr SDL_Color teal = {0, 128, 128, 0};
     static constexpr SDL_Color navy = {0, 0, 128, 0};
+    static constexpr SDL_Color darkGreen = {0, 150, 0, 0};
 };

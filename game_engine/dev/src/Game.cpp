@@ -22,7 +22,10 @@ void EscapeFromCapstone::runGameLoop()
 
     ///////// END CHARACTER INIT //////
 
-    
+    // Timer Init
+    //Timer* timer = Timer::instance();
+    //bool timerStarted = false;
+    //float countTime;
 
     // temporary place for this
     Screen screen = INTRO;
@@ -415,6 +418,16 @@ void EscapeFromCapstone::runGameLoop()
                         screen = STATUS_MENU;
                         break;
                     }
+                    case SDLK_6:
+                    {
+                        screen = WIN;
+                        break;
+                    }
+                    case SDLK_7:
+                    {
+                        screen = DEFEAT;
+                        break;
+                    }
                 }
             }
             switch (screen)
@@ -554,6 +567,14 @@ void EscapeFromCapstone::runGameLoop()
                         }
                     } 
 
+                    break;
+                }
+                case WIN:
+                {
+                    break;
+                }
+                case DEFEAT:
+                {
                     break;
                 }
             }
@@ -949,6 +970,25 @@ void EscapeFromCapstone::runGameLoop()
 
                 //SDL_FreeSurface(surface);
                 //SDL_DestroyTexture(texture);
+                break;
+            }
+            case WIN:
+            {
+                SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
+                SDL_RenderClear(getRenderer());
+
+                TextBox baseName = TextBox("Congratulations  ", 100, 200, 100, 500, 200, Font::roboto, Color::black, Color::darkGreen);
+                baseName.render(getRenderer());
+
+                timerStarted = true;
+                countTime = timer->deltaTimer() + 3;
+
+                break;
+            }
+            case DEFEAT:
+            {
+                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
+                SDL_RenderClear(getRenderer());
                 break;
             }
             
