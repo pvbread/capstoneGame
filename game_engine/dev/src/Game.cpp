@@ -652,13 +652,20 @@ void DashDaCapo::runGameLoop()
                             validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
                             int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
                             std::string currPlayerName = combatParticipants[charIndex].getName();
+                            std::string currPlayerNameCopy = currPlayerName;
                             currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                             std::string targetName = combatParticipants[validMoves[currTarget][0]].getName();
                             int targetIndex = validMoves[currTarget][0];
                             //combatParticipants[charIndex].setNewParticipantsIndex(targetIndex);
                             //combatParticipants[targetIndex].setNewParticipantsIndex(charIndex);
                             roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants);
-                            
+                            for (int i = 0; i < roundOrder.size(); i++)
+                            {
+                                if(roundOrder[i]->getName()==currPlayerNameCopy)
+                                {
+                                    std::swap(roundOrder[i],roundOrder[currOrderNum]);
+                                }
+                            }
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             do 
                             {
