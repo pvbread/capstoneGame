@@ -347,6 +347,7 @@ void DashDaCapo::runGameLoop()
                                    sandboxOptionsStrings, 
                                    Font::openSans, 
                                    Color::white, 
+                                   Color::maroon,
                                    getRenderer()
     );
 
@@ -901,8 +902,7 @@ void DashDaCapo::runGameLoop()
                     SDL_DestroyTexture(texture);
                 }
 
-                SDL_FreeSurface(surface);
-                SDL_DestroyTexture(texture);
+                
 
                  if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
 
@@ -1297,8 +1297,8 @@ void DashDaCapo::runGameLoop()
                 TextBox baseName = TextBox("Congratulations  ", 100, 200, 100, 500, 200, Font::roboto, Color::black, Color::darkGreen);
                 baseName.render(getRenderer());
 
-                timerStarted = true;
-                countTime = timer->deltaTimer() + 3;
+                //timerStarted = true;
+                //countTime = timer->deltaTimer() + 3;
 
 
                 break;
