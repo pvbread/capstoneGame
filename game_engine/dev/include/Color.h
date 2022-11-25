@@ -2,6 +2,7 @@
 
 #include "pch.h"
 
+/// @brief Provides static access to common colors
 class Color
 {
 public:

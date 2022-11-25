@@ -172,17 +172,14 @@ void CharacterInMap::onInput(SDL_Event& event,
 
 void CharacterInMap::move(int xBoundary, 
                           int yBoundary)
-{
-    // TODO update to not be hard coded
-
-    
+{  
     if (collisionBox.x < 30)
         collisionBox.x += mainVelocity;
-    else if (collisionBox.x >= 1280)
+    else if (collisionBox.x >= xBoundary)
         collisionBox.x -= mainVelocity; 
     else if (collisionBox.y < 30) 
         collisionBox.y += mainVelocity;
-    else if (collisionBox.y >= 960)
+    else if (collisionBox.y >= yBoundary)
         collisionBox.y -= mainVelocity;
 }
 
@@ -193,7 +190,7 @@ void CharacterInMap::render(SDL_Renderer* renderer, const SDL_Rect& camera, Text
 }
 
 
-void CharacterInMap::centerScreen(SDL_Rect& camera)
+void CharacterInMap::centerScreen(SDL_Rect& camera, int xBoundary, int yBoundary)
 {
     // TODO fix this hardcoding to take in any size
     camera.x = collisionBox.x - (camera.w/2);
@@ -203,8 +200,8 @@ void CharacterInMap::centerScreen(SDL_Rect& camera)
         camera.x = 0;
     if (camera.y < 0)
         camera.y = 0;
-    if (camera.x > 1280 - camera.w)
-        camera.x = 1280 - camera.w;
-    if (camera.y > 960 - camera.h)
-        camera.y = 960 - camera.h;
+    if (camera.x > xBoundary - camera.w)
+        camera.x = xBoundary - camera.w;
+    if (camera.y > yBoundary - camera.h)
+        camera.y = yBoundary - camera.h;
 }

@@ -9,10 +9,10 @@ public:
     static void release();
 
     void reset();
-    float deltaTimer();//gives back delta time
+    float deltaTime();//gives back delta time
 
     void timerScale(float t);//for setting timescale
-    float timerScale();//returns timescale
+    float getTimerScale();//returns timescale
 
     void update();//timer update
 
@@ -23,7 +23,7 @@ private:
 
     unsigned int mStartTicks;//where SDL_GETTICKS gets from beginning of program
     unsigned int mElapsedTicks;
-    float mDeltaTimer;
+    float mDeltaTime;
     float mTimerScale;
 
     Timer();

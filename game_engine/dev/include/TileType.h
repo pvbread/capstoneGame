@@ -13,5 +13,9 @@ enum TileType
     LEFTRIGHT = 8,
     LEFTUP = 9,
     LEFTDOWN = 10,
-    FOURWAY = 11
+    FOURWAY = 11,
+    ENDUP = 12,
+    ENDRIGHT = 13,
+    ENDDOWN = 14,
+    ENDLEFT = 15
 };

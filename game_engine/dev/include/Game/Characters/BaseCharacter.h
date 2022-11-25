@@ -19,16 +19,25 @@ class BaseCharacter
 {
 public:
     BaseCharacter() = default;
+    ~BaseCharacter() = default;
     BaseCharacter(std::string name, int hp, int speed, 
                   int hit, int armor, int itemModifier, int speedModifier, 
                   int dodgeModifier, bool enemy
     );
 
-    std::pair<ActionType, std::vector<int>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
+/*
+    //copy constructor
+    BaseCharacter(const BaseCharacter& rhs);
+
+    //copy assignment
+    BaseCharacter& operator= (const BaseCharacter& rhs);
+*/
+
+    std::pair<ActionType, std::vector<std::vector<int>>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                  std::string decisionAlgo = "RANDOM"
     );
 
-    std::vector<int> getValidMoves(ActionType actionType,
+    std::vector<std::vector<int>> getValidMoves(ActionType actionType,
                                    int charIndex,
                                    const std::vector<BaseCharacter>& participants
     );
@@ -37,9 +46,10 @@ public:
                                          const std::vector<BaseCharacter>& participants
     );
 
-    std::vector<BaseCharacter> doAction(ActionType actionType, 
+    void doAction(ActionType actionType, 
+                                        std::vector<int>& effectOfAction,
                                         std::vector<int> targets, 
-                                        std::vector<BaseCharacter> participants
+                                        std::vector<BaseCharacter>& participants
     );
 
     void shiftDead(std::vector<BaseCharacter>& participants);
@@ -47,12 +57,13 @@ public:
     int attack(BaseCharacter targetCharacter);
     int buff(BaseCharacter targetCharacter);
     int debuff(BaseCharacter targetCharacter);
-    std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
-                                         std::vector<BaseCharacter> participants
+    void moveSpots(int charIndex, int targetIndex, 
+                                         std::vector<BaseCharacter>& participants
     );
 
     friend std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters);
     friend bool isTeamAlive(const std::vector<BaseCharacter>& participants, bool enemy);
+    
 
     std::string getName() const;
     bool isAlive() const;
@@ -97,8 +108,8 @@ protected:
     
     //example validMoves and ranges
     std::unordered_map<ActionType, std::vector<int>> movesAndRanges = {
-        {ATTACK, {2,4}},
-        {BUFF, {1,2}},
-        {DEBUFF, {4}}
+        {ATTACK, {1,2,3,4,5,6,7}},
+        {BUFF, {1}},
+        {DEBUFF, {1}}
     };
 };

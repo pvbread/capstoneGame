@@ -17,7 +17,21 @@ int main()
     BaseCharacter e2 = BaseCharacter("eSlow", 30, 0, 3, 0, 3, 3, 3, true);
     BaseCharacter e3 = BaseCharacter("eMid", 30, 2, 3, 0, 3, 3, 3, true);
     BaseCharacter e4 = BaseCharacter("eMid2", 30, 3, 3, 0, 3, 3, 3, true);
-    std::vector<BaseCharacter> participants{e1,e2,e3,e4,p1,p2,p3,p4};
+    e1.setNewParticipantsIndex(4);
+    e2.setNewParticipantsIndex(5);
+    e3.setNewParticipantsIndex(6);
+    e4.setNewParticipantsIndex(7);
+    p1.setNewParticipantsIndex(0);
+    p2.setNewParticipantsIndex(1);
+    p3.setNewParticipantsIndex(2);
+    p4.setNewParticipantsIndex(3);
+    std::vector<BaseCharacter> playerTeam{p1,p2,p3,p4};
+    std::vector<BaseCharacter> enemies{e1,e2,e3,e4};
+    std::vector<BaseCharacter> participants;
+    participants = playerTeam;
+    participants.insert(std::end(participants), std::begin(enemies), std::end(enemies));
+
+    
     for (auto el: participants)
     {
         std::cout << el.getName() << " ";
@@ -29,6 +43,8 @@ int main()
     for (auto el: roundOrder)
     {
         std::cout << el->getName() << " ";
+        std::cout << el->getParticipantsIndex();
+        std::cout << std::endl;
     }
     std::cout << std::endl; 
 

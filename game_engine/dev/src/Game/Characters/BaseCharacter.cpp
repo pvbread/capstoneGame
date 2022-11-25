@@ -17,11 +17,50 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     alive = true;
 }
 
-std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
+/*
+//copy constructor
+BaseCharacter::BaseCharacter(const BaseCharacter& rhs)
+{
+    name = rhs.name;
+    maxHp = rhs.maxHp; 
+    speed = rhs.speed;
+    hit = rhs.hit;
+    armor = rhs.armor;
+    dodgeModifier = rhs.dodgeModifier;
+    enemy = rhs.enemy;
+    speedModifier = rhs.speedModifier;
+    hp = rhs.hp;
+    alive = rhs.alive;
+    participantsIndex = rhs.participantsIndex;
+    itemModifier = rhs.itemModifier;
+}
+
+BaseCharacter& BaseCharacter::operator= (const BaseCharacter& rhs)
+{
+    if (this != &rhs)
+    {
+        name = rhs.name;
+        maxHp = rhs.maxHp; 
+        speed = rhs.speed;
+        hit = rhs.hit;
+        armor = rhs.armor;
+        dodgeModifier = rhs.dodgeModifier;
+        enemy = rhs.enemy;
+        speedModifier = rhs.speedModifier;
+        hp = rhs.hp;
+        alive = rhs.alive;
+        participantsIndex = rhs.participantsIndex;
+        itemModifier = rhs.itemModifier;
+    }
+    return *this;
+}
+*/
+
+std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
     ActionType chosenMove;
-    std::vector<int> targets;
+    std::vector<std::vector<int>> targets;
     if (decisionAlgo == "RANDOM")
     {
         std::random_device rd;
@@ -29,77 +68,115 @@ std::pair<ActionType, std::vector<int>> BaseCharacter::getActionAndTargets(const
         std::uniform_int_distribution<> dist(0,3);
         chosenMove = (ActionType)dist(gen);
 
-        // try to find index of current character in vector (unsure if this works, needs testing)
-        std::string key = name;
-        auto itr = std::find_if(participants.begin(),
-                            participants.end(),
-                            [&key] (const BaseCharacter& obj)
-                            {
-                                return obj.getName()==key;
-                            }
-        );
-        if (itr != participants.end())
-        {
-            auto participantsIndex = std::distance(participants.begin(),itr);
-        }
-
+        
+        int participantsIndex = this->getParticipantsIndex();
         targets = getValidMoves(chosenMove, participantsIndex, participants);
     }
 
     return make_pair(chosenMove, targets);
 }
 
-std::vector<int> BaseCharacter::getValidMoves(ActionType actionType,
+std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType,
                                               int charIndex,
                                               const std::vector<BaseCharacter>& participants)
 {
-    std::vector<int> validMoves;
+    std::vector<int> targets;
+    std::vector<std::vector<int>> validMoves;
 
     switch(actionType)
     {
         case ATTACK:
-        {
+        {   
+            // change valid moves for attacks one character at a time
+            const int TEAM_SIZE = 4;
             if (!enemy)
             {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i+4].isAlive())
+                            validMoves.push_back({i+4});
+                    }
+                /*
                 for (auto position: movesAndRanges[ATTACK])
                 {
                     int targetPosition = charIndex + position;
                     if (targetPosition < participants.size())
-                        validMoves.push_back(targetPosition);
+                        targets = {targetPosition};
+                    validMoves.push_back(targets);
                 }
+                */
             }
             else
             {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i].isAlive())
+                            validMoves.push_back({i});
+                    }
                 //it's an enemy
+                /*
                 for (auto position: movesAndRanges[ATTACK])
                 {
                     int targetPosition = charIndex - position;
                     if (targetPosition >= 0)
-                        validMoves.push_back(targetPosition);
+                        targets = {targetPosition};
+                    validMoves.push_back(targets);
                 }
+                */
             }
             break;
         }
         case BUFF: case DEBUFF:
         {
             //this covers both the BUFF and DEBUFF cases
-            validMoves = getValidBuffTargets(actionType, participants);
+            targets = getValidBuffTargets(actionType, participants);
+            for(int i = 0; i < targets.size(); i++)
+            {
+                std::vector<int> temp = {targets[i]};
+                validMoves.push_back(temp);
+            }
             break;
         }
         case MOVE:
         {
+            const int TEAM_SIZE = 4;
+            if (!enemy)
+            {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i].isAlive() && i != charIndex)
+                            validMoves.push_back({i});
+                    }
+            }
+            else
+            {
+                for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i+4].isAlive() && i+4 != charIndex)
+                            validMoves.push_back({i+4});
+                    }
+            }
+
+            // FOR SOME REASON THERE"S A SEGFAULT WITHIN THIS LAMBDA FUNCTION SOMETHING TO DO WITH THE ITERATORS
+            /*
             //SPECIAL CASE, it's like a buff but we want to filter out character index
-            validMoves = getValidBuffTargets(BUFF, participants);
+            targets = getValidBuffTargets(BUFF, participants);
             std::vector<int>::iterator adjustments;
             int currCharIndex = charIndex; //needed for lambda to be happy (changed lambda conditions)
-            adjustments = std::remove_if(validMoves.begin(),
-                                    validMoves.end(),
+            adjustments = std::remove_if(targets.begin(),
+                                    targets.end(),
                                     [currCharIndex] (int index) 
                                     {
-                                        return index != currCharIndex + 1 || index != currCharIndex - 1;
+                                        return index != currCharIndex + 1 && index != currCharIndex - 1;
                                     }
             );
-            validMoves.erase(adjustments, validMoves.end());
+            targets.erase(adjustments, targets.end());
+            for(int i; i < targets.size(); i++)
+            {
+                std::vector<int> temp = {targets[i]};
+                validMoves.push_back(temp);
+            }
+            */
             break;
         }
     }
@@ -132,19 +209,24 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
     return validMoves;
 }
 
-std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
+
+void BaseCharacter::doAction(ActionType actionType, 
+                                                   std::vector<int>& effectOfAction,
                                                    std::vector<int> targets, 
-                                                   std::vector<BaseCharacter> participants)
+                                                   std::vector<BaseCharacter>& participants)
 {
+    effectOfAction.clear();
     switch(actionType)
     {
         case ATTACK:
         {
+        
             for (auto target: targets)
             {
                 if (participants[target].isAlive())
                 {
                     int hit = attack(participants[target]);
+                    effectOfAction.push_back(hit);
                     int newHp = participants[target].getHp() - hit;
                     participants[target].setHp(newHp);
                     if (participants[target].getHp() <= 0)
@@ -155,6 +237,8 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
                     }
                 }
             }
+
+            
             break;
         }
 
@@ -162,8 +246,10 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
         {
             for (auto target: targets)
             {
-                int newTargetHp = buff(participants[target]);
-                participants[target].setHp(newTargetHp);
+                int healAmount = buff(participants[target]);
+                effectOfAction.push_back(healAmount);
+                int newHp = participants[target].getHp() + healAmount;
+                participants[target].setHp(newHp);
             }
             break;
         }
@@ -173,6 +259,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
             for (auto target: targets)
             {
                 int newTargetSpeedMod = debuff(participants[target]);
+                effectOfAction.push_back(newTargetSpeedMod); 
                 participants[target].setSpeedModifier(newTargetSpeedMod);
             }
             break;
@@ -185,7 +272,6 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
             break;
         }
     }
-    return participants;
 }
 
 void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
@@ -196,7 +282,12 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         for (int j = 0; j < LIVE_BOUNDARY; j++)
         {
             if (participants[j].isAlive() && !participants[j+1].isAlive())
+            {
                 std::swap(participants[j], participants[j+1]);
+                // once swapped, update participant index
+                participants[j].setNewParticipantsIndex(j);
+                participants[j+1].setNewParticipantsIndex(j+1);
+            }   
         }
     }
     for (int i = 0; i < LIVE_BOUNDARY; i++)
@@ -204,7 +295,12 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         for (int j = 0; j < LIVE_BOUNDARY; j++)
         {
             if (participants[j+5].isAlive() && !participants[j+4].isAlive())
+            {
                 std::swap(participants[j+5], participants[j+4]);
+                // once swapped, update participant index
+                participants[j+4].setNewParticipantsIndex(j+4);
+                participants[j+5].setNewParticipantsIndex(j+5);
+            }   
         }
     }
 }
@@ -232,17 +328,18 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     return damage;
 }
 
-// returns the newHp of the targetCharacter after buff
+
+// returns the hp to heal
+
 int BaseCharacter::buff(BaseCharacter targetCharacter)
 {
     if (targetCharacter.getHp() >= targetCharacter.getMaxHp())
-        return targetCharacter.getHp();
+        return 0;
     if (!targetCharacter.isAlive())
         return 0;
     // the last case is that char is alive and doesn't have full health
     int healAmount = ceil(float(targetCharacter.getMaxHp()) * 0.1);
-    int newHp = targetCharacter.getHp() + healAmount;
-    return newHp;
+    return healAmount;
 }
 
 int BaseCharacter::debuff(BaseCharacter targetCharacter)
@@ -253,15 +350,14 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
     return newSpeedMod;
 }
 
-std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
+void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter>& participants)
 {
-    if (
-        ( participants[charIndex].isEnemy() && !participants[targetIndex].isEnemy() ) ||
-        ( participants[targetIndex].isEnemy() && !participants[charIndex].isEnemy() )
-       )
-        return participants;
+ 
     std::swap(participants[charIndex], participants[targetIndex]);
-    return participants;
+    // once swapped, update participant index
+    participants[charIndex].setNewParticipantsIndex(charIndex);
+    participants[targetIndex].setNewParticipantsIndex(targetIndex);
+    
 }
 
 std::string BaseCharacter::getName() const

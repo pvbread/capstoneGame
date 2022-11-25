@@ -605,4 +605,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 .DS_Store
-*.json
+
+game_engine/dev/.vscode/settings.json
+
