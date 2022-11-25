@@ -856,6 +856,14 @@ void DashDaCapo::runGameLoop()
                     }
                 }
                 
+                for (int i = 0; i < tempCharNames.size() - 1; i++)
+                {
+                    if (tempCharNames[i]==" ")
+                    {
+                        tempCharNames[i] = tempCharNames[i+1];
+                        tempCharNames[i+1] = " ";
+                    }
+                }
                 
                 
 
