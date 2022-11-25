@@ -17,7 +17,7 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     alive = true;
 }
 
-
+/*
 //copy constructor
 BaseCharacter::BaseCharacter(const BaseCharacter& rhs)
 {
@@ -88,7 +88,7 @@ BaseCharacter& BaseCharacter::operator= (BaseCharacter&& rhs)
 
     return *this;
 }
-
+*/
 std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
@@ -316,7 +316,7 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         {
             if (participants[j].isAlive() && !participants[j+1].isAlive())
             {
-                participants[j] = std::move(participants[j+1]);
+                std::swap(participants[j], participants[j+1]);
                 // once swapped, update participant index
                 participants[j].setNewParticipantsIndex(j);
                 participants[j+1].setNewParticipantsIndex(j+1);
@@ -329,7 +329,7 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         {
             if (participants[j+5].isAlive() && !participants[j+4].isAlive())
             {
-                participants[j+4] = std::move(participants[j+5]);
+                std::swap(participants[j+4],participants[j+5]);
                 // once swapped, update participant index
 
                 participants[j+4].setNewParticipantsIndex(j+4);
@@ -386,11 +386,13 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
 
 void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter>& participants)
 {
- 
-    participants[charIndex] = std::move(participants[targetIndex]);
+    //BaseCharacter copy = participants[charIndex];
+    //participants[charIndex] = std::move(participants[targetIndex]);
+    //participants[targetIndex] = std::move(copy);
+    std::swap(participants[charIndex],participants[targetIndex]);
     // once swapped, update participant index
-    participants[charIndex].setNewParticipantsIndex(charIndex);
-    participants[targetIndex].setNewParticipantsIndex(targetIndex);
+    participants[charIndex].setNewParticipantsIndex(targetIndex);
+    participants[targetIndex].setNewParticipantsIndex(charIndex);
     
 }
 

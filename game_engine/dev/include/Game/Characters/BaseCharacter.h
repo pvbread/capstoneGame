@@ -25,7 +25,7 @@ public:
                   int dodgeModifier, bool enemy
     );
 
-
+    /*
     //copy constructor
     BaseCharacter(const BaseCharacter& rhs);
 
@@ -38,7 +38,7 @@ public:
     //move assignment
 
     BaseCharacter& operator= (BaseCharacter && rhs);
-
+    */
     std::pair<ActionType, std::vector<std::vector<int>>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                  std::string decisionAlgo = "RANDOM"
     );
