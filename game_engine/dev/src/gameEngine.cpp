@@ -11,7 +11,8 @@
 #include "pch.h"
 
 
-Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
+ 
+Archimedes::Archimedes(Uint32 flags, const char* title, int x, int y, int w, int h)
 {
     this->height = h;
     this->width = w;
@@ -53,22 +54,24 @@ Phoenix::Phoenix(Uint32 flags, const char* title, int x, int y, int w, int h)
         SDL_Log("Load Mixer Error: %s", Mix_GetError());  
 }
 
-Phoenix::~Phoenix()
+Archimedes::~Archimedes()
 {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
-void Phoenix::runGameLoop()
+void Archimedes::runGameLoop()
 {}
 
-void Phoenix::stopGameLoop()
+void Archimedes::stopGameLoop()
 {
     quit = true;
 }
 
-bool Phoenix::loadTiles(std::vector<Tile*>& tileMap, 
+
+bool Archimedes::loadTiles(std::vector<Tile*>& tileMap, 
+                        const std::vector<int>& levelInfo,
                         std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                         std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap,
                         int TILE_COUNT, 
@@ -78,26 +81,31 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
     int x = 0;
     int y = 0;
 
-    std::ifstream level("../../assets/maps/testLevel.map");
-
+    //std::ifstream level("../../assets/maps/testLevel.map");
+    /*
     if (level.fail())
     {
         SDL_Log("Failure loading level");
         return false;
-    }
+    }*/
 
     //tyle type
     int tileType;
+    const int LEVEL_WIDTH = levelInfo[1]*80;
 
+    //start at index 2 (because first 2 are the dimensions)
     for (int i = 0; i < TILE_COUNT; i++)
     {
-        level >> tileType;
-
+        //level >> tileType;
+        /*
         if (level.fail())
         {
             SDL_Log("Error with level read at %d", i);
             return false;
         }
+        */
+        //need to offset the 2 dimensions
+        tileType = levelInfo[i+2];
 
         //need to cast tileType here otherwise
         //it can't read it in right
@@ -109,24 +117,22 @@ bool Phoenix::loadTiles(std::vector<Tile*>& tileMap,
             if ((TileType)tileType != BLACK)
             coordinateToEventTypeMap[coordinates] = "";
         }
-        //TODO DON't HARD CODE THIS
-        //MAP_WIDTH
+        
         x += TILE_LENGTH;
 
-        if (x >= 1280)
+        if (x >= LEVEL_WIDTH)
         {
             x = 0;
             y += TILE_LENGTH;
         }
        
     }
-    level.close();
 
     return true;
 
 }
 
-bool Phoenix::loadImageAssets(SDL_Renderer* renderer,  
+bool Archimedes::loadImageAssets(SDL_Renderer* renderer,  
                               std::unordered_map<TextureWrapper*, std::string> textureFilePaths)
 {
     for (auto [texturePtr, textureFilePath]: textureFilePaths)
@@ -142,7 +148,7 @@ bool Phoenix::loadImageAssets(SDL_Renderer* renderer,
     return true;
 }
 
-bool Phoenix::clipSheet(int ROWS,
+bool Archimedes::clipSheet(int ROWS,
                         int COLS, 
                         int BLOCK_LENGTH,
                         int BLOCK_HEIGHT,
@@ -171,32 +177,58 @@ bool Phoenix::clipSheet(int ROWS,
     return true;
 }
 
-SDL_Window* Phoenix::getWindow() const
+SDL_Window* Archimedes::getWindow() const
 {
     return window;
 }
 
-SDL_Renderer* Phoenix::getRenderer() const
+SDL_Renderer* Archimedes::getRenderer() const
 {
     return renderer;
 }
 
-bool Phoenix::getQuit() const
+
+std::vector<int> Archimedes::convertMapToVector(std::string pathName)
+{
+    std::ifstream level(pathName);
+    std::vector<int> levelData;
+    int rows;
+    int cols;
+    int element;
+
+    level >> rows;
+    level >> cols;
+
+    levelData.push_back(rows);
+    levelData.push_back(cols);  
+
+    for (int i = 0; i < rows * cols; i++)
+    {
+        level >> element;
+        levelData.push_back(element);
+    }
+    level.close();
+
+    return levelData;
+}
+
+bool Archimedes::getQuit() const
+
 {
     return quit;
 }
     
-int Phoenix::getWidth() const
+int Archimedes::getWidth() const
 {
     return width;
 }
     
-int Phoenix::getHeight() const
+int Archimedes::getHeight() const
 {
     return height;
 }
 
-void Phoenix::setToQuit()
+void Archimedes::setToQuit()
 {
     quit = !quit;
 }
