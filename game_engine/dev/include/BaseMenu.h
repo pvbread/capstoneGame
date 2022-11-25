@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Color.h"
 
 /// @brief Creates a menu. Just specify a font size, some dimensions,
 /// a list of options, font path and color, and a renderer.
