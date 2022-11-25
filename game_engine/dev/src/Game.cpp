@@ -565,7 +565,11 @@ void DashDaCapo::runGameLoop()
                             //look at roundOrder
                             std::vector<int> healAmount;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            std::string currPlayerName = combatParticipants[charIndex].getName();
+                            currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                             roundOrder[currOrderNum]->doAction(BUFF, healAmount, validMoves[currTarget], combatParticipants); 
+
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             do 
                             {
@@ -578,7 +582,8 @@ void DashDaCapo::runGameLoop()
                             {
                                 if (i == 0)
                                 {
-
+                                    healNotification += currPlayerName;
+                                    healNotification += "heals";
                                     healNotification += std::to_string(healAmount[i]);
                                     healNotification += " healed for ";
                                     healNotification += combatParticipants[validMoves[currTarget][i]].getName();
@@ -604,6 +609,9 @@ void DashDaCapo::runGameLoop()
                             //look at roundOrder
                             std::vector<int> newSpeed;
                             validMoves = roundOrder[currOrderNum]->getValidMoves(DEBUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            std::string currPlayerName = combatParticipants[charIndex].getName();
+                            currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                             roundOrder[currOrderNum]->doAction(DEBUFF, newSpeed, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             do 
@@ -616,6 +624,8 @@ void DashDaCapo::runGameLoop()
                             {
                                 if (i == 0)
                                 {
+                                    debuffNotification += currPlayerName;
+                                    debuffNotification += "debuffs";
                                     debuffNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
                                     debuffNotification += " is the new speed for ";
                                     debuffNotification += combatParticipants[validMoves[currTarget][i]].getName();
@@ -645,6 +655,8 @@ void DashDaCapo::runGameLoop()
                             currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                             std::string targetName = combatParticipants[validMoves[currTarget][0]].getName();
                             roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants); 
+                            int targetIndex = validMoves[currTarget][0];
+    
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             do 
                             {
@@ -852,16 +864,19 @@ void DashDaCapo::runGameLoop()
                     }
                     else
                     {
-                        tempCharNames[i] = " ";
+                        tempCharNames[i] = "dead           ";
                     }
                 }
                 
                 for (int i = 0; i < tempCharNames.size() - 1; i++)
                 {
-                    if (tempCharNames[i]==" ")
+                    for(int j = 0; j < tempCharNames.size()-1;j++)
                     {
-                        tempCharNames[i] = tempCharNames[i+1];
-                        tempCharNames[i+1] = " ";
+                        if (tempCharNames[j]=="dead           ")
+                        {
+                            tempCharNames[j] = tempCharNames[j+1];
+                            tempCharNames[j+1] = "dead           ";
+                        }
                     }
                 }
                 

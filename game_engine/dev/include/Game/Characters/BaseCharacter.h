@@ -25,13 +25,19 @@ public:
                   int dodgeModifier, bool enemy
     );
 
-/*
+
     //copy constructor
     BaseCharacter(const BaseCharacter& rhs);
 
     //copy assignment
     BaseCharacter& operator= (const BaseCharacter& rhs);
-*/
+
+    //move constructor
+    BaseCharacter(BaseCharacter&& rhs);
+
+    //move assignment
+
+    BaseCharacter& operator= (BaseCharacter && rhs);
 
     std::pair<ActionType, std::vector<std::vector<int>>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                  std::string decisionAlgo = "RANDOM"
