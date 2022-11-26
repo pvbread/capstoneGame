@@ -246,7 +246,7 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
 std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
                                                    std::vector<int>& effectOfAction,
                                                    std::vector<int> targets, 
-                                                   std::vector<BaseCharacter>& participants)
+                                                   std::vector<BaseCharacter> participants)
 {
     effectOfAction.clear();
     switch(actionType)
@@ -266,7 +266,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
                     {
                         participants[target].changeLifeStatus(false);
                         participants[target].setHp(0); 
-                        shiftDead(participants);
+                        participants = shiftDead(participants);
                     }
                 }
             }
@@ -301,7 +301,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
         case MOVE:
         {
             int targetIndex = targets[0];
-            moveSpots(participantsIndex, targetIndex, participants);
+            participants = moveSpots(participantsIndex, targetIndex, participants);
             break;
         }
     }
@@ -309,7 +309,7 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
 
 }
 
-void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
+std::vector<BaseCharacter> BaseCharacter::shiftDead(std::vector<BaseCharacter> participants)
 {
     const int LIVE_BOUNDARY = 3;
     for (int i = 0; i < LIVE_BOUNDARY; i++)
@@ -339,6 +339,7 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
             }   
         }
     }
+    return participants;
 }
 
 int BaseCharacter::attack(BaseCharacter targetCharacter)
@@ -386,7 +387,7 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
     return newSpeedMod;
 }
 
-void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter>& participants)
+std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
 {
     //BaseCharacter copy = participants[charIndex];
     //participants[charIndex] = std::move(participants[targetIndex]);
@@ -395,6 +396,7 @@ void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCh
     // once swapped, update participant index
     participants[charIndex].setNewParticipantsIndex(charIndex);
     participants[targetIndex].setNewParticipantsIndex(targetIndex);
+    return participants;
     
 }
 

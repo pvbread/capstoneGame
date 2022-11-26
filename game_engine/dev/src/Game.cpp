@@ -485,7 +485,6 @@ void DashDaCapo::runGameLoop()
                     if(!STATE_roundsSet && STATE_roundOver)
                     {
                         // get new round turn order
-                        roundOrder.clear();
                         roundOrder = setRoundTurns(combatParticipants);
                         
                         STATE_roundsSet = true;
@@ -682,8 +681,8 @@ void DashDaCapo::runGameLoop()
                                     std::string currPlayerName = combatParticipants[i].getName();
                                     currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                                     std::string targetNotification;
-                                    combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
                                     targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                    combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
 
                                     std::string moveNotification;
                                     moveNotification += currPlayerName;
@@ -941,36 +940,17 @@ void DashDaCapo::runGameLoop()
                 SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
                 SDL_FreeSurface(surfaceTesting);
                 SDL_DestroyTexture(textureTesting);
+               
                 for (int i = 0; i < roundOrder.size();i++)
                 {
                     tempCharNames[i] = roundOrder[i];
-                }
-                // update turn order for rendering
-                /*
-                for(int i = 0; i < roundOrder.size(); i++)
-                {
-                    if(roundOrder[i]->isAlive())
+                    for (int j = roundOrder.size(); j < tempCharNames.size(); j++)
                     {
-                        tempCharNames[i] = roundOrder[i]->getName();
+                        tempCharNames[j] = " ";
                     }
-                    else
-                    {
-                        tempCharNames[i] = "dead           ";
-                    }
+                    
                 }
                 
-                for (int i = 0; i < tempCharNames.size() - 1; i++)
-                {
-                    for(int j = 0; j < tempCharNames.size()-1;j++)
-                    {
-                        if (tempCharNames[j]=="dead           ")
-                        {
-                            tempCharNames[j] = tempCharNames[j+1];
-                            tempCharNames[j+1] = "dead           ";
-                        }
-                    }
-                }
-                */
                 
 
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)

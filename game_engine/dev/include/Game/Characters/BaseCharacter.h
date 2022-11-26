@@ -55,16 +55,16 @@ public:
     std::vector<BaseCharacter> doAction(ActionType actionType, 
                                         std::vector<int>& effectOfAction,
                                         std::vector<int> targets, 
-                                        std::vector<BaseCharacter>& participants
+                                        std::vector<BaseCharacter> participants
     );
 
-    void shiftDead(std::vector<BaseCharacter>& participants);
+    std::vector<BaseCharacter> shiftDead(std::vector<BaseCharacter> participants);
 
     int attack(BaseCharacter targetCharacter);
     int buff(BaseCharacter targetCharacter);
     int debuff(BaseCharacter targetCharacter);
-    void moveSpots(int charIndex, int targetIndex, 
-                                         std::vector<BaseCharacter>& participants
+    std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
+                                         std::vector<BaseCharacter> participants
     );
 
     friend std::vector<std::string> setRoundTurns(std::vector<BaseCharacter>& characters);
