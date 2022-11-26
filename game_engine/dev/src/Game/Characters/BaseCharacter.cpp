@@ -243,7 +243,7 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
 }
 
 
-void BaseCharacter::doAction(ActionType actionType, 
+std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
                                                    std::vector<int>& effectOfAction,
                                                    std::vector<int> targets, 
                                                    std::vector<BaseCharacter>& participants)
@@ -305,6 +305,8 @@ void BaseCharacter::doAction(ActionType actionType,
             break;
         }
     }
+    return participants;
+
 }
 
 void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
@@ -391,8 +393,8 @@ void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCh
     //participants[targetIndex] = std::move(copy);
     std::swap(participants[charIndex],participants[targetIndex]);
     // once swapped, update participant index
-    participants[charIndex].setNewParticipantsIndex(targetIndex);
-    participants[targetIndex].setNewParticipantsIndex(charIndex);
+    participants[charIndex].setNewParticipantsIndex(charIndex);
+    participants[targetIndex].setNewParticipantsIndex(targetIndex);
     
 }
 

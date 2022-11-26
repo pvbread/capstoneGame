@@ -52,7 +52,7 @@ public:
                                          const std::vector<BaseCharacter>& participants
     );
 
-    void doAction(ActionType actionType, 
+    std::vector<BaseCharacter> doAction(ActionType actionType, 
                                         std::vector<int>& effectOfAction,
                                         std::vector<int> targets, 
                                         std::vector<BaseCharacter>& participants
@@ -67,7 +67,7 @@ public:
                                          std::vector<BaseCharacter>& participants
     );
 
-    friend std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters);
+    friend std::vector<std::string> setRoundTurns(std::vector<BaseCharacter>& characters);
     friend bool isTeamAlive(const std::vector<BaseCharacter>& participants, bool enemy);
     
 
