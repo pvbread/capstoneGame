@@ -37,25 +37,58 @@ BaseCharacter::BaseCharacter(const BaseCharacter& rhs)
 
 BaseCharacter& BaseCharacter::operator= (const BaseCharacter& rhs)
 {
-    if (this != &rhs)
-    {
-        name = rhs.name;
-        maxHp = rhs.maxHp; 
-        speed = rhs.speed;
-        hit = rhs.hit;
-        armor = rhs.armor;
-        dodgeModifier = rhs.dodgeModifier;
-        enemy = rhs.enemy;
-        speedModifier = rhs.speedModifier;
-        hp = rhs.hp;
-        alive = rhs.alive;
-        participantsIndex = rhs.participantsIndex;
-        itemModifier = rhs.itemModifier;
-    }
+    BaseCharacter copy = rhs;
+    std::swap(*this,copy);
+    return *this;
+}
+
+BaseCharacter::BaseCharacter(BaseCharacter &&rhs)
+{
+    name = rhs.name;
+    maxHp = rhs.maxHp; 
+    speed = rhs.speed;
+    hit = rhs.hit;
+    armor = rhs.armor;
+    dodgeModifier = rhs.dodgeModifier;
+    enemy = rhs.enemy;
+    speedModifier = rhs.speedModifier;
+    hp = rhs.hp;
+    alive = rhs.alive;
+    participantsIndex = rhs.participantsIndex;
+    itemModifier = rhs.itemModifier;
+    rhs.name = "";
+    rhs.maxHp = 0; 
+    rhs.speed = 0;
+    rhs.hit = 0;
+    rhs.armor = 0;
+    rhs.dodgeModifier = 0;
+    rhs.enemy = 0;
+    rhs.speedModifier = 0;
+    rhs.hp = 0;
+    rhs.alive = 0;
+    rhs.participantsIndex = 0;
+    rhs.itemModifier = 0;
+
+}
+
+BaseCharacter& BaseCharacter::operator= (BaseCharacter&& rhs)
+{
+    std::swap(name,rhs.name);
+    std::swap(maxHp,rhs.maxHp);
+    std::swap(speed,rhs.speed);
+    std::swap(hit,rhs.hit);
+    std::swap(armor,rhs.armor);
+    std::swap(dodgeModifier,rhs.dodgeModifier);
+    std::swap(enemy,rhs.enemy);
+    std::swap(speedModifier,rhs.speedModifier);
+    std::swap(hp,rhs.hp);
+    std::swap(alive,rhs.alive);
+    std::swap(participantsIndex,rhs.participantsIndex);
+    std::swap(itemModifier,rhs.itemModifier);
+
     return *this;
 }
 */
-
 std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
@@ -210,10 +243,10 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
 }
 
 
-void BaseCharacter::doAction(ActionType actionType, 
+std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
                                                    std::vector<int>& effectOfAction,
                                                    std::vector<int> targets, 
-                                                   std::vector<BaseCharacter>& participants)
+                                                   std::vector<BaseCharacter> participants)
 {
     effectOfAction.clear();
     switch(actionType)
@@ -233,7 +266,7 @@ void BaseCharacter::doAction(ActionType actionType,
                     {
                         participants[target].changeLifeStatus(false);
                         participants[target].setHp(0); 
-                        shiftDead(participants);
+                        participants = shiftDead(participants);
                     }
                 }
             }
@@ -268,13 +301,15 @@ void BaseCharacter::doAction(ActionType actionType,
         case MOVE:
         {
             int targetIndex = targets[0];
-            moveSpots(participantsIndex, targetIndex, participants);
+            participants = moveSpots(participantsIndex, targetIndex, participants);
             break;
         }
     }
+    return participants;
+
 }
 
-void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
+std::vector<BaseCharacter> BaseCharacter::shiftDead(std::vector<BaseCharacter> participants)
 {
     const int LIVE_BOUNDARY = 3;
     for (int i = 0; i < LIVE_BOUNDARY; i++)
@@ -296,13 +331,15 @@ void BaseCharacter::shiftDead(std::vector<BaseCharacter>& participants)
         {
             if (participants[j+5].isAlive() && !participants[j+4].isAlive())
             {
-                std::swap(participants[j+5], participants[j+4]);
+                std::swap(participants[j+4],participants[j+5]);
                 // once swapped, update participant index
+
                 participants[j+4].setNewParticipantsIndex(j+4);
                 participants[j+5].setNewParticipantsIndex(j+5);
             }   
         }
     }
+    return participants;
 }
 
 int BaseCharacter::attack(BaseCharacter targetCharacter)
@@ -350,13 +387,16 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
     return newSpeedMod;
 }
 
-void BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter>& participants)
+std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
 {
- 
-    std::swap(participants[charIndex], participants[targetIndex]);
+    //BaseCharacter copy = participants[charIndex];
+    //participants[charIndex] = std::move(participants[targetIndex]);
+    //participants[targetIndex] = std::move(copy);
+    std::swap(participants[charIndex],participants[targetIndex]);
     // once swapped, update participant index
     participants[charIndex].setNewParticipantsIndex(charIndex);
     participants[targetIndex].setNewParticipantsIndex(targetIndex);
+    return participants;
     
 }
 

@@ -25,14 +25,20 @@ public:
                   int dodgeModifier, bool enemy
     );
 
-/*
+    /*
     //copy constructor
     BaseCharacter(const BaseCharacter& rhs);
 
     //copy assignment
     BaseCharacter& operator= (const BaseCharacter& rhs);
-*/
 
+    //move constructor
+    BaseCharacter(BaseCharacter&& rhs);
+
+    //move assignment
+
+    BaseCharacter& operator= (BaseCharacter && rhs);
+    */
     std::pair<ActionType, std::vector<std::vector<int>>> getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                  std::string decisionAlgo = "RANDOM"
     );
@@ -46,22 +52,22 @@ public:
                                          const std::vector<BaseCharacter>& participants
     );
 
-    void doAction(ActionType actionType, 
+    std::vector<BaseCharacter> doAction(ActionType actionType, 
                                         std::vector<int>& effectOfAction,
                                         std::vector<int> targets, 
-                                        std::vector<BaseCharacter>& participants
+                                        std::vector<BaseCharacter> participants
     );
 
-    void shiftDead(std::vector<BaseCharacter>& participants);
+    std::vector<BaseCharacter> shiftDead(std::vector<BaseCharacter> participants);
 
     int attack(BaseCharacter targetCharacter);
     int buff(BaseCharacter targetCharacter);
     int debuff(BaseCharacter targetCharacter);
-    void moveSpots(int charIndex, int targetIndex, 
-                                         std::vector<BaseCharacter>& participants
+    std::vector<BaseCharacter> moveSpots(int charIndex, int targetIndex, 
+                                         std::vector<BaseCharacter> participants
     );
 
-    friend std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters);
+    friend std::vector<std::string> setRoundTurns(std::vector<BaseCharacter>& characters);
     friend bool isTeamAlive(const std::vector<BaseCharacter>& participants, bool enemy);
     
 
