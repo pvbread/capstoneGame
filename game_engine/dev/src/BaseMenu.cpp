@@ -50,10 +50,12 @@ BaseMenu::BaseMenu(int fontSize,
             surface = TTF_RenderUTF8_Blended(menuFont, optionNames[i].c_str(), fontColor);
         menuTextures[i] = SDL_CreateTextureFromSurface(renderer, surface); 
 
+
         TTF_SizeText(menuFont, CURSOR.c_str(), &cursorRectangle.w, &cursorRectangle.h);
         surface = TTF_RenderUTF8_Blended(menuFont, CURSOR.c_str(), fontColor);
         cursorTextures[i] = SDL_CreateTextureFromSurface(renderer, surface);
     }
+
     SDL_FreeSurface(surface);
    
     

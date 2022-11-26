@@ -190,6 +190,9 @@ cython_debug/
 #VSCODE gitignore
 
 .vscode/*
+!setting.json
+!.setting.json
+!.\setting.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -602,4 +605,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 .DS_Store
+
 game_engine/dev/.vscode/settings.json
+

@@ -26,6 +26,7 @@ void TextBox::render(SDL_Renderer* renderer)
     SDL_Surface* surface = TTF_RenderUTF8_Blended(font, textStream.str().c_str(), textColor); 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface); 
     SDL_RenderCopy(renderer, texture, nullptr, &textBox); 
+
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
 }
