@@ -32,6 +32,48 @@ void DashDaCapo::runGameLoop()
 
     ///////// END CHARACTER INIT //////
 
+
+    ///////// START ITEM INIT ////////
+
+    BaseItem normalHit = BaseItem("Normal Intonation Enhancement", "hit", 1);
+    BaseItem rareHit = BaseItem("Rare Intonation Enhancement", "hit", 3);
+    BaseItem epicHit = BaseItem("Epic Intonation Enhancement", "hit", 5);
+    BaseItem normalDodge = BaseItem("Normal Faking Enhancement", "dodge", 1);
+    BaseItem rareDodge = BaseItem("Rare Faking Enhancement", "dodge", 2);
+    BaseItem epicDodge = BaseItem("Epic Faking Enhancement", "dodge", 3);
+    BaseItem normalSpeed = BaseItem("Normal Metronome", "speed", 1);
+    BaseItem rareSpeed = BaseItem("Rare Metronome", "speed", 2);
+    BaseItem epicSpeed = BaseItem("Epic Metronome", "speed", 3);
+
+    // access in the following way itemList[NORMAL_HIT]
+    // since we already have an ItemEnum for the item indexes
+    std::vector<BaseItem> itemList {
+        normalHit,
+        rareHit,
+        epicHit,
+        normalDodge,
+        rareDodge,
+        epicDodge,
+        normalSpeed,
+        rareSpeed,
+        epicSpeed
+    };
+
+    //maybe enum this
+    std::unordered_map<int, int> teamItemPool {
+        {NORMAL_HIT, 0},
+        {RARE_HIT, 0},
+        {EPIC_HIT, 0},
+        {NORMAL_DODGE, 0},
+        {RARE_DODGE, 0},
+        {EPIC_DODGE, 0},
+        {NORMAL_SPEED, 0},
+        {RARE_SPEED, 0},
+        {EPIC_SPEED, 0}
+    };    
+
+    ///////// END ITEM INIT /////////
+
     // Timer Init
     //Timer* timer = Timer::instance();
     //bool timerStarted = false;
@@ -425,7 +467,7 @@ void DashDaCapo::runGameLoop()
     
     ////// END CHARACTER STATS //////
 
-    
+    //BaseItem test("some item", "normal", 5);
 
     //double degrees = 0;
     //SDL_RendererFlip flipType = SDL_FLIP_NONE;

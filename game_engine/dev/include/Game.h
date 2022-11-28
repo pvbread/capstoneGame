@@ -13,6 +13,8 @@
 #include "Game/Characters/BaseCharacter.h"
 #include "Game/Characters/Players/BasePlayer.h"
 #include "Game/Characters/Players/Bass.h"
+#include "Game/Items/BaseItem.h"
+#include "Game/Items/ItemEnum.h"
 
 /// @brief Where the game gets implemented
 class DashDaCapo : public Archimedes
