@@ -100,6 +100,9 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
     bool STATE_debug = false;
+    bool STATE_preScreenTransition = false;
+    bool STATE_postScreenTransition = false;
+    int STATE_currTransparency = 255;
     float STATE_timerCount;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
@@ -117,7 +120,8 @@ void DashDaCapo::runGameLoop()
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
-    int currTestTransparency = 255;
+    
+    
 
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
@@ -894,9 +898,9 @@ void DashDaCapo::runGameLoop()
             case MAP:
             {
                 //ALEX LOOK AT THIS
-                currTestTransparency--;
+                STATE_currTransparency--;
                 
-                characterInMapTexture.setAlpha(currTestTransparency);
+                characterInMapTexture.setAlpha(STATE_currTransparency);
                 //write macro for this eventually
                 if (STATE_debug)
                 {

@@ -23,6 +23,11 @@ void YourGame::runGameLoop()
     bool timerStarted = false;
     float countTime;
     ////////////// END SECTION OF INITIALIZING VARIABLES ///////////////
+
+    ////surface///
+    SDL_Surface* testSurface = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
+    SDL_Texture* testTexture = SDL_CreateTextureFromSurface(getRenderer(), testSurface);
+    SDL_Rect testRect = {20, 20, 100, 100};
     
     SDL_Event event;
     while (!getQuit())
@@ -52,32 +57,7 @@ void YourGame::runGameLoop()
 
         /////////////// RENDER EVENTS HERE ///////////////////
         
-        //menu.render(getRenderer());
-        //if (whatHappened != "")
-        //    myText.changeText(whatHappened);
-        SDL_Rect currTextPos = myText.getTextBox();
-        SDL_Rect currTextPos2 = myText2.getTextBox();
-        SDL_Rect currTextPos3 = myText3.getTextBox();
-        SDL_Rect currTextPos4 = myText4.getTextBox();
-        if (currTextPos.x > -100)
-        {
-            myText.changePosition(currTextPos.x, currTextPos.y-6);
-            myText2.changePosition(currTextPos2.x, currTextPos2.y-6);
-            myText3.changePosition(currTextPos3.x, currTextPos3.y-6);
-            myText4.changePosition(currTextPos4.x, currTextPos4.y-6);
-            myText.render(getRenderer());
-            myText2.render(getRenderer());
-            myText3.render(getRenderer());
-            myText4.render(getRenderer());
-        }
-        if (timerStarted && timer->deltaTimer() < countTime)
-        {
-            testTimer.render(getRenderer());
-        }
-        if (timer->deltaTimer() > countTime)
-        {
-           timerStarted = false; 
-        }
+        SDL_RenderCopy(getRenderer(), testTexture, nullptr, &testRect);
 
         //////////////// END RENDER EVENTS ///////////////////
         
