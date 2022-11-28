@@ -117,6 +117,8 @@ void DashDaCapo::runGameLoop()
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
+    int currTestTransparency = 255;
+
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
@@ -891,6 +893,10 @@ void DashDaCapo::runGameLoop()
             }
             case MAP:
             {
+                //ALEX LOOK AT THIS
+                currTestTransparency--;
+                
+                characterInMapTexture.setAlpha(currTestTransparency);
                 //write macro for this eventually
                 if (STATE_debug)
                 {
