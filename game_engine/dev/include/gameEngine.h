@@ -76,10 +76,12 @@ public:
     int getHeight() const;
     void setToQuit();
 
+
 private:
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
     bool quit = false;
     int width;
     int height;
+    //Uint16 alpha = 0;
 };

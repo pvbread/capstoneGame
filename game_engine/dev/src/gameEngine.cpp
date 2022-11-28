@@ -7,6 +7,7 @@
 #include "Screen.h"
 #include "TileType.h"
 #include "BaseMenu.h"
+#include "Timer.h"
 
 #include "pch.h"
 
@@ -232,3 +233,4 @@ void Archimedes::setToQuit()
 {
     quit = !quit;
 }
+
