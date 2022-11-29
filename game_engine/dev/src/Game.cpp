@@ -494,17 +494,9 @@ void DashDaCapo::runGameLoop()
                         if (STATE_introSelectedOption == "New Game")
                         {
                             STATE_newGameSelected = true;
-                            STATE_gameOver = false;
-                            STATE_preTransition = true;
-                            //if(preScreenTransition != true)
-                            //{
-                            //    break;
-                            //}
-                            //else
-                            //{
-                                screen = MAP;
-                            //    STATE_preTransition = true;
-                            //}
+                            STATE_gameOver = false;  
+                            screen = MAP;
+
                             
                         }
                     }
