@@ -142,10 +142,14 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
     bool STATE_debug = false;
+    bool STATE_itemNotificationShowing = false;
+    bool STATE_healNotificationShowing = false;
     float STATE_timerCount;
+    int STATE_amountHealed;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
     std::string STATE_combatSelectedOption = "NONE";
+    std::string STATE_itemFound = "NONE";
 
     /////////// END INIT STATES /////// 
 
@@ -499,7 +503,7 @@ void DashDaCapo::runGameLoop()
                     }
                     case SDLK_3:
                     {
-                        screen = COMBAT;
+                        //screen = COMBAT;//will segfault hahahhahahahah
                         break;
                     }
                     case SDLK_4:
@@ -550,9 +554,10 @@ void DashDaCapo::runGameLoop()
                     }
                     if (STATE_debug)
                         debugController.onInput(event);
-                    else
+                    else if (!STATE_mapEventboxOpen)
                         characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
-
+                    
+                    
                     if (nextMapEvent == "BATTLE")
                     {
                         //init enemy characters
@@ -580,15 +585,58 @@ void DashDaCapo::runGameLoop()
                         STATE_roundsSet = true;
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
+                        STATE_mapEventboxOpen = false;
                         // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
                             tempCharNames[i] = roundOrder[i];
                         }
-                        
-
-
                     }
+                    else if (nextMapEvent == "ITEM" && !STATE_itemNotificationShowing)
+                    {
+                        //std::random_device rd;
+                        //std::mt19937 gen(rd());
+                        std::uniform_int_distribution<> distForRarity(1,100);
+                        std::uniform_int_distribution<> distForItem(0,2);
+                        int itemRoll = distForItem(gen);
+                        int rarityRoll = distForRarity(gen);
+                        //if it's 0 it's a NORMAL_HIT
+                        if (itemRoll == 1)
+                        {
+                            itemRoll = NORMAL_DODGE;
+                        }
+                        else if (itemRoll == 2)
+                        {
+                            itemRoll = NORMAL_SPEED;
+                        }
+                        //this just bumps up the item quality
+                        if (rarityRoll > 70 && rarityRoll < 95)
+                        {
+                            itemRoll += 1;
+                        }
+                        else if (rarityRoll >= 95)
+                        {
+                            itemRoll += 2;
+                        }
+                        //add the item to the item pool
+                        teamItemPool[itemRoll]++;
+                        STATE_itemFound = itemList[itemRoll].getName();
+                        STATE_itemNotificationShowing = true;
+                        
+                    }
+                    else if (nextMapEvent == "HEAL" && !STATE_healNotificationShowing)
+                    {
+                        std::uniform_int_distribution<> distForHeal(1,3);
+                        STATE_amountHealed = distForHeal(gen);
+                        for (auto& player: playerTeam)
+                        {
+                            if (player.getHp() != player.getMaxHp())
+                                player.setHp(player.getHp() + STATE_amountHealed);
+                        }
+                        STATE_healNotificationShowing = true;
+                    }
+                    
+                    
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
@@ -596,6 +644,9 @@ void DashDaCapo::runGameLoop()
                             case SDLK_RETURN:
                             {
                                 STATE_mapEventboxOpen = false;
+                                STATE_itemNotificationShowing = false;
+                                STATE_healNotificationShowing = false;
+                                nextMapEvent = "BLANKEVENT";
                                 break;
                             }
                             case SDLK_e:
@@ -953,17 +1004,26 @@ void DashDaCapo::runGameLoop()
                 else
                     characterController.render(getRenderer(), camera, characterInMapTexture);
                 if (STATE_mapEventboxOpen)
-                {
-                    SDL_SetRenderDrawColor(getRenderer(), 0, 0, 200, 255);
-                    SDL_RenderFillRect(getRenderer(), &mapEventBox);
-                    SDL_Color textColor = { 255, 0, 0, 255 };
-                    std::stringstream mapEventStream;
-                    mapEventStream << nextMapEvent;
-                    SDL_Surface* surfaceTesting = TTF_RenderText_Solid(font, mapEventStream.str().c_str(), textColor); //ttf surface  
-                    SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
-                    SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &mapEventBox); 
-                    SDL_FreeSurface(surfaceTesting);
-                    SDL_DestroyTexture(textureTesting);
+                {   
+                    if (nextMapEvent == "ITEM")
+                    {
+                        std::string textNotification = STATE_itemFound + " was found!";
+                        TextBox itemNotification = TextBox(textNotification, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        itemNotification.render(getRenderer());
+                        //STATE_itemFound = "NONE"; gotta do this after? no
+                    }
+                    else if (nextMapEvent == "JOKE")
+                    {
+                        TextBox jokeNotification = TextBox("some joke", 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        jokeNotification.render(getRenderer());
+                    }
+                    else if (nextMapEvent == "HEAL")
+                    {
+                        
+                        std::string healText = std::to_string(STATE_amountHealed) + "hp healed for all team members";
+                        TextBox healNotification = TextBox(healText, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        healNotification.render(getRenderer());
+                    }
                 }
                 break;
             } 

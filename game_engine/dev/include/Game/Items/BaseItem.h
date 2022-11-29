@@ -4,6 +4,7 @@
 class BaseItem
 {
 public:
+    BaseItem() = default;
     BaseItem(std::string name, std::string type, int mod);
     std::string getName() const;
     std::string getType() const;
