@@ -25,9 +25,11 @@ void YourGame::runGameLoop()
     ////////////// END SECTION OF INITIALIZING VARIABLES ///////////////
 
     ////surface///
-    SDL_Surface* testSurface = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
+    SDL_Surface* testSurface = SDL_CreateRGBSurface(0, 100, 100, 32, 0xFF, 0xA5, 0x00, 0xFF);
+    SDL_SetSurfaceBlendMode(testSurface, SDL_BLENDMODE_BLEND);
+    
     SDL_Texture* testTexture = SDL_CreateTextureFromSurface(getRenderer(), testSurface);
-    SDL_Rect testRect = {20, 20, 100, 100};
+    SDL_Rect testRect = {20, 20, 200, 100};
     
     SDL_Event event;
     while (!getQuit())
@@ -51,7 +53,7 @@ void YourGame::runGameLoop()
         /////////////// END INPUT EVENT HANDLING //////////////
 
         //you can change the background color here
-        SDL_Color backgroundColor = Color::navy;
+        SDL_Color backgroundColor = Color::white;
         SDL_SetRenderDrawColor(getRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
         SDL_RenderClear(getRenderer());
 
