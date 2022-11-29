@@ -163,12 +163,14 @@ void DashDaCapo::runGameLoop()
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
+    TextureWrapper blackScreenTransition;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
-        {&characterTestTexture, "../../assets/image/char.png"}
+        {&characterTestTexture, "../../assets/image/char.png"},
+        {&blackScreenTransition, "../../assets/image/blackScreen.png"}
     }; 
     
     //so there's going to be a couple of these per char
