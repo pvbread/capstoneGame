@@ -33,7 +33,49 @@ void DashDaCapo::runGameLoop()
 
     ///////// END CHARACTER INIT //////
 
-    
+
+
+    ///////// START ITEM INIT ////////
+
+    BaseItem normalHit = BaseItem("Normal Intonation Enhancement", "hit", 1);
+    BaseItem rareHit = BaseItem("Rare Intonation Enhancement", "hit", 3);
+    BaseItem epicHit = BaseItem("Epic Intonation Enhancement", "hit", 5);
+    BaseItem normalDodge = BaseItem("Normal Faking Enhancement", "dodge", 1);
+    BaseItem rareDodge = BaseItem("Rare Faking Enhancement", "dodge", 2);
+    BaseItem epicDodge = BaseItem("Epic Faking Enhancement", "dodge", 3);
+    BaseItem normalSpeed = BaseItem("Normal Metronome", "speed", 1);
+    BaseItem rareSpeed = BaseItem("Rare Metronome", "speed", 2);
+    BaseItem epicSpeed = BaseItem("Epic Metronome", "speed", 3);
+
+    // access in the following way itemList[NORMAL_HIT]
+    // since we already have an ItemEnum for the item indexes
+    std::vector<BaseItem> itemList {
+        normalHit,
+        rareHit,
+        epicHit,
+        normalDodge,
+        rareDodge,
+        epicDodge,
+        normalSpeed,
+        rareSpeed,
+        epicSpeed
+    };
+
+    //maybe enum this
+    std::unordered_map<int, int> teamItemPool {
+        {NORMAL_HIT, 0},
+        {RARE_HIT, 0},
+        {EPIC_HIT, 0},
+        {NORMAL_DODGE, 0},
+        {RARE_DODGE, 0},
+        {EPIC_DODGE, 0},
+        {NORMAL_SPEED, 0},
+        {RARE_SPEED, 0},
+        {EPIC_SPEED, 0}
+    };    
+
+    ///////// END ITEM INIT /////////
+
 
     // Timer Init
     //Timer* timer = Timer::instance();
@@ -103,10 +145,14 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
     bool STATE_debug = false;
+    bool STATE_itemNotificationShowing = false;
+    bool STATE_healNotificationShowing = false;
     float STATE_timerCount;
+    int STATE_amountHealed;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
     std::string STATE_combatSelectedOption = "NONE";
+    std::string STATE_itemFound = "NONE";
 
     /////////// END INIT STATES /////// 
 
@@ -300,7 +346,7 @@ void DashDaCapo::runGameLoop()
     SDL_Rect orderTitleBox = {750, 280, 200, 30};
     std::string orderTitle = "ORDER        ";
     int currOrderNum = 0;
-    std::vector<BaseCharacter*> roundOrder;
+    std::vector<std::string> roundOrder;
 
     ////////// END BATTLE ORDER INIT ///////////////
 
@@ -427,6 +473,9 @@ void DashDaCapo::runGameLoop()
     ////// END CHARACTER STATS //////
 
 
+    //BaseItem test("some item", "normal", 5);
+
+
     //double degrees = 0;
     //SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
@@ -457,7 +506,7 @@ void DashDaCapo::runGameLoop()
                     }
                     case SDLK_3:
                     {
-                        screen = COMBAT;
+                        //screen = COMBAT;//will segfault hahahhahahahah
                         break;
                     }
                     case SDLK_4:
@@ -512,9 +561,10 @@ void DashDaCapo::runGameLoop()
                     }
                     if (STATE_debug)
                         debugController.onInput(event);
-                    else
+                    else if (!STATE_mapEventboxOpen)
                         characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
-
+                    
+                    
                     if (nextMapEvent == "BATTLE")
                     {
                         //init enemy characters
@@ -542,12 +592,58 @@ void DashDaCapo::runGameLoop()
                         STATE_roundsSet = true;
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
+                        STATE_mapEventboxOpen = false;
                         // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
-                            tempCharNames[i] = roundOrder[i]->getName();
-
-
+                        {
+                            tempCharNames[i] = roundOrder[i];
+                        }
                     }
+                    else if (nextMapEvent == "ITEM" && !STATE_itemNotificationShowing)
+                    {
+                        //std::random_device rd;
+                        //std::mt19937 gen(rd());
+                        std::uniform_int_distribution<> distForRarity(1,100);
+                        std::uniform_int_distribution<> distForItem(0,2);
+                        int itemRoll = distForItem(gen);
+                        int rarityRoll = distForRarity(gen);
+                        //if it's 0 it's a NORMAL_HIT
+                        if (itemRoll == 1)
+                        {
+                            itemRoll = NORMAL_DODGE;
+                        }
+                        else if (itemRoll == 2)
+                        {
+                            itemRoll = NORMAL_SPEED;
+                        }
+                        //this just bumps up the item quality
+                        if (rarityRoll > 70 && rarityRoll < 95)
+                        {
+                            itemRoll += 1;
+                        }
+                        else if (rarityRoll >= 95)
+                        {
+                            itemRoll += 2;
+                        }
+                        //add the item to the item pool
+                        teamItemPool[itemRoll]++;
+                        STATE_itemFound = itemList[itemRoll].getName();
+                        STATE_itemNotificationShowing = true;
+                        
+                    }
+                    else if (nextMapEvent == "HEAL" && !STATE_healNotificationShowing)
+                    {
+                        std::uniform_int_distribution<> distForHeal(1,3);
+                        STATE_amountHealed = distForHeal(gen);
+                        for (auto& player: playerTeam)
+                        {
+                            if (player.getHp() != player.getMaxHp())
+                                player.setHp(player.getHp() + STATE_amountHealed);
+                        }
+                        STATE_healNotificationShowing = true;
+                    }
+                    
+                    
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
@@ -555,6 +651,9 @@ void DashDaCapo::runGameLoop()
                             case SDLK_RETURN:
                             {
                                 STATE_mapEventboxOpen = false;
+                                STATE_itemNotificationShowing = false;
+                                STATE_healNotificationShowing = false;
+                                nextMapEvent = "BLANKEVENT";
                                 break;
                             }
                             case SDLK_e:
@@ -606,7 +705,6 @@ void DashDaCapo::runGameLoop()
                     if(!STATE_roundsSet && STATE_roundOver)
                     {
                         // get new round turn order
-                        roundOrder.clear();
                         roundOrder = setRoundTurns(combatParticipants);
                         
                         STATE_roundsSet = true;
@@ -639,37 +737,52 @@ void DashDaCapo::runGameLoop()
                             STATE_combatSelectedOption = "NONE";
 
                             //std::vector<int> attackDamage;
-                            validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            for (int i = 0; i < combatParticipants.size();i++)
+                            {
+                                if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                                {
+                                    int charIndex = combatParticipants[i].getParticipantsIndex();
+                                    validMoves = combatParticipants[i].getValidMoves(ATTACK,charIndex,combatParticipants);
+                                    std::string currPlayerName = combatParticipants[i].getName();
+                                    currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                    std::string targetNotification;
+                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                    combatParticipants = combatParticipants[i].doAction(ATTACK,attackDamage,validMoves[currTarget],combatParticipants);
+                                    std::string attackNotification;
+                                    for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                    {
+                                        if (j == 0)
+                                        {
+                                            attackNotification += currPlayerName;
+                                            attackNotification += " attacks: ";
+                                            attackNotification += std::to_string(attackDamage[j]);
+                                            attackNotification += " dmg dealt to ";
+                                            attackNotification += targetNotification;
+                                            continue;
+                                        }
+                                        attackNotification += " *** ";
+                                        attackNotification += std::to_string(attackDamage[j]);
+                                        attackNotification += " dmg dealt to ";
+                                        attackNotification += combatParticipants[validMoves[currTarget][j]].getName();
+
+                                    }
+                                    battleNotification.changeText(attackNotification);
+                                    STATE_timerStarted = true;
+                                    STATE_timerCount = timer->deltaTime() + 3;
+                                }
+                            }
+                           // validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            //int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            //std::string currPlayerName = combatParticipants[charIndex].getName();
+                            //currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                             // in case when a character dies, preserve target index's name before performing action 
-                            std::string targetNotification;
-                            targetNotification += combatParticipants[validMoves[currTarget][0]].getName();
-                            roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
+                            //std::string targetNotification;
+                            //targetNotification += combatParticipants[validMoves[currTarget][0]].getName();
+                            //roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
                             //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             
-                            do 
-                            {
-                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
-                            }
-                            while (roundOrder[currOrderNum]->isAlive()==false);
-                            std::string attackNotification;
-                            for (int i = 0; i < validMoves[currTarget].size(); i++)
-                            {
-                                if (i == 0)
-                                {
-                                    attackNotification += std::to_string(attackDamage[i]);
-                                    attackNotification += " dmg dealt to ";
-                                    attackNotification += targetNotification;
-                                    continue;
-                                }
-                                attackNotification += " *** ";
-                                attackNotification += std::to_string(attackDamage[i]);
-                                attackNotification += " dmg dealt to ";
-                                attackNotification += combatParticipants[validMoves[currTarget][i]].getName();
-
-                            }
-                            battleNotification.changeText(attackNotification);
-                            STATE_timerStarted = true;
-                            STATE_timerCount = timer->deltaTime() + 3;
+                            
+                            
                         }
 
                         if (STATE_combatSelectedOption == "Buff")
@@ -678,37 +791,49 @@ void DashDaCapo::runGameLoop()
                             //WAS the round order properly set??
                             
                             STATE_combatSelectedOption = "NONE";
-                            //look at roundOrder
                             std::vector<int> healAmount;
-                            validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            roundOrder[currOrderNum]->doAction(BUFF, healAmount, validMoves[currTarget], combatParticipants); 
-                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            do 
-                            {
-                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
-                            }
-                            while (roundOrder[currOrderNum]->isAlive()==false);
-                            std::string healNotification;
 
-                            for (int i = 0; i < validMoves[currTarget].size(); i++)
+                            //look at roundOrder
+                            for (int i = 0; i < combatParticipants.size();i++)
                             {
-                                if (i == 0)
+                                if (combatParticipants[i].getName()==roundOrder[currOrderNum])
                                 {
+                                    int charIndex = combatParticipants[i].getParticipantsIndex();
+                                    validMoves = combatParticipants[i].getValidMoves(BUFF,charIndex,combatParticipants);
+                                    std::string currPlayerName = combatParticipants[i].getName();
+                                    currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                    std::string targetNotification;
+                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                    combatParticipants = combatParticipants[i].doAction(BUFF,healAmount,validMoves[currTarget],combatParticipants);
+                                    std::string healNotification;
+                                    for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                    {
+                                        if (j == 0)
+                                        {
+                                            healNotification += currPlayerName;
+                                            healNotification += " heals: ";
+                                            healNotification += std::to_string(healAmount[j]);
+                                            healNotification += " healed for ";
+                                            healNotification += targetNotification;
+                                            continue;
+                                        }
+                                        
 
-                                    healNotification += std::to_string(healAmount[i]);
-                                    healNotification += " healed for ";
-                                    healNotification += combatParticipants[validMoves[currTarget][i]].getName();
-                                    continue;
+                                    }
+                                    battleNotification.changeText(healNotification);
+                                    STATE_timerStarted = true;
+                                    STATE_timerCount = timer->deltaTime() + 3;
                                 }
-                                healNotification += " *** ";
-                                healNotification += std::to_string(healAmount[i]);
-                                healNotification += " healed for ";
-                                healNotification += combatParticipants[validMoves[currTarget][i]].getName();
-
                             }
-                            battleNotification.changeText(healNotification);
-                            STATE_timerStarted = true;
-                            STATE_timerCount = timer->deltaTime() + 3;
+                            //validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            //int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            //std::string currPlayerName = combatParticipants[charIndex].getName();
+                            //currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                            //roundOrder[currOrderNum]->doAction(BUFF, healAmount, validMoves[currTarget], combatParticipants); 
+
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            
+                                
 
 
                         }
@@ -720,65 +845,101 @@ void DashDaCapo::runGameLoop()
 
                             //look at roundOrder
                             std::vector<int> newSpeed;
-                            validMoves = roundOrder[currOrderNum]->getValidMoves(DEBUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            roundOrder[currOrderNum]->doAction(DEBUFF, newSpeed, validMoves[currTarget], combatParticipants); 
-                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            do 
+                            for (int i = 0; i < combatParticipants.size();i++)
                             {
-                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
-                            }
-                            while (roundOrder[currOrderNum]->isAlive()==false);
-                            std::string debuffNotification;
-                            for (int i = 0; i < validMoves[currTarget].size(); i++)
-                            {
-                                if (i == 0)
+                                if (combatParticipants[i].getName()==roundOrder[currOrderNum])
                                 {
-                                    debuffNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
-                                    debuffNotification += " is the new speed for ";
-                                    debuffNotification += combatParticipants[validMoves[currTarget][i]].getName();
-                                    continue;
-                                }
-                                debuffNotification += " *** ";
-                                debuffNotification += std::to_string(combatParticipants[validMoves[currTarget][i]].getSpeed() + newSpeed[i]);
-                                debuffNotification += " is the new speed for ";
-                                debuffNotification += combatParticipants[validMoves[currTarget][i]].getName();
+                                    int charIndex = combatParticipants[i].getParticipantsIndex();
+                                    validMoves = combatParticipants[i].getValidMoves(DEBUFF,charIndex,combatParticipants);
+                                    std::string currPlayerName = combatParticipants[i].getName();
+                                    currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                    std::string targetNotification;
+                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                    combatParticipants = combatParticipants[i].doAction(DEBUFF,newSpeed,validMoves[currTarget],combatParticipants);
+                                    std::string debuffNotification;
+                                    for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                    {
+                                        if (j == 0)
+                                        {
+                                            debuffNotification += currPlayerName;
+                                            debuffNotification += " debuffs: ";
+                                            debuffNotification += std::to_string(newSpeed[j]);
+                                            debuffNotification += " is the new speed for ";
+                                            debuffNotification += targetNotification;
+                                            continue;
+                                        }
+                                        
 
+                                    }
+                                    battleNotification.changeText(debuffNotification);
+                                    STATE_timerStarted = true;
+                                    STATE_timerCount = timer->deltaTime() + 3;
+                                }
                             }
-                            battleNotification.changeText(debuffNotification);
-                            STATE_timerStarted = true;
-                            STATE_timerCount = timer->deltaTime() + 3;
+
 
                         }
 
                         if (STATE_combatSelectedOption == "Move")
                         {
-                            int x = 5;
                             //WAS the round order properly set??
                             STATE_combatSelectedOption = "NONE";
                             //look at roundOrder
                             std::vector<int> nothing;
-                            validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
-                            std::string currPlayerName = combatParticipants[charIndex].getName();
-                            currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
-                            std::string targetName = combatParticipants[validMoves[currTarget][0]].getName();
-                            roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants); 
-                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            do 
+                            for (int i = 0; i < combatParticipants.size();i++)
                             {
-                                currOrderNum = (currOrderNum + 1) % roundOrder.size();
-                            }
-                            while (roundOrder[currOrderNum]->isAlive()==false);
-                            std::string moveNotification;
-                            moveNotification += currPlayerName;
-                            moveNotification += " switch places with ";
-                            moveNotification += targetName;
-                            
-                            battleNotification.changeText(moveNotification);
-                            STATE_timerStarted = true;
-                            STATE_timerCount = timer->deltaTime() + 3;
-                        }
+                                if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                                {
+                                    int charIndex = combatParticipants[i].getParticipantsIndex();
+                                    validMoves = combatParticipants[i].getValidMoves(MOVE,charIndex,combatParticipants);
+                                    std::string currPlayerName = combatParticipants[i].getName();
+                                    currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                    std::string targetNotification;
+                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                    combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
 
+                                    std::string moveNotification;
+                                    moveNotification += currPlayerName;
+                                    moveNotification += " switch places with ";
+                                    moveNotification += targetNotification;
+                            
+                                    battleNotification.changeText(moveNotification);
+                                    STATE_timerStarted = true;
+                                    STATE_timerCount = timer->deltaTime() + 3;
+                                    
+                                }
+                            }
+                            //validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
+                            //int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
+                            //std::string currPlayerName = combatParticipants[charIndex].getName();
+                            //std::string currPlayerNameCopy = currPlayerName;
+                            //currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                            //std::string targetName = combatParticipants[validMoves[currTarget][0]].getName();
+                            //int targetIndex = validMoves[currTarget][0];
+                            //combatParticipants[charIndex].setNewParticipantsIndex(targetIndex);
+                            //combatParticipants[targetIndex].setNewParticipantsIndex(charIndex);
+                            //roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants);
+                            
+                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
+                            
+                            
+                        }
+                        bool isNextTurnAlive = false;
+                        do 
+                        {
+                            currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                            for (int i = 0; i < combatParticipants.size(); i++)
+                            {
+                                if (combatParticipants[i].getName() == roundOrder[currOrderNum])
+                                {
+                                    if (combatParticipants[i].isAlive())
+                                    {
+                                        isNextTurnAlive = true;
+                                    }
+                                }
+                            }
+                        }
+                        while (!isNextTurnAlive);
                         //TODO get end state for battle
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
@@ -881,17 +1042,26 @@ void DashDaCapo::runGameLoop()
                 else
                     characterController.render(getRenderer(), camera, characterInMapTexture);
                 if (STATE_mapEventboxOpen)
-                {
-                    SDL_SetRenderDrawColor(getRenderer(), 0, 0, 200, 255);
-                    SDL_RenderFillRect(getRenderer(), &mapEventBox);
-                    SDL_Color textColor = { 255, 0, 0, 255 };
-                    std::stringstream mapEventStream;
-                    mapEventStream << nextMapEvent;
-                    SDL_Surface* surfaceTesting = TTF_RenderText_Solid(font, mapEventStream.str().c_str(), textColor); //ttf surface  
-                    SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
-                    SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &mapEventBox); 
-                    SDL_FreeSurface(surfaceTesting);
-                    SDL_DestroyTexture(textureTesting);
+                {   
+                    if (nextMapEvent == "ITEM")
+                    {
+                        std::string textNotification = STATE_itemFound + " was found!";
+                        TextBox itemNotification = TextBox(textNotification, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        itemNotification.render(getRenderer());
+                        //STATE_itemFound = "NONE"; gotta do this after? no
+                    }
+                    else if (nextMapEvent == "JOKE")
+                    {
+                        TextBox jokeNotification = TextBox("some joke", 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        jokeNotification.render(getRenderer());
+                    }
+                    else if (nextMapEvent == "HEAL")
+                    {
+                        
+                        std::string healText = std::to_string(STATE_amountHealed) + "hp healed for all team members";
+                        TextBox healNotification = TextBox(healText, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        healNotification.render(getRenderer());
+                    }
                 }
                 break;
             } 
@@ -913,12 +1083,8 @@ void DashDaCapo::runGameLoop()
                 characterTestTexture.render(getRenderer(), 550, 100, currFrameRect);
                 characterTestTexture.render(getRenderer(), 650, 100, currFrameRect);
                 characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
-
-                SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
-                //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
-                //TODO Something wrong with the rendering of currPlayer
-                int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
-                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                
+                
 
                 //hpBoxes
                 SDL_Surface* surface;
@@ -954,11 +1120,18 @@ void DashDaCapo::runGameLoop()
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
                     // rerender bug if I don't update validMoves
-                    validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                    for (auto target: validMoves[currTarget])
+                    for (int i = 0; i < combatParticipants.size();i++)
                     {
-                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                        if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                        {
+                            validMoves = combatParticipants[i].getValidMoves(ATTACK, combatParticipants[i].getParticipantsIndex(),combatParticipants);
+                            for (auto target: validMoves[currTarget])
+                            {
+                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                            }
+                        }
                     }
+                    
                 }
                 if (STATE_combatSelectedOption == "Buff")
                 {
@@ -972,11 +1145,18 @@ void DashDaCapo::runGameLoop()
                     //statusRoundOrderSize.render(getRenderer());
                     SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                     
-                    validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                    for (auto target: validMoves[currTarget])
+                    for (int i = 0; i < combatParticipants.size();i++)
                     {
-                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                        if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                        {
+                            validMoves = combatParticipants[i].getValidMoves(BUFF, combatParticipants[i].getParticipantsIndex(),combatParticipants);
+                            for (auto target: validMoves[currTarget])
+                            {
+                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                            }
+                        }
                     }
+                    
                     
                 }
 
@@ -984,10 +1164,16 @@ void DashDaCapo::runGameLoop()
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
                     // rerender bug if I don't update validMoves
-                    validMoves = roundOrder[currOrderNum]->getValidMoves(DEBUFF, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                    for (auto target: validMoves[currTarget])
+                    for (int i = 0; i < combatParticipants.size();i++)
                     {
-                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                        if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                        {
+                            validMoves = combatParticipants[i].getValidMoves(DEBUFF, combatParticipants[i].getParticipantsIndex(),combatParticipants);
+                            for (auto target: validMoves[currTarget])
+                            {
+                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                            }
+                        }
                     }
                 }
 
@@ -995,12 +1181,32 @@ void DashDaCapo::runGameLoop()
                 {
                     SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                     // rerender bug if I don't update validMoves
-                    validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                    for (auto target: validMoves[currTarget])
+                    for (int i = 0; i < combatParticipants.size();i++)
                     {
-                        SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                        if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                        {
+                            validMoves = combatParticipants[i].getValidMoves(MOVE, combatParticipants[i].getParticipantsIndex(),combatParticipants);
+                            for (auto target: validMoves[currTarget])
+                            {
+                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                            }
+                        }
                     }
                 }
+                
+                SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
+                //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
+                //TODO Something wrong with the rendering of currPlayer
+                int currPlayer;
+                for (int i = 0; i < combatParticipants.size(); i++)
+                {
+                    if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                    {
+                        currPlayer = combatParticipants[i].getParticipantsIndex();
+                    }
+                }
+                //int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
+                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
                 
 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
@@ -1016,17 +1222,18 @@ void DashDaCapo::runGameLoop()
                 SDL_FreeSurface(surfaceTesting);
                 SDL_DestroyTexture(textureTesting);
 
-
-                // update turn order for rendering
-                for(int i = 0; i < roundOrder.size(); i++)
+               
+                for (int i = 0; i < roundOrder.size();i++)
                 {
-                    tempCharNames[i] = roundOrder[i]->getName();
+                    tempCharNames[i] = roundOrder[i];
+                    for (int j = roundOrder.size(); j < tempCharNames.size(); j++)
+                    {
+                        tempCharNames[j] = " ";
+                    }
+                    
                 }
-                // TODO: figure out how to remove names when character dies
-                for (int i = roundOrder.size(); i < orderBoxes.size();i++)
-                {
-                    orderBoxes.pop_back();
-                }
+                
+                
 
 
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)

@@ -18,11 +18,12 @@ TextBox::TextBox(std::string text,
 
 void TextBox::render(SDL_Renderer* renderer)
 {
-    SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
-    SDL_RenderFillRect(renderer, &textBox);
     std::stringstream textStream;
     textStream << text;
     TTF_SizeText(font, text.c_str(), &textBox.w, &textBox.h);
+    SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+    SDL_RenderFillRect(renderer, &textBox);
+    
     SDL_Surface* surface = TTF_RenderUTF8_Blended(font, textStream.str().c_str(), textColor); 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface); 
     SDL_RenderCopy(renderer, texture, nullptr, &textBox); 
