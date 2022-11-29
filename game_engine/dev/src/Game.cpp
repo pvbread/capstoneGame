@@ -103,6 +103,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
     bool STATE_debug = false;
+    bool STATE_preTransition = false;
     float STATE_timerCount;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
