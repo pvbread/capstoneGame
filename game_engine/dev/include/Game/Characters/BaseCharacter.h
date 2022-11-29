@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "../Items/BaseItem.h"
 
 //just in case we decide to do a moveset array, very unlikely
 typedef void(*VoidFunctionPointer)();
@@ -111,6 +112,7 @@ protected:
     bool alive;
     int participantsIndex;
     int itemModifier;
+    BaseItem itemEquipped;
     
     //example validMoves and ranges
     std::unordered_map<ActionType, std::vector<int>> movesAndRanges = {

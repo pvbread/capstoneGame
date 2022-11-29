@@ -15,6 +15,7 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     this->dodgeModifier = dodgeModifier;
     this->enemy = enemy;
     alive = true;
+    BaseItem noItem = BaseItem("", "", 0);
 }
 
 /*
