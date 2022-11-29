@@ -16,10 +16,10 @@ struct greater_prefer_ally
     }
 };
 
-std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters)
+std::vector<std::string> setRoundTurns(std::vector<BaseCharacter>& characters)
 {   
     
-    std::vector<BaseCharacter*> roundOrder;
+    std::vector<std::string> roundOrder;
     std::priority_queue<std::pair<int, std::pair<bool, BaseCharacter*>>, 
                         std::vector<std::pair<int, std::pair<bool, BaseCharacter*>>>,
                         greater_prefer_ally> newOrderQueue;
@@ -43,7 +43,9 @@ std::vector<BaseCharacter*> setRoundTurns(std::vector<BaseCharacter>& characters
     while(!newOrderQueue.empty())
     {
         auto curr = newOrderQueue.top();
-        roundOrder.push_back(&(*curr.second.second)); //insert pointer to character
+        auto temp = (&(*curr.second.second)); //insert pointer to character
+        std::string charName = temp->getName(); 
+        roundOrder.push_back(charName);
         newOrderQueue.pop();
     }
 
