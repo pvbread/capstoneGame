@@ -114,12 +114,20 @@ void DashDaCapo::runGameLoop()
         "Move"
     };
 
-    SDL_Color combatMenuColor = { 0, 0, 255, 255 };
+    //SDL_Color combatMenuColor = { 0, 0, 255, 255 };
+    /*
     BaseMenu combatMenu = BaseMenu(50, 25, 520, 200, 50, 
                                    combatOptionsStrings, 
                                    Font::raleway, 
                                    Color::red,
                                    Color::maroon, 
+                                   getRenderer()
+    );*/
+    BaseMenu combatMenu = BaseMenu(50, 750, 490, 100, 50, 
+                                   combatOptionsStrings, 
+                                   Font::openSans, 
+                                   Color::white, 
+                                   Color::navy,
                                    getRenderer()
     );
 
@@ -163,12 +171,14 @@ void DashDaCapo::runGameLoop()
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
+    TextureWrapper combatScreenTexture;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
-        {&characterTestTexture, "../../assets/image/char.png"}
+        {&characterTestTexture, "../../assets/image/char.png"},
+        {&combatScreenTexture, "../../assets/image/combat_screen.png"} 
     }; 
     
     //so there's going to be a couple of these per char
@@ -186,6 +196,30 @@ void DashDaCapo::runGameLoop()
     }
 
     //////////// END TEXTURE LOADING /////////////
+    
+    /////////// COMBAT SCREEN THINGS //////////
+    TextBox combatStatBass = TextBox("bass", 25, 50, 630, 150, 30);
+    TextBox combatStatBassHP = TextBox("Hp:", 25, 50, 660, 150, 30);
+    
+    TextBox combatStatDrum = TextBox("drum", 25, 200, 630, 150, 30);
+    TextBox combatStatDrumHP = TextBox("Hp:", 25, 200, 660, 150, 30);
+
+    TextBox combatStatFlute = TextBox("flute", 25, 350, 630, 150, 30);
+    TextBox combatStatFluteHP = TextBox("Hp:", 25, 350, 660, 150, 30);
+    
+    TextBox combatStatConductor = TextBox("conductor", 25, 500, 630, 150, 30);
+    TextBox combatStatConductorHP = TextBox("Hp:", 25, 500, 660, 150, 30);
+
+    std::vector<TextBox> combatStatusRow {
+        combatStatBass, combatStatDrum, 
+        combatStatFlute, combatStatConductor,
+        combatStatBassHP, combatStatDrumHP, 
+        combatStatFluteHP, combatStatConductorHP
+    };
+
+
+    ///////////// END COMBAT SCREEN THINGS /////////
+
 
     //////////// START RANDOM MAP GEN /////////////
     /*
@@ -349,7 +383,7 @@ void DashDaCapo::runGameLoop()
 
     ////////// START BATTLE NOTIFICATION //////////
 
-    TextBox battleNotification = TextBox("", 25, 5, 400, 700, 100);
+    TextBox battleNotification = TextBox("", 30, 0, 564, 500, 60);
 
     /////////  END BATTLE NOTIFICATION ///////////
 
@@ -389,11 +423,11 @@ void DashDaCapo::runGameLoop()
         "Move"
     };
 
-    BaseMenu sandboxMenu = BaseMenu(750, 500, 200, 50, 100, 
+    BaseMenu sandboxMenu = BaseMenu(50, 750, 490, 100, 50, 
                                    sandboxOptionsStrings, 
                                    Font::openSans, 
                                    Color::white, 
-                                   Color::maroon,
+                                   Color::navy,
                                    getRenderer()
     );
 
@@ -404,29 +438,29 @@ void DashDaCapo::runGameLoop()
     std::vector<TextBox> sandboxQueIcons;
 
     for (int i = 0; i < 8; i++)
-        {
-            TextBox orderRect = TextBox("-->", 50, 750, (initialOrderHeight + (i*50)),
-             80, 50, Font::roboto, Color::blue, Color::white);
-            sandboxQue.push_back(orderRect);
-            //Icons
-            TextBox orderIcons = TextBox("X", 50, 830, (initialOrderHeight + (i*50)),
-             50, 50, Font::roboto, Color::blue, Color::red);
-            sandboxQueIcons.push_back(orderIcons);
-        }
+    {
+        TextBox orderRect = TextBox("-->", 50, 750, (initialOrderHeight + (i*50)),
+            80, 50, Font::roboto, Color::blue, Color::white);
+        sandboxQue.push_back(orderRect);
+        //Icons
+        TextBox orderIcons = TextBox("X", 50, 830, (initialOrderHeight + (i*50)),
+            50, 50, Font::roboto, Color::blue, Color::red);
+        sandboxQueIcons.push_back(orderIcons);
+    }
     
     //Status///////////////////////////////////
     //std::vector<TextBox> StatusRow;
-    TextBox statBass = TextBox("bass     ", 500, 50, 630, 150, 30);
-    TextBox statBassHP = TextBox("Hp:       ", 500, 50, 660, 150, 30);
+    TextBox statBass = TextBox("bass", 25, 50, 630, 150, 30);
+    TextBox statBassHP = TextBox("Hp:", 25, 50, 660, 150, 30);
 
-    TextBox statDrum = TextBox("drum     ", 500, 200, 630, 150, 30);
-    TextBox statDrumHP = TextBox("Hp:       ", 500, 200, 660, 150, 30);
+    TextBox statDrum = TextBox("drum", 25, 200, 630, 150, 30);
+    TextBox statDrumHP = TextBox("Hp:", 25, 200, 660, 150, 30);
 
-    TextBox statFlute = TextBox("flute   ", 500, 350, 630, 150, 30);
-    TextBox statFluteHP = TextBox("Hp:        ", 500, 350, 660, 150, 30);
+    TextBox statFlute = TextBox("flute", 25, 350, 630, 150, 30);
+    TextBox statFluteHP = TextBox("Hp:", 25, 350, 660, 150, 30);
     
-    TextBox statConductor = TextBox("conductor", 500, 500, 630, 150, 30);
-    TextBox statConductorHP = TextBox("Hp:          ", 500, 500, 660, 150, 30);
+    TextBox statConductor = TextBox("conductor", 25, 500, 630, 150, 30);
+    TextBox statConductorHP = TextBox("Hp:", 25, 500, 660, 150, 30);
 
     std::vector<TextBox> statusRow{statBass, statDrum, statFlute, statConductor};
 
@@ -940,6 +974,7 @@ void DashDaCapo::runGameLoop()
                 }
                 case SANDBOX:
                 {
+                    sandboxMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
                     break;
                 }
                 case STATUS_MENU:
@@ -1031,6 +1066,28 @@ void DashDaCapo::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
+
+                combatScreenTexture.render(getRenderer(), 0, 0);
+
+                
+                //Status Pane
+                SDL_Rect statusPane = {0, 600, 720, 120};
+                SDL_Color colStatus = Color::cyan;
+                SDL_SetRenderDrawColor(getRenderer(), colStatus.r, colStatus.g, colStatus.b, 0);
+                SDL_RenderFillRect(getRenderer(), &statusPane);
+
+                //Order Pane
+                SDL_Rect orderPane = {720, 0, 240, 480};
+                SDL_Color colOrder = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), colOrder.r, colOrder.g, colOrder.b, 0);
+                SDL_RenderFillRect(getRenderer(), &orderPane);
+
+                //Menu Pane
+                SDL_Rect menuPane = {720, 480, 720, 240};
+                SDL_Color colMenu = Color::maroon;
+                SDL_SetRenderDrawColor(getRenderer(), colMenu.r, colMenu.g, colMenu.b, 0);
+                SDL_RenderFillRect(getRenderer(), &menuPane);
+                
                 combatMenu.render(getRenderer());
                 
                 
@@ -1211,6 +1268,10 @@ void DashDaCapo::runGameLoop()
                     SDL_DestroyTexture(textureTesting);
                 }
 
+                for (auto el: combatStatusRow)
+                {
+                    el.render(getRenderer());
+                } 
 
                 break;
             }
@@ -1275,7 +1336,7 @@ void DashDaCapo::runGameLoop()
                 statFluteHP.render(getRenderer());
                 statDrumHP.render(getRenderer());
                 statConductorHP.render(getRenderer());
-
+                combatScreenTexture.render(getRenderer(), 0, 0);
                 break;
             }
             case STATUS_MENU:
