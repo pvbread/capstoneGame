@@ -16,10 +16,10 @@ void DashDaCapo::runGameLoop()
     Timer* timer = Timer::instance();
 
     ////////// START CHARACTER INIT ////////
-    BasePlayer conductor = BasePlayer("conductor    ", 30, 3, 3, 0, 3, 3, 3);
-    BasePlayer drum = BasePlayer("drummer      ", 50, 2, 1, 0, 3, 3, 3);
-    BasePlayer flute = BasePlayer("flutist      ", 20, 6, 1, 0, 3, 3, 3);
-    Bass bass = Bass("bassist      ", 60, 1, 3, 0, 3, 3, 3);
+    BasePlayer conductor = BasePlayer("conductor", 30, 3, 3, 0, 3, 3, 3);
+    BasePlayer drum = BasePlayer("drummer", 50, 2, 1, 0, 3, 3, 3);
+    BasePlayer flute = BasePlayer("flutist", 20, 6, 1, 0, 3, 3, 3);
+    Bass bass = Bass("bassist", 60, 1, 3, 0, 3, 3, 3);
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
     bass.setNewParticipantsIndex(2);
@@ -198,23 +198,25 @@ void DashDaCapo::runGameLoop()
     //////////// END TEXTURE LOADING /////////////
     
     /////////// COMBAT SCREEN THINGS //////////
+    std::string prefixHP = "HP: ";
+
     TextBox combatStatBass = TextBox("bass", 25, 50, 630, 150, 30);
-    TextBox combatStatBassHP = TextBox("Hp:", 25, 50, 660, 150, 30);
+    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 50, 660, 150, 30);
     
     TextBox combatStatDrum = TextBox("drum", 25, 200, 630, 150, 30);
-    TextBox combatStatDrumHP = TextBox("Hp:", 25, 200, 660, 150, 30);
+    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 200, 660, 150, 30);
 
     TextBox combatStatFlute = TextBox("flute", 25, 350, 630, 150, 30);
-    TextBox combatStatFluteHP = TextBox("Hp:", 25, 350, 660, 150, 30);
+    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 350, 660, 150, 30);
     
     TextBox combatStatConductor = TextBox("conductor", 25, 500, 630, 150, 30);
-    TextBox combatStatConductorHP = TextBox("Hp:", 25, 500, 660, 150, 30);
+    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 500, 660, 150, 30);
 
     std::vector<TextBox> combatStatusRow {
-        combatStatBass, combatStatDrum, 
         combatStatFlute, combatStatConductor,
+        combatStatBass, combatStatDrum,
+        combatStatFluteHP, combatStatConductorHP,
         combatStatBassHP, combatStatDrumHP, 
-        combatStatFluteHP, combatStatConductorHP
     };
 
 
@@ -354,7 +356,7 @@ void DashDaCapo::runGameLoop()
     std::vector<SDL_Rect> charBoxes(8);
     for (int i = 0; i < charBoxes.size(); i++)
     {
-        SDL_Rect temp = {(50+(i*100)), 200, 64, 64};
+        SDL_Rect temp = {(i*100), 300, 64, 64};
         charBoxes[i] = temp; 
     }
 
@@ -1094,14 +1096,14 @@ void DashDaCapo::runGameLoop()
                 SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
 
                 //will be for loop (eventually)
-                characterTestTexture.render(getRenderer(), 50, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 150, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 250, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 350, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 450, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 550, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 650, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 0, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 100, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 200, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 300, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 400, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 500, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 600, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 700, 400, currFrameRect);
                 
                 
 
@@ -1267,6 +1269,12 @@ void DashDaCapo::runGameLoop()
                     SDL_FreeSurface(surfaceTesting);
                     SDL_DestroyTexture(textureTesting);
                 }
+                
+                //HACK but that's life
+                combatStatusRow[4].changeText(prefixHP + std::to_string(playerTeam[0].getHp()));
+                combatStatusRow[5].changeText(prefixHP + std::to_string(playerTeam[1].getHp()));
+                combatStatusRow[6].changeText(prefixHP + std::to_string(playerTeam[2].getHp()));
+                combatStatusRow[7].changeText(prefixHP + std::to_string(playerTeam[3].getHp()));
 
                 for (auto el: combatStatusRow)
                 {
