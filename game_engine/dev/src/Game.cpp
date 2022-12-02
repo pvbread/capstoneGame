@@ -147,6 +147,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_healNotificationShowing = false;
     bool STATE_preTransition = false;
     bool STATE_postTransition = true;
+    bool STATE_statMenu = false;
     float STATE_timerCount;
     int STATE_amountHealed;
     std::string STATE_introSelectedOption = "NONE";
@@ -491,16 +492,47 @@ void DashDaCapo::runGameLoop()
     SDL_Event event;
     while (!getQuit())
     {
+        /// POST-PROCESSOR ///
+
         timer->update();
 
+        //////SCREEN TRANSITIONS////////
         if (STATE_introSelectedOption == "New Game")
         {
             STATE_preTransition = true;
             if(alphaValue >= 255)
             {
+                STATE_preTransition = false;
                 screen = MAP;
+                STATE_postTransition = true;
+                STATE_introSelectedOption = "NONE";
+            }
+            
+        }
+        if (nextMapEvent == "BATTLE")
+        {
+            STATE_preTransition = true;
+            if(alphaValue >= 255)
+            {
+                STATE_preTransition = false;
+                screen = COMBAT;
+                STATE_postTransition = true;
+                STATE_mapEventboxOpen = false;
+                nextMapEvent = "BLANKEVENT";
             }
         }
+        if (STATE_statMenu == true)
+        {
+            STATE_preTransition = true;
+            if(alphaValue >= 255)
+            {
+                STATE_preTransition = false;
+                screen = STATUS_MENU;
+                STATE_postTransition = true;
+            }
+        }
+
+        //////END SCREEN TRANSITIONS////////
 
         while(SDL_PollEvent(&event))
         {
@@ -559,18 +591,18 @@ void DashDaCapo::runGameLoop()
                     if (STATE_introSelectedOption != "NONE")
                     {
                         if (STATE_introSelectedOption == "New Game")
-                        {          
+                        {
+                            
                             STATE_newGameSelected = true;
-                            STATE_gameOver = false;
+                            STATE_gameOver = false; 
                         }
-                    
                     }
                     
                     break;
                 }
                 case MAP:
                 {
-
+                    
                     if (event.type == SDL_KEYDOWN)
                     {
                         if (event.key.keysym.sym == SDLK_9)
@@ -607,9 +639,9 @@ void DashDaCapo::runGameLoop()
                         //setRoundOrder
                         roundOrder = setRoundTurns(combatParticipants);
                         STATE_roundsSet = true;
-                        screen = COMBAT;
-                        nextMapEvent = "BLANKEVENT";
-                        STATE_mapEventboxOpen = false;
+                        ////screen = COMBAT;//put in screen transition
+                        ////nextMapEvent = "BLANKEVENT";//put in screen transition
+                        ////STATE_mapEventboxOpen = false;//put in screen transition
                         // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
@@ -675,7 +707,8 @@ void DashDaCapo::runGameLoop()
                             }
                             case SDLK_e:
                             {
-                                screen = STATUS_MENU;
+                                STATE_statMenu = true;
+                                //screen = STATUS_MENU;
                                 break;
                             }
                         }
@@ -974,6 +1007,7 @@ void DashDaCapo::runGameLoop()
                         {
                             case SDLK_e:
                             {
+                                STATE_statMenu = false;
                                 screen = MAP;
                                 break;
                             }
@@ -1011,7 +1045,7 @@ void DashDaCapo::runGameLoop()
                     blackScreenTransition.setAlpha(alphaValue);
                     if(alphaValue == 0)
                     {
-                        STATE_postTransition = false; 
+                        STATE_postTransition = false;  
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
@@ -1071,6 +1105,28 @@ void DashDaCapo::runGameLoop()
                         healNotification.render(getRenderer());
                     }
                 }
+
+                if(STATE_postTransition == true)
+                {
+                    alphaValue -= 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 0)
+                    {
+                        STATE_postTransition = false;  
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                else if(STATE_preTransition == true)
+                {
+                    alphaValue += 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 255)
+                    {
+                        STATE_preTransition = false;
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+
                 break;
             } 
             case COMBAT:
