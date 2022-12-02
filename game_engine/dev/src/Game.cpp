@@ -200,17 +200,19 @@ void DashDaCapo::runGameLoop()
     /////////// COMBAT SCREEN THINGS //////////
     std::string prefixHP = "HP: ";
 
-    TextBox combatStatBass = TextBox("bass", 25, 50, 630, 150, 30);
-    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 50, 660, 150, 30);
     
-    TextBox combatStatDrum = TextBox("drum", 25, 200, 630, 150, 30);
-    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 200, 660, 150, 30);
 
-    TextBox combatStatFlute = TextBox("flute", 25, 350, 630, 150, 30);
-    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 350, 660, 150, 30);
+    TextBox combatStatFlute = TextBox("flute", 25, 50, 630, 150, 30);
+    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 50, 660, 150, 30);
     
-    TextBox combatStatConductor = TextBox("conductor", 25, 500, 630, 150, 30);
-    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 500, 660, 150, 30);
+    TextBox combatStatConductor = TextBox("conductor", 25, 200, 630, 150, 30);
+    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 200, 660, 150, 30);
+
+    TextBox combatStatBass = TextBox("bass", 25, 350, 630, 150, 30);
+    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 350, 660, 150, 30);
+    
+    TextBox combatStatDrum = TextBox("drum", 25, 500, 630, 150, 30);
+    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 500, 660, 150, 30);
 
     std::vector<TextBox> combatStatusRow {
         combatStatFlute, combatStatConductor,
@@ -372,7 +374,7 @@ void DashDaCapo::runGameLoop()
     std::vector<SDL_Rect> orderBoxes(8);
     for (int i = 0; i < orderBoxes.size(); i++)
     {
-        SDL_Rect temp = {750, 330+(i*50), 200, 30};
+        SDL_Rect temp = {750, 30+(i*50), 200, 30};
         orderBoxes[i] = temp; 
     }
 
@@ -1107,26 +1109,11 @@ void DashDaCapo::runGameLoop()
                 
                 
 
-                //hpBoxes
-                SDL_Surface* surface;
-                SDL_Texture* texture;
-                for (int i = 0;  i < hpBoxes.size(); i++)
-                {
-                    SDL_SetRenderDrawColor(getRenderer(), 0, 0, 170, 255);
-                    SDL_RenderFillRect(getRenderer(), &hpBoxes[i]); 
-                    SDL_Color textColor = { 255, 0, 0, 255 };
-                    std::stringstream hpStream;
-                    hpStream << combatParticipants[i].getHp();
-                    surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
-                    texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
-                    SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
-                    SDL_FreeSurface(surface);
-                    SDL_DestroyTexture(texture);
-                }
+                
 
                 
 
-                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
+                if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
 
                 {
                     battleNotification.render(getRenderer());
@@ -1270,12 +1257,15 @@ void DashDaCapo::runGameLoop()
                     SDL_DestroyTexture(textureTesting);
                 }
                 
-                //HACK but that's life
-                combatStatusRow[4].changeText(prefixHP + std::to_string(playerTeam[0].getHp()));
-                combatStatusRow[5].changeText(prefixHP + std::to_string(playerTeam[1].getHp()));
-                combatStatusRow[6].changeText(prefixHP + std::to_string(playerTeam[2].getHp()));
-                combatStatusRow[7].changeText(prefixHP + std::to_string(playerTeam[3].getHp()));
-
+                //Update Position and text renderings
+               
+            
+                for (int i = 0; i < 4; i++)
+                {
+                    combatStatusRow[i].changeText(combatParticipants[i].getName());
+                    combatStatusRow[i+4].changeText(prefixHP + std::to_string(combatParticipants[i].getHp()));
+                }
+               
                 for (auto el: combatStatusRow)
                 {
                     el.render(getRenderer());
