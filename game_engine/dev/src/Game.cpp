@@ -387,7 +387,7 @@ void DashDaCapo::runGameLoop()
     }
 
     SDL_Rect orderTitleBox = {750, 280, 200, 30};
-    std::string orderTitle = "ORDER        ";
+    std::string orderTitle = "        ";
     int currOrderNum = 0;
     std::vector<std::string> roundOrder;
 
@@ -604,7 +604,7 @@ void DashDaCapo::runGameLoop()
                         characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
                     
                     
-                    if (nextMapEvent == "BATTLE")
+                    if (nextMapEvent == "BATTLE" || nextMapEvent == "BOSS")
                     {
                         //init enemy characters
                         BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
