@@ -146,7 +146,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_itemNotificationShowing = false;
     bool STATE_healNotificationShowing = false;
     bool STATE_preTransition = false;
-    bool STATE_postTransition = false;
+    bool STATE_postTransition = true;
     float STATE_timerCount;
     int STATE_amountHealed;
     std::string STATE_introSelectedOption = "NONE";
@@ -167,6 +167,7 @@ void DashDaCapo::runGameLoop()
     TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
     TextureWrapper blackScreenTransition;
+    
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
@@ -282,9 +283,7 @@ void DashDaCapo::runGameLoop()
 
     ////////////START SCREEN TRANSITION INIT ///////////
 
-    SDL_Rect screenTransitionBox = {0, 0, 960, 720};
-    //blackScreenTransition.render(getRenderer(), 0, 0, screenTransitionBox);
-    
+    int alphaValue = 255;
 
     ////////////END START SCREEN TRANSITION INIT ///////////
 
@@ -545,17 +544,21 @@ void DashDaCapo::runGameLoop()
             {
                 case INTRO:
                 { 
+                    
                     introMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
                     if (STATE_introSelectedOption != "NONE")
                     {
                         if (STATE_introSelectedOption == "New Game")
                         {
+                            
                             STATE_newGameSelected = true;
                             STATE_gameOver = false;
+                            STATE_postTransition = true;
                             screen = MAP;
                         }
-                        //-------------
+                    
                     }
+                    
                     break;
                 }
                 case MAP:
@@ -994,6 +997,26 @@ void DashDaCapo::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
                 introMenu.render(getRenderer()); 
+
+                if(STATE_postTransition == true)
+                {
+                    alphaValue = alphaValue - 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 0)
+                    {
+                        STATE_postTransition = false;
+                    }
+                }
+                if(STATE_preTransition == true)
+                {
+                    alphaValue = alphaValue + 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 255)
+                    {
+                        STATE_preTransition = false;
+                    }
+                }
+                blackScreenTransition.render(getRenderer(), 0, 0);
                 break;
             }
             case MAP:
