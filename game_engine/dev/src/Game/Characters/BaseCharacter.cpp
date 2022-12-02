@@ -190,27 +190,14 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
                             validMoves.push_back({i+4});
                     }
             }
-
-            // FOR SOME REASON THERE"S A SEGFAULT WITHIN THIS LAMBDA FUNCTION SOMETHING TO DO WITH THE ITERATORS
-            /*
-            //SPECIAL CASE, it's like a buff but we want to filter out character index
-            targets = getValidBuffTargets(BUFF, participants);
-            std::vector<int>::iterator adjustments;
-            int currCharIndex = charIndex; //needed for lambda to be happy (changed lambda conditions)
-            adjustments = std::remove_if(targets.begin(),
-                                    targets.end(),
-                                    [currCharIndex] (int index) 
-                                    {
-                                        return index != currCharIndex + 1 && index != currCharIndex - 1;
-                                    }
-            );
-            targets.erase(adjustments, targets.end());
-            for(int i; i < targets.size(); i++)
+            // if move is selected and teammates are dead
+            if (validMoves.size()==0)
             {
-                std::vector<int> temp = {targets[i]};
-                validMoves.push_back(temp);
+                validMoves.push_back({charIndex});
+                return validMoves;
             }
-            */
+
+            
             break;
         }
     }
@@ -390,9 +377,7 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
 
 std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
 {
-    //BaseCharacter copy = participants[charIndex];
-    //participants[charIndex] = std::move(participants[targetIndex]);
-    //participants[targetIndex] = std::move(copy);
+   
     std::swap(participants[charIndex],participants[targetIndex]);
     // once swapped, update participant index
     participants[charIndex].setNewParticipantsIndex(charIndex);
