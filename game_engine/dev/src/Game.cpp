@@ -330,7 +330,15 @@ void DashDaCapo::runGameLoop()
 
     for (auto& [coordinate, event]: coordinateToEventTypeMap)
     {
-        event = eventList[dist(gen)];  
+        if (coordinateToTileTypeMap[coordinate] == ENDDOWN ||
+            coordinateToTileTypeMap[coordinate] == ENDUP ||
+            coordinateToTileTypeMap[coordinate] == ENDLEFT ||
+            coordinateToTileTypeMap[coordinate] == ENDRIGHT)
+        {
+            event = "BOSS";
+        }
+        else
+            event = eventList[dist(gen)];  
     }
 
     std::string nextMapEvent = "";
