@@ -762,6 +762,7 @@ void DashDaCapo::runGameLoop()
                                     battleNotification.changeText(attackNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
+                                    break;
                                 }
                             }
                            
@@ -806,6 +807,7 @@ void DashDaCapo::runGameLoop()
                                     battleNotification.changeText(healNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
+                                    break;
                                 }
                             }
                             
@@ -850,6 +852,7 @@ void DashDaCapo::runGameLoop()
                                     battleNotification.changeText(debuffNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
+                                    break;
                                 }
                             }
 
@@ -871,18 +874,27 @@ void DashDaCapo::runGameLoop()
                                     std::string currPlayerName = combatParticipants[i].getName();
                                     currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                                     std::string targetNotification;
-                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
-                                    combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
-
                                     std::string moveNotification;
-                                    moveNotification += currPlayerName;
-                                    moveNotification += " switch places with ";
-                                    moveNotification += targetNotification;
+
+                                    if (validMoves[currTarget][0]!=charIndex) 
+                                    {
+                                        
+                                        targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                        combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
+
+                                        moveNotification += currPlayerName;
+                                        moveNotification += " switch places with ";
+                                        moveNotification += targetNotification;
+                                    }
+                                    else 
+                                    {
+                                        moveNotification = " Your teammates are dead. You just wasted a turn.";
+                                    }
                             
                                     battleNotification.changeText(moveNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
-                                    
+                                    break;       
                                 }
                             }
                             
