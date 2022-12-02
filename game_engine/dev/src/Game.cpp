@@ -912,6 +912,7 @@ void DashDaCapo::runGameLoop()
 
                         if (isPlayerTeamAlive == false || isEnemyTeamAlive == false)
                         {
+                            //saves player team's stats
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
