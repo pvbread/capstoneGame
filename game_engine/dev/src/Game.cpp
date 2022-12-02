@@ -553,8 +553,12 @@ void DashDaCapo::runGameLoop()
                             
                             STATE_newGameSelected = true;
                             STATE_gameOver = false;
-                            STATE_postTransition = true;
-                            screen = MAP;
+                            STATE_preTransition = true;
+                            if(alphaValue >= 255)
+                            {
+                                screen = MAP;
+                            }
+                            
                         }
                     
                     }
@@ -1000,23 +1004,25 @@ void DashDaCapo::runGameLoop()
 
                 if(STATE_postTransition == true)
                 {
-                    alphaValue = alphaValue - 5;
+                    alphaValue -= 5;
                     blackScreenTransition.setAlpha(alphaValue);
                     if(alphaValue == 0)
                     {
-                        STATE_postTransition = false;
+                        STATE_postTransition = false; 
                     }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
                 }
-                if(STATE_preTransition == true)
+                else if(STATE_preTransition == true)
                 {
-                    alphaValue = alphaValue + 5;
+                    alphaValue += 5;
                     blackScreenTransition.setAlpha(alphaValue);
                     if(alphaValue == 255)
                     {
                         STATE_preTransition = false;
                     }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
                 }
-                blackScreenTransition.render(getRenderer(), 0, 0);
+                
                 break;
             }
             case MAP:
