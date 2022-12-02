@@ -492,6 +492,16 @@ void DashDaCapo::runGameLoop()
     while (!getQuit())
     {
         timer->update();
+
+        if (STATE_introSelectedOption == "New Game")
+        {
+            STATE_preTransition = true;
+            if(alphaValue >= 255)
+            {
+                screen = MAP;
+            }
+        }
+
         while(SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -549,16 +559,9 @@ void DashDaCapo::runGameLoop()
                     if (STATE_introSelectedOption != "NONE")
                     {
                         if (STATE_introSelectedOption == "New Game")
-                        {
-                            
+                        {          
                             STATE_newGameSelected = true;
                             STATE_gameOver = false;
-                            STATE_preTransition = true;
-                            if(alphaValue >= 255)
-                            {
-                                screen = MAP;
-                            }
-                            
                         }
                     
                     }
