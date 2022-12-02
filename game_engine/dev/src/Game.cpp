@@ -89,6 +89,7 @@ void DashDaCapo::runGameLoop()
     SDL_Rect cursor = { 45, 160, 50, 50 };
     //incredibly temp
 
+
     //////////// START MENUS INIT ///////////////
 
     const std::vector<std::string> introOptions = {
@@ -144,6 +145,8 @@ void DashDaCapo::runGameLoop()
     bool STATE_debug = false;
     bool STATE_itemNotificationShowing = false;
     bool STATE_healNotificationShowing = false;
+    bool STATE_preTransition = false;
+    bool STATE_postTransition = false;
     float STATE_timerCount;
     int STATE_amountHealed;
     std::string STATE_introSelectedOption = "NONE";
@@ -276,6 +279,14 @@ void DashDaCapo::runGameLoop()
     }
 
     //////////// END TILE LOADING /////////////
+
+    ////////////START SCREEN TRANSITION INIT ///////////
+
+    SDL_Rect screenTransitionBox = {0, 0, 960, 720};
+    //blackScreenTransition.render(getRenderer(), 0, 0, screenTransitionBox);
+    
+
+    ////////////END START SCREEN TRANSITION INIT ///////////
 
     //////////// START MAP EVENT GENERATION ////////
 
@@ -543,6 +554,7 @@ void DashDaCapo::runGameLoop()
                             STATE_gameOver = false;
                             screen = MAP;
                         }
+                        //-------------
                     }
                     break;
                 }
