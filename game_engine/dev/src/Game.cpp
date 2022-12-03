@@ -1444,6 +1444,8 @@ void DashDaCapo::runGameLoop()
             {
                 std::string statMenuDisplayStr;
 
+                
+
                 //////Background Color////////
                 SDL_Rect backgroundPane1 = {0, 0, 960, 730};
                 SDL_Color backgroundMenu1 = Color::navy;
@@ -1529,24 +1531,24 @@ void DashDaCapo::runGameLoop()
 
                 ///////Base Stats/////////
                 //name
-                TextBox baseName = TextBox("Bass  ", 40, 100, 115, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                TextBox baseName = TextBox("Bass", 40, 100, 120, 50, 30, Font::roboto, Color::blue, Color::cyan);
                 baseName.render(getRenderer());
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[2].getHp());
-                TextBox bassHPName = TextBox(statMenuDisplayStr, 40, 200, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox bassHPName = TextBox(statMenuDisplayStr, 30, 205, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 bassHPName.changeText(statMenuDisplayStr);
                 bassHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[2].getMaxHp());
-                TextBox bassMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox bassMaxHPName = TextBox(statMenuDisplayStr, 30, 260, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 bassMaxHPName.render(getRenderer());
                 //Speed
                 statMenuDisplayStr = std::to_string(playerTeam[2].getSpeed());
-                TextBox bassSpeedName = TextBox(statMenuDisplayStr, 40, 355, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox bassSpeedName = TextBox(statMenuDisplayStr, 40, 360, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 bassSpeedName.render(getRenderer());
                 //Hit
                 statMenuDisplayStr = std::to_string(playerTeam[2].getHit());
-                TextBox bassHitName = TextBox(statMenuDisplayStr, 40, 470, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox bassHitName = TextBox(statMenuDisplayStr, 40, 480, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 bassHitName.render(getRenderer());
                 //Armor
                 statMenuDisplayStr = std::to_string(playerTeam[2].getArmor());
@@ -1554,30 +1556,30 @@ void DashDaCapo::runGameLoop()
                 bassArmorName.render(getRenderer());
                 //Dodge
                 statMenuDisplayStr = std::to_string(playerTeam[2].getDodgeModifier());
-                TextBox bassDodgeName = TextBox(statMenuDisplayStr, 40, 730, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox bassDodgeName = TextBox(statMenuDisplayStr, 40, 740, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 bassDodgeName.render(getRenderer());
                 ///////End Base Stats/////////
 
                 ///////Drum Stats/////////
                 //name
-                TextBox drumName = TextBox("Drum  ", 40, 100, 265, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                TextBox drumName = TextBox("Drum", 40, 100, 270, 50, 30, Font::roboto, Color::blue, Color::cyan);
                 drumName.render(getRenderer());
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[3].getHp());
-                TextBox drumHPName = TextBox(statMenuDisplayStr, 40, 200, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox drumHPName = TextBox(statMenuDisplayStr, 30, 205, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 drumHPName.changeText(statMenuDisplayStr);
                 drumHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[3].getMaxHp());
-                TextBox drumMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox drumMaxHPName = TextBox(statMenuDisplayStr, 30, 260, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 drumMaxHPName.render(getRenderer());
                 //Speed
                 statMenuDisplayStr = std::to_string(playerTeam[3].getSpeed());
-                TextBox drumSpeedName = TextBox(statMenuDisplayStr, 40, 355, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox drumSpeedName = TextBox(statMenuDisplayStr, 40, 360, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 drumSpeedName.render(getRenderer());
                 //Hit
                 statMenuDisplayStr = std::to_string(playerTeam[3].getHit());
-                TextBox drumHitName = TextBox(statMenuDisplayStr, 40, 470, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox drumHitName = TextBox(statMenuDisplayStr, 40, 480, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 drumHitName.render(getRenderer());
                 //Armor
                 statMenuDisplayStr = std::to_string(playerTeam[3].getArmor());
@@ -1585,30 +1587,30 @@ void DashDaCapo::runGameLoop()
                 drumArmorName.render(getRenderer());
                 //Dodge
                 statMenuDisplayStr = std::to_string(playerTeam[3].getDodgeModifier());
-                TextBox drumDodgeName = TextBox(statMenuDisplayStr, 40, 730, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox drumDodgeName = TextBox(statMenuDisplayStr, 40, 740, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 drumDodgeName.render(getRenderer());
                 ///////End Drum Stats/////////
 
                 ///////Flute Stats/////////
                 //name
-                TextBox fluteName = TextBox("Flute  ", 40, 100, 415, 100, 70, Font::roboto, Color::blue, Color::cyan);
+                TextBox fluteName = TextBox("Flute", 40, 100, 420, 50, 30, Font::roboto, Color::blue, Color::cyan);
                 fluteName.render(getRenderer());
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[0].getHp());
-                TextBox fluteHPName = TextBox(statMenuDisplayStr, 40, 200, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox fluteHPName = TextBox(statMenuDisplayStr, 30, 205, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 fluteHPName.changeText(statMenuDisplayStr);
                 fluteHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[0].getMaxHp());
-                TextBox fluteMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox fluteMaxHPName = TextBox(statMenuDisplayStr, 30, 260, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 fluteMaxHPName.render(getRenderer());
                 //Speed
                 statMenuDisplayStr = std::to_string(playerTeam[0].getSpeed());
-                TextBox fluteSpeedName = TextBox(statMenuDisplayStr, 40, 355, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox fluteSpeedName = TextBox(statMenuDisplayStr, 40, 360, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 fluteSpeedName.render(getRenderer());
                 //Hit
                 statMenuDisplayStr = std::to_string(playerTeam[0].getHit());
-                TextBox fluteHitName = TextBox(statMenuDisplayStr, 40, 470, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox fluteHitName = TextBox(statMenuDisplayStr, 40, 480, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 fluteHitName.render(getRenderer());
                 //Armor
                 statMenuDisplayStr = std::to_string(playerTeam[0].getArmor());
@@ -1616,30 +1618,30 @@ void DashDaCapo::runGameLoop()
                 fluteArmorName.render(getRenderer());
                 //Dodge
                 statMenuDisplayStr = std::to_string(playerTeam[0].getDodgeModifier());
-                TextBox fluteDodgeName = TextBox(statMenuDisplayStr, 40, 730, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox fluteDodgeName = TextBox(statMenuDisplayStr, 40, 740, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 fluteDodgeName.render(getRenderer());
                 ///////End Flute Stats/////////
 
                 ///////Conductor Stats/////////
                 //name
-                TextBox conductorName = TextBox("Conductor  ", 40, 100, 570, 100, 60, Font::roboto, Color::blue, Color::cyan);
+                TextBox conductorName = TextBox("Conductor", 20, 100, 580, 50, 30, Font::roboto, Color::blue, Color::cyan);
                 conductorName.render(getRenderer());
                 //HP
                 statMenuDisplayStr = std::to_string(playerTeam[1].getHp());
-                TextBox conductorHPName = TextBox(statMenuDisplayStr, 40, 200, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox conductorHPName = TextBox(statMenuDisplayStr, 30, 205, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 conductorHPName.changeText(statMenuDisplayStr);
                 conductorHPName.render(getRenderer());
                 //Max HP
                 statMenuDisplayStr = std::to_string(playerTeam[1].getMaxHp());
-                TextBox conductorMaxHPName = TextBox(statMenuDisplayStr, 40, 250, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox conductorMaxHPName = TextBox(statMenuDisplayStr, 30, 260, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
                 conductorMaxHPName.render(getRenderer());
                 //Speed
                 statMenuDisplayStr = std::to_string(playerTeam[1].getSpeed());
-                TextBox conductorSpeedName = TextBox(statMenuDisplayStr, 40, 355, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox conductorSpeedName = TextBox(statMenuDisplayStr, 40, 360, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 conductorSpeedName.render(getRenderer());
                 //Hit
                 statMenuDisplayStr = std::to_string(playerTeam[1].getHit());
-                TextBox conductorHitName = TextBox(statMenuDisplayStr, 40, 470, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox conductorHitName = TextBox(statMenuDisplayStr, 40, 480, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 conductorHitName.render(getRenderer());
                 //Armor
                 statMenuDisplayStr = std::to_string(playerTeam[1].getArmor());
@@ -1647,7 +1649,7 @@ void DashDaCapo::runGameLoop()
                 conductorArmorName.render(getRenderer());
                 //Dodge
                 statMenuDisplayStr = std::to_string(playerTeam[1].getDodgeModifier());
-                TextBox conductorDodgeName = TextBox(statMenuDisplayStr, 40, 730, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+                TextBox conductorDodgeName = TextBox(statMenuDisplayStr, 40, 740, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
                 conductorDodgeName.render(getRenderer());
                 ///////End Conductor Stats/////////
 
