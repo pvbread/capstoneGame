@@ -491,6 +491,7 @@ void DashDaCapo::runGameLoop()
 
 
     ///////// END SANDBOX ///////////
+    
     //////// CHARACTER STATS ////////
     int startBoxWidth = 100;
     int slashBoxWidth = 150;
@@ -502,27 +503,27 @@ void DashDaCapo::runGameLoop()
     std::vector<TextBox> characterStatSlash;
     for (int i = 0; i < 4; i++)
     {
-        TextBox statsHP = TextBox("HP  ", 100, 200, (startBoxWidth + (i*150)),
-         100, 50, Font::roboto, Color::blue, Color::cyan);
+        TextBox statsHP = TextBox("HP", 50, 220, (startBoxWidth + (i*150)),
+         50, 20, Font::roboto, Color::blue, Color::cyan);
         characterStatsHP.push_back(statsHP);
         
-        TextBox statsSpeed = TextBox("Speed  ", 100, 325, (startBoxWidth + (i*150)),
+        TextBox statsSpeed = TextBox("Speed", 35, 320, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsSpeed.push_back(statsSpeed);
 
-        TextBox statsHit = TextBox("Hit  ", 100, 450, (startBoxWidth + (i*150)),
+        TextBox statsHit = TextBox("Hit", 40, 465, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsHit.push_back(statsHit);
 
-        TextBox statsArmor = TextBox("Armor  ", 100, 575, (startBoxWidth + (i*150)),
+        TextBox statsArmor = TextBox("Armor", 38, 565, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsArmor.push_back(statsArmor);
         
-        TextBox statsDodge = TextBox("Dodge ", 100, 700, (startBoxWidth + (i*150)),
+        TextBox statsDodge = TextBox("Dodge", 38, 700, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsDodge.push_back(statsDodge);
 
-        TextBox justASlash = TextBox("/", 100, 240, (slashBoxWidth + (i*150)),
+        TextBox justASlash = TextBox("-", 40, 243, (slashBoxWidth + (i*150 - 5)),
          10, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatSlash.push_back(justASlash);
         
