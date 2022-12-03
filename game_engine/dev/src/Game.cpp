@@ -16,10 +16,10 @@ void DashDaCapo::runGameLoop()
     Timer* timer = Timer::instance();
 
     ////////// START CHARACTER INIT ////////
-    BasePlayer conductor = BasePlayer("conductor    ", 30, 3, 3, 0, 3, 3, 3);
-    BasePlayer drum = BasePlayer("drummer      ", 50, 2, 1, 0, 3, 3, 3);
-    BasePlayer flute = BasePlayer("flutist      ", 20, 6, 1, 0, 3, 3, 3);
-    Bass bass = Bass("bassist      ", 60, 1, 3, 0, 3, 3, 3);
+    BasePlayer conductor = BasePlayer("conductor", 30, 3, 3, 0, 3, 3, 3);
+    BasePlayer drum = BasePlayer("drummer", 50, 2, 1, 0, 3, 3, 3);
+    BasePlayer flute = BasePlayer("flutist", 20, 6, 1, 0, 3, 3, 3);
+    Bass bass = Bass("bassist", 60, 1, 3, 0, 3, 3, 3);
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
     bass.setNewParticipantsIndex(2);
@@ -114,12 +114,20 @@ void DashDaCapo::runGameLoop()
         "Move"
     };
 
-    SDL_Color combatMenuColor = { 0, 0, 255, 255 };
+    //SDL_Color combatMenuColor = { 0, 0, 255, 255 };
+    /*
     BaseMenu combatMenu = BaseMenu(50, 25, 520, 200, 50, 
                                    combatOptionsStrings, 
                                    Font::raleway, 
                                    Color::red,
                                    Color::maroon, 
+                                   getRenderer()
+    );*/
+    BaseMenu combatMenu = BaseMenu(50, 750, 490, 100, 50, 
+                                   combatOptionsStrings, 
+                                   Font::openSans, 
+                                   Color::white, 
+                                   Color::navy,
                                    getRenderer()
     );
 
@@ -163,12 +171,14 @@ void DashDaCapo::runGameLoop()
     TextureWrapper characterInMapTexture;
     TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
+    TextureWrapper combatScreenTexture;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&debugControllerTexture, "../../assets/image/dot.bmp"},
-        {&characterTestTexture, "../../assets/image/char.png"}
+        {&characterTestTexture, "../../assets/image/char.png"},
+        {&combatScreenTexture, "../../assets/image/combat_screen.png"} 
     }; 
     
     //so there's going to be a couple of these per char
@@ -186,6 +196,34 @@ void DashDaCapo::runGameLoop()
     }
 
     //////////// END TEXTURE LOADING /////////////
+    
+    /////////// COMBAT SCREEN THINGS //////////
+    std::string prefixHP = "HP: ";
+
+    
+
+    TextBox combatStatFlute = TextBox("flute", 25, 50, 630, 150, 30);
+    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 50, 660, 150, 30);
+    
+    TextBox combatStatConductor = TextBox("conductor", 25, 200, 630, 150, 30);
+    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 200, 660, 150, 30);
+
+    TextBox combatStatBass = TextBox("bass", 25, 350, 630, 150, 30);
+    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 350, 660, 150, 30);
+    
+    TextBox combatStatDrum = TextBox("drum", 25, 500, 630, 150, 30);
+    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 500, 660, 150, 30);
+
+    std::vector<TextBox> combatStatusRow {
+        combatStatFlute, combatStatConductor,
+        combatStatBass, combatStatDrum,
+        combatStatFluteHP, combatStatConductorHP,
+        combatStatBassHP, combatStatDrumHP, 
+    };
+
+
+    ///////////// END COMBAT SCREEN THINGS /////////
+
 
     //////////// START RANDOM MAP GEN /////////////
     /*
@@ -292,7 +330,15 @@ void DashDaCapo::runGameLoop()
 
     for (auto& [coordinate, event]: coordinateToEventTypeMap)
     {
-        event = eventList[dist(gen)];  
+        if (coordinateToTileTypeMap[coordinate] == ENDDOWN ||
+            coordinateToTileTypeMap[coordinate] == ENDUP ||
+            coordinateToTileTypeMap[coordinate] == ENDLEFT ||
+            coordinateToTileTypeMap[coordinate] == ENDRIGHT)
+        {
+            event = "BOSS";
+        }
+        else
+            event = eventList[dist(gen)];  
     }
 
     std::string nextMapEvent = "";
@@ -320,7 +366,7 @@ void DashDaCapo::runGameLoop()
     std::vector<SDL_Rect> charBoxes(8);
     for (int i = 0; i < charBoxes.size(); i++)
     {
-        SDL_Rect temp = {(50+(i*100)), 200, 64, 64};
+        SDL_Rect temp = {(i*100), 300, 64, 64};
         charBoxes[i] = temp; 
     }
 
@@ -336,7 +382,7 @@ void DashDaCapo::runGameLoop()
     std::vector<SDL_Rect> orderBoxes(8);
     for (int i = 0; i < orderBoxes.size(); i++)
     {
-        SDL_Rect temp = {750, 330+(i*50), 200, 30};
+        SDL_Rect temp = {750, 30+(i*50), 200, 30};
         orderBoxes[i] = temp; 
     }
 
@@ -349,7 +395,7 @@ void DashDaCapo::runGameLoop()
 
     ////////// START BATTLE NOTIFICATION //////////
 
-    TextBox battleNotification = TextBox("", 25, 5, 400, 700, 100);
+    TextBox battleNotification = TextBox("", 30, 0, 564, 500, 60);
 
     /////////  END BATTLE NOTIFICATION ///////////
 
@@ -389,11 +435,11 @@ void DashDaCapo::runGameLoop()
         "Move"
     };
 
-    BaseMenu sandboxMenu = BaseMenu(750, 500, 200, 50, 100, 
+    BaseMenu sandboxMenu = BaseMenu(50, 750, 490, 100, 50, 
                                    sandboxOptionsStrings, 
                                    Font::openSans, 
                                    Color::white, 
-                                   Color::maroon,
+                                   Color::navy,
                                    getRenderer()
     );
 
@@ -404,29 +450,29 @@ void DashDaCapo::runGameLoop()
     std::vector<TextBox> sandboxQueIcons;
 
     for (int i = 0; i < 8; i++)
-        {
-            TextBox orderRect = TextBox("-->", 50, 750, (initialOrderHeight + (i*50)),
-             80, 50, Font::roboto, Color::blue, Color::white);
-            sandboxQue.push_back(orderRect);
-            //Icons
-            TextBox orderIcons = TextBox("X", 50, 830, (initialOrderHeight + (i*50)),
-             50, 50, Font::roboto, Color::blue, Color::red);
-            sandboxQueIcons.push_back(orderIcons);
-        }
+    {
+        TextBox orderRect = TextBox("-->", 50, 750, (initialOrderHeight + (i*50)),
+            80, 50, Font::roboto, Color::blue, Color::white);
+        sandboxQue.push_back(orderRect);
+        //Icons
+        TextBox orderIcons = TextBox("X", 50, 830, (initialOrderHeight + (i*50)),
+            50, 50, Font::roboto, Color::blue, Color::red);
+        sandboxQueIcons.push_back(orderIcons);
+    }
     
     //Status///////////////////////////////////
     //std::vector<TextBox> StatusRow;
-    TextBox statBass = TextBox("bass     ", 500, 50, 630, 150, 30);
-    TextBox statBassHP = TextBox("Hp:       ", 500, 50, 660, 150, 30);
+    TextBox statBass = TextBox("bass", 25, 50, 630, 150, 30);
+    TextBox statBassHP = TextBox("Hp:", 25, 50, 660, 150, 30);
 
-    TextBox statDrum = TextBox("drum     ", 500, 200, 630, 150, 30);
-    TextBox statDrumHP = TextBox("Hp:       ", 500, 200, 660, 150, 30);
+    TextBox statDrum = TextBox("drum", 25, 200, 630, 150, 30);
+    TextBox statDrumHP = TextBox("Hp:", 25, 200, 660, 150, 30);
 
-    TextBox statFlute = TextBox("flute   ", 500, 350, 630, 150, 30);
-    TextBox statFluteHP = TextBox("Hp:        ", 500, 350, 660, 150, 30);
+    TextBox statFlute = TextBox("flute", 25, 350, 630, 150, 30);
+    TextBox statFluteHP = TextBox("Hp:", 25, 350, 660, 150, 30);
     
-    TextBox statConductor = TextBox("conductor", 500, 500, 630, 150, 30);
-    TextBox statConductorHP = TextBox("Hp:          ", 500, 500, 660, 150, 30);
+    TextBox statConductor = TextBox("conductor", 25, 500, 630, 150, 30);
+    TextBox statConductorHP = TextBox("Hp:", 25, 500, 660, 150, 30);
 
     std::vector<TextBox> statusRow{statBass, statDrum, statFlute, statConductor};
 
@@ -762,19 +808,10 @@ void DashDaCapo::runGameLoop()
                                     battleNotification.changeText(attackNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
+                                    break;
                                 }
                             }
-                           // validMoves = roundOrder[currOrderNum]->getValidMoves(ATTACK, roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            //int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
-                            //std::string currPlayerName = combatParticipants[charIndex].getName();
-                            //currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
-                            // in case when a character dies, preserve target index's name before performing action 
-                            //std::string targetNotification;
-                            //targetNotification += combatParticipants[validMoves[currTarget][0]].getName();
-                            //roundOrder[currOrderNum]->doAction(ATTACK, attackDamage, validMoves[currTarget], combatParticipants); 
-                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
-                            
-                            
+                           
                             
                         }
 
@@ -816,15 +853,9 @@ void DashDaCapo::runGameLoop()
                                     battleNotification.changeText(healNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
+                                    break;
                                 }
                             }
-                            //validMoves = roundOrder[currOrderNum]->getValidMoves(BUFF,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            //int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
-                            //std::string currPlayerName = combatParticipants[charIndex].getName();
-                            //currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
-                            //roundOrder[currOrderNum]->doAction(BUFF, healAmount, validMoves[currTarget], combatParticipants); 
-
-                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             
                                 
 
@@ -867,6 +898,7 @@ void DashDaCapo::runGameLoop()
                                     battleNotification.changeText(debuffNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
+                                    break;
                                 }
                             }
 
@@ -888,32 +920,29 @@ void DashDaCapo::runGameLoop()
                                     std::string currPlayerName = combatParticipants[i].getName();
                                     currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
                                     std::string targetNotification;
-                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
-                                    combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
-
                                     std::string moveNotification;
-                                    moveNotification += currPlayerName;
-                                    moveNotification += " switch places with ";
-                                    moveNotification += targetNotification;
+
+                                    if (validMoves[currTarget][0]!=charIndex) 
+                                    {
+                                        
+                                        targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                        combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
+
+                                        moveNotification += currPlayerName;
+                                        moveNotification += " switch places with ";
+                                        moveNotification += targetNotification;
+                                    }
+                                    else 
+                                    {
+                                        moveNotification = " Your teammates are dead. You just wasted a turn.";
+                                    }
                             
                                     battleNotification.changeText(moveNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
-                                    
+                                    break;       
                                 }
                             }
-                            //validMoves = roundOrder[currOrderNum]->getValidMoves(MOVE,roundOrder[currOrderNum]->getParticipantsIndex(),combatParticipants);
-                            //int charIndex = roundOrder[currOrderNum]->getParticipantsIndex();
-                            //std::string currPlayerName = combatParticipants[charIndex].getName();
-                            //std::string currPlayerNameCopy = currPlayerName;
-                            //currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
-                            //std::string targetName = combatParticipants[validMoves[currTarget][0]].getName();
-                            //int targetIndex = validMoves[currTarget][0];
-                            //combatParticipants[charIndex].setNewParticipantsIndex(targetIndex);
-                            //combatParticipants[targetIndex].setNewParticipantsIndex(charIndex);
-                            //roundOrder[currOrderNum]->doAction(MOVE, nothing, validMoves[currTarget], combatParticipants);
-                            
-                            //TODO Set 8 to be the current size of alive characters (player and enemies) 'livingCharacters'
                             
                             
                         }
@@ -933,13 +962,30 @@ void DashDaCapo::runGameLoop()
                             }
                         }
                         while (!isNextTurnAlive);
-                        //TODO get end state for battle
+
+
+                        //check end state for battle (edit this when victory/defeat screens get merged to main)
+                        bool isPlayerTeamAlive = isTeamAlive(combatParticipants, false);
+                        bool isEnemyTeamAlive = isTeamAlive(combatParticipants, true);
+
+                        if (isPlayerTeamAlive == false || isEnemyTeamAlive == false)
+                        {
+                            //saves player team's stats
+                            playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                            STATE_combatMenuTargetSelected = false;
+                            currTarget = 0;
+                            currOrderNum = 0;
+                            screen = MAP;
+                            break;
+                        }
+
                         STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
                     }
                 }
                 case SANDBOX:
                 {
+                    sandboxMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
                     break;
                 }
                 case STATUS_MENU:
@@ -1031,43 +1077,50 @@ void DashDaCapo::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
+
+                combatScreenTexture.render(getRenderer(), 0, 0);
+
+                
+                //Status Pane
+                SDL_Rect statusPane = {0, 600, 720, 120};
+                SDL_Color colStatus = Color::cyan;
+                SDL_SetRenderDrawColor(getRenderer(), colStatus.r, colStatus.g, colStatus.b, 0);
+                SDL_RenderFillRect(getRenderer(), &statusPane);
+
+                //Order Pane
+                SDL_Rect orderPane = {720, 0, 240, 480};
+                SDL_Color colOrder = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), colOrder.r, colOrder.g, colOrder.b, 0);
+                SDL_RenderFillRect(getRenderer(), &orderPane);
+
+                //Menu Pane
+                SDL_Rect menuPane = {720, 480, 720, 240};
+                SDL_Color colMenu = Color::maroon;
+                SDL_SetRenderDrawColor(getRenderer(), colMenu.r, colMenu.g, colMenu.b, 0);
+                SDL_RenderFillRect(getRenderer(), &menuPane);
+                
                 combatMenu.render(getRenderer());
                 
                 
                 SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
 
                 //will be for loop (eventually)
-                characterTestTexture.render(getRenderer(), 50, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 150, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 250, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 350, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 450, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 550, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 650, 100, currFrameRect);
-                characterTestTexture.render(getRenderer(), 750, 100, currFrameRect);
+                characterTestTexture.render(getRenderer(), 0, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 100, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 200, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 300, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 400, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 500, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 600, 400, currFrameRect);
+                characterTestTexture.render(getRenderer(), 700, 400, currFrameRect);
                 
                 
 
-                //hpBoxes
-                SDL_Surface* surface;
-                SDL_Texture* texture;
-                for (int i = 0;  i < hpBoxes.size(); i++)
-                {
-                    SDL_SetRenderDrawColor(getRenderer(), 0, 0, 170, 255);
-                    SDL_RenderFillRect(getRenderer(), &hpBoxes[i]); 
-                    SDL_Color textColor = { 255, 0, 0, 255 };
-                    std::stringstream hpStream;
-                    hpStream << combatParticipants[i].getHp();
-                    surface = TTF_RenderText_Solid(orderFont, hpStream.str().c_str(), textColor); //ttf surface  
-                    texture = SDL_CreateTextureFromSurface(getRenderer(), surface); 
-                    SDL_RenderCopy(getRenderer(), texture, nullptr, &hpBoxes[i]); 
-                    SDL_FreeSurface(surface);
-                    SDL_DestroyTexture(texture);
-                }
+                
 
                 
 
-                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
+                if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
 
                 {
                     battleNotification.render(getRenderer());
@@ -1099,13 +1152,7 @@ void DashDaCapo::runGameLoop()
                 if (STATE_combatSelectedOption == "Buff")
                 {
                     
-                    // rerender bug if I don't update validMoves
-                    //statusRoundOrderSize.changeText(std::to_string(roundOrder.size()));
-                    //statusCurrOrderNum.changeText(std::to_string(currOrderNum));
-                    //statusGetParticipantsIndex.changeText(std::to_string(roundOrder[currOrderNum]->getParticipantsIndex()));
-                    //statusCurrOrderNum.render(getRenderer());
-                    //statusGetParticipantsIndex.render(getRenderer());
-                    //statusRoundOrderSize.render(getRenderer());
+                    
                     SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                     
                     for (int i = 0; i < combatParticipants.size();i++)
@@ -1210,7 +1257,20 @@ void DashDaCapo::runGameLoop()
                     SDL_FreeSurface(surfaceTesting);
                     SDL_DestroyTexture(textureTesting);
                 }
-
+                
+                //Update Position and text renderings
+               
+            
+                for (int i = 0; i < 4; i++)
+                {
+                    combatStatusRow[i].changeText(combatParticipants[i].getName());
+                    combatStatusRow[i+4].changeText(prefixHP + std::to_string(combatParticipants[i].getHp()));
+                }
+               
+                for (auto el: combatStatusRow)
+                {
+                    el.render(getRenderer());
+                } 
 
                 break;
             }
@@ -1275,7 +1335,7 @@ void DashDaCapo::runGameLoop()
                 statFluteHP.render(getRenderer());
                 statDrumHP.render(getRenderer());
                 statConductorHP.render(getRenderer());
-
+                combatScreenTexture.render(getRenderer(), 0, 0);
                 break;
             }
             case STATUS_MENU:
