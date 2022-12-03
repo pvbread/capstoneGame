@@ -54,28 +54,38 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
             const int TEAM_SIZE = 4;
             if (!enemy)
             {
-                validMoves = {{4}};
 
                 if (charIndex == 0)
                 {
-                    break;
+                    validMoves = {{4}};
+
                 }
                 else if (charIndex == 1)
                 {
-                    if (participants[6].isAlive())
-                        validMoves.push_back({6});
+                    
+                    for (int i = 0; i < TEAM_SIZE - 2; i++)
+                    {
+                        if (participants[i+4].isAlive())
+                            validMoves.push_back({i+4});
+                    }
 
                 }
                 else if (charIndex == 2)
                 {
-                    if (participants[7].isAlive())
-                        validMoves.push_back({7});
+                    for (int i = 0; i < TEAM_SIZE - 1; i++)
+                    {
+                        if (participants[i+4].isAlive())
+                            validMoves.push_back({i+4});
+                    }
 
                 }
                 else if (charIndex == 3)
                 {
-                    if (participants[5].isAlive())
-                        validMoves.push_back({5});
+                    for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i+4].isAlive())
+                            validMoves.push_back({i+4});
+                    }
                 }
                 /*
                 for (int i = 0; i < TEAM_SIZE; i++)
@@ -95,28 +105,37 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
             }
             else
             {
-                validMoves ={{3}};
                 if (charIndex == 4)
                 {
-                    if (participants[2].isAlive())
-                        validMoves.push_back({2});
+                    for (int i = 0; i < TEAM_SIZE; i++)
+                    {
+                        if (participants[i].isAlive())
+                            validMoves.push_back({i});
+                    }
 
                 }
                 else if (charIndex == 5)
                 {
-                    if (participants[0].isAlive())
-                        validMoves.push_back({0});
+                    for (int i = 0; i < TEAM_SIZE - 1; i++)
+                    {
+                        if (participants[i].isAlive())
+                            validMoves.push_back({i+1});
+                    }
 
 
                 }
                 else if (charIndex == 6)
                 {
-                    if (participants[1].isAlive())
-                        validMoves.push_back({1});
+                    for (int i = 0; i < TEAM_SIZE - 2; i++)
+                    {
+                        if (participants[i].isAlive())
+                            validMoves.push_back({i+2});
+                    }
                 }
                 else if (charIndex == 7)
                 {
-                    break;
+                    validMoves ={{3}};
+
                 }
                 /*
                 for (int i = 0; i < TEAM_SIZE; i++)
