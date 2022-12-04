@@ -390,10 +390,10 @@ void DashDaCapo::runGameLoop()
 
     ////////// START BATTLE ORDER INIT ///////////////
 
-    std::vector<SDL_Rect> orderBoxes(8);
+    std::vector<TextBox> orderBoxes(8);
     for (int i = 0; i < orderBoxes.size(); i++)
     {
-        SDL_Rect temp = {750, 30+(i*50), 200, 30};
+        TextBox temp = TextBox("", 25, 750, 30+(i*50), 200, 30, Font::openSans, Color::black, Color::gray);
         orderBoxes[i] = temp; 
     }
 
@@ -647,6 +647,7 @@ void DashDaCapo::runGameLoop()
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
                             tempCharNames[i] = roundOrder[i];
+                            orderBoxes[i].changeText(roundOrder[i]);
                         }
                     }
                     else if (nextMapEvent == "ITEM" && !STATE_itemNotificationShowing)
@@ -720,7 +721,6 @@ void DashDaCapo::runGameLoop()
                     
                     if (STATE_combatSelectedOption != "NONE")
                     {
-                        
                         if (event.type == SDL_KEYDOWN)
                         {
                             switch (event.key.keysym.sym)
@@ -746,11 +746,9 @@ void DashDaCapo::runGameLoop()
                                     break;
                                 }
                             }
-                        } 
-                        
+                        }     
                     }
-                    
-                    
+
                     // create new round and set round turns
                     if(!STATE_roundsSet && STATE_roundOver)
                     {
@@ -760,23 +758,17 @@ void DashDaCapo::runGameLoop()
                         STATE_roundsSet = true;
                         STATE_roundOver = false;
                     }
-                    
-                    
-                    
-
+     
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
                         combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
                     
 
                     // state for when a round ends
                     if ((currOrderNum + 1) == roundOrder.size() && STATE_combatSelectedOption!= "None" && STATE_combatMenuTargetSelected)
-                            {
-                                STATE_roundOver = true;
-                                STATE_roundsSet = false;
-                            }
-                    
-                    
-                    
+                    {
+                        STATE_roundOver = true;
+                        STATE_roundsSet = false;
+                    }
                     if (STATE_combatMenuTargetSelected)
                     {   
                         //do thing;
@@ -821,14 +813,11 @@ void DashDaCapo::runGameLoop()
                                     STATE_timerCount = timer->deltaTime() + 3;
                                     break;
                                 }
-                            }
-                           
-                            
+                            }  
                         }
 
                         if (STATE_combatSelectedOption == "Buff")
                         {
-
                             //WAS the round order properly set??
                             
                             STATE_combatSelectedOption = "NONE";
@@ -858,8 +847,6 @@ void DashDaCapo::runGameLoop()
                                             healNotification += targetNotification;
                                             continue;
                                         }
-                                        
-
                                     }
                                     battleNotification.changeText(healNotification);
                                     STATE_timerStarted = true;
@@ -867,10 +854,6 @@ void DashDaCapo::runGameLoop()
                                     break;
                                 }
                             }
-                            
-                                
-
-
                         }
 
                         if (STATE_combatSelectedOption == "Debuff")
@@ -903,8 +886,6 @@ void DashDaCapo::runGameLoop()
                                             debuffNotification += targetNotification;
                                             continue;
                                         }
-                                        
-
                                     }
                                     battleNotification.changeText(debuffNotification);
                                     STATE_timerStarted = true;
@@ -912,8 +893,6 @@ void DashDaCapo::runGameLoop()
                                     break;
                                 }
                             }
-
-
                         }
 
                         if (STATE_combatSelectedOption == "Move")
@@ -1115,7 +1094,8 @@ void DashDaCapo::runGameLoop()
                 
                 //SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
 
-                //will be for loop (eventually)
+                //make this into a loop
+                //only render if char is alive
                 flutistTexture.render(getRenderer(), 0, 400);
                 flutistTexture.render(getRenderer(), 90, 400);
                 bassistTexture.render(getRenderer(), 180, 400);
@@ -1139,7 +1119,6 @@ void DashDaCapo::runGameLoop()
                 //targetBoxes
                 if (STATE_combatSelectedOption == "Attack")
                 {
-                    SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
                     // rerender bug if I don't update validMoves
                     for (int i = 0; i < combatParticipants.size();i++)
                     {
@@ -1157,10 +1136,6 @@ void DashDaCapo::runGameLoop()
                 }
                 if (STATE_combatSelectedOption == "Buff")
                 {
-                    
-                    
-                    SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
-                    
                     for (int i = 0; i < combatParticipants.size();i++)
                     {
                         if (combatParticipants[i].getName()==roundOrder[currOrderNum])
@@ -1227,45 +1202,22 @@ void DashDaCapo::runGameLoop()
                 //int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
                 //SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
                 currPlayerTexture.render(getRenderer(), charBoxes[currPlayer].x, charBoxes[currPlayer].y);
-                
 
-                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
-                //TODO, render ORDER first
-                //TODO, pop off when x happens
-                SDL_RenderFillRect(getRenderer(), &orderTitleBox);
-                SDL_Color textColor = { 255, 0, 0, 255 };
-                std::stringstream titleStream;
-                titleStream << orderTitle;
-                SDL_Surface* surfaceTesting = TTF_RenderText_Solid(orderFont, titleStream.str().c_str(), textColor); //ttf surface  
-                SDL_Texture* textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting); 
-                SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderTitleBox); 
-                SDL_FreeSurface(surfaceTesting);
-                SDL_DestroyTexture(textureTesting);
-
-               
+                /*
                 for (int i = 0; i < roundOrder.size();i++)
                 {
                     tempCharNames[i] = roundOrder[i];
                     for (int j = roundOrder.size(); j < tempCharNames.size(); j++)
                     {
-                        tempCharNames[j] = " ";
+                        tempCharNames[j] = "";
                     }
                     
-                }
-                
-                
-
-
+                }*/
+    
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
-                    std::stringstream charNameStream;
-                    SDL_RenderFillRect(getRenderer(), &orderBoxes[i]);
-                    charNameStream << tempCharNames[i];
-                    surfaceTesting = TTF_RenderText_Solid(orderFont, charNameStream.str().c_str(), textColor); //ttf surface  
-                    textureTesting = SDL_CreateTextureFromSurface(getRenderer(), surfaceTesting);  
-                    SDL_RenderCopy(getRenderer(), textureTesting, nullptr, &orderBoxes[i]); 
-                    SDL_FreeSurface(surfaceTesting);
-                    SDL_DestroyTexture(textureTesting);
+                    orderBoxes[i].render(getRenderer());
+                    //charNameStream << tempCharNames[i];
                 }
                 
                 //Update Position and text renderings

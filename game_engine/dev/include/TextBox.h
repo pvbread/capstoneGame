@@ -7,6 +7,7 @@
 class TextBox
 {
 public:
+    TextBox() = default;
     TextBox(std::string text,
             int fontSize,
             int x, int y,
