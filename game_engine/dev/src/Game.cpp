@@ -172,12 +172,22 @@ void DashDaCapo::runGameLoop()
     TextureWrapper characterInMapTexture;
     TextureWrapper characterTestTexture;
     TextureWrapper combatScreenTexture;
+    TextureWrapper flutistTexture;
+    TextureWrapper bassistTexture;
+    TextureWrapper linebackerTexture;
+    TextureWrapper currPlayerTexture;
+    TextureWrapper targetTexture;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"},
-        {&combatScreenTexture, "../../assets/image/combat_screen.png"} 
+        {&combatScreenTexture, "../../assets/image/combat_screen.png"},
+        {&flutistTexture, "../../assets/image/chars/flutist.png"},
+        {&bassistTexture, "../../assets/image/chars/bassist.png"},
+        {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
+        {&currPlayerTexture, "../../assets/image/treble.png"},
+        {&targetTexture, "../../assets/image/sixteenth.png"}  
     }; 
     
     //so there's going to be a couple of these per char
@@ -290,6 +300,7 @@ void DashDaCapo::runGameLoop()
     {
         setToQuit();
     }
+    /*
     const int TEST_CHAR_SHEET_ROWS = 1;
     const int TEST_CHAR_SHEET_COLS = 5;
     const int ANIMATION_FRAME_COUNT = 5;
@@ -308,7 +319,7 @@ void DashDaCapo::runGameLoop()
     if (!didClip)
     {
         setToQuit();
-    }
+    }*/
 
     //////////// END TILE LOADING /////////////
 
@@ -362,7 +373,7 @@ void DashDaCapo::runGameLoop()
     std::vector<SDL_Rect> charBoxes(8);
     for (int i = 0; i < charBoxes.size(); i++)
     {
-        SDL_Rect temp = {(i*100), 300, 64, 64};
+        SDL_Rect temp = {(i*90), 300, 64, 64};
         charBoxes[i] = temp; 
     }
 
@@ -1095,23 +1106,25 @@ void DashDaCapo::runGameLoop()
                 combatMenu.render(getRenderer());
                 
                 
-                SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
+                //SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
 
                 //will be for loop (eventually)
-                characterTestTexture.render(getRenderer(), 0, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 100, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 200, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 300, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 400, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 500, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 600, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 700, 400, currFrameRect);
-                
-                
-
-                
-
-                
+                if (combatParticipants[0].isAlive())
+                    flutistTexture.render(getRenderer(), 0, 400);
+                if (combatParticipants[1].isAlive())
+                    flutistTexture.render(getRenderer(), 90, 400);
+                if (combatParticipants[2].isAlive())
+                    bassistTexture.render(getRenderer(), 180, 400);
+                if (combatParticipants[3].isAlive())
+                    bassistTexture.render(getRenderer(), 270, 400);
+                if (combatParticipants[4].isAlive())
+                    linebackerTexture.render(getRenderer(), 360, 400);
+                if (combatParticipants[5].isAlive())
+                    linebackerTexture.render(getRenderer(), 450, 400);
+                if (combatParticipants[6].isAlive())
+                    linebackerTexture.render(getRenderer(), 540, 400);
+                if (combatParticipants[7].isAlive())
+                    linebackerTexture.render(getRenderer(), 630, 400);
 
                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
 
@@ -1136,7 +1149,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(ATTACK, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1155,7 +1169,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(BUFF, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1174,7 +1189,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(DEBUFF, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1191,7 +1207,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(MOVE, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1209,7 +1226,8 @@ void DashDaCapo::runGameLoop()
                     }
                 }
                 //int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
-                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                //SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                currPlayerTexture.render(getRenderer(), charBoxes[currPlayer].x, charBoxes[currPlayer].y);
                 
 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
