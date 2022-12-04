@@ -14,6 +14,7 @@ void DashDaCapo::runGameLoop()
 {
 
     Timer* timer = Timer::instance();
+    MapDebugController debugCont = MapDebugController();
 
     ////////// START CHARACTER INIT ////////
     BasePlayer conductor = BasePlayer("conductor", 30, 3, 3, 0, 3, 3, 3);
@@ -169,14 +170,12 @@ void DashDaCapo::runGameLoop()
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
-    TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
     TextureWrapper combatScreenTexture;
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
-        {&debugControllerTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"},
         {&combatScreenTexture, "../../assets/image/combat_screen.png"} 
     }; 
@@ -348,11 +347,8 @@ void DashDaCapo::runGameLoop()
 
     /////////// START  CAMERA AND MAP CHARACTER INIT ///////
     //set this to 0 whenever we want a clear debug controller
-    debugControllerTexture.setAlpha(0);
 
-    SDL_Rect debugHitbox = {0, 0, 1, 1};
     SDL_Rect characterControllerHitbox = {30, 30, 80, 80};
-    MapDebugController debugController(10, 0, 0, debugHitbox);
     CharacterInMap characterController(80, 0, 0, characterControllerHitbox);
 
     const int SCREEN_WIDTH = 960;
@@ -599,7 +595,7 @@ void DashDaCapo::runGameLoop()
                             STATE_debug = !STATE_debug;
                     }
                     if (STATE_debug)
-                        debugController.onInput(event);
+                        debugCont.onInput(event, MAP_WIDTH, MAP_HEIGHT);
                     else if (!STATE_mapEventboxOpen)
                         characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
                     
@@ -1033,8 +1029,7 @@ void DashDaCapo::runGameLoop()
                 //write macro for this eventually
                 if (STATE_debug)
                 {
-                    debugController.move(MAP_WIDTH, MAP_HEIGHT);
-                    debugController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
+                    debugCont.move(camera); 
                 }
                 else
                 {
@@ -1045,9 +1040,7 @@ void DashDaCapo::runGameLoop()
                 {
                     tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
                 }
-                if (STATE_debug)
-                    debugController.render(getRenderer(), camera, debugControllerTexture);
-                else
+                if (!STATE_debug)
                     characterController.render(getRenderer(), camera, characterInMapTexture);
                 if (STATE_mapEventboxOpen)
                 {   
