@@ -505,8 +505,7 @@ void DashDaCapo::runGameLoop()
     TextBox bassArmorName = TextBox(std::to_string(bass.getArmor()), 40, 525, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
     TextBox bassDodgeName = TextBox(std::to_string(bass.getDodgeModifier()), 40, 655, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
     TextBox bassItemModName = TextBox(std::to_string(bass.getItemModifier()) + tempItemModAddStat, 40, 750, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    //TextBox bassItemTypeName = TextBox(std::to_string(bass.getitemtype()), 40, 760, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
-
+    
     std::vector<TextBox> statMenuBassRow { baseName, bassHPName, bassMaxHPName, bassSpeedName, bassHitName, bassArmorName, bassDodgeName, bassItemModName };
     ///////End Base Stats/////////
     ///////Drum Stats/////////
@@ -1598,7 +1597,7 @@ void DashDaCapo::runGameLoop()
                     statMenuConductorRow[statLoopTemp].render(getRenderer());
                 } 
 
-                ///////Display Names-Stats////////
+                ///////Display Names-Stats//////// 
 
                 
                 break;
