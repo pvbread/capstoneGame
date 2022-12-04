@@ -1116,14 +1116,22 @@ void DashDaCapo::runGameLoop()
                 //SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
 
                 //will be for loop (eventually)
-                flutistTexture.render(getRenderer(), 0, 400);
-                flutistTexture.render(getRenderer(), 90, 400);
-                bassistTexture.render(getRenderer(), 180, 400);
-                bassistTexture.render(getRenderer(), 270, 400);
-                linebackerTexture.render(getRenderer(), 360, 400);
-                linebackerTexture.render(getRenderer(), 450, 400);
-                linebackerTexture.render(getRenderer(), 540, 400);
-                linebackerTexture.render(getRenderer(), 630, 400);
+                if (combatParticipants[0].isAlive())
+                    flutistTexture.render(getRenderer(), 0, 400);
+                if (combatParticipants[1].isAlive())
+                    flutistTexture.render(getRenderer(), 90, 400);
+                if (combatParticipants[2].isAlive())
+                    bassistTexture.render(getRenderer(), 180, 400);
+                if (combatParticipants[3].isAlive())
+                    bassistTexture.render(getRenderer(), 270, 400);
+                if (combatParticipants[4].isAlive())
+                    linebackerTexture.render(getRenderer(), 360, 400);
+                if (combatParticipants[5].isAlive())
+                    linebackerTexture.render(getRenderer(), 450, 400);
+                if (combatParticipants[6].isAlive())
+                    linebackerTexture.render(getRenderer(), 540, 400);
+                if (combatParticipants[7].isAlive())
+                    linebackerTexture.render(getRenderer(), 630, 400);
 
                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
 
