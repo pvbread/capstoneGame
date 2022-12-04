@@ -475,19 +475,39 @@ void DashDaCapo::runGameLoop()
     
     //Status///////////////////////////////////
     //std::vector<TextBox> StatusRow;
-    TextBox statBass = TextBox("bass", 25, 50, 630, 150, 30); 
-    TextBox statBassHP = TextBox("Hp:", 25, 50, 660, 150, 30);
+    TextBox conductorStats = TextBox("Conductor", 30, 20, 620, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox testToHitStats = TextBox("x+ to hit", 30, 666, 620, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox conductorStatsHP = TextBox("30/30", 30, 220, 620, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox conductorStatsSpeed = TextBox(std::to_string(conductor.getSpeed()), 30, 355, 620, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox conductorStatsHit = TextBox(std::to_string(conductor.getHit()), 30, 439, 620, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox conductorStatsArmor = TextBox(std::to_string(conductor.getArmor()), 30, 523, 620, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox conductorStatsDodge = TextBox(std::to_string(conductor.getDodgeModifier()), 30, 607, 620, 100, 100, Font::sono, Color::white, Color::black);  
 
-    TextBox statDrum = TextBox("drum", 25, 200, 630, 150, 30);
-    TextBox statDrumHP = TextBox("Hp:", 25, 200, 660, 150, 30);
+    TextBox drummerStats = TextBox("Drummer", 30, 20, 420, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox testToHitStats2 = TextBox("x+ to hit", 30, 666, 420, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox drummerStatsHP = TextBox("30/30", 30, 220, 420, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox drummerStatsSpeed = TextBox(std::to_string(conductor.getSpeed()), 30, 355, 420, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox drummerStatsHit = TextBox(std::to_string(conductor.getHit()), 30, 439, 420, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox drummerStatsArmor = TextBox(std::to_string(conductor.getArmor()), 30, 523, 420, 100, 100, Font::sono, Color::white, Color::black);
+    TextBox drummerStatsDodge = TextBox(std::to_string(conductor.getDodgeModifier()), 30, 607, 420, 100, 100, Font::sono, Color::white, Color::black);       
 
-    TextBox statFlute = TextBox("flute", 25, 350, 630, 150, 30);
-    TextBox statFluteHP = TextBox("Hp:", 25, 350, 660, 150, 30);
-    
-    TextBox statConductor = TextBox("conductor", 25, 500, 630, 150, 30);
-    TextBox statConductorHP = TextBox("Hp:", 25, 500, 660, 150, 30);
+    std::vector<TextBox> conductorStatsRow{
+        testToHitStats,
+        conductorStatsHP,
+        conductorStatsSpeed,
+        conductorStatsHit,
+        conductorStatsArmor,
+        conductorStatsDodge 
+    };
 
-    std::vector<TextBox> statusRow{statBass, statDrum, statFlute, statConductor};
+    std::vector<TextBox> drummerStatsRow{
+        testToHitStats2,
+        drummerStatsHP,
+        drummerStatsSpeed,
+        drummerStatsHit,
+        drummerStatsArmor,
+        drummerStatsDodge 
+    };
 
 
     ///////// END SANDBOX ///////////
@@ -1468,37 +1488,49 @@ void DashDaCapo::runGameLoop()
                 SDL_Color colRecentAttack = Color::gray;
                 SDL_SetRenderDrawColor(getRenderer(), colRecentAttack.r, colRecentAttack.g, colRecentAttack.b, 0);
                 SDL_RenderFillRect(getRenderer(), &recentAttackPane);
-                sandboxMenu.render(getRenderer());
-                
-                
-                
-                // list
-                for (int i = 0; i < 8; i++)
-                {
-                    sandboxQue[i].render(getRenderer());
-                    sandboxQueIcons[i].render(getRenderer());
-                    
-                }
-                
 
-                //stat
-                /*
-                for (int i = 0; i < 4; i++)
+                conductorStats.render(getRenderer());
+                testToHitStats.render(getRenderer());
+                SDL_Rect x = {20, 620, 226, 100};
+                SDL_Color y = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), y.r, y.g, y.b, 0);
+                SDL_RenderFillRect(getRenderer(), &x);
+                SDL_Rect a = {666, 620, 226, 100};
+                SDL_Color b = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), b.r, b.g, b.b, 0);
+                SDL_RenderFillRect(getRenderer(), &a);
+                SDL_Rect box1 = {246, 620, 84, 100};
+                SDL_Color color1 = Color::gray;
+                SDL_SetRenderDrawColor(getRenderer(), color1.r, color1.g, color1.b, 0);
+                SDL_RenderFillRect(getRenderer(), &box1);
+                SDL_Rect box2 = {330, 620, 84, 100};
+                SDL_Color color2 = Color::navy;
+                SDL_SetRenderDrawColor(getRenderer(), color2.r, color2.g, color2.b, 0);
+                SDL_RenderFillRect(getRenderer(), &box2);
+                SDL_Rect box3 = {414, 620, 84, 100};
+                SDL_Color color3 = Color::black;
+                SDL_SetRenderDrawColor(getRenderer(), color3.r, color3.g, color3.b, 0);
+                SDL_RenderFillRect(getRenderer(), &box3);
+                SDL_Rect box4 = {498, 620, 84, 100};
+                SDL_Color color4 = Color::olive;
+                SDL_SetRenderDrawColor(getRenderer(), color4.r, color4.g, color4.b, 0);
+                SDL_RenderFillRect(getRenderer(), &box4);
+                SDL_Rect box5 = {582, 620, 84, 100};
+                SDL_Color color5 = Color::white;
+                SDL_SetRenderDrawColor(getRenderer(), color5.r, color5.g, color5.b, 0);
+                SDL_RenderFillRect(getRenderer(), &box5);
+                conductorStats.render(getRenderer());
+                drummerStats.render(getRenderer());
+                for (auto stat: conductorStatsRow)
                 {
-                    statusRow[i].render(getRenderer());
-                    
+                    stat.render(getRenderer());
                 }
-                */
-                statBass.render(getRenderer());
-                statFlute.render(getRenderer());
-                statDrum.render(getRenderer());
-                statConductor.render(getRenderer());
-
-                statBassHP.render(getRenderer());
-                statFluteHP.render(getRenderer());
-                statDrumHP.render(getRenderer());
-                statConductorHP.render(getRenderer());
-                combatScreenTexture.render(getRenderer(), 0, 0);
+                for (auto stat: drummerStatsRow)
+                {
+                    stat.render(getRenderer());
+                }
+                //TextBox conductorStats = TextBox("Conductor", 40, 20, 620, 100, 100, Font::sono, Color::white, Color::black);
+                //TextBox testToHitStats = TextBox("x+ to hit", 40, 690, 620, 100, 100, Font::sono, Color::white, Color::black);  
                 break;
             }
             case STATUS_MENU:
