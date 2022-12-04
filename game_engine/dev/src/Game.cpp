@@ -613,6 +613,7 @@ void DashDaCapo::runGameLoop()
                     
                     if (nextMapEvent == "BATTLE")
                     {
+                    
                         //init enemy characters
                         BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
@@ -624,6 +625,44 @@ void DashDaCapo::runGameLoop()
                         e3.setNewParticipantsIndex(6);
                         e4.setNewParticipantsIndex(7);
                         std::vector<BaseCharacter> enemies{e1, e2, e3, e4};
+                        
+                        //this might not be necessary
+                        combatParticipants = playerTeam;
+                        combatParticipants.insert(std::end(combatParticipants), std::begin(enemies), std::end(enemies));
+
+                        //change enemiesSet state
+                        STATE_enemiesSet = true;
+                        //change battle state
+                        STATE_battle = true;
+                        //setRoundOrder
+                        roundOrder = setRoundTurns(combatParticipants);
+                        STATE_roundsSet = true;
+                        screen = COMBAT;
+                        nextMapEvent = "BLANKEVENT";
+                        STATE_mapEventboxOpen = false;
+                        // update setRoundTurns display
+                        for(int i = 0; i < roundOrder.size(); i++)
+                        {
+                            tempCharNames[i] = roundOrder[i];
+                        }
+                    }
+                    else if (nextMapEvent == "BOSS")
+                    {
+                        // init boss and 3 dead characters as placeholders
+                        BaseCharacter boss = BaseCharacter("boss", 100, 0, 8, 5, 0, 0, 0, true);
+                        BaseCharacter e2 = BaseCharacter("", 0, 6, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("", 0, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("", 0, 0, 1, 0, 3, 3, 3, true);
+                        //normally this will just get enemies from a randomly selected "PACK"
+                        boss.setNewParticipantsIndex(4);
+                        e2.setNewParticipantsIndex(5);
+                        e3.setNewParticipantsIndex(6);
+                        e4.setNewParticipantsIndex(7);
+                        // set placeholders as dead so only the boss will be on the screen
+                        e2.changeLifeStatus(false);
+                        e3.changeLifeStatus(false);
+                        e4.changeLifeStatus(false);
+                        std::vector<BaseCharacter> enemies{boss, e2, e3, e4};
                         
                         //this might not be necessary
                         combatParticipants = playerTeam;
