@@ -10,8 +10,6 @@ DashDaCapo::DashDaCapo(Uint32 flags,
 
 void DashDaCapo::runGameLoop()
 {
-
-
     MapDebugController debugCont = MapDebugController();
 
     bool STATE_debug = false;
