@@ -122,26 +122,23 @@ void CharacterInMap::onInput(SDL_Event& event)
         switch (event.key.keysym.sym)
         {
             case SDLK_a:
+            {
                 collisionBox.x -= mainVelocity; 
                 break;
             }
             case SDLK_w:
             {
-                collisionBox.y -= mainVelocity;
-                    
+                collisionBox.y -= mainVelocity;  
                 break;
             }
             case SDLK_d:
             {
                 collisionBox.x += mainVelocity;
-                    
                 break;
             }
             case SDLK_s:
             {
-
                 collisionBox.y += mainVelocity;
-                   
                 break;
             }
         }

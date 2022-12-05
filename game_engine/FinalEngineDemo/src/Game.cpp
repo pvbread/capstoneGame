@@ -28,7 +28,7 @@ void DashDaCapo::runGameLoop()
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
-        {&characterInMapTexture, "../../assets/image/dot.bmp"},
+        {&characterInMapTexture, "../../assets/image/maxwell.png"},
         {&characterTestTexture, "../../assets/image/char.png"},
         {&combatScreenTexture, "../../assets/image/combat_screen.png"} 
     }; 
@@ -144,7 +144,7 @@ void DashDaCapo::runGameLoop()
             if (event.type == SDL_QUIT)
             {
                 setToQuit();
-                break;
+               
             }
            
            
