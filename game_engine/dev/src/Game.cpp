@@ -14,6 +14,7 @@ void DashDaCapo::runGameLoop()
 {
 
     Timer* timer = Timer::instance();
+    MapDebugController debugCont = MapDebugController();
 
     ////////// START CHARACTER INIT ////////
     BasePlayer conductor = BasePlayer("conductor", 30, 3, 3, 0, 3, 3, 3);
@@ -174,19 +175,27 @@ void DashDaCapo::runGameLoop()
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
     TextureWrapper characterInMapTexture;
-    TextureWrapper debugControllerTexture;
     TextureWrapper characterTestTexture;
     TextureWrapper combatScreenTexture;
     TextureWrapper blackScreenTransition;
+    TextureWrapper flutistTexture;
+    TextureWrapper bassistTexture;
+    TextureWrapper linebackerTexture;
+    TextureWrapper currPlayerTexture;
+    TextureWrapper targetTexture;
+
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
-        {&debugControllerTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"},
         {&combatScreenTexture, "../../assets/image/combat_screen.png"},
         {&blackScreenTransition, "../../assets/image/blackScreen.png"}
-
+        {&flutistTexture, "../../assets/image/chars/flutist.png"},
+        {&bassistTexture, "../../assets/image/chars/bassist.png"},
+        {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
+        {&currPlayerTexture, "../../assets/image/treble.png"},
+        {&targetTexture, "../../assets/image/sixteenth.png"}  
     }; 
     
     //so there's going to be a couple of these per char
@@ -299,6 +308,7 @@ void DashDaCapo::runGameLoop()
     {
         setToQuit();
     }
+    /*
     const int TEST_CHAR_SHEET_ROWS = 1;
     const int TEST_CHAR_SHEET_COLS = 5;
     const int ANIMATION_FRAME_COUNT = 5;
@@ -317,7 +327,7 @@ void DashDaCapo::runGameLoop()
     if (!didClip)
     {
         setToQuit();
-    }
+    }*/
 
     //////////// END TILE LOADING /////////////
 
@@ -362,11 +372,8 @@ void DashDaCapo::runGameLoop()
 
     /////////// START  CAMERA AND MAP CHARACTER INIT ///////
     //set this to 0 whenever we want a clear debug controller
-    debugControllerTexture.setAlpha(0);
 
-    SDL_Rect debugHitbox = {0, 0, 1, 1};
     SDL_Rect characterControllerHitbox = {30, 30, 80, 80};
-    MapDebugController debugController(10, 0, 0, debugHitbox);
     CharacterInMap characterController(80, 0, 0, characterControllerHitbox);
 
     const int SCREEN_WIDTH = 960;
@@ -380,7 +387,7 @@ void DashDaCapo::runGameLoop()
     std::vector<SDL_Rect> charBoxes(8);
     for (int i = 0; i < charBoxes.size(); i++)
     {
-        SDL_Rect temp = {(i*100), 300, 64, 64};
+        SDL_Rect temp = {(i*90), 300, 64, 64};
         charBoxes[i] = temp; 
     }
 
@@ -749,13 +756,14 @@ void DashDaCapo::runGameLoop()
                             STATE_debug = !STATE_debug;
                     }
                     if (STATE_debug)
-                        debugController.onInput(event);
+                        debugCont.onInput(event, MAP_WIDTH, MAP_HEIGHT);
                     else if (!STATE_mapEventboxOpen)
                         characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
                     
                     
                     if (nextMapEvent == "BATTLE")
                     {
+                    
                         //init enemy characters
                         BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
@@ -784,6 +792,44 @@ void DashDaCapo::runGameLoop()
                         ////STATE_mapEventboxOpen = false;//put in screen transition
                         // update setRoundTurns display
                         STATE_mapScreenOpenForTransition = false;
+                        for(int i = 0; i < roundOrder.size(); i++)
+                        {
+                            tempCharNames[i] = roundOrder[i];
+                        }
+                    }
+                    else if (nextMapEvent == "BOSS")
+                    {
+                        // init boss and 3 dead characters as placeholders
+                        BaseCharacter boss = BaseCharacter("boss", 100, 0, 8, 5, 0, 0, 0, true);
+                        BaseCharacter e2 = BaseCharacter("", 0, 6, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("", 0, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("", 0, 0, 1, 0, 3, 3, 3, true);
+                        //normally this will just get enemies from a randomly selected "PACK"
+                        boss.setNewParticipantsIndex(4);
+                        e2.setNewParticipantsIndex(5);
+                        e3.setNewParticipantsIndex(6);
+                        e4.setNewParticipantsIndex(7);
+                        // set placeholders as dead so only the boss will be on the screen
+                        e2.changeLifeStatus(false);
+                        e3.changeLifeStatus(false);
+                        e4.changeLifeStatus(false);
+                        std::vector<BaseCharacter> enemies{boss, e2, e3, e4};
+                        
+                        //this might not be necessary
+                        combatParticipants = playerTeam;
+                        combatParticipants.insert(std::end(combatParticipants), std::begin(enemies), std::end(enemies));
+
+                        //change enemiesSet state
+                        STATE_enemiesSet = true;
+                        //change battle state
+                        STATE_battle = true;
+                        //setRoundOrder
+                        roundOrder = setRoundTurns(combatParticipants);
+                        STATE_roundsSet = true;
+                        screen = COMBAT;
+                        nextMapEvent = "BLANKEVENT";
+                        STATE_mapEventboxOpen = false;
+                        // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
                             tempCharNames[i] = roundOrder[i];
@@ -1232,8 +1278,7 @@ void DashDaCapo::runGameLoop()
                 //write macro for this eventually
                 if (STATE_debug)
                 {
-                    debugController.move(MAP_WIDTH, MAP_HEIGHT);
-                    debugController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
+                    debugCont.move(camera); 
                 }
                 else
                 {
@@ -1244,9 +1289,7 @@ void DashDaCapo::runGameLoop()
                 {
                     tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
                 }
-                if (STATE_debug)
-                    debugController.render(getRenderer(), camera, debugControllerTexture);
-                else
+                if (!STATE_debug)
                     characterController.render(getRenderer(), camera, characterInMapTexture);
                 if (STATE_mapEventboxOpen)
                 {   
@@ -1323,23 +1366,25 @@ void DashDaCapo::runGameLoop()
                 combatMenu.render(getRenderer());
                 
                 
-                SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
+                //SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
 
                 //will be for loop (eventually)
-                characterTestTexture.render(getRenderer(), 0, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 100, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 200, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 300, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 400, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 500, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 600, 400, currFrameRect);
-                characterTestTexture.render(getRenderer(), 700, 400, currFrameRect);
-                
-                
-
-                
-
-                
+                if (combatParticipants[0].isAlive())
+                    flutistTexture.render(getRenderer(), 0, 400);
+                if (combatParticipants[1].isAlive())
+                    flutistTexture.render(getRenderer(), 90, 400);
+                if (combatParticipants[2].isAlive())
+                    bassistTexture.render(getRenderer(), 180, 400);
+                if (combatParticipants[3].isAlive())
+                    bassistTexture.render(getRenderer(), 270, 400);
+                if (combatParticipants[4].isAlive())
+                    linebackerTexture.render(getRenderer(), 360, 400);
+                if (combatParticipants[5].isAlive())
+                    linebackerTexture.render(getRenderer(), 450, 400);
+                if (combatParticipants[6].isAlive())
+                    linebackerTexture.render(getRenderer(), 540, 400);
+                if (combatParticipants[7].isAlive())
+                    linebackerTexture.render(getRenderer(), 630, 400);
 
                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
 
@@ -1364,7 +1409,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(ATTACK, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1383,7 +1429,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(BUFF, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1402,7 +1449,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(DEBUFF, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1419,7 +1467,8 @@ void DashDaCapo::runGameLoop()
                             validMoves = combatParticipants[i].getValidMoves(MOVE, combatParticipants[i].getParticipantsIndex(),combatParticipants);
                             for (auto target: validMoves[currTarget])
                             {
-                                SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
+                                targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
                             }
                         }
                     }
@@ -1437,7 +1486,8 @@ void DashDaCapo::runGameLoop()
                     }
                 }
                 //int currPlayer = roundOrder[currOrderNum]->getParticipantsIndex();
-                SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                //SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
+                currPlayerTexture.render(getRenderer(), charBoxes[currPlayer].x, charBoxes[currPlayer].y);
                 
 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 140, 255);
