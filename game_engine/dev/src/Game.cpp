@@ -646,6 +646,7 @@ void DashDaCapo::runGameLoop()
                 nextMapEvent = "BLANKEVENT";
             }
         }
+
         if (STATE_statMenu == true)
         {
             STATE_preTransition = true;
@@ -1120,7 +1121,7 @@ void DashDaCapo::runGameLoop()
                         bool isPlayerTeamAlive = isTeamAlive(combatParticipants, false);
                         bool isEnemyTeamAlive = isTeamAlive(combatParticipants, true);
 
-                        if (isEnemyTeamAlive == false)
+                        if (isEnemyTeamAlive == false) 
                         {
                             //saves player team's stats
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
@@ -1492,6 +1493,27 @@ void DashDaCapo::runGameLoop()
                     el.render(getRenderer());
                 } 
 
+                if(STATE_postTransition == true)
+                {
+                    alphaValue -= 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 0)
+                    {
+                        STATE_postTransition = false;  
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                else if(STATE_preTransition == true)
+                {
+                    alphaValue += 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 255)
+                    {
+                        STATE_preTransition = false;
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+
                 break;
             }
             case SANDBOX:           
@@ -1712,7 +1734,7 @@ void DashDaCapo::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
 
-                TextBox congrads = TextBox("You Died", 100, 200, 100, 500, 200, Font::roboto, Color::maroon, Color::black);
+                TextBox congrads = TextBox("  You Died", 100, 200, 100, 500, 200, Font::roboto, Color::maroon, Color::black);
                 congrads.render(getRenderer());
 
                 break;
