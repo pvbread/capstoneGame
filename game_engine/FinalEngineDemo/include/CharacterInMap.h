@@ -42,12 +42,7 @@ public:
     /// @param boxOpen 
     /// @param coordinateToTileTypeMap 
     /// @param coordinateToEventTypeMap 
-    void onInput(SDL_Event& event,
-                 std::string& nextMapEvent,
-                 bool& boxOpen,
-                 std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
-                 std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
-    );
+    void onInput(SDL_Event& event);
 
     /// @brief Updates the character state in the map
     /// @param xBoundary 
