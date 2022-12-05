@@ -1120,14 +1120,24 @@ void DashDaCapo::runGameLoop()
                         bool isPlayerTeamAlive = isTeamAlive(combatParticipants, false);
                         bool isEnemyTeamAlive = isTeamAlive(combatParticipants, true);
 
-                        if (isPlayerTeamAlive == false || isEnemyTeamAlive == false)
+                        if (isEnemyTeamAlive == false)
                         {
                             //saves player team's stats
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
                             currOrderNum = 0;
-                            screen = MAP;
+                            screen = WIN;
+                            break;
+                        }
+                        else if (isPlayerTeamAlive == false)
+                        {
+                            //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
+                            playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                            STATE_combatMenuTargetSelected = false;
+                            currTarget = 0;
+                            currOrderNum = 0;
+                            screen = DEFEAT;
                             break;
                         }
 
@@ -1160,7 +1170,19 @@ void DashDaCapo::runGameLoop()
                 }
                 case WIN:
                 {
-                    break;
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_RETURN:
+                            {
+                                
+                                screen = MAP;
+                                break;
+                            }
+                        }
+                    } 
+                    
                 }
                 case DEFEAT:
                 {
