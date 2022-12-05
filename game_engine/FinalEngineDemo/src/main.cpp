@@ -7,7 +7,7 @@ DashDaCapo* game;
 
 int main(int argc, char* argv[])
 {
-    const char* title = "Dash Da Capo!";
+    const char* title = "Archimedes Engine";
     game = new DashDaCapo(SDL_INIT_VIDEO, title, 20, 20, 960, 720);
     game->runGameLoop();
 

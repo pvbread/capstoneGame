@@ -15,29 +15,16 @@ void DashDaCapo::runGameLoop()
     MapDebugController debugCont = MapDebugController();
 
     bool STATE_debug = false;
-    
-   
-
- 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
-    TextureWrapper characterInMapTexture;
-    TextureWrapper characterTestTexture;
-    TextureWrapper combatScreenTexture;
+    TextureWrapper characterInMapTexture;  
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
         {&characterInMapTexture, "../../assets/image/maxwell.png"},
-        {&characterTestTexture, "../../assets/image/char.png"},
-        {&combatScreenTexture, "../../assets/image/combat_screen.png"} 
     }; 
     
-    //so there's going to be a couple of these per char
-    //maybe a map would do well here?
-
-    //TODO in the destructor, clean this up
-    //maybe better to have a dedicated function to map the coordinate tiles?
     bool didTexturesLoad = loadImageAssets(getRenderer(), 
                                            textureFilePaths
     );
@@ -53,21 +40,23 @@ void DashDaCapo::runGameLoop()
 
 
     //////////// START RANDOM MAP GEN /////////////
+    
+    std::string commandCall = "python ../mapBuilder/drunkardWalkTestMinusLibs.py ";
     /*
-    std::string commandCall = "python ./mapBuilder/drunkardWalkTestMinusLibs.py ";
     std::vector<std::string> commandCalls;
     for (int i = 2; i < 6; i++)
     {
         commandCalls.push_back(commandCall + std::to_string(i));
     }
-    system("python ./mapBuilder/drunkardWalkTestMinusLibs.py 1");
     */
+    system("python ../mapBuilder/drunkardWalkTestMinusLibs.py 1");
+    
     /*
     for (auto call: commandCalls)
     {
         system(call.c_str()); 
-    }
-    */
+    }*/
+    
    
 
     //////////// END RANDOM MAP GEN /////////////
@@ -75,14 +64,17 @@ void DashDaCapo::runGameLoop()
     //////////// START TILE LOADING /////////////
     
     // load random map
+    /*
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> intDist(0,4);
     int mapRandom = intDist(gen);
-    std::vector<std::string> tests = {"testLevel.map", "testLevel2.map", "testLevel3.map", "testLevel4.map", "testLevel5.map"};
-    std::string testLevel = tests[mapRandom]; 
+    std::vector<std::string> tests = {"testLevelIntegration.map", "testLevel2.map", "testLevel3.map", "testLevel4.map", "testLevel5.map"};
+    */
+    
+    //std::string testLevel = tests[mapRandom]; 
 
-    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/" + testLevel);
+    std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevelIntegration.map");
     const int MAP_COLS = levelInfo[1];
     const int MAP_ROWS = levelInfo[0]; 
     const int TILE_COUNT = MAP_COLS * MAP_ROWS;
@@ -146,8 +138,6 @@ void DashDaCapo::runGameLoop()
                 setToQuit();
                
             }
-           
-           
             if (event.type == SDL_KEYDOWN)
             {
                 if (event.key.keysym.sym == SDLK_9)
@@ -157,10 +147,7 @@ void DashDaCapo::runGameLoop()
                 debugCont.onInput(event, MAP_WIDTH, MAP_HEIGHT);
             else 
                 characterController.onInput(event);
-                    
-                    
-            
-            
+     
         }
         ////////////// BEGIN RENDER SECTION /////////////////////
 
@@ -168,8 +155,6 @@ void DashDaCapo::runGameLoop()
         SDL_SetRenderDrawColor(getRenderer(), 255, 255, 255, 255);
         SDL_RenderClear(getRenderer());
         
- 
-        //write macro for this eventually
         if (STATE_debug)
         {
             debugCont.move(camera); 
@@ -183,9 +168,10 @@ void DashDaCapo::runGameLoop()
         {
             tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
         }
+        /*
         if (!STATE_debug)
             characterController.render(getRenderer(), camera, characterInMapTexture);
-                
+        */     
         //Update screen
         SDL_RenderPresent(getRenderer());
 
