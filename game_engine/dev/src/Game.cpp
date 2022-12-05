@@ -160,6 +160,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapScreenOpenForTransition = false;
     float STATE_timerCount;
     int STATE_amountHealed;
+    int STATE_characterDirection = LEFT;
     std::string STATE_introSelectedOption = "NONE";
     std::string STATE_helpMenuSelectedOption = "NONE";
     std::string STATE_combatSelectedOption = "NONE";
@@ -170,16 +171,20 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    //Mix_PlayMusic(SelectOST, -1); 
+    Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
-    TextureWrapper characterInMapTexture;
+    TextureWrapper characterInMapTextureDown;
+    TextureWrapper characterInMapTextureLeft;
+    TextureWrapper characterInMapTextureRight;
+    TextureWrapper characterInMapTextureUp;
     TextureWrapper characterTestTexture;
     TextureWrapper combatScreenTexture;
     TextureWrapper blackScreenTransition;
     TextureWrapper flutistTexture;
     TextureWrapper bassistTexture;
+    TextureWrapper drummerTexture;
     TextureWrapper linebackerTexture;
     TextureWrapper currPlayerTexture;
     TextureWrapper targetTexture;
@@ -187,12 +192,16 @@ void DashDaCapo::runGameLoop()
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
         {&tileTexture, "../../assets/image/newspritedraft.png"},
-        {&characterInMapTexture, "../../assets/image/dot.bmp"},
+        {&characterInMapTextureDown, "../../assets/image/chars/flutist-sprite-down.png"},
+        {&characterInMapTextureLeft, "../../assets/image/chars/flutist-sprite-left.png"},
+        {&characterInMapTextureRight, "../../assets/image/chars/flutist-sprite-right.png"},
+        {&characterInMapTextureUp, "../../assets/image/chars/flutist-sprite-up.png"},
         {&characterTestTexture, "../../assets/image/char.png"},
         {&combatScreenTexture, "../../assets/image/combat_screen.png"},
         {&blackScreenTransition, "../../assets/image/blackScreen.png"},
         {&flutistTexture, "../../assets/image/chars/flutist.png"},
         {&bassistTexture, "../../assets/image/chars/bassist.png"},
+        {&drummerTexture, "../../assets/image/chars/drummer.png"},
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
         {&targetTexture, "../../assets/image/sixteenth.png"}  
@@ -310,25 +319,25 @@ void DashDaCapo::runGameLoop()
     }
     /*
     const int TEST_CHAR_SHEET_ROWS = 1;
-    const int TEST_CHAR_SHEET_COLS = 5;
-    const int ANIMATION_FRAME_COUNT = 5;
+    const int TEST_CHAR_SHEET_COLS = 4;
+    const int ANIMATION_FRAME_COUNT = 4;
     int currFrameNum = 0;
     int currRectNum = 0;
     
     std::vector<SDL_Rect> spriteClipped(ANIMATION_FRAME_COUNT);
     std::unordered_map<TextureWrapper*, int> textureFrameCount = {
-        {&characterTestTexture, ANIMATION_FRAME_COUNT}
+        {&characterInMapTexture, ANIMATION_FRAME_COUNT}
     };
     std::unordered_map<TextureWrapper*, std::vector<SDL_Rect>> texturePtrToSpriteMap = {
-        {&characterTestTexture, spriteClipped}
+        {&characterInMapTexture, spriteClipped}
     };
 
-    didClip = clipSheet(TEST_CHAR_SHEET_ROWS, TEST_CHAR_SHEET_COLS, 64, 64, ANIMATION_FRAME_COUNT, spriteClipped);
+    didClip = clipSheet(TEST_CHAR_SHEET_ROWS, TEST_CHAR_SHEET_COLS, 51, 107, ANIMATION_FRAME_COUNT, spriteClipped);
     if (!didClip)
     {
         setToQuit();
-    }*/
-
+    }
+    */
     //////////// END TILE LOADING /////////////
 
     ////////////START SCREEN TRANSITION INIT ///////////
@@ -758,7 +767,7 @@ void DashDaCapo::runGameLoop()
                     if (STATE_debug)
                         debugCont.onInput(event, MAP_WIDTH, MAP_HEIGHT);
                     else if (!STATE_mapEventboxOpen)
-                        characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, coordinateToTileTypeMap, coordinateToEventTypeMap);
+                        characterController.onInput(event, nextMapEvent, STATE_mapEventboxOpen, STATE_characterDirection, coordinateToTileTypeMap, coordinateToEventTypeMap);
                     
                     
                     if (nextMapEvent == "BATTLE")
@@ -1290,7 +1299,33 @@ void DashDaCapo::runGameLoop()
                     tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
                 }
                 if (!STATE_debug)
-                    characterController.render(getRenderer(), camera, characterInMapTexture);
+                {
+                    switch (STATE_characterDirection)
+                    {
+                        case UP:
+                        {
+                            characterController.render(getRenderer(), camera, characterInMapTextureUp);
+                            break;
+                        }
+                        case LEFT:
+                        {
+                            characterController.render(getRenderer(), camera, characterInMapTextureLeft);
+                            break;
+                        }
+                        case RIGHT:
+                        {
+                            characterController.render(getRenderer(), camera, characterInMapTextureRight);
+                            break;
+                        }
+                        case DOWN:
+                        {
+                            characterController.render(getRenderer(), camera, characterInMapTextureDown);
+                            break;
+                        }
+                        
+                    }
+                    
+                }
                 if (STATE_mapEventboxOpen)
                 {   
                     if (nextMapEvent == "ITEM")
@@ -1376,7 +1411,7 @@ void DashDaCapo::runGameLoop()
                 if (combatParticipants[2].isAlive())
                     bassistTexture.render(getRenderer(), 180, 400);
                 if (combatParticipants[3].isAlive())
-                    bassistTexture.render(getRenderer(), 270, 400);
+                    drummerTexture.render(getRenderer(), 270, 400);
                 if (combatParticipants[4].isAlive())
                     linebackerTexture.render(getRenderer(), 360, 400);
                 if (combatParticipants[5].isAlive())
@@ -1513,9 +1548,6 @@ void DashDaCapo::runGameLoop()
                     }
                     
                 }
-                
-                
-
 
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {

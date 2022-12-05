@@ -6,6 +6,7 @@
 #include "BaseSingleTexture.h"
 #include "TextureWrapper.h"
 #include "TileType.h"
+#include "CharacterDirection.h"
 
 /// @brief Game-specific class for the character representation in map
 class CharacterInMap : public BaseSingleTexture
@@ -45,6 +46,7 @@ public:
     void onInput(SDL_Event& event,
                  std::string& nextMapEvent,
                  bool& boxOpen,
+                 int& STATE_characterDirection,
                  std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                  std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
     );
