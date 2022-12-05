@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "Screen.h"
 #include "TileType.h"
+#include "CharacterDirection.h"
 #include "GameEngine.h"
 #include "TextureWrapper.h"
 #include "Tile.h"

@@ -114,6 +114,7 @@ void CharacterInMap::updateEvent(std::string& nextMapEvent,
 void CharacterInMap::onInput(SDL_Event& event, 
                              std::string& nextMapEvent,
                              bool& boxOpen,
+                             int& STATE_characterDirection,
                              std::map<std::pair<int, int>, TileType>& coordinateToTileTypeMap,
                              std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
                             )
@@ -133,6 +134,7 @@ void CharacterInMap::onInput(SDL_Event& event,
                     collisionBox.x -= mainVelocity;
                     std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
                     updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap);  
+                    STATE_characterDirection = LEFT;
                 }
                 break;
             }
@@ -142,7 +144,8 @@ void CharacterInMap::onInput(SDL_Event& event,
                 {
                     collisionBox.y -= mainVelocity;
                     std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
-                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap); 
+                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap);
+                    STATE_characterDirection = UP; 
                 }
                 break;
             }
@@ -152,7 +155,8 @@ void CharacterInMap::onInput(SDL_Event& event,
                 {
                     collisionBox.x += mainVelocity;
                     std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
-                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap); 
+                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap);
+                    STATE_characterDirection = RIGHT;  
                 }
                 break;
             }
@@ -162,7 +166,8 @@ void CharacterInMap::onInput(SDL_Event& event,
                 {
                     collisionBox.y += mainVelocity;
                     std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
-                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap); 
+                    updateEvent(nextMapEvent, boxOpen, coordinates, coordinateToEventTypeMap);
+                    STATE_characterDirection = DOWN;   
                 }
                 break;
             }
