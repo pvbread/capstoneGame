@@ -156,6 +156,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_preTransition = false;
     bool STATE_postTransition = true;
     bool STATE_statMenu = false;
+    bool STATE_mapScreenOpenForTransition = false;
     float STATE_timerCount;
     int STATE_amountHealed;
     std::string STATE_introSelectedOption = "NONE";
@@ -514,58 +515,58 @@ void DashDaCapo::runGameLoop()
     
     //////// CHARACTER STATS ////////
 
-    std::string tempItemModAddStat = "+ to hit";
+    std::string tempItemModAddStat = "+Dodge";
 
     ///////Base Stats/////////
-    TextBox baseName = TextBox("Bass", 40, 50, 120, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassHPName = TextBox(std::to_string(bass.getHp()), 30, 155, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassMaxHPName = TextBox(std::to_string(bass.getMaxHp()), 30, 210, 150, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassSpeedName = TextBox(std::to_string(bass.getSpeed()), 40, 310, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassHitName = TextBox(std::to_string(bass.getHit()), 40, 415, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassArmorName = TextBox(std::to_string(bass.getArmor()), 40, 525, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassDodgeName = TextBox(std::to_string(bass.getDodgeModifier()), 40, 655, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassItemModName = TextBox(std::to_string(bass.getItemModifier()) + tempItemModAddStat, 40, 750, 150, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox baseName = TextBox("   Bassist", 40, 50, 95, 50, 30, Font::roboto, Color::blue, Color::cyan);
+    TextBox bassHPName = TextBox(std::to_string(bass.getHp()) + "-", 40, 130, 145, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox bassMaxHPName = TextBox(std::to_string(bass.getMaxHp()), 40, 185, 145, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox bassSpeedName = TextBox(std::to_string(bass.getSpeed()), 40, 315, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox bassHitName = TextBox(std::to_string(bass.getHit()), 40, 435, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox bassArmorName = TextBox(std::to_string(bass.getArmor()), 40, 550, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox bassDodgeName = TextBox(std::to_string(bass.getDodgeModifier()), 40, 670, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox bassItemModName = TextBox(std::to_string(bass.getItemModifier()) + tempItemModAddStat, 40, 750, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
     
-    std::vector<TextBox> statMenuBassRow { baseName, bassHPName, bassMaxHPName, bassSpeedName, bassHitName, bassArmorName, bassDodgeName, bassItemModName };
+    std::vector<TextBox> statMenuBassRow { baseName , bassHPName, bassMaxHPName, bassSpeedName, bassHitName, bassArmorName, bassDodgeName, bassItemModName };
     ///////End Base Stats/////////
     ///////Drum Stats/////////
-    TextBox drumName = TextBox("Drum", 39, 50, 270, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumHPName = TextBox(std::to_string(drum.getHp()), 30, 155, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumMaxHPName = TextBox(std::to_string(drum.getMaxHp()), 30, 210, 300, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumSpeedName = TextBox(std::to_string(drum.getSpeed()), 40, 310, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumHitName = TextBox(std::to_string(drum.getHit()), 40, 415, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumArmorName = TextBox(std::to_string(drum.getArmor()), 40, 525, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumDodgeName = TextBox(std::to_string(drum.getDodgeModifier()), 40, 655, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumItemModName = TextBox(std::to_string(drum.getItemModifier()) + tempItemModAddStat, 40, 750, 300, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumName = TextBox(" Drummer", 40, 50, 245, 50, 30, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumHPName = TextBox(std::to_string(drum.getHp()) + "-", 40, 130, 295, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumMaxHPName = TextBox(std::to_string(drum.getMaxHp()), 40, 185, 295, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumSpeedName = TextBox(std::to_string(drum.getSpeed()), 40, 315, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumHitName = TextBox(std::to_string(drum.getHit()), 40, 435, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumArmorName = TextBox(std::to_string(drum.getArmor()), 40, 550, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumDodgeName = TextBox(std::to_string(drum.getDodgeModifier()), 40, 670, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumItemModName = TextBox(std::to_string(drum.getItemModifier()) + tempItemModAddStat, 40, 750, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
 
-    std::vector<TextBox> statMenuDrumRow { drumName, drumHPName, drumMaxHPName, drumSpeedName, drumHitName, drumArmorName, drumDodgeName, drumItemModName };
+    std::vector<TextBox> statMenuDrumRow { drumName , drumHPName, drumMaxHPName, drumSpeedName, drumHitName, drumArmorName, drumDodgeName, drumItemModName };
     ///////End Drum Stats/////////
     ///////Flute Stats/////////
-    TextBox fluteName = TextBox("Flute", 40, 50, 420, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteHPName = TextBox(std::to_string(flute.getHp()), 30, 155, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteMaxHPName = TextBox(std::to_string(flute.getMaxHp()), 30, 210, 450, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteSpeedName = TextBox(std::to_string(flute.getSpeed()), 40, 310, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteHitName = TextBox(std::to_string(flute.getHit()), 40, 415, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteArmorName = TextBox(std::to_string(flute.getArmor()), 40, 525, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteDodgeName = TextBox(std::to_string(flute.getDodgeModifier()), 40, 655, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteItemModName = TextBox(std::to_string(flute.getItemModifier()) + tempItemModAddStat, 40, 750, 450, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteName = TextBox("    Flutist", 40, 50, 395, 50, 30, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteHPName = TextBox(std::to_string(flute.getHp()) + "-", 40, 130, 445, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteMaxHPName = TextBox(std::to_string(flute.getMaxHp()), 40, 185, 445, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteSpeedName = TextBox(std::to_string(flute.getSpeed()), 40, 315, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteHitName = TextBox(std::to_string(flute.getHit()), 40, 435, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteArmorName = TextBox(std::to_string(flute.getArmor()), 40, 550, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteDodgeName = TextBox(std::to_string(flute.getDodgeModifier()), 40, 670, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteItemModName = TextBox(std::to_string(flute.getItemModifier()) + tempItemModAddStat, 40, 750, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
 
-    std::vector<TextBox> statMenuFluteRow { fluteName, fluteHPName, fluteMaxHPName, fluteSpeedName, fluteHitName, fluteArmorName, fluteDodgeName, fluteItemModName };
+    std::vector<TextBox> statMenuFluteRow { fluteName , fluteHPName, fluteMaxHPName, fluteSpeedName, fluteHitName, fluteArmorName, fluteDodgeName, fluteItemModName };
     ///////End Flute Stats/////////
     ///////Conductor Stats/////////
-    TextBox conductorName = TextBox("Conductor", 20, 50, 580, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorHPName = TextBox(std::to_string(conductor.getHp()), 30, 155, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorMaxHPName = TextBox(std::to_string(conductor.getMaxHp()), 30, 210, 600, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorSpeedName = TextBox(std::to_string(conductor.getSpeed()), 40, 310, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorHitName = TextBox(std::to_string(conductor.getHit()), 40, 415, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorArmorName = TextBox(std::to_string(conductor.getArmor()), 40, 525, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorDodgeName = TextBox(std::to_string(conductor.getDodgeModifier()), 40, 655, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorItemModName = TextBox(std::to_string(conductor.getItemModifier()) + tempItemModAddStat, 40, 750, 600, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorName = TextBox("Conductor", 40, 50, 545, 50, 30, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorHPName = TextBox(std::to_string(conductor.getHp()) + "-", 40, 130, 595, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorMaxHPName = TextBox(std::to_string(conductor.getMaxHp()), 40, 185, 595, 40, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorSpeedName = TextBox(std::to_string(conductor.getSpeed()), 40, 315, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorHitName = TextBox(std::to_string(conductor.getHit()), 40, 435, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorArmorName = TextBox(std::to_string(conductor.getArmor()), 40, 550, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorDodgeName = TextBox(std::to_string(conductor.getDodgeModifier()), 40, 670, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorItemModName = TextBox(std::to_string(conductor.getItemModifier()) + tempItemModAddStat, 40, 750, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
 
-    std::vector<TextBox> statMenuConductorRow { conductorName, conductorHPName, conductorMaxHPName, conductorSpeedName, conductorHitName, conductorArmorName, conductorDodgeName, conductorItemModName };
+    std::vector<TextBox> statMenuConductorRow { conductorName , conductorHPName, conductorMaxHPName, conductorSpeedName, conductorHitName, conductorArmorName, conductorDodgeName, conductorItemModName };
     ///////End Conductor Stats/////////
     ///////Display Stat Names/////////
-    int startBoxWidth = 100;
+    int startBoxWidth = 95;
     int slashBoxWidth = 150;
     std::vector<TextBox> characterStatsHP;
     std::vector<TextBox> characterStatsSpeed;
@@ -577,33 +578,29 @@ void DashDaCapo::runGameLoop()
 
     for (int i = 0; i < 4; i++)
     {
-        TextBox statsHP = TextBox("HP", 38, 170, (startBoxWidth + (i*150)),
+        TextBox statsHP = TextBox(" HP", 40, 50, (startBoxWidth + (i*150) + 50),
          50, 20, Font::roboto, Color::blue, Color::cyan);
         characterStatsHP.push_back(statsHP);
         
-        TextBox statsSpeed = TextBox("Speed", 35, 267, (startBoxWidth + (i*150) + 5),
+        TextBox statsSpeed = TextBox("Speed", 35, 276, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsSpeed.push_back(statsSpeed);
 
-        TextBox statsHit = TextBox("Hit", 40, 400, (startBoxWidth + (i*150)),
+        TextBox statsHit = TextBox("   Hit   ", 35, 393, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsHit.push_back(statsHit);
 
-        TextBox statsArmor = TextBox("Armor", 38, 480, (startBoxWidth + (i*150)),
+        TextBox statsArmor = TextBox("Armor", 35, 510, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsArmor.push_back(statsArmor);
         
-        TextBox statsDodge = TextBox("Dodge", 38, 610, (startBoxWidth + (i*150)),
+        TextBox statsDodge = TextBox("Dodge", 35, 627, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsDodge.push_back(statsDodge);
 
-        TextBox statsItemMod = TextBox("Item Mod", 35, 740, (startBoxWidth + (i*150)),
+        TextBox statsItemMod = TextBox("Item Mod", 35, 748, (startBoxWidth + (i*150)),
          100, 50, Font::roboto, Color::blue, Color::cyan);
         characterStatsItemMod.push_back(statsItemMod);
-
-        TextBox justASlash = TextBox("-", 40, 193, (slashBoxWidth + (i*150 - 5)),
-         10, 50, Font::roboto, Color::blue, Color::cyan);
-        characterStatSlash.push_back(justASlash);
         
         
     }   
@@ -641,6 +638,7 @@ void DashDaCapo::runGameLoop()
             STATE_preTransition = true;
             if(alphaValue >= 255)
             {
+
                 STATE_preTransition = false;
                 screen = COMBAT;
                 STATE_postTransition = true;
@@ -656,9 +654,22 @@ void DashDaCapo::runGameLoop()
                 STATE_preTransition = false;
                 screen = STATUS_MENU;
                 STATE_postTransition = true;
+                STATE_statMenu = false;
             }
         }
-
+        
+        if (STATE_mapScreenOpenForTransition == true)
+        {
+            STATE_preTransition = true;
+            if(alphaValue >= 255)
+            {
+                STATE_preTransition = false;
+                screen = MAP;
+                STATE_postTransition = true;
+                STATE_mapScreenOpenForTransition = false;
+            }
+        }
+        
         //////END SCREEN TRANSITIONS////////
 
         while(SDL_PollEvent(&event))
@@ -722,6 +733,7 @@ void DashDaCapo::runGameLoop()
                             
                             STATE_newGameSelected = true;
                             STATE_gameOver = false; 
+                            STATE_mapScreenOpenForTransition = true;
                         }
                     }
                     
@@ -770,6 +782,7 @@ void DashDaCapo::runGameLoop()
                         ////nextMapEvent = "BLANKEVENT";//put in screen transition
                         ////STATE_mapEventboxOpen = false;//put in screen transition
                         // update setRoundTurns display
+                        STATE_mapScreenOpenForTransition = false;
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
                             tempCharNames[i] = roundOrder[i];
@@ -835,6 +848,7 @@ void DashDaCapo::runGameLoop()
                             case SDLK_e:
                             {
                                 STATE_statMenu = true;
+                                STATE_mapScreenOpenForTransition = false;
                                 //screen = STATUS_MENU;
                                 break;
                             }
@@ -1135,7 +1149,8 @@ void DashDaCapo::runGameLoop()
                             case SDLK_e:
                             {
                                 STATE_statMenu = false;
-                                screen = MAP;
+                                STATE_mapScreenOpenForTransition = true;
+                                //screen = MAP;
                                 break;
                             }
                         }
@@ -1537,7 +1552,6 @@ void DashDaCapo::runGameLoop()
             {
                 std::string statMenuDisplayStr;
 
-                
                 //////Background Color////////
                 SDL_Rect backgroundPane1 = {0, 0, 960, 730};
                 SDL_Color backgroundMenu1 = Color::navy;
@@ -1551,22 +1565,22 @@ void DashDaCapo::runGameLoop()
 
                 ///////Background under the text////////
                 
-                SDL_Rect StatMenuBackground1 = {50, 100, 850, 100};
+                SDL_Rect StatMenuBackground1 = {50, 95, 861, 100};
                 SDL_Color StatMenuColor1 = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor1.r, StatMenuColor1.g, StatMenuColor1.b, 0);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground1);
 
-                SDL_Rect StatMenuBackground2 = {50, 250, 850, 100};
+                SDL_Rect StatMenuBackground2 = {50, 245, 861, 100};
                 SDL_Color StatMenuColor2 = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor2.r, StatMenuColor2.g, StatMenuColor2.b, 0);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground2);
 
-                SDL_Rect StatMenuBackground3 = {50, 400, 850, 100};
+                SDL_Rect StatMenuBackground3 = {50, 395, 861, 100};
                 SDL_Color StatMenuColor3 = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor3.r, StatMenuColor3.g, StatMenuColor3.b, 0);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground3);
 
-                SDL_Rect StatMenuBackground4 = {50, 550, 850, 100};
+                SDL_Rect StatMenuBackground4 = {50, 545, 861, 100};
                 SDL_Color StatMenuColor4 = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor4.r, StatMenuColor4.g, StatMenuColor4.b, 0);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground4);
@@ -1575,32 +1589,37 @@ void DashDaCapo::runGameLoop()
 
                 ///////Lines that split the screen//////////
                 
-                SDL_Rect splitLine1 = {145, 100, 5, 550};
+                SDL_Rect splitLine1 = {239, 95, 3, 550};
                 SDL_Color splitLineColor1 = Color::teal;
                 SDL_SetRenderDrawColor(getRenderer(), splitLineColor1.r, splitLineColor1.g, splitLineColor1.b, 0);
                 SDL_RenderFillRect(getRenderer(), &splitLine1);
+
+                SDL_Rect splitLine7 = {252, 95, 3, 550};
+                SDL_Color splitLineColor7 = Color::teal;
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor7.r, splitLineColor7.g, splitLineColor7.b, 0);
+                SDL_RenderFillRect(getRenderer(), &splitLine7);
                 
-                SDL_Rect splitLine2 = {250, 100, 5, 550};
+                SDL_Rect splitLine2 = {265, 95, 3, 550};
                 SDL_Color splitLineColor2 = Color::teal;
                 SDL_SetRenderDrawColor(getRenderer(), splitLineColor2.r, splitLineColor2.g, splitLineColor2.b, 0);
                 SDL_RenderFillRect(getRenderer(), &splitLine2);
                 
-                SDL_Rect splitLine3 = {380, 100, 5, 550};
+                SDL_Rect splitLine3 = {385, 95, 3, 550};
                 SDL_Color splitLineColor3 = Color::teal;
                 SDL_SetRenderDrawColor(getRenderer(), splitLineColor3.r, splitLineColor3.g, splitLineColor3.b, 0);
                 SDL_RenderFillRect(getRenderer(), &splitLine3);
 
-                SDL_Rect splitLine4 = {465, 100, 5, 550};
+                SDL_Rect splitLine4 = {499, 95, 3, 550};
                 SDL_Color splitLineColor4 = Color::teal;
                 SDL_SetRenderDrawColor(getRenderer(), splitLineColor4.r, splitLineColor4.g, splitLineColor4.b, 0);
                 SDL_RenderFillRect(getRenderer(), &splitLine4);
 
-                SDL_Rect splitLine5 = {595, 100, 5, 550};
+                SDL_Rect splitLine5 = {617, 95, 3, 550};
                 SDL_Color splitLineColor5 = Color::teal;
                 SDL_SetRenderDrawColor(getRenderer(), splitLineColor5.r, splitLineColor5.g, splitLineColor5.b, 0);
                 SDL_RenderFillRect(getRenderer(), &splitLine5);
 
-                SDL_Rect splitLine6 = {730, 100, 5, 550};
+                SDL_Rect splitLine6 = {737, 95, 3, 550};
                 SDL_Color splitLineColor6 = Color::teal;
                 SDL_SetRenderDrawColor(getRenderer(), splitLineColor6.r, splitLineColor6.g, splitLineColor6.b, 0);
                 SDL_RenderFillRect(getRenderer(), &splitLine6);
@@ -1617,10 +1636,9 @@ void DashDaCapo::runGameLoop()
                     characterStatsArmor[i].render(getRenderer());
                     characterStatsDodge[i].render(getRenderer());
                     characterStatsItemMod[i].render(getRenderer());
-                    characterStatSlash[i].render(getRenderer());
 
                 }
-
+                
                 for (int statLoopTemp = 0; statLoopTemp < 8; statLoopTemp++)
                 {
                     statMenuBassRow[statLoopTemp].render(getRenderer());
@@ -1631,6 +1649,26 @@ void DashDaCapo::runGameLoop()
 
                 ///////Display Names-Stats//////// 
 
+                if(STATE_postTransition == true)
+                {
+                    alphaValue -= 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 0)
+                    {
+                        STATE_postTransition = false;  
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                else if(STATE_preTransition == true)
+                {
+                    alphaValue += 5;
+                    blackScreenTransition.setAlpha(alphaValue);
+                    if(alphaValue == 255)
+                    {
+                        STATE_preTransition = false;
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
                 
                 break;
             }
