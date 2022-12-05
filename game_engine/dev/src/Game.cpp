@@ -190,7 +190,7 @@ void DashDaCapo::runGameLoop()
         {&characterInMapTexture, "../../assets/image/dot.bmp"},
         {&characterTestTexture, "../../assets/image/char.png"},
         {&combatScreenTexture, "../../assets/image/combat_screen.png"},
-        {&blackScreenTransition, "../../assets/image/blackScreen.png"}
+        {&blackScreenTransition, "../../assets/image/blackScreen.png"},
         {&flutistTexture, "../../assets/image/chars/flutist.png"},
         {&bassistTexture, "../../assets/image/chars/bassist.png"},
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
