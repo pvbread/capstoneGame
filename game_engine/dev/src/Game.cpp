@@ -188,6 +188,7 @@ void DashDaCapo::runGameLoop()
     TextureWrapper linebackerTexture;
     TextureWrapper currPlayerTexture;
     TextureWrapper targetTexture;
+    TextureWrapper getHitEffect;
 
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
@@ -204,7 +205,8 @@ void DashDaCapo::runGameLoop()
         {&drummerTexture, "../../assets/image/chars/drummer.png"},
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
-        {&targetTexture, "../../assets/image/sixteenth.png"}  
+        {&targetTexture, "../../assets/image/sixteenth.png"},  
+        {&getHitEffect, "../../assets/image/starEffect.png"}
     }; 
     
     //so there's going to be a couple of these per char
