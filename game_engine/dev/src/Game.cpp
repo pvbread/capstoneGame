@@ -412,14 +412,14 @@ void DashDaCapo::runGameLoop()
 
 
     std::vector<std::string> tempCharNames {
-        "flute        ",
-        "conductor    ",
-        "drums        ",
-        "bass         ",
+        "flutist",
+        "conductor",
+        "drummer",
+        "bassist",
         "coneheadAlpha",
         "coneheadBeta ",
         "coneheadTheta",
-        "Carl         "
+        "Carl"
     };
     //TODO account for dead chars in order
     
@@ -646,7 +646,6 @@ void DashDaCapo::runGameLoop()
                         // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
-                            tempCharNames[i] = roundOrder[i];
                             orderBoxes[i].changeText(roundOrder[i]);
                         }
                     }
@@ -1203,17 +1202,29 @@ void DashDaCapo::runGameLoop()
                 //SDL_RenderFillRect(getRenderer(), &charBoxes[currPlayer]);
                 currPlayerTexture.render(getRenderer(), charBoxes[currPlayer].x, charBoxes[currPlayer].y);
 
-                /*
-                for (int i = 0; i < roundOrder.size();i++)
+                // update order display
+                for (int i = 0; i < combatParticipants.size(); i++)
                 {
-                    tempCharNames[i] = roundOrder[i];
-                    for (int j = roundOrder.size(); j < tempCharNames.size(); j++)
+                    for (int j = 0; j < roundOrder.size(); j++)
                     {
-                        tempCharNames[j] = "";
+                        if (combatParticipants[i].getName() == roundOrder[j])
+                        {
+                            // if character in round order is alive, write its name in the order box
+                            if (combatParticipants[i].isAlive())
+                                orderBoxes[j].changeText(roundOrder[j]);
+                            // if character in round order is dead, overwrite its name with an empty string
+                            else 
+                                orderBoxes[j].changeText("");
+                        }
                     }
-                    
-                }*/
-    
+                }
+                // if round order size less than order boxes size, replace dead character names with empty string
+                for (int i = roundOrder.size(); i < orderBoxes.size(); i++)
+                {
+                    orderBoxes[i].changeText("");
+                }
+                
+                
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
                     orderBoxes[i].render(getRenderer());
