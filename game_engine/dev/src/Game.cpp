@@ -158,6 +158,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_postTransition = true;
     bool STATE_statMenu = false;
     bool STATE_mapScreenOpenForTransition = false;
+    bool STATE_tookDamage = false;
     float STATE_timerCount;
     int STATE_amountHealed;
     int STATE_characterDirection = LEFT;
@@ -206,7 +207,7 @@ void DashDaCapo::runGameLoop()
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
         {&targetTexture, "../../assets/image/sixteenth.png"},  
-        {&getHitEffect, "../../assets/image/starEffect.png"}
+        {&getHitEffect, "../../assets/image/explosion-notes.png"}
     }; 
     
     //so there's going to be a couple of these per char
@@ -344,7 +345,7 @@ void DashDaCapo::runGameLoop()
 
     ////////////START SCREEN TRANSITION INIT ///////////
 
-    int alphaValue = 255;
+    int alphaValueScreenTransition = 255;
 
     ////////////END START SCREEN TRANSITION INIT ///////////
 
@@ -451,6 +452,12 @@ void DashDaCapo::runGameLoop()
     std::vector<std::vector<int>> validMoves;
     bool actionChosen = false;
 
+    ///battle damage/death 
+    int alphaDamageON = 255;
+    int alphaDamageOFF = 0;
+    int alphaDeathON = 255;
+    int alphaDeathOFF = 0;
+    int whichTargetXValueForDamageAnimation;
 
     ///////////////////////////////////
     ///////// BEGIN SANDBOX ///////////
@@ -642,7 +649,7 @@ void DashDaCapo::runGameLoop()
         if (STATE_introSelectedOption == "New Game")
         {
             STATE_preTransition = true;
-            if(alphaValue >= 255)
+            if(alphaValueScreenTransition >= 255)
             {
                 STATE_preTransition = false;
                 screen = MAP;
@@ -654,7 +661,7 @@ void DashDaCapo::runGameLoop()
         if (nextMapEvent == "BATTLE")
         {
             STATE_preTransition = true;
-            if(alphaValue >= 255)
+            if(alphaValueScreenTransition >= 255)
             {
 
                 STATE_preTransition = false;
@@ -668,7 +675,7 @@ void DashDaCapo::runGameLoop()
         if (STATE_statMenu == true)
         {
             STATE_preTransition = true;
-            if(alphaValue >= 255)
+            if(alphaValueScreenTransition >= 255)
             {
                 STATE_preTransition = false;
                 screen = STATUS_MENU;
@@ -680,7 +687,7 @@ void DashDaCapo::runGameLoop()
         if (STATE_mapScreenOpenForTransition == true)
         {
             STATE_preTransition = true;
-            if(alphaValue >= 255)
+            if(alphaValueScreenTransition >= 255)
             {
                 STATE_preTransition = false;
                 screen = MAP;
@@ -1007,7 +1014,9 @@ void DashDaCapo::runGameLoop()
                                             attackNotification += std::to_string(attackDamage[j]);
                                             attackNotification += " dmg dealt to ";
                                             attackNotification += targetNotification;
+                                            STATE_tookDamage = true;
                                             continue;
+                                            //----------------
                                         }
                                         attackNotification += " *** ";
                                         attackNotification += std::to_string(attackDamage[j]);
@@ -1263,9 +1272,9 @@ void DashDaCapo::runGameLoop()
 
                 if(STATE_postTransition == true)
                 {
-                    alphaValue -= 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 0)
+                    alphaValueScreenTransition -= 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 0)
                     {
                         STATE_postTransition = false;  
                     }
@@ -1273,9 +1282,9 @@ void DashDaCapo::runGameLoop()
                 }
                 else if(STATE_preTransition == true)
                 {
-                    alphaValue += 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 255)
+                    alphaValueScreenTransition += 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 255)
                     {
                         STATE_preTransition = false;
                     }
@@ -1353,9 +1362,9 @@ void DashDaCapo::runGameLoop()
 
                 if(STATE_postTransition == true)
                 {
-                    alphaValue -= 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 0)
+                    alphaValueScreenTransition -= 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 0)
                     {
                         STATE_postTransition = false;  
                     }
@@ -1363,9 +1372,9 @@ void DashDaCapo::runGameLoop()
                 }
                 else if(STATE_preTransition == true)
                 {
-                    alphaValue += 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 255)
+                    alphaValueScreenTransition += 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 255)
                     {
                         STATE_preTransition = false;
                     }
@@ -1448,6 +1457,7 @@ void DashDaCapo::runGameLoop()
                             {
                                 //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
                                 targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
+                                
                             }
                         }
                     }
@@ -1468,6 +1478,7 @@ void DashDaCapo::runGameLoop()
                             {
                                 //SDL_RenderFillRect(getRenderer(), &charBoxes[target]);
                                 targetTexture.render(getRenderer(), charBoxes[target].x, charBoxes[target].y);
+                                
                             }
                         }
                     }
@@ -1579,9 +1590,9 @@ void DashDaCapo::runGameLoop()
 
                 if(STATE_postTransition == true)
                 {
-                    alphaValue -= 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 0)
+                    alphaValueScreenTransition -= 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 0)
                     {
                         STATE_postTransition = false;  
                     }
@@ -1589,13 +1600,19 @@ void DashDaCapo::runGameLoop()
                 }
                 else if(STATE_preTransition == true)
                 {
-                    alphaValue += 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 255)
+                    alphaValueScreenTransition += 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 255)
                     {
                         STATE_preTransition = false;
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                
+                if(STATE_tookDamage == true)
+                {
+                    getHitEffect.setAlpha(alphaDamageON);
+                    getHitEffect.render(getRenderer(), 0, whichTargetXValueForDamageAnimation);
                 }
 
                 break;
@@ -1779,9 +1796,9 @@ void DashDaCapo::runGameLoop()
 
                 if(STATE_postTransition == true)
                 {
-                    alphaValue -= 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 0)
+                    alphaValueScreenTransition -= 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 0)
                     {
                         STATE_postTransition = false;  
                     }
@@ -1789,9 +1806,9 @@ void DashDaCapo::runGameLoop()
                 }
                 else if(STATE_preTransition == true)
                 {
-                    alphaValue += 5;
-                    blackScreenTransition.setAlpha(alphaValue);
-                    if(alphaValue == 255)
+                    alphaValueScreenTransition += 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 255)
                     {
                         STATE_preTransition = false;
                     }
