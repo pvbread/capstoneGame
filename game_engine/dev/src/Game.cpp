@@ -394,7 +394,8 @@ void DashDaCapo::runGameLoop()
 
     /////////// END CAMERA AND MAP CHARACTER INIT ///////
 
-
+    // stores screen positioning for the characters
+    std::vector<int> charRendering = {0, 90, 180, 270, 360, 450, 540, 630};
 
     std::vector<SDL_Rect> charBoxes(8);
     for (int i = 0; i < charBoxes.size(); i++)
@@ -792,7 +793,8 @@ void DashDaCapo::runGameLoop()
                         e2.setNewParticipantsIndex(5);
                         e3.setNewParticipantsIndex(6);
                         e4.setNewParticipantsIndex(7);
-                        std::vector<BaseCharacter> enemies{e1, e2, e3, e4};
+                        std::vector<BaseCharacter> enemiesTemp{e1, e2, e3, e4};
+                        enemies = enemiesTemp;
                         
                         //this might not be necessary
                         combatParticipants = playerTeam;
@@ -831,7 +833,8 @@ void DashDaCapo::runGameLoop()
                         e2.changeLifeStatus(false);
                         e3.changeLifeStatus(false);
                         e4.changeLifeStatus(false);
-                        std::vector<BaseCharacter> enemies{boss, e2, e3, e4};
+                        std::vector<BaseCharacter> enemiesTemp{boss, e2, e3, e4};
+                        enemies = enemiesTemp;
                         
                         //this might not be necessary
                         combatParticipants = playerTeam;
@@ -1413,25 +1416,41 @@ void DashDaCapo::runGameLoop()
                 
                 
                 //SDL_Rect* currFrameRect = &spriteClipped[currFrameNum];
-
                 //will be for loop (eventually)
-                if (combatParticipants[0].isAlive())
-                    flutistTexture.render(getRenderer(), 0, 400);
-                if (combatParticipants[1].isAlive())
-                    flutistTexture.render(getRenderer(), 90, 400);
-                if (combatParticipants[2].isAlive())
-                    bassistTexture.render(getRenderer(), 180, 400);
-                if (combatParticipants[3].isAlive())
-                    drummerTexture.render(getRenderer(), 270, 400);
-                if (combatParticipants[4].isAlive())
-                    linebackerTexture.render(getRenderer(), 360, 400);
-                if (combatParticipants[5].isAlive())
-                    linebackerTexture.render(getRenderer(), 450, 400);
-                if (combatParticipants[6].isAlive())
-                    linebackerTexture.render(getRenderer(), 540, 400);
-                if (combatParticipants[7].isAlive())
-                    linebackerTexture.render(getRenderer(), 630, 400);
 
+                // render players at their positions
+                for (int i = 0; i < 4; i++)
+                {
+                    if (combatParticipants[i].isAlive())
+                    {
+                        if (combatParticipants[i].getName() == "flutist")
+                            flutistTexture.render(getRenderer(), charRendering[i], 400);
+                        if (combatParticipants[i].getName() == "drummer")
+                            drummerTexture.render(getRenderer(), charRendering[i], 400);
+                        if (combatParticipants[i].getName() == "bassist")
+                            bassistTexture.render(getRenderer(), charRendering[i], 400);
+                        if (combatParticipants[i].getName() == "conductor")
+                            flutistTexture.render(getRenderer(), charRendering[i], 400);
+                    }
+                }
+                
+                // render enemies at their positions
+                for (int i = 0; i < 4; i++)
+                {
+                    if (combatParticipants[i+4].isAlive())
+                    {
+                        if (combatParticipants[i+4].getName() == enemies[0].getName())
+                            linebackerTexture.render(getRenderer(), charRendering[i+4], 400);
+                        if (combatParticipants[i+4].getName() == enemies[1].getName())
+                            drummerTexture.render(getRenderer(), charRendering[i+4], 400);
+                        if (combatParticipants[i+4].getName() == enemies[2].getName())
+                            bassistTexture.render(getRenderer(), charRendering[i+4], 400);
+                        if (combatParticipants[i+4].getName() == enemies[3].getName())
+                            flutistTexture.render(getRenderer(), charRendering[i+4], 400);
+                    }
+                }
+                
+                
                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
 
                 {
@@ -1551,7 +1570,7 @@ void DashDaCapo::runGameLoop()
                 SDL_FreeSurface(surfaceTesting);
                 SDL_DestroyTexture(textureTesting);
 
-               
+               // reset round order display
                 for (int i = 0; i < roundOrder.size();i++)
                 {
                     tempCharNames[i] = roundOrder[i];
