@@ -458,7 +458,7 @@ void DashDaCapo::runGameLoop()
     int alphaDamageOFF = 0;
     int alphaDeathON = 255;
     int alphaDeathOFF = 0;
-    int whichTargetXValueForDamageAnimation;
+    int whichTargetXValueForDamageAnimation = 0;
 
     ///////////////////////////////////
     ///////// BEGIN SANDBOX ///////////
@@ -1446,7 +1446,7 @@ void DashDaCapo::runGameLoop()
                         if (combatParticipants[i+4].getName() == enemies[2].getName())
                             bassistTexture.render(getRenderer(), charRendering[i+4], 400);
                         if (combatParticipants[i+4].getName() == enemies[3].getName())
-                            flutistTexture.render(getRenderer(), charRendering[i+4], 400);
+                            flutistTexture.render(getRenderer(), charRendering[i+4], 400); 
                     }
                 }
                 
@@ -1631,7 +1631,7 @@ void DashDaCapo::runGameLoop()
                 if(STATE_tookDamage == true)
                 {
                     getHitEffect.setAlpha(alphaDamageON);
-                    getHitEffect.render(getRenderer(), 0, whichTargetXValueForDamageAnimation);
+                    getHitEffect.render(getRenderer(), whichTargetXValueForDamageAnimation, 398);
                 }
 
                 break;
