@@ -228,17 +228,17 @@ void DashDaCapo::runGameLoop()
 
     
 
-    TextBox combatStatFlute = TextBox("flute", 25, 50, 630, 150, 30);
-    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 50, 660, 150, 30);
+    TextBox combatStatFlute = TextBox("flute", 25, 50, 630, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 50, 660, 150, 30, Font::inter, Color::black, Color::cyan);
     
-    TextBox combatStatConductor = TextBox("conductor", 25, 200, 630, 150, 30);
-    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 200, 660, 150, 30);
+    TextBox combatStatConductor = TextBox("conductor", 25, 200, 630, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 200, 660, 150, 30, Font::inter, Color::black, Color::cyan);
 
-    TextBox combatStatBass = TextBox("bass", 25, 350, 630, 150, 30);
-    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 350, 660, 150, 30);
+    TextBox combatStatBass = TextBox("bass", 25, 350, 630, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 350, 660, 150, 30, Font::inter, Color::black, Color::cyan);
     
-    TextBox combatStatDrum = TextBox("drum", 25, 500, 630, 150, 30);
-    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 500, 660, 150, 30);
+    TextBox combatStatDrum = TextBox("drum", 25, 500, 630, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 500, 660, 150, 30, Font::inter, Color::black, Color::cyan);
 
     std::vector<TextBox> combatStatusRow {
         combatStatFlute, combatStatConductor,
@@ -413,7 +413,7 @@ void DashDaCapo::runGameLoop()
     std::vector<TextBox> orderBoxes(8);
     for (int i = 0; i < orderBoxes.size(); i++)
     {
-        TextBox temp = TextBox("", 25, 750, 30+(i*50), 200, 30, Font::openSans, Color::black, Color::gray);
+        TextBox temp = TextBox("", 25, 750, 30+(i*50), 200, 30, Font::raleway, Color::black, Color::gray);
         orderBoxes[i] = temp; 
     }
 
@@ -1498,8 +1498,7 @@ void DashDaCapo::runGameLoop()
                 }
                 
                 SDL_SetRenderDrawColor(getRenderer(), 0, 170, 0, 255);
-                //TODO FIX THIS BEFORE IT MELTS DAVID'S COMPUTER
-                //TODO Something wrong with the rendering of currPlayer
+                
                 int currPlayer;
                 for (int i = 0; i < combatParticipants.size(); i++)
                 {
@@ -1538,7 +1537,6 @@ void DashDaCapo::runGameLoop()
                 for (int i = currOrderNum; i < orderBoxes.size(); i++)
                 {
                     orderBoxes[i].render(getRenderer());
-                    //charNameStream << tempCharNames[i];
                 }
                 
                 //Update Position and text renderings
