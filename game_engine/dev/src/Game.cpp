@@ -158,8 +158,11 @@ void DashDaCapo::runGameLoop()
     bool STATE_postTransition = true;
     bool STATE_statMenu = false;
     bool STATE_mapScreenOpenForTransition = false;
-    bool STATE_tookDamage = false;
+    bool STATE_timerAnimationStarted = false;
+    bool STATE_didAnimationHappen = false;
+    int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
+    float STATE_timerAnimationCount;
     int STATE_amountHealed;
     int STATE_characterDirection = LEFT;
     std::string STATE_introSelectedOption = "NONE";
@@ -459,6 +462,7 @@ void DashDaCapo::runGameLoop()
     int alphaDeathON = 255;
     int alphaDeathOFF = 0;
     int whichTargetXValueForDamageAnimation = 0;
+    std::vector<int> damageTakenPosition = {0, 90, 180, 270, 360, 450, 540, 630};
 
     ///////////////////////////////////
     ///////// BEGIN SANDBOX ///////////
@@ -1017,7 +1021,7 @@ void DashDaCapo::runGameLoop()
                                             attackNotification += std::to_string(attackDamage[j]);
                                             attackNotification += " dmg dealt to ";
                                             attackNotification += targetNotification;
-                                            STATE_tookDamage = true;
+                                            
                                             continue;
                                             //----------------
                                         }
@@ -1027,6 +1031,13 @@ void DashDaCapo::runGameLoop()
                                         attackNotification += combatParticipants[validMoves[currTarget][j]].getName();
 
                                     }
+                                    int currPlayerIdx = i;
+                                    STATE_lastCurrTarget = currTarget;
+                                    if (currPlayerIdx < 4)
+                                        currTarget += 4;
+                                    STATE_timerAnimationStarted = true;
+                                    STATE_timerAnimationCount = timer->deltaTime() + 1;
+                                    whichTargetXValueForDamageAnimation = damageTakenPosition[currTarget];
                                     battleNotification.changeText(attackNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
@@ -1212,6 +1223,7 @@ void DashDaCapo::runGameLoop()
                         }
 
                         STATE_combatMenuTargetSelected = false;
+                        
                         currTarget = 0;
                     }
                 }
@@ -1450,15 +1462,24 @@ void DashDaCapo::runGameLoop()
                     }
                 }
                 
-                
                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
-
-                {
+                {  
                     battleNotification.render(getRenderer());
                 }
                 if (timer->deltaTime() > STATE_timerCount)
                 {
                     STATE_timerStarted = false; 
+                }
+
+                if(STATE_timerAnimationStarted && timer->deltaTime() < STATE_timerAnimationCount)
+                {
+                    getHitEffect.setAlpha(alphaDamageON);
+                    getHitEffect.render(getRenderer(), whichTargetXValueForDamageAnimation, 398);
+                }
+                if (timer->deltaTime() > STATE_timerAnimationCount)
+                {
+                    getHitEffect.setAlpha(alphaDamageOFF);
+                    STATE_timerAnimationStarted = false; 
                 }
 
                 
@@ -1628,11 +1649,7 @@ void DashDaCapo::runGameLoop()
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
                 
-                if(STATE_tookDamage == true)
-                {
-                    getHitEffect.setAlpha(alphaDamageON);
-                    getHitEffect.render(getRenderer(), whichTargetXValueForDamageAnimation, 398);
-                }
+                //---
 
                 break;
             }
