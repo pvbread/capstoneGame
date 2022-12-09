@@ -28,7 +28,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
     {
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dist(0,2);
+        std::uniform_int_distribution<> dist(0,3);
         chosenMove = (ActionType)dist(gen);
 
         

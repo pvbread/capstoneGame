@@ -937,6 +937,7 @@ void DashDaCapo::runGameLoop()
                         {
                             if (combatParticipants[i].getName()==roundOrder[currOrderNum])
                             {
+                                // player input to select target
                                 if (!combatParticipants[i].isEnemy())
                                 {
                                     if (event.type == SDL_KEYDOWN)
@@ -966,6 +967,7 @@ void DashDaCapo::runGameLoop()
                                         }
                                     } 
                                 }
+                                // had to add this in or else enemy actions carry out too fast (press the return key to carry out action)
                                 else
                                 {
                                     if (event.type == SDL_KEYDOWN)
@@ -1000,11 +1002,14 @@ void DashDaCapo::runGameLoop()
                             for (int i = 0; i < combatParticipants.size(); i++)
                             {
                                 if (combatParticipants[i].getName() == roundOrder[currOrderNum])
+                                    // player turn
                                     if (!combatParticipants[i].isEnemy())
                                         combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+
+                                    // enemy turn
                                     else
                                     {
-                                        
+                                        // Random decision making for enemy AI, TODO: implement basic logic
                                         std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
                                         std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
                                         int targetChoice = distForTarget(gen);
@@ -1020,6 +1025,7 @@ void DashDaCapo::runGameLoop()
                                             STATE_combatSelectedOption = "Move";
 
                                     }
+                                
                             }
                         }
 
