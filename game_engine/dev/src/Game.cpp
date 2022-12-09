@@ -1022,13 +1022,11 @@ void DashDaCapo::runGameLoop()
                                         attackNotification += combatParticipants[validMoves[currTarget][j]].getName();
 
                                     }
-                                    int currPlayerIdx = i;
+                                    int currPlayerIdx = charIndex;
                                     STATE_lastCurrTarget = currTarget;
-                                    if (currPlayerIdx < 4)
-                                        currTarget += 4;
                                     STATE_timerAnimationStarted = true;
                                     STATE_timerAnimationCount = timer->deltaTime() + 1;
-                                    whichTargetXValueForDamageAnimation = damageTakenPosition[currTarget];
+                                    whichTargetXValueForDamageAnimation = damageTakenPosition[validMoves[currTarget][0]];
                                     battleNotification.changeText(attackNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
