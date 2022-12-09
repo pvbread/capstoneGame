@@ -18,78 +18,7 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     BaseItem noItem = BaseItem("", "", 0);
 }
 
-/*
-//copy constructor
-BaseCharacter::BaseCharacter(const BaseCharacter& rhs)
-{
-    name = rhs.name;
-    maxHp = rhs.maxHp; 
-    speed = rhs.speed;
-    hit = rhs.hit;
-    armor = rhs.armor;
-    dodgeModifier = rhs.dodgeModifier;
-    enemy = rhs.enemy;
-    speedModifier = rhs.speedModifier;
-    hp = rhs.hp;
-    alive = rhs.alive;
-    participantsIndex = rhs.participantsIndex;
-    itemModifier = rhs.itemModifier;
-}
 
-BaseCharacter& BaseCharacter::operator= (const BaseCharacter& rhs)
-{
-    BaseCharacter copy = rhs;
-    std::swap(*this,copy);
-    return *this;
-}
-
-BaseCharacter::BaseCharacter(BaseCharacter &&rhs)
-{
-    name = rhs.name;
-    maxHp = rhs.maxHp; 
-    speed = rhs.speed;
-    hit = rhs.hit;
-    armor = rhs.armor;
-    dodgeModifier = rhs.dodgeModifier;
-    enemy = rhs.enemy;
-    speedModifier = rhs.speedModifier;
-    hp = rhs.hp;
-    alive = rhs.alive;
-    participantsIndex = rhs.participantsIndex;
-    itemModifier = rhs.itemModifier;
-    rhs.name = "";
-    rhs.maxHp = 0; 
-    rhs.speed = 0;
-    rhs.hit = 0;
-    rhs.armor = 0;
-    rhs.dodgeModifier = 0;
-    rhs.enemy = 0;
-    rhs.speedModifier = 0;
-    rhs.hp = 0;
-    rhs.alive = 0;
-    rhs.participantsIndex = 0;
-    rhs.itemModifier = 0;
-
-}
-
-BaseCharacter& BaseCharacter::operator= (BaseCharacter&& rhs)
-{
-    std::swap(name,rhs.name);
-    std::swap(maxHp,rhs.maxHp);
-    std::swap(speed,rhs.speed);
-    std::swap(hit,rhs.hit);
-    std::swap(armor,rhs.armor);
-    std::swap(dodgeModifier,rhs.dodgeModifier);
-    std::swap(enemy,rhs.enemy);
-    std::swap(speedModifier,rhs.speedModifier);
-    std::swap(hp,rhs.hp);
-    std::swap(alive,rhs.alive);
-    std::swap(participantsIndex,rhs.participantsIndex);
-    std::swap(itemModifier,rhs.itemModifier);
-
-    return *this;
-}
-*/
 std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
@@ -103,7 +32,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
         chosenMove = (ActionType)dist(gen);
 
         
-        int participantsIndex = this->getParticipantsIndex();
+        int participantsIndex = getParticipantsIndex();
         targets = getValidMoves(chosenMove, participantsIndex, participants);
     }
 
