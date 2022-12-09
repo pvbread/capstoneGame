@@ -17,10 +17,10 @@ void DashDaCapo::runGameLoop()
     MapDebugController debugCont = MapDebugController();
 
     ////////// START CHARACTER INIT ////////
-    BasePlayer conductor = BasePlayer("conductor", 30, 3, 3, 0, 3, 3, 3);
-    BasePlayer drum = BasePlayer("drummer", 50, 2, 1, 0, 3, 3, 3);
-    BasePlayer flute = BasePlayer("flutist", 20, 6, 1, 0, 3, 3, 3);
-    Bass bass = Bass("bassist", 60, 1, 3, 0, 3, 3, 3);
+    BaseCharacter conductor = BaseCharacter("conductor", 30, 3, 3, 0, 3, 3, 3,false);
+    BaseCharacter drum = BaseCharacter("drummer", 50, 2, 1, 0, 3, 3, 3,false);
+    BaseCharacter flute = BaseCharacter("flutist", 20, 6, 1, 0, 3, 3, 3,false);
+    BaseCharacter bass = BaseCharacter("bassist", 60, 1, 3, 0, 3, 3, 3,false);
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
     bass.setNewParticipantsIndex(2);
@@ -1235,6 +1235,18 @@ void DashDaCapo::runGameLoop()
                         {
                             //saves player team's stats
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                            for (int i = 0; i < 4; i++)
+                            {
+                                
+                                    if (combatParticipants[i].getName() == "flutist")
+                                        flute = combatParticipants[i];
+                                    if (combatParticipants[i].getName() == "drummer")
+                                        drum = combatParticipants[i];
+                                    if (combatParticipants[i].getName() == "bassist")
+                                        bass = combatParticipants[i];
+                                    if (combatParticipants[i].getName() == "conductor")
+                                        conductor = combatParticipants[i];                                
+                            }
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
                             currOrderNum = 0;
@@ -1245,6 +1257,7 @@ void DashDaCapo::runGameLoop()
                         {
                             //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                            
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
                             currOrderNum = 0;
