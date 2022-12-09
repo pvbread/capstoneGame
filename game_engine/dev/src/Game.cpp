@@ -160,6 +160,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapScreenOpenForTransition = false;
     bool STATE_timerAnimationStarted = false;
     bool STATE_didAnimationHappen = false;
+    bool STATE_updateHP = false;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -919,6 +920,7 @@ void DashDaCapo::runGameLoop()
                             }
                             case SDLK_e:
                             {
+                                STATE_updateHP = true;
                                 STATE_statMenu = true;
                                 STATE_mapScreenOpenForTransition = false;
                                 //screen = STATUS_MENU;
@@ -1237,16 +1239,26 @@ void DashDaCapo::runGameLoop()
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             for (int i = 0; i < 4; i++)
                             {
-                                
-                                    if (combatParticipants[i].getName() == "flutist")
-                                        flute = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "drummer")
-                                        drum = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "bassist")
-                                        bass = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "conductor")
-                                        conductor = combatParticipants[i];                                
+                                if (combatParticipants[i].getName() == "flutist")
+                                    flute = combatParticipants[i];
+                                if (combatParticipants[i].getName() == "drummer")
+                                    drum = combatParticipants[i];
+                                if (combatParticipants[i].getName() == "bassist")
+                                    bass = combatParticipants[i];
+                                if (combatParticipants[i].getName() == "conductor")
+                                    conductor = combatParticipants[i];                                
                             }
+
+                            /// Updates player stats for statMenu page
+                            conductorHPName.changeText(std::to_string(conductor.getHp()) + "-");
+                            statMenuConductorRow[1] = conductorHPName;
+                            bassHPName.changeText(std::to_string(bass.getHp()) + "-");
+                            statMenuBassRow[1] = bassHPName;
+                            drumHPName.changeText(std::to_string(drum.getHp()) + "-");
+                            statMenuDrumRow[1] = drumHPName;
+                            fluteHPName.changeText(std::to_string(flute.getHp()) + "-");
+                            statMenuFluteRow[1] = fluteHPName;
+
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
                             currOrderNum = 0;
@@ -1756,6 +1768,8 @@ void DashDaCapo::runGameLoop()
             case STATUS_MENU:
             {
                 std::string statMenuDisplayStr;
+
+
 
                 //////Background Color////////
                 SDL_Rect backgroundPane1 = {0, 0, 960, 730};
