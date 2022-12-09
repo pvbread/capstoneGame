@@ -938,60 +938,34 @@ void DashDaCapo::runGameLoop()
                 case COMBAT:
                 {   
                     
-                    if (STATE_combatSelectedOption != "NONE" && !STATE_combatMenuTargetSelected)
+                    if (STATE_combatSelectedOption != "NONE")
                     {
-                        for (int i = 0; i < combatParticipants.size(); i++)
+                        if (event.type == SDL_KEYDOWN)
                         {
-                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            switch (event.key.keysym.sym)
                             {
-                                // player input to select target
-                                if (!combatParticipants[i].isEnemy())
+                                case SDLK_LEFT:
                                 {
-                                    if (event.type == SDL_KEYDOWN)
-                                    {
-                                        switch (event.key.keysym.sym)
-                                        {
-                                            case SDLK_LEFT:
-                                            {
-                                                currTarget--;
-                                                if (currTarget < 0)
-                                                    currTarget = 0;
-                                                break;
-                                            }
-                                            case SDLK_RIGHT:
-                                            {
-                                                currTarget++;
-                                                if (currTarget == validMoves.size())
-                                                    currTarget = validMoves.size()-1;
-                                                break;
-                                            }
-                                            case SDLK_RETURN:
-                                            {
-                                                STATE_combatMenuTargetSelected = true;
-
-                                                break;
-                                            }
-                                        }
-                                    } 
+                                    currTarget--;
+                                    if (currTarget < 0)
+                                        currTarget = 0;
+                                    break;
                                 }
-                                // had to add this in or else enemy actions carry out too fast (press the return key to carry out action)
-                                else
+                                case SDLK_RIGHT:
                                 {
-                                    if (event.type == SDL_KEYDOWN)
-                                    {
-                                        switch (event.key.keysym.sym)
-                                        {
-                                            case SDLK_RETURN:
-                                            {
-                                                STATE_combatMenuTargetSelected = true;
-
-                                                break;
-                                            }
-                                        }
-                                    } 
+                                    currTarget++;
+                                    if (currTarget == validMoves.size())
+                                        currTarget = validMoves.size()-1;
+                                    break;
                                 }
-                            }    
-                        }
+                                case SDLK_RETURN:
+                                {
+                                    STATE_combatMenuTargetSelected = true;
+
+                                    break;
+                                }
+                            }
+                        }     
                     }
 
                     // create new round and set round turns
@@ -1005,36 +979,8 @@ void DashDaCapo::runGameLoop()
                     }
      
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
-                        {
-                            for (int i = 0; i < combatParticipants.size(); i++)
-                            {
-                                if (combatParticipants[i].getName() == roundOrder[currOrderNum])
-                                    // player turn
-                                    if (!combatParticipants[i].isEnemy())
-                                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
-
-                                    // enemy turn
-                                    else
-                                    {
-                                        // Random decision making for enemy AI, TODO: implement basic logic
-                                        std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
-                                        std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
-                                        int targetChoice = distForTarget(gen);
-                                        currTarget = targetChoice;
-                                        validMoves = decision.second;
-                                        if (decision.first == ATTACK)
-                                            STATE_combatSelectedOption = "Attack";
-                                        if (decision.first == BUFF)
-                                            STATE_combatSelectedOption = "Buff";
-                                        if (decision.first == DEBUFF)
-                                            STATE_combatSelectedOption = "Debuff";
-                                        if (decision.first == MOVE)
-                                            STATE_combatSelectedOption = "Move";
-
-                                    }
-                                
-                            }
-                        }
+                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+                    
 
                     // state for when a round ends
                     if ((currOrderNum + 1) == roundOrder.size() && STATE_combatSelectedOption!= "None" && STATE_combatMenuTargetSelected)
@@ -1083,11 +1029,13 @@ void DashDaCapo::runGameLoop()
                                         attackNotification += combatParticipants[validMoves[currTarget][j]].getName();
 
                                     }
-                                    int currPlayerIdx = charIndex;
+                                    int currPlayerIdx = i;
                                     STATE_lastCurrTarget = currTarget;
+                                    if (currPlayerIdx < 4)
+                                        currTarget += 4;
                                     STATE_timerAnimationStarted = true;
                                     STATE_timerAnimationCount = timer->deltaTime() + 1;
-                                    whichTargetXValueForDamageAnimation = damageTakenPosition[validMoves[currTarget][0]];
+                                    whichTargetXValueForDamageAnimation = damageTakenPosition[currTarget];
                                     battleNotification.changeText(attackNotification);
                                     STATE_timerStarted = true;
                                     STATE_timerCount = timer->deltaTime() + 3;
@@ -1242,18 +1190,6 @@ void DashDaCapo::runGameLoop()
                         {
                             //saves player team's stats
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
-                            for (int i = 0; i < 4; i++)
-                            {
-                                
-                                    if (combatParticipants[i].getName() == "flutist")
-                                        flute = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "drummer")
-                                        drum = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "bassist")
-                                        bass = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "conductor")
-                                        conductor = combatParticipants[i];                                
-                            }
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
                             currOrderNum = 0;
@@ -1264,7 +1200,6 @@ void DashDaCapo::runGameLoop()
                         {
                             //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
-                            
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
                             currOrderNum = 0;
