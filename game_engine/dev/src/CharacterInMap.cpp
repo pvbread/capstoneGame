@@ -128,6 +128,7 @@ void CharacterInMap::onInput(SDL_Event& event,
         switch (event.key.keysym.sym)
         {
             case SDLK_a:
+            case SDLK_LEFT:
             {
                 if (isMoveValid("left", coordinateToTileTypeMap))
                 {
@@ -139,6 +140,7 @@ void CharacterInMap::onInput(SDL_Event& event,
                 break;
             }
             case SDLK_w:
+            case SDLK_UP:
             {
                 if (isMoveValid("up", coordinateToTileTypeMap))
                 {
@@ -150,6 +152,7 @@ void CharacterInMap::onInput(SDL_Event& event,
                 break;
             }
             case SDLK_d:
+            case SDLK_RIGHT:
             {
                 if (isMoveValid("right", coordinateToTileTypeMap))
                 {
@@ -161,6 +164,7 @@ void CharacterInMap::onInput(SDL_Event& event,
                 break;
             }
             case SDLK_s:
+            case SDLK_DOWN:
             {
                 if (isMoveValid("down", coordinateToTileTypeMap))
                 {

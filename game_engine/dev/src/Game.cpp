@@ -160,6 +160,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapScreenOpenForTransition = false;
     bool STATE_timerAnimationStarted = false;
     bool STATE_didAnimationHappen = false;
+    bool STATE_UpdateHP = false;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -595,6 +596,10 @@ void DashDaCapo::runGameLoop()
 
     std::vector<TextBox> statMenuConductorRow { conductorName , conductorHPName, conductorMaxHPName, conductorSpeedName, conductorHitName, conductorArmorName, conductorDodgeName, conductorItemModName };
     ///////End Conductor Stats/////////
+    ///////Update HP items////////////
+    
+
+    ///////End Update HP items////////
     ///////Display Stat Names/////////
     int startBoxWidth = 95;
     int slashBoxWidth = 150;
@@ -649,6 +654,8 @@ void DashDaCapo::runGameLoop()
         /// POST-PROCESSOR ///
 
         timer->update();
+
+        
 
         //////SCREEN TRANSITIONS////////
         if (STATE_introSelectedOption == "New Game")
@@ -919,9 +926,9 @@ void DashDaCapo::runGameLoop()
                             }
                             case SDLK_e:
                             {
+                                STATE_UpdateHP = true;
                                 STATE_statMenu = true;
                                 STATE_mapScreenOpenForTransition = false;
-                                //screen = STATUS_MENU;
                                 break;
                             }
                         }
@@ -1220,7 +1227,6 @@ void DashDaCapo::runGameLoop()
                             {
                                 STATE_statMenu = false;
                                 STATE_mapScreenOpenForTransition = true;
-                                //screen = MAP;
                                 break;
                             }
                         }
@@ -1236,7 +1242,6 @@ void DashDaCapo::runGameLoop()
                         {
                             case SDLK_RETURN:
                             {
-                                
                                 screen = MAP;
                                 break;
                             }
@@ -1246,7 +1251,17 @@ void DashDaCapo::runGameLoop()
                 }
                 case DEFEAT:
                 {
-                    break;
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_RETURN:
+                            {
+                                screen = MAP;
+                                break;
+                            }
+                        }
+                    } 
                 }
             }
             
@@ -1587,6 +1602,7 @@ void DashDaCapo::runGameLoop()
                     el.render(getRenderer());
                 } 
 
+                //screen transition 
                 if(STATE_postTransition == true)
                 {
                     alphaValueScreenTransition -= 5;
@@ -1692,6 +1708,7 @@ void DashDaCapo::runGameLoop()
             {
                 std::string statMenuDisplayStr;
 
+
                 //////Background Color////////
                 SDL_Rect backgroundPane1 = {0, 0, 960, 730};
                 SDL_Color backgroundMenu1 = Color::navy;
@@ -1789,6 +1806,17 @@ void DashDaCapo::runGameLoop()
 
                 ///////Display Names-Stats//////// 
 
+                ///////Update text///////////////
+
+                //for(int i = 0; i < 8; i++)
+                //{
+                //statMenuBassRow[1].changeText(prefixHP + std::to_string(bass.getHp()));
+                //}
+
+                ///////End Update Text///////////
+
+                ///////Screen Transition//////////
+
                 if(STATE_postTransition == true)
                 {
                     alphaValueScreenTransition -= 5;
@@ -1809,7 +1837,8 @@ void DashDaCapo::runGameLoop()
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
-                
+                 /////// End Screen Transition//////////
+
                 break;
             }
             case WIN:
