@@ -32,7 +32,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
         chosenMove = (ActionType)dist(gen);
 
         
-        int participantsIndex = this->getParticipantsIndex();
+        int participantsIndex = getParticipantsIndex();
         targets = getValidMoves(chosenMove, participantsIndex, participants);
     }
 

@@ -931,34 +931,58 @@ void DashDaCapo::runGameLoop()
                 case COMBAT:
                 {   
                     
-                    if (STATE_combatSelectedOption != "NONE")
+                    if (STATE_combatSelectedOption != "NONE" && !STATE_combatMenuTargetSelected)
                     {
-                        if (event.type == SDL_KEYDOWN)
+                        for (int i = 0; i < combatParticipants.size(); i++)
                         {
-                            switch (event.key.keysym.sym)
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
                             {
-                                case SDLK_LEFT:
+                                if (!combatParticipants[i].isEnemy())
                                 {
-                                    currTarget--;
-                                    if (currTarget < 0)
-                                        currTarget = 0;
-                                    break;
-                                }
-                                case SDLK_RIGHT:
-                                {
-                                    currTarget++;
-                                    if (currTarget == validMoves.size())
-                                        currTarget = validMoves.size()-1;
-                                    break;
-                                }
-                                case SDLK_RETURN:
-                                {
-                                    STATE_combatMenuTargetSelected = true;
+                                    if (event.type == SDL_KEYDOWN)
+                                    {
+                                        switch (event.key.keysym.sym)
+                                        {
+                                            case SDLK_LEFT:
+                                            {
+                                                currTarget--;
+                                                if (currTarget < 0)
+                                                    currTarget = 0;
+                                                break;
+                                            }
+                                            case SDLK_RIGHT:
+                                            {
+                                                currTarget++;
+                                                if (currTarget == validMoves.size())
+                                                    currTarget = validMoves.size()-1;
+                                                break;
+                                            }
+                                            case SDLK_RETURN:
+                                            {
+                                                STATE_combatMenuTargetSelected = true;
 
-                                    break;
+                                                break;
+                                            }
+                                        }
+                                    } 
                                 }
-                            }
-                        }     
+                                else
+                                {
+                                    if (event.type == SDL_KEYDOWN)
+                                    {
+                                        switch (event.key.keysym.sym)
+                                        {
+                                            case SDLK_RETURN:
+                                            {
+                                                STATE_combatMenuTargetSelected = true;
+
+                                                break;
+                                            }
+                                        }
+                                    } 
+                                }
+                            }    
+                        }
                     }
 
                     // create new round and set round turns
@@ -972,8 +996,32 @@ void DashDaCapo::runGameLoop()
                     }
      
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
-                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
-                    
+                        {
+                            for (int i = 0; i < combatParticipants.size(); i++)
+                            {
+                                if (combatParticipants[i].getName() == roundOrder[currOrderNum])
+                                    if (!combatParticipants[i].isEnemy())
+                                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+                                    else
+                                    {
+                                        
+                                        std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
+                                        std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
+                                        int targetChoice = distForTarget(gen);
+                                        currTarget = targetChoice;
+                                        validMoves = decision.second;
+                                        if (decision.first == ATTACK)
+                                            STATE_combatSelectedOption = "Attack";
+                                        if (decision.first == BUFF)
+                                            STATE_combatSelectedOption = "Buff";
+                                        if (decision.first == DEBUFF)
+                                            STATE_combatSelectedOption = "Debuff";
+                                        if (decision.first == MOVE)
+                                            STATE_combatSelectedOption = "Move";
+
+                                    }
+                            }
+                        }
 
                     // state for when a round ends
                     if ((currOrderNum + 1) == roundOrder.size() && STATE_combatSelectedOption!= "None" && STATE_combatMenuTargetSelected)
