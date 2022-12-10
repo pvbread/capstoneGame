@@ -68,5 +68,6 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "vector": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/pita/Documents/GitHub/capstoneGame/01_Demo/demo1"
 }
