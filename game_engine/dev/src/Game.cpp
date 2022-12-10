@@ -904,13 +904,13 @@ void DashDaCapo::runGameLoop()
                         for (int i = 0; i < 4; i++)
                         {
                             
-                                if (combatParticipants[i].getName() == "flutist")
+                                if (combatParticipants[i].getName() == flute.getName())
                                     flute = combatParticipants[i];
-                                if (combatParticipants[i].getName() == "drummer")
+                                if (combatParticipants[i].getName() == drum.getName())
                                     drum = combatParticipants[i];
-                                if (combatParticipants[i].getName() == "bassist")
+                                if (combatParticipants[i].getName() == bass.getName())
                                     bass = combatParticipants[i];
-                                if (combatParticipants[i].getName() == "conductor")
+                                if (combatParticipants[i].getName() == conductor.getName())
                                     conductor = combatParticipants[i];                                
                         }
                         //STATE_combatMenuTargetSelected = false;
@@ -1437,14 +1437,13 @@ void DashDaCapo::runGameLoop()
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             for (int i = 0; i < 4; i++)
                             {
-                                
-                                    if (combatParticipants[i].getName() == "flutist")
+                                    if (combatParticipants[i].getName() == flute.getName())
                                         flute = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "drummer")
+                                    if (combatParticipants[i].getName() == drum.getName())
                                         drum = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "bassist")
+                                    if (combatParticipants[i].getName() == bass.getName())
                                         bass = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "conductor")
+                                    if (combatParticipants[i].getName() == conductor.getName())
                                         conductor = combatParticipants[i];                                
                             }
                             STATE_combatMenuTargetSelected = false;
@@ -1674,13 +1673,13 @@ void DashDaCapo::runGameLoop()
                 {
                     if (combatParticipants[i].isAlive())
                     {
-                        if (combatParticipants[i].getName() == "flutist")
+                        if (combatParticipants[i].getName() == flute.getName())
                             flutistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "drummer")
+                        if (combatParticipants[i].getName() == drum.getName())
                             drummerTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "bassist")
+                        if (combatParticipants[i].getName() == bass.getName())
                             bassistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "conductor")
+                        if (combatParticipants[i].getName() == conductor.getName())
                             flutistTexture.render(getRenderer(), charRendering[i], 400);
                     }
                 }
