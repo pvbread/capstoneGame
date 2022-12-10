@@ -641,6 +641,18 @@ void DashDaCapo::runGameLoop()
     
     ////// END CHARACTER STATS //////
 
+    ///////WIN AND LOSS SCREEN////////
+
+    //win
+    TextBox congradsWinText = TextBox("Congratulations  ", 100, 100, 100, 500, 200, Font::roboto, Color::black, Color::darkGreen);
+    TextBox moveOnWin = TextBox("Press ''Enter'' to continue", 65, 100, 550, 500, 200, Font::roboto, Color::black, Color::darkGreen);
+    
+    //loss
+    TextBox congradsYouDiedText = TextBox("  You Died", 100, 200, 100, 500, 200, Font::roboto, Color::maroon, Color::black);
+    TextBox moveOnLoss = TextBox("Press ''Escape'' to return to intro", 65, 20, 550, 500, 200, Font::roboto, Color::maroon, Color::black);
+
+    ///////END WIN AND LOSS SCREEN//////
+
     //BaseItem test("some item", "normal", 5);
 
     //double degrees = 0;
@@ -1263,6 +1275,12 @@ void DashDaCapo::runGameLoop()
                             statMenuFluteRow[1] = fluteHPName;
 
                             STATE_combatMenuTargetSelected = false;
+                            STATE_battle = false;
+                            STATE_enemiesSet = false;
+                            STATE_roundsSet = false;
+                            STATE_timerStarted = false;
+                            STATE_timerAnimationStarted = false;
+
                             currTarget = 0;
                             currOrderNum = 0;
                             STATE_youWin = true;
@@ -1275,8 +1293,17 @@ void DashDaCapo::runGameLoop()
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             
                             STATE_combatMenuTargetSelected = false;
+                            //STATE_gameOver = true; 
+                            STATE_newGameSelected = false;
+                            STATE_enemiesSet = false;
+                            STATE_battle = false;
+                            STATE_roundsSet = false;
+                            STATE_timerStarted = false;
+                            STATE_timerAnimationStarted = false;
+
                             currTarget = 0;
                             currOrderNum = 0;
+                            STATE_youLoose = true;
                             screen = DEFEAT;
                             break;
                         }
@@ -1311,12 +1338,7 @@ void DashDaCapo::runGameLoop()
                 }
                 case WIN:
                 {
-                    STATE_battle = false;
-                    STATE_enemiesSet = false;
-                    STATE_roundsSet = false;
-                    STATE_timerStarted = false;
-                    STATE_timerAnimationStarted = false;
-                    
+                     
                     if(STATE_youWin == true){
                         if (event.type == SDL_KEYDOWN)
                         {
@@ -1324,7 +1346,7 @@ void DashDaCapo::runGameLoop()
                             {
                                 case SDLK_RETURN:
                                 {
-
+                                    STATE_youWin = false;
                                     screen = MAP;
                                     break;
                                 }
@@ -1337,24 +1359,20 @@ void DashDaCapo::runGameLoop()
                 }
                 case DEFEAT:
                 {
-                    if (event.type == SDL_KEYDOWN)
-                    {
-                        switch (event.key.keysym.sym)
+                    if(STATE_youLoose == true){
+                        if (event.type == SDL_KEYDOWN)
                         {
-                            case SDLK_ESCAPE:
+                            switch (event.key.keysym.sym)
                             {
-                                screen = INTRO;
-                                //STATE_gameOver = true; 
-                                //STATE_newGameSelected = false;
-                                //STATE_enemiesSet = false;
-                                //STATE_battle = false;
-                                ///STATE_roundsSet = false;
-                                //STATE_timerStarted = false;
-                                //STATE_timerAnimationStarted = false;
-                                break;
+                                case SDLK_ESCAPE:
+                                {
+                                    screen = INTRO;
+                                    break;
+                                }
                             }
-                        }
-                    } 
+                        } 
+                    }
+                    
                 }
             }
             
@@ -1927,10 +1945,8 @@ void DashDaCapo::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                 SDL_RenderClear(getRenderer());
 
-                TextBox congrads = TextBox("Congratulations  ", 100, 100, 100, 500, 200, Font::roboto, Color::black, Color::darkGreen);
-                congrads.render(getRenderer());
-                TextBox moveOn = TextBox("Press ''Enter'' to continue", 65, 100, 550, 500, 200, Font::roboto, Color::black, Color::darkGreen);
-                moveOn.render(getRenderer());
+                congradsWinText.render(getRenderer());
+                moveOnWin.render(getRenderer());
 
                 break;
             }
@@ -1940,8 +1956,8 @@ void DashDaCapo::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
 
-                TextBox congrads = TextBox("  You Died", 100, 200, 100, 500, 200, Font::roboto, Color::maroon, Color::black);
-                congrads.render(getRenderer());
+                congradsYouDiedText.render(getRenderer());
+                moveOnLoss.render(getRenderer());
 
                 break;
             }
