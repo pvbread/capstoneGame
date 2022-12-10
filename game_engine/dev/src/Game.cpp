@@ -17,10 +17,10 @@ void DashDaCapo::runGameLoop()
     MapDebugController debugCont = MapDebugController();
 
     ////////// START CHARACTER INIT ////////
-    BaseCharacter conductor = BaseCharacter("conductor", 30, 3, 3, 0, 3, 3, 3,false);
-    BaseCharacter drum = BaseCharacter("drummer", 50, 2, 1, 0, 3, 3, 3,false);
-    BaseCharacter flute = BaseCharacter("flutist", 20, 6, 1, 0, 3, 3, 3,false);
-    BaseCharacter bass = BaseCharacter("bassist", 60, 1, 3, 0, 3, 3, 3,false);
+    BaseCharacter conductor = BaseCharacter("Conductor", 30, 3, 3, 0, 3, 3, 3,false);
+    BaseCharacter drum = BaseCharacter("Drummer", 50, 2, 1, 0, 3, 3, 3,false);
+    BaseCharacter flute = BaseCharacter("Flutist", 20, 6, 1, 0, 3, 3, 3,false);
+    BaseCharacter bass = BaseCharacter("Bassist", 60, 1, 3, 0, 3, 3, 3,false);
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
     bass.setNewParticipantsIndex(2);
@@ -826,10 +826,12 @@ void DashDaCapo::runGameLoop()
                     {
                     
                         //init enemy characters
+
                         BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
                         BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("Carl         ", 20, 0, 1, 0, 3, 3, 3, true);
+                        
                         //normally this will just get enemies from a randomly selected "PACK"
                         e1.setNewParticipantsIndex(4);
                         e2.setNewParticipantsIndex(5);
@@ -1278,14 +1280,14 @@ void DashDaCapo::runGameLoop()
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             for (int i = 0; i < 4; i++)
                             {
-                                if (combatParticipants[i].getName() == "flutist")
-                                    flute = combatParticipants[i];
-                                if (combatParticipants[i].getName() == "drummer")
-                                    drum = combatParticipants[i];
-                                if (combatParticipants[i].getName() == "bassist")
-                                    bass = combatParticipants[i];
-                                if (combatParticipants[i].getName() == "conductor")
-                                    conductor = combatParticipants[i];                                
+                                    if (combatParticipants[i].getName() == "Flutist")
+                                        flute = combatParticipants[i];
+                                    if (combatParticipants[i].getName() == "Drummer")
+                                        drum = combatParticipants[i];
+                                    if (combatParticipants[i].getName() == "Bassist")
+                                        bass = combatParticipants[i];
+                                    if (combatParticipants[i].getName() == "Conductor")
+                                        conductor = combatParticipants[i];                                
                             }
 
                             /// Updates player stats for statMenu page
@@ -1567,14 +1569,14 @@ void DashDaCapo::runGameLoop()
                 {
                     if (combatParticipants[i].isAlive())
                     {
-                        if (combatParticipants[i].getName() == "flutist")
+                        if (combatParticipants[i].getName() == "Flutist")
                             flutistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "drummer")
+                        if (combatParticipants[i].getName() == "Drummer")
                             drummerTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "bassist")
+                        if (combatParticipants[i].getName() == "Bassist")
                             bassistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "conductor")
-                            conductorTexture.render(getRenderer(), charRendering[i], 400);
+                        if (combatParticipants[i].getName() == "Conductor")
+                            flutistTexture.render(getRenderer(), charRendering[i], 400);
                     }
                 }
                 
