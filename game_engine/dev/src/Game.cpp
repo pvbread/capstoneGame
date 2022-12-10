@@ -708,8 +708,6 @@ void DashDaCapo::runGameLoop()
             STATE_enemyTimerStarted = false;
         if (screen == COMBAT && !STATE_enemyTimerStarted)
         {
-            
-
             for (int i = 4; i < combatParticipants.size(); i++)
             {
                 if ( combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
@@ -1055,6 +1053,8 @@ void DashDaCapo::runGameLoop()
                         ////STATE_mapEventboxOpen = false;//put in screen transition
                         // update setRoundTurns display
                         STATE_mapScreenOpenForTransition = false;
+                        STATE_enemyTimerStarted = true;
+                        STATE_enemyTimerCount = timer->deltaTime() + 3;
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
                             tempCharNames[i] = roundOrder[i];
@@ -1093,6 +1093,8 @@ void DashDaCapo::runGameLoop()
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
                         STATE_mapEventboxOpen = false;
+                        STATE_enemyTimerStarted = true;
+                        STATE_enemyTimerCount = timer->deltaTime() + 3;
                         // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
