@@ -189,7 +189,12 @@ void DashDaCapo::runGameLoop()
     TextureWrapper flutistTexture;
     TextureWrapper bassistTexture;
     TextureWrapper drummerTexture;
+    TextureWrapper conductorTexture;
     TextureWrapper linebackerTexture;
+    TextureWrapper enemyBellTexture;
+    TextureWrapper enemyBatTexture;
+    TextureWrapper pizzaheadTexture;
+    TextureWrapper carlTexture;
     TextureWrapper currPlayerTexture;
     TextureWrapper targetTexture;
     TextureWrapper getHitEffect;
@@ -207,6 +212,11 @@ void DashDaCapo::runGameLoop()
         {&flutistTexture, "../../assets/image/chars/flutist.png"},
         {&bassistTexture, "../../assets/image/chars/bassist.png"},
         {&drummerTexture, "../../assets/image/chars/drummer.png"},
+        {&conductorTexture, "../../assets/image/chars/conductor.png"},
+        {&enemyBellTexture, "../../assets/image/chars/enemysh-bell.png"},
+        {&enemyBatTexture, "../../assets/image/chars/enemysh-bat.png"},
+        {&pizzaheadTexture, "../../assets/image/chars/pizzahead.png"},
+        {&carlTexture, "../../assets/image/chars/Carl.png"},
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
         {&targetTexture, "../../assets/image/sixteenth.png"},  
@@ -444,7 +454,7 @@ void DashDaCapo::runGameLoop()
         "bassist",
         "coneheadAlpha",
         "coneheadBeta ",
-        "coneheadTheta",
+        "PizzaHead",
         "Carl"
     };
     //TODO account for dead chars in order
@@ -790,7 +800,7 @@ void DashDaCapo::runGameLoop()
                         //init enemy characters
                         BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e3 = BaseCharacter("coneheadKappa", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("Carl         ", 20, 0, 1, 0, 3, 3, 3, true);
                         //normally this will just get enemies from a randomly selected "PACK"
                         e1.setNewParticipantsIndex(4);
@@ -1481,7 +1491,7 @@ void DashDaCapo::runGameLoop()
                         if (combatParticipants[i].getName() == "bassist")
                             bassistTexture.render(getRenderer(), charRendering[i], 400);
                         if (combatParticipants[i].getName() == "conductor")
-                            flutistTexture.render(getRenderer(), charRendering[i], 400);
+                            conductorTexture.render(getRenderer(), charRendering[i], 400);
                     }
                 }
                 
@@ -1491,13 +1501,13 @@ void DashDaCapo::runGameLoop()
                     if (combatParticipants[i+4].isAlive())
                     {
                         if (combatParticipants[i+4].getName() == enemies[0].getName())
-                            linebackerTexture.render(getRenderer(), charRendering[i+4], 400);
+                            enemyBatTexture.render(getRenderer(), charRendering[i+4], 400);
                         if (combatParticipants[i+4].getName() == enemies[1].getName())
-                            drummerTexture.render(getRenderer(), charRendering[i+4], 400);
+                            enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
                         if (combatParticipants[i+4].getName() == enemies[2].getName())
-                            bassistTexture.render(getRenderer(), charRendering[i+4], 400);
+                            pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
                         if (combatParticipants[i+4].getName() == enemies[3].getName())
-                            flutistTexture.render(getRenderer(), charRendering[i+4], 400); 
+                            carlTexture.render(getRenderer(), charRendering[i+4], 400); 
                     }
                 }
                 
