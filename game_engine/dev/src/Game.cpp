@@ -702,12 +702,14 @@ void DashDaCapo::runGameLoop()
                 STATE_mapScreenOpenForTransition = false;
             }
         }
-
+      
         // enemy event
         if (screen == COMBAT && STATE_enemyTimerStarted && timer->deltaTime()>STATE_enemyTimerCount)
             STATE_enemyTimerStarted = false;
         if (screen == COMBAT && !STATE_enemyTimerStarted)
         {
+            
+
             for (int i = 4; i < combatParticipants.size(); i++)
             {
                 if ( combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
@@ -1169,50 +1171,42 @@ void DashDaCapo::runGameLoop()
                 {   
                     
                     if (STATE_combatSelectedOption != "NONE" && !STATE_combatMenuTargetSelected)
-                    {
+                    {  
                         for (int i = 0; i < combatParticipants.size(); i++)
-                        {
-                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                        { 
+                            if (!combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
                             {
-                                // player input to select target
-                                if (!combatParticipants[i].isEnemy())
+                                if (event.type == SDL_KEYDOWN)
                                 {
-                                    if (event.type == SDL_KEYDOWN)
+                                    switch (event.key.keysym.sym)
                                     {
-                                        switch (event.key.keysym.sym)
+                                        case SDLK_LEFT:
                                         {
-                                            case SDLK_LEFT:
-                                            {
-                                                currTarget--;
-                                                if (currTarget < 0)
-                                                    currTarget = 0;
-                                                break;
-                                            }
-                                            case SDLK_RIGHT:
-                                            {
-                                                currTarget++;
-                                                if (currTarget == validMoves.size())
-                                                    currTarget = validMoves.size()-1;
-                                                break;
-                                            }
-                                            case SDLK_RETURN:
-                                            {
-                                                STATE_combatMenuTargetSelected = true;
-
-                                                break;
-                                            }
+                                            currTarget--;
+                                            if (currTarget < 0)
+                                                currTarget = 0;
+                                            break;
                                         }
-                                    } 
-                                }
-                                else
-                                {
-                                    break;
+                                        case SDLK_RIGHT:
+                                        {
+                                            currTarget++;
+                                            if (currTarget == validMoves.size())
+                                                currTarget = validMoves.size()-1;
+                                            break;
+                                        }
+                                        case SDLK_RETURN:
+                                        {
+                                            STATE_combatMenuTargetSelected = true;
 
-                                                
+                                            break;
+                                        }
+                                    }
                                 }
-                            }    
+                                                                                                                      
+                            }
                         }
                     }
+                
 
                     // create new round and set round turns
                     if(!STATE_roundsSet && STATE_roundOver)
@@ -1227,21 +1221,11 @@ void DashDaCapo::runGameLoop()
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
                     {
                         for (int i = 0; i < combatParticipants.size(); i++)
-                        {
-                            if (combatParticipants[i].getName() == roundOrder[currOrderNum])
-                                // player turn
-                                if (!combatParticipants[i].isEnemy())
-                                    combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
-
-                                // enemy turn
-                                else
-                                {
-                                    // Random decision making for enemy AI, TODO: implement basic logic
-                                    
-
-
-                                }
-                            
+                        { 
+                            if (!combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+                            }
                         }
                     }
 
@@ -1741,6 +1725,8 @@ void DashDaCapo::runGameLoop()
                 //targetBoxes
                 if (STATE_combatSelectedOption == "Attack")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     // rerender bug if I don't update validMoves
                     for (int i = 0; i < combatParticipants.size();i++)
                     {
@@ -1759,6 +1745,8 @@ void DashDaCapo::runGameLoop()
                 }
                 if (STATE_combatSelectedOption == "Buff")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     for (int i = 0; i < combatParticipants.size();i++)
                     {
                         if (combatParticipants[i].getName()==roundOrder[currOrderNum])
@@ -1778,6 +1766,8 @@ void DashDaCapo::runGameLoop()
 
                 if (STATE_combatSelectedOption == "Debuff")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
                     // rerender bug if I don't update validMoves
                     for (int i = 0; i < combatParticipants.size();i++)
@@ -1796,6 +1786,8 @@ void DashDaCapo::runGameLoop()
 
                 if (STATE_combatSelectedOption == "Move")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                     // rerender bug if I don't update validMoves
                     for (int i = 0; i < combatParticipants.size();i++)
