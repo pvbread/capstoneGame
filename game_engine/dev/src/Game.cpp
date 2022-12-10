@@ -1576,7 +1576,7 @@ void DashDaCapo::runGameLoop()
                         if (combatParticipants[i].getName() == "Bassist")
                             bassistTexture.render(getRenderer(), charRendering[i], 400);
                         if (combatParticipants[i].getName() == "Conductor")
-                            flutistTexture.render(getRenderer(), charRendering[i], 400);
+                            conductorTexture.render(getRenderer(), charRendering[i], 400);
                     }
                 }
                 
