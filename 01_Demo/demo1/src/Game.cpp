@@ -755,7 +755,7 @@ void DashDaCapo::runGameLoop()
             {
                 case INTRO:
                 { 
-                    
+                    /*
                     introMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
                     if (STATE_introSelectedOption != "NONE")
                     {
@@ -766,7 +766,7 @@ void DashDaCapo::runGameLoop()
                             STATE_gameOver = false; 
                             STATE_mapScreenOpenForTransition = true;
                         }
-                    }
+                    }*/
                     
                     break;
                 }
@@ -1326,7 +1326,9 @@ void DashDaCapo::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
-                introMenu.render(getRenderer()); 
+                
+                
+                /*introMenu.render(getRenderer()); 
 
                 if(STATE_postTransition == true)
                 {
@@ -1348,7 +1350,7 @@ void DashDaCapo::runGameLoop()
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
-                
+                */
                 break;
             }
             case MAP:
