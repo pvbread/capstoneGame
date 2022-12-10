@@ -161,6 +161,8 @@ void DashDaCapo::runGameLoop()
     bool STATE_timerAnimationStarted = false;
     bool STATE_didAnimationHappen = false;
     bool STATE_updateHP = false;
+    bool STATE_youWin = false;
+    bool STATE_youLoose = false;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -1233,6 +1235,7 @@ void DashDaCapo::runGameLoop()
                         bool isPlayerTeamAlive = isTeamAlive(combatParticipants, false);
                         bool isEnemyTeamAlive = isTeamAlive(combatParticipants, true);
 
+
                         if (isEnemyTeamAlive == false) 
                         {
                             //saves player team's stats
@@ -1262,6 +1265,7 @@ void DashDaCapo::runGameLoop()
                             STATE_combatMenuTargetSelected = false;
                             currTarget = 0;
                             currOrderNum = 0;
+                            STATE_youWin = true;
                             screen = WIN;
                             break;
                         }
@@ -1307,23 +1311,50 @@ void DashDaCapo::runGameLoop()
                 }
                 case WIN:
                 {
-                    if (event.type == SDL_KEYDOWN)
-                    {
-                        switch (event.key.keysym.sym)
+                    STATE_battle = false;
+                    STATE_enemiesSet = false;
+                    STATE_roundsSet = false;
+                    STATE_timerStarted = false;
+                    STATE_timerAnimationStarted = false;
+                    
+                    if(STATE_youWin == true){
+                        if (event.type == SDL_KEYDOWN)
                         {
-                            case SDLK_RETURN:
+                            switch (event.key.keysym.sym)
                             {
-                                
-                                screen = MAP;
-                                break;
+                                case SDLK_RETURN:
+                                {
+
+                                    screen = MAP;
+                                    break;
+                                }
                             }
-                        }
-                    } 
+                        } 
+                    }
+
+                    
                     
                 }
                 case DEFEAT:
                 {
-                    break;
+                    if (event.type == SDL_KEYDOWN)
+                    {
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_ESCAPE:
+                            {
+                                screen = INTRO;
+                                //STATE_gameOver = true; 
+                                //STATE_newGameSelected = false;
+                                //STATE_enemiesSet = false;
+                                //STATE_battle = false;
+                                ///STATE_roundsSet = false;
+                                //STATE_timerStarted = false;
+                                //STATE_timerAnimationStarted = false;
+                                break;
+                            }
+                        }
+                    } 
                 }
             }
             
