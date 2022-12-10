@@ -177,7 +177,7 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1); 
+    //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
@@ -719,16 +719,223 @@ void DashDaCapo::runGameLoop()
                     currTarget = targetChoice;
                     validMoves = decision.second;
                     if (decision.first == ATTACK)
-                        STATE_combatSelectedOption = "Attack";
+                    {
+                        std::vector<int> attackDamage;
+                        //STATE_combatSelectedOption = "NONE";
+
+                        //std::vector<int> attackDamage;
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(ATTACK,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                combatParticipants = combatParticipants[i].doAction(ATTACK,attackDamage,validMoves[currTarget],combatParticipants);
+                                std::string attackNotification;
+                                for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                {
+                                    if (j == 0)
+                                    {
+                                        attackNotification += currPlayerName;
+                                        attackNotification += " attacks: ";
+                                        attackNotification += std::to_string(attackDamage[j]);
+                                        attackNotification += " dmg dealt to ";
+                                        attackNotification += targetNotification;
+                                        
+                                        continue;
+                                        //----------------
+                                    }
+                                    attackNotification += " *** ";
+                                    attackNotification += std::to_string(attackDamage[j]);
+                                    attackNotification += " dmg dealt to ";
+                                    attackNotification += combatParticipants[validMoves[currTarget][j]].getName();
+
+                                }
+                                int currPlayerIdx = charIndex;
+                                STATE_lastCurrTarget = currTarget;
+                                STATE_timerAnimationStarted = true;
+                                STATE_timerAnimationCount = timer->deltaTime() + 1;
+                                whichTargetXValueForDamageAnimation = damageTakenPosition[validMoves[currTarget][0]];
+                                battleNotification.changeText(attackNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;
+                            }
+                        }
+                    }
                     if (decision.first == BUFF)
-                        STATE_combatSelectedOption = "Buff";
+                    {
+                        std::vector<int> healAmount;
+
+                        //look at roundOrder
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(BUFF,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                combatParticipants = combatParticipants[i].doAction(BUFF,healAmount,validMoves[currTarget],combatParticipants);
+                                std::string healNotification;
+                                for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                {
+                                    if (j == 0)
+                                    {
+                                        healNotification += currPlayerName;
+                                        healNotification += " heals: ";
+                                        healNotification += std::to_string(healAmount[j]);
+                                        healNotification += " healed for ";
+                                        healNotification += targetNotification;
+                                        continue;
+                                    }
+                                }
+                                battleNotification.changeText(healNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;
+                            }
+                        }
+                    } 
                     if (decision.first == DEBUFF)
-                        STATE_combatSelectedOption = "Debuff";
+                    {
+                        //look at roundOrder
+                        std::vector<int> newSpeed;
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(DEBUFF,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                combatParticipants = combatParticipants[i].doAction(DEBUFF,newSpeed,validMoves[currTarget],combatParticipants);
+                                std::string debuffNotification;
+                                for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                {
+                                    if (j == 0)
+                                    {
+                                        debuffNotification += currPlayerName;
+                                        debuffNotification += " debuffs: ";
+                                        debuffNotification += std::to_string(newSpeed[j]);
+                                        debuffNotification += " is the new speed for ";
+                                        debuffNotification += targetNotification;
+                                        continue;
+                                    }
+                                }
+                                battleNotification.changeText(debuffNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;
+                            }
+                        }
+                    } 
                     if (decision.first == MOVE)
-                        STATE_combatSelectedOption = "Move";
+                    {
+                        std::vector<int> nothing;
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(MOVE,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                std::string moveNotification;
+
+                                if (validMoves[currTarget][0]!=charIndex) 
+                                {
+                                    
+                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                    combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
+
+                                    moveNotification += currPlayerName;
+                                    moveNotification += " switch places with ";
+                                    moveNotification += targetNotification;
+                                }
+                                else 
+                                {
+                                    moveNotification = " Your teammates are dead. You just wasted a turn.";
+                                }
+                        
+                                battleNotification.changeText(moveNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;       
+                            }
+                        }
+                    }
+                    bool isNextTurnAlive = false;
+                    do 
+                    {
+                        currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                        for (int i = 0; i < combatParticipants.size(); i++)
+                        {
+                            if (combatParticipants[i].getName() == roundOrder[currOrderNum])
+                            {
+                                if (combatParticipants[i].isAlive())
+                                {
+                                    isNextTurnAlive = true;
+                                }
+                            }
+                        }
+                    }
+                    while (!isNextTurnAlive);
+
+
+                    //check end state for battle (edit this when victory/defeat screens get merged to main)
+                    bool isPlayerTeamAlive = isTeamAlive(combatParticipants, false);
+                    bool isEnemyTeamAlive = isTeamAlive(combatParticipants, true);
+
+                    if (isEnemyTeamAlive == false) 
+                    {
+                        //saves player team's stats
+                        playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                        for (int i = 0; i < 4; i++)
+                        {
+                            
+                                if (combatParticipants[i].getName() == "flutist")
+                                    flute = combatParticipants[i];
+                                if (combatParticipants[i].getName() == "drummer")
+                                    drum = combatParticipants[i];
+                                if (combatParticipants[i].getName() == "bassist")
+                                    bass = combatParticipants[i];
+                                if (combatParticipants[i].getName() == "conductor")
+                                    conductor = combatParticipants[i];                                
+                        }
+                        STATE_combatMenuTargetSelected = false;
+                        currTarget = 0;
+                        currOrderNum = 0;
+                        screen = WIN;
+                        break;
+                    }
+                    else if (isPlayerTeamAlive == false)
+                    {
+                        //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
+                        //playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                        
+                        STATE_combatMenuTargetSelected = false;
+                        currTarget = 0;
+                        currOrderNum = 0;
+                        screen = DEFEAT;
+                        break;
+                    }
+
+                    STATE_combatMenuTargetSelected = false;
+                    
+                    currTarget = 0;
                     //STATE_combatMenuTargetSelected = true;
                     STATE_enemyTimerStarted = true;
-                    STATE_enemyTimerCount = timer->deltaTime() + 10;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                 }
             }
         }
@@ -1019,25 +1226,25 @@ void DashDaCapo::runGameLoop()
                     }
      
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
+                    {
+                        for (int i = 0; i < combatParticipants.size(); i++)
                         {
-                            for (int i = 0; i < combatParticipants.size(); i++)
-                            {
-                                if (combatParticipants[i].getName() == roundOrder[currOrderNum])
-                                    // player turn
-                                    if (!combatParticipants[i].isEnemy())
-                                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
+                            if (combatParticipants[i].getName() == roundOrder[currOrderNum])
+                                // player turn
+                                if (!combatParticipants[i].isEnemy())
+                                    combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
 
-                                    // enemy turn
-                                    else
-                                    {
-                                        // Random decision making for enemy AI, TODO: implement basic logic
-                                        
+                                // enemy turn
+                                else
+                                {
+                                    // Random decision making for enemy AI, TODO: implement basic logic
+                                    
 
 
-                                    }
-                                
-                            }
+                                }
+                            
                         }
+                    }
 
                     // state for when a round ends
                     if ((currOrderNum + 1) == roundOrder.size() && STATE_combatSelectedOption!= "None" && STATE_combatMenuTargetSelected)
