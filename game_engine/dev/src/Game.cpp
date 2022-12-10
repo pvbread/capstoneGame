@@ -175,6 +175,7 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
+    Mix_Chunk *MapNotification = Mix_LoadWAV("mapNotification.wav");
     Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
@@ -1395,25 +1396,25 @@ void DashDaCapo::runGameLoop()
                     }
                     
                 }
-                if (STATE_mapEventboxOpen)
+                if (STATE_mapEventboxOpen)//-----
                 {   
                     if (nextMapEvent == "ITEM")
                     {
-                        std::string textNotification = STATE_itemFound + " was found!";
-                        TextBox itemNotification = TextBox(textNotification, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        std::string textNotification = "!!! " + STATE_itemFound + " was found!";
+                        TextBox itemNotification = TextBox(textNotification, 40, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
                         itemNotification.render(getRenderer());
                         //STATE_itemFound = "NONE"; gotta do this after? no
                     }
                     else if (nextMapEvent == "JOKE")
                     {
-                        TextBox jokeNotification = TextBox("some joke", 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        TextBox jokeNotification = TextBox("some joke", 26, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
                         jokeNotification.render(getRenderer());
                     }
                     else if (nextMapEvent == "HEAL")
                     {
                         
-                        std::string healText = std::to_string(STATE_amountHealed) + "hp healed for all team members";
-                        TextBox healNotification = TextBox(healText, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        std::string healText = "!!! " + std::to_string(STATE_amountHealed) + " Hp healed for all team members";
+                        TextBox healNotification = TextBox(healText, 50, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
                         healNotification.render(getRenderer());
                     }
                 }
