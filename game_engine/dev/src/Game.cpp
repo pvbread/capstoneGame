@@ -163,6 +163,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_roundOver = false;
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
+    bool STATE_enemyTimerStarted = false;
     bool STATE_debug = false;
     bool STATE_itemNotificationShowing = false;
     bool STATE_healNotificationShowing = false;
@@ -179,6 +180,7 @@ void DashDaCapo::runGameLoop()
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
+    float STATE_enemyTimerCount;
     int STATE_amountHealed;
     int STATE_characterDirection = LEFT;
     std::string STATE_introSelectedOption = "NONE";
@@ -191,7 +193,7 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1); 
+    //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
@@ -738,7 +740,242 @@ void DashDaCapo::runGameLoop()
                 STATE_mapScreenOpenForTransition = false;
             }
         }
-        
+      
+        // enemy event
+        if (screen == COMBAT && STATE_enemyTimerStarted && timer->deltaTime()>STATE_enemyTimerCount)
+            STATE_enemyTimerStarted = false;
+        if (screen == COMBAT && !STATE_enemyTimerStarted)
+        {
+            for (int i = 4; i < combatParticipants.size(); i++)
+            {
+                if ( combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
+                {
+                    std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
+                    std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
+                    int targetChoice = distForTarget(gen);
+                    currTarget = targetChoice;
+                    validMoves = decision.second;
+                    if (decision.first == ATTACK)
+                    {
+                        std::vector<int> attackDamage;
+                        //STATE_combatSelectedOption = "NONE";
+
+                        //std::vector<int> attackDamage;
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(ATTACK,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                combatParticipants = combatParticipants[i].doAction(ATTACK,attackDamage,validMoves[currTarget],combatParticipants);
+                                std::string attackNotification;
+                                for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                {
+                                    if (j == 0)
+                                    {
+                                        attackNotification += currPlayerName;
+                                        attackNotification += " attacks: ";
+                                        attackNotification += std::to_string(attackDamage[j]);
+                                        attackNotification += " dmg dealt to ";
+                                        attackNotification += targetNotification;
+                                        
+                                        continue;
+                                        //----------------
+                                    }
+                                    attackNotification += " *** ";
+                                    attackNotification += std::to_string(attackDamage[j]);
+                                    attackNotification += " dmg dealt to ";
+                                    attackNotification += combatParticipants[validMoves[currTarget][j]].getName();
+
+                                }
+                                int currPlayerIdx = charIndex;
+                                STATE_lastCurrTarget = currTarget;
+                                STATE_timerAnimationStarted = true;
+                                STATE_timerAnimationCount = timer->deltaTime() + 1;
+                                whichTargetXValueForDamageAnimation = damageTakenPosition[validMoves[currTarget][0]];
+                                battleNotification.changeText(attackNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;
+                            }
+                        }
+                    }
+                    if (decision.first == BUFF)
+                    {
+                        std::vector<int> healAmount;
+
+                        //look at roundOrder
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(BUFF,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                combatParticipants = combatParticipants[i].doAction(BUFF,healAmount,validMoves[currTarget],combatParticipants);
+                                std::string healNotification;
+                                for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                {
+                                    if (j == 0)
+                                    {
+                                        healNotification += currPlayerName;
+                                        healNotification += " heals: ";
+                                        healNotification += std::to_string(healAmount[j]);
+                                        healNotification += " healed for ";
+                                        healNotification += targetNotification;
+                                        continue;
+                                    }
+                                }
+                                battleNotification.changeText(healNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;
+                            }
+                        }
+                    } 
+                    if (decision.first == DEBUFF)
+                    {
+                        //look at roundOrder
+                        std::vector<int> newSpeed;
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(DEBUFF,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                combatParticipants = combatParticipants[i].doAction(DEBUFF,newSpeed,validMoves[currTarget],combatParticipants);
+                                std::string debuffNotification;
+                                for (int j = 0; j < validMoves[currTarget].size(); j++)
+                                {
+                                    if (j == 0)
+                                    {
+                                        debuffNotification += currPlayerName;
+                                        debuffNotification += " debuffs: ";
+                                        debuffNotification += std::to_string(newSpeed[j]);
+                                        debuffNotification += " is the new speed for ";
+                                        debuffNotification += targetNotification;
+                                        continue;
+                                    }
+                                }
+                                battleNotification.changeText(debuffNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;
+                            }
+                        }
+                    } 
+                    if (decision.first == MOVE)
+                    {
+                        std::vector<int> nothing;
+                        for (int i = 0; i < combatParticipants.size();i++)
+                        {
+                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                            {
+                                int charIndex = combatParticipants[i].getParticipantsIndex();
+                                validMoves = combatParticipants[i].getValidMoves(MOVE,charIndex,combatParticipants);
+                                std::string currPlayerName = combatParticipants[i].getName();
+                                currPlayerName.erase(std::remove_if(currPlayerName.begin(),currPlayerName.end(), ::isspace),currPlayerName.end());
+                                std::string targetNotification;
+                                std::string moveNotification;
+
+                                if (validMoves[currTarget][0]!=charIndex) 
+                                {
+                                    
+                                    targetNotification = combatParticipants[validMoves[currTarget][0]].getName();
+                                    combatParticipants = combatParticipants[i].doAction(MOVE,nothing,validMoves[currTarget],combatParticipants);
+
+                                    moveNotification += currPlayerName;
+                                    moveNotification += " switch places with ";
+                                    moveNotification += targetNotification;
+                                }
+                                else 
+                                {
+                                    moveNotification = " Your teammates are dead. You just wasted a turn.";
+                                }
+                        
+                                battleNotification.changeText(moveNotification);
+                                STATE_timerStarted = true;
+                                STATE_timerCount = timer->deltaTime() + 3;
+                                break;       
+                            }
+                        }
+                    }
+                    bool isNextTurnAlive = false;
+                    do 
+                    {
+                        currOrderNum = (currOrderNum + 1) % roundOrder.size();
+                        for (int i = 0; i < combatParticipants.size(); i++)
+                        {
+                            if (combatParticipants[i].getName() == roundOrder[currOrderNum])
+                            {
+                                if (combatParticipants[i].isAlive())
+                                {
+                                    isNextTurnAlive = true;
+                                }
+                            }
+                        }
+                    }
+                    while (!isNextTurnAlive);
+
+
+                    //check end state for battle (edit this when victory/defeat screens get merged to main)
+                    bool isPlayerTeamAlive = isTeamAlive(combatParticipants, false);
+                    bool isEnemyTeamAlive = isTeamAlive(combatParticipants, true);
+
+                    if (isEnemyTeamAlive == false) 
+                    {
+                        //saves player team's stats
+                        playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                        for (int i = 0; i < 4; i++)
+                        {
+                            
+                                if (combatParticipants[i].getName() == flute.getName())
+                                    flute = combatParticipants[i];
+                                if (combatParticipants[i].getName() == drum.getName())
+                                    drum = combatParticipants[i];
+                                if (combatParticipants[i].getName() == bass.getName())
+                                    bass = combatParticipants[i];
+                                if (combatParticipants[i].getName() == conductor.getName())
+                                    conductor = combatParticipants[i];                                
+                        }
+                        //STATE_combatMenuTargetSelected = false;
+                        currTarget = 0;
+                        currOrderNum = 0;
+                        screen = WIN;
+                        break;
+                    }
+                    else if (isPlayerTeamAlive == false)
+                    {
+                        //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
+                        //playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                        
+                        STATE_combatMenuTargetSelected = false;
+                        currTarget = 0;
+                        currOrderNum = 0;
+                        screen = DEFEAT;
+                        break;
+                    }
+
+                    STATE_combatMenuTargetSelected = false;
+                    
+                    currTarget = 0;
+                    //STATE_combatMenuTargetSelected = true;
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
+                }
+            }
+        }
         //////END SCREEN TRANSITIONS////////
 
         while(SDL_PollEvent(&event))
@@ -856,6 +1093,8 @@ void DashDaCapo::runGameLoop()
                         ////STATE_mapEventboxOpen = false;//put in screen transition
                         // update setRoundTurns display
                         STATE_mapScreenOpenForTransition = false;
+                        STATE_enemyTimerStarted = true;
+                        STATE_enemyTimerCount = timer->deltaTime() + 3;
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
                             tempCharNames[i] = roundOrder[i];
@@ -894,6 +1133,8 @@ void DashDaCapo::runGameLoop()
                         screen = COMBAT;
                         nextMapEvent = "BLANKEVENT";
                         STATE_mapEventboxOpen = false;
+                        STATE_enemyTimerStarted = true;
+                        STATE_enemyTimerCount = timer->deltaTime() + 3;
                         // update setRoundTurns display
                         for(int i = 0; i < roundOrder.size(); i++)
                         {
@@ -974,60 +1215,42 @@ void DashDaCapo::runGameLoop()
                 {   
                     
                     if (STATE_combatSelectedOption != "NONE" && !STATE_combatMenuTargetSelected)
-                    {
+                    {  
                         for (int i = 0; i < combatParticipants.size(); i++)
-                        {
-                            if (combatParticipants[i].getName()==roundOrder[currOrderNum])
+                        { 
+                            if (!combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
                             {
-                                // player input to select target
-                                if (!combatParticipants[i].isEnemy())
+                                if (event.type == SDL_KEYDOWN)
                                 {
-                                    if (event.type == SDL_KEYDOWN)
+                                    switch (event.key.keysym.sym)
                                     {
-                                        switch (event.key.keysym.sym)
+                                        case SDLK_LEFT:
                                         {
-                                            case SDLK_LEFT:
-                                            {
-                                                currTarget--;
-                                                if (currTarget < 0)
-                                                    currTarget = 0;
-                                                break;
-                                            }
-                                            case SDLK_RIGHT:
-                                            {
-                                                currTarget++;
-                                                if (currTarget == validMoves.size())
-                                                    currTarget = validMoves.size()-1;
-                                                break;
-                                            }
-                                            case SDLK_RETURN:
-                                            {
-                                                STATE_combatMenuTargetSelected = true;
-
-                                                break;
-                                            }
+                                            currTarget--;
+                                            if (currTarget < 0)
+                                                currTarget = 0;
+                                            break;
                                         }
-                                    } 
-                                }
-                                // had to add this in or else enemy actions carry out too fast (press the return key to carry out action)
-                                else
-                                {
-                                    if (event.type == SDL_KEYDOWN)
-                                    {
-                                        switch (event.key.keysym.sym)
+                                        case SDLK_RIGHT:
                                         {
-                                            case SDLK_RETURN:
-                                            {
-                                                STATE_combatMenuTargetSelected = true;
-
-                                                break;
-                                            }
+                                            currTarget++;
+                                            if (currTarget == validMoves.size())
+                                                currTarget = validMoves.size()-1;
+                                            break;
                                         }
-                                    } 
+                                        case SDLK_RETURN:
+                                        {
+                                            STATE_combatMenuTargetSelected = true;
+
+                                            break;
+                                        }
+                                    }
                                 }
-                            }    
+                                                                                                                      
+                            }
                         }
                     }
+                
 
                     // create new round and set round turns
                     if(!STATE_roundsSet && STATE_roundOver)
@@ -1040,36 +1263,15 @@ void DashDaCapo::runGameLoop()
                     }
      
                     if (STATE_combatSelectedOption == "NONE" && !STATE_combatMenuTargetSelected)
-                        {
-                            for (int i = 0; i < combatParticipants.size(); i++)
+                    {
+                        for (int i = 0; i < combatParticipants.size(); i++)
+                        { 
+                            if (!combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
                             {
-                                if (combatParticipants[i].getName() == roundOrder[currOrderNum])
-                                    // player turn
-                                    if (!combatParticipants[i].isEnemy())
-                                        combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
-
-                                    // enemy turn
-                                    else
-                                    {
-                                        // Random decision making for enemy AI, TODO: implement basic logic
-                                        std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
-                                        std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
-                                        int targetChoice = distForTarget(gen);
-                                        currTarget = targetChoice;
-                                        validMoves = decision.second;
-                                        if (decision.first == ATTACK)
-                                            STATE_combatSelectedOption = "Attack";
-                                        if (decision.first == BUFF)
-                                            STATE_combatSelectedOption = "Buff";
-                                        if (decision.first == DEBUFF)
-                                            STATE_combatSelectedOption = "Debuff";
-                                        if (decision.first == MOVE)
-                                            STATE_combatSelectedOption = "Move";
-
-                                    }
-                                
+                                combatMenu.onInput(event, SelectMusic, STATE_combatSelectedOption);
                             }
                         }
+                    }
 
                     // state for when a round ends
                     if ((currOrderNum + 1) == roundOrder.size() && STATE_combatSelectedOption!= "None" && STATE_combatMenuTargetSelected)
@@ -1280,13 +1482,14 @@ void DashDaCapo::runGameLoop()
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             for (int i = 0; i < 4; i++)
                             {
-                                    if (combatParticipants[i].getName() == "Flutist")
+
+                                    if (combatParticipants[i].getName() == flute.getName())
                                         flute = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "Drummer")
+                                    if (combatParticipants[i].getName() == drum.getName())
                                         drum = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "Bassist")
+                                    if (combatParticipants[i].getName() == bass.getName())
                                         bass = combatParticipants[i];
-                                    if (combatParticipants[i].getName() == "Conductor")
+                                    if (combatParticipants[i].getName() == conductor.getName())
                                         conductor = combatParticipants[i];                                
                             }
 
@@ -1569,14 +1772,14 @@ void DashDaCapo::runGameLoop()
                 {
                     if (combatParticipants[i].isAlive())
                     {
-                        if (combatParticipants[i].getName() == "Flutist")
+                        if (combatParticipants[i].getName() == flute.getName())
                             flutistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "Drummer")
+                        if (combatParticipants[i].getName() == drum.getName())
                             drummerTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "Bassist")
+                        if (combatParticipants[i].getName() == bass.getName())
                             bassistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == "Conductor")
-                            conductorTexture.render(getRenderer(), charRendering[i], 400);
+                        if (combatParticipants[i].getName() == conductor.getName())
+                            flutistTexture.render(getRenderer(), charRendering[i], 400);
                     }
                 }
                 
@@ -1620,6 +1823,8 @@ void DashDaCapo::runGameLoop()
                 //targetBoxes
                 if (STATE_combatSelectedOption == "Attack")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     // rerender bug if I don't update validMoves
                     for (int i = 0; i < combatParticipants.size();i++)
                     {
@@ -1638,6 +1843,8 @@ void DashDaCapo::runGameLoop()
                 }
                 if (STATE_combatSelectedOption == "Buff")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     for (int i = 0; i < combatParticipants.size();i++)
                     {
                         if (combatParticipants[i].getName()==roundOrder[currOrderNum])
@@ -1657,6 +1864,8 @@ void DashDaCapo::runGameLoop()
 
                 if (STATE_combatSelectedOption == "Debuff")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     SDL_SetRenderDrawColor(getRenderer(), 150, 0, 0, 255);
                     // rerender bug if I don't update validMoves
                     for (int i = 0; i < combatParticipants.size();i++)
@@ -1675,6 +1884,8 @@ void DashDaCapo::runGameLoop()
 
                 if (STATE_combatSelectedOption == "Move")
                 {
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 3;
                     SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                     // rerender bug if I don't update validMoves
                     for (int i = 0; i < combatParticipants.size();i++)
