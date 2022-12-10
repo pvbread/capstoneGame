@@ -151,6 +151,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_roundOver = false;
     bool STATE_mapEventboxOpen = false;
     bool STATE_timerStarted = false;
+    bool STATE_enemyTimerStarted = false;
     bool STATE_debug = false;
     bool STATE_itemNotificationShowing = false;
     bool STATE_healNotificationShowing = false;
@@ -163,6 +164,7 @@ void DashDaCapo::runGameLoop()
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
+    float STATE_enemyTimerCount;
     int STATE_amountHealed;
     int STATE_characterDirection = LEFT;
     std::string STATE_introSelectedOption = "NONE";
@@ -700,7 +702,36 @@ void DashDaCapo::runGameLoop()
                 STATE_mapScreenOpenForTransition = false;
             }
         }
-        
+
+        // enemy event
+        if (STATE_enemyTimerStarted && timer->deltaTime()>STATE_enemyTimerCount)
+            STATE_enemyTimerStarted = false;
+        if (!STATE_enemyTimerStarted)
+        {
+            for (int i = 4; i < combatParticipants.size(); i++)
+            {
+                if ( combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
+                {
+                    
+                    std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
+                    std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
+                    int targetChoice = distForTarget(gen);
+                    currTarget = targetChoice;
+                    validMoves = decision.second;
+                    if (decision.first == ATTACK)
+                        STATE_combatSelectedOption = "Attack";
+                    if (decision.first == BUFF)
+                        STATE_combatSelectedOption = "Buff";
+                    if (decision.first == DEBUFF)
+                        STATE_combatSelectedOption = "Debuff";
+                    if (decision.first == MOVE)
+                        STATE_combatSelectedOption = "Move";
+                    //STATE_combatMenuTargetSelected = true;
+                    STATE_enemyTimerStarted = true;
+                    STATE_enemyTimerCount = timer->deltaTime() + 10;
+                }
+            }
+        }
         //////END SCREEN TRANSITIONS////////
 
         while(SDL_PollEvent(&event))
@@ -967,21 +998,11 @@ void DashDaCapo::runGameLoop()
                                         }
                                     } 
                                 }
-                                // had to add this in or else enemy actions carry out too fast (press the return key to carry out action)
                                 else
                                 {
-                                    if (event.type == SDL_KEYDOWN)
-                                    {
-                                        switch (event.key.keysym.sym)
-                                        {
-                                            case SDLK_RETURN:
-                                            {
-                                                STATE_combatMenuTargetSelected = true;
+                                    break;
 
-                                                break;
-                                            }
-                                        }
-                                    } 
+                                                
                                 }
                             }    
                         }
@@ -1010,19 +1031,8 @@ void DashDaCapo::runGameLoop()
                                     else
                                     {
                                         // Random decision making for enemy AI, TODO: implement basic logic
-                                        std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
-                                        std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
-                                        int targetChoice = distForTarget(gen);
-                                        currTarget = targetChoice;
-                                        validMoves = decision.second;
-                                        if (decision.first == ATTACK)
-                                            STATE_combatSelectedOption = "Attack";
-                                        if (decision.first == BUFF)
-                                            STATE_combatSelectedOption = "Buff";
-                                        if (decision.first == DEBUFF)
-                                            STATE_combatSelectedOption = "Debuff";
-                                        if (decision.first == MOVE)
-                                            STATE_combatSelectedOption = "Move";
+                                        
+
 
                                     }
                                 
