@@ -33,6 +33,18 @@ void DashDaCapo::runGameLoop()
 
     ///////// END CHARACTER INIT //////
 
+    ////////ONE LINER JOKES LIST////////
+
+    int jokeNumber = 1;
+    std::unordered_map<int, std::string > jokeList = 
+        {{1, "I went to buy some camo pants but couldnt find any."},
+        {2, "I failed math so many times at school, I cant even count."},
+        {3, "When life gives you melons, you might be dyslexic."},
+        {4, "I cant believe I got fired from the calendar factory. All I did was take a day off."},
+        {5, "Most people are shocked when they find out how bad I am as an electrician."},
+        {6, "Russian dolls are so full of themselves."}};
+
+    ////////ONE LINER JOKES LIST////////
 
     ///////// START ITEM INIT ////////
 
@@ -160,6 +172,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapScreenOpenForTransition = false;
     bool STATE_timerAnimationStarted = false;
     bool STATE_didAnimationHappen = false;
+    bool STATE_didGetRandNumForJoke = true;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -914,6 +927,7 @@ void DashDaCapo::runGameLoop()
                                 STATE_mapEventboxOpen = false;
                                 STATE_itemNotificationShowing = false;
                                 STATE_healNotificationShowing = false;
+                                STATE_didGetRandNumForJoke = true;
                                 nextMapEvent = "BLANKEVENT";
                                 break;
                             }
@@ -1402,12 +1416,20 @@ void DashDaCapo::runGameLoop()
                         std::string textNotification = STATE_itemFound + " was found!";
                         TextBox itemNotification = TextBox(textNotification, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
                         itemNotification.render(getRenderer());
-                        //STATE_itemFound = "NONE"; gotta do this after? no
+                        //STATE_itemFound = "NONE"; gotta do this after? no 
                     }
                     else if (nextMapEvent == "JOKE")
                     {
-                        TextBox jokeNotification = TextBox("some joke", 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
-                        jokeNotification.render(getRenderer());
+                        if(STATE_didGetRandNumForJoke == true)
+                        {
+                            std::uniform_int_distribution<> jokeRandomPick(1,6);
+                            jokeNumber = jokeRandomPick(gen);
+                            STATE_didGetRandNumForJoke = false;
+                        }
+        
+                        TextBox jokeNotification = TextBox(jokeList[jokeNumber], 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        jokeNotification.render(getRenderer()); 
+                        
                     }
                     else if (nextMapEvent == "HEAL")
                     {
