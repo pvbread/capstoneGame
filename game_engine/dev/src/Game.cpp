@@ -704,15 +704,14 @@ void DashDaCapo::runGameLoop()
         }
 
         // enemy event
-        if (STATE_enemyTimerStarted && timer->deltaTime()>STATE_enemyTimerCount)
+        if (screen == COMBAT && STATE_enemyTimerStarted && timer->deltaTime()>STATE_enemyTimerCount)
             STATE_enemyTimerStarted = false;
-        if (!STATE_enemyTimerStarted)
+        if (screen == COMBAT && !STATE_enemyTimerStarted)
         {
             for (int i = 4; i < combatParticipants.size(); i++)
             {
                 if ( combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
                 {
-                    
                     std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
                     std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
                     int targetChoice = distForTarget(gen);
@@ -912,7 +911,7 @@ void DashDaCapo::runGameLoop()
                                 if (combatParticipants[i].getName() == "conductor")
                                     conductor = combatParticipants[i];                                
                         }
-                        STATE_combatMenuTargetSelected = false;
+                        //STATE_combatMenuTargetSelected = false;
                         currTarget = 0;
                         currOrderNum = 0;
                         screen = WIN;
