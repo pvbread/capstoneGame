@@ -17,10 +17,10 @@ void DashDaCapo::runGameLoop()
     MapDebugController debugCont = MapDebugController();
 
     ////////// START CHARACTER INIT ////////
-    BaseCharacter conductor = BaseCharacter("conductor", 30, 3, 3, 0, 3, 3, 3,false);
-    BaseCharacter drum = BaseCharacter("drummer", 50, 2, 1, 0, 3, 3, 3,false);
-    BaseCharacter flute = BaseCharacter("flutist", 20, 6, 1, 0, 3, 3, 3,false);
-    BaseCharacter bass = BaseCharacter("bassist", 60, 1, 3, 0, 3, 3, 3,false);
+    BaseCharacter conductor = BaseCharacter("Conductor", 30, 3, 3, 0, 3, 3, 3,false);
+    BaseCharacter drum = BaseCharacter("Drummer", 50, 2, 1, 0, 3, 3, 3,false);
+    BaseCharacter flute = BaseCharacter("Flutist", 20, 6, 1, 0, 3, 3, 3,false);
+    BaseCharacter bass = BaseCharacter("Bassist", 60, 1, 3, 0, 3, 3, 3,false);
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
     bass.setNewParticipantsIndex(2);
@@ -33,6 +33,18 @@ void DashDaCapo::runGameLoop()
 
     ///////// END CHARACTER INIT //////
 
+    ////////ONE LINER JOKES LIST////////
+
+    int jokeNumber = 1;
+    std::unordered_map<int, std::string > jokeList = 
+        {{1, "I went to buy some camo pants but couldnt find any."},
+        {2, "I failed math so many times at school, I cant even count."},
+        {3, "When life gives you melons, you might be dyslexic."},
+        {4, "I cant believe I got fired from the calendar factory. All I did was take a day off."},
+        {5, "Most people are shocked when they find out how bad I am as an electrician."},
+        {6, "Russian dolls are so full of themselves."}};
+
+    ////////ONE LINER JOKES LIST////////
 
     ///////// START ITEM INIT ////////
 
@@ -161,6 +173,10 @@ void DashDaCapo::runGameLoop()
     bool STATE_mapScreenOpenForTransition = false;
     bool STATE_timerAnimationStarted = false;
     bool STATE_didAnimationHappen = false;
+    bool STATE_updateHP = false;
+    bool STATE_youWin = false;
+    bool STATE_youLoose = false;
+    bool STATE_didGetRandNumForJoke = true;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -191,7 +207,12 @@ void DashDaCapo::runGameLoop()
     TextureWrapper flutistTexture;
     TextureWrapper bassistTexture;
     TextureWrapper drummerTexture;
+    TextureWrapper conductorTexture;
     TextureWrapper linebackerTexture;
+    TextureWrapper enemyBellTexture;
+    TextureWrapper enemyBatTexture;
+    TextureWrapper pizzaheadTexture;
+    TextureWrapper carlTexture;
     TextureWrapper currPlayerTexture;
     TextureWrapper targetTexture;
     TextureWrapper getHitEffect;
@@ -209,6 +230,11 @@ void DashDaCapo::runGameLoop()
         {&flutistTexture, "../../assets/image/chars/flutist.png"},
         {&bassistTexture, "../../assets/image/chars/bassist.png"},
         {&drummerTexture, "../../assets/image/chars/drummer.png"},
+        {&conductorTexture, "../../assets/image/chars/conductor.png"},
+        {&enemyBellTexture, "../../assets/image/chars/enemysh-bell.png"},
+        {&enemyBatTexture, "../../assets/image/chars/enemysh-bat.png"},
+        {&pizzaheadTexture, "../../assets/image/chars/pizzahead.png"},
+        {&carlTexture, "../../assets/image/chars/Carl.png"},
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
         {&targetTexture, "../../assets/image/sixteenth.png"},  
@@ -446,7 +472,7 @@ void DashDaCapo::runGameLoop()
         "bassist",
         "coneheadAlpha",
         "coneheadBeta ",
-        "coneheadTheta",
+        "PizzaHead",
         "Carl"
     };
     //TODO account for dead chars in order
@@ -639,6 +665,18 @@ void DashDaCapo::runGameLoop()
     ///////End Display Stat Names/////////
     
     ////// END CHARACTER STATS //////
+
+    ///////WIN AND LOSS SCREEN////////
+
+    //win
+    TextBox congradsWinText = TextBox("Congratulations  ", 100, 100, 100, 500, 200, Font::roboto, Color::black, Color::darkGreen);
+    TextBox moveOnWin = TextBox("Press ''Enter'' to continue", 65, 100, 550, 500, 200, Font::roboto, Color::black, Color::darkGreen);
+    
+    //loss
+    TextBox congradsYouDiedText = TextBox("  You Died", 100, 200, 100, 500, 200, Font::roboto, Color::maroon, Color::black);
+    TextBox moveOnLoss = TextBox("Press ''Escape'' to return to intro", 65, 20, 550, 500, 200, Font::roboto, Color::maroon, Color::black);
+
+    ///////END WIN AND LOSS SCREEN//////
 
     //BaseItem test("some item", "normal", 5);
 
@@ -1025,10 +1063,12 @@ void DashDaCapo::runGameLoop()
                     {
                     
                         //init enemy characters
+
                         BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e3 = BaseCharacter("coneheadKappa", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("Carl         ", 20, 0, 1, 0, 3, 3, 3, true);
+                        
                         //normally this will just get enemies from a randomly selected "PACK"
                         e1.setNewParticipantsIndex(4);
                         e2.setNewParticipantsIndex(5);
@@ -1155,11 +1195,13 @@ void DashDaCapo::runGameLoop()
                                 STATE_mapEventboxOpen = false;
                                 STATE_itemNotificationShowing = false;
                                 STATE_healNotificationShowing = false;
+                                STATE_didGetRandNumForJoke = true;
                                 nextMapEvent = "BLANKEVENT";
                                 break;
                             }
                             case SDLK_e:
                             {
+                                STATE_updateHP = true;
                                 STATE_statMenu = true;
                                 STATE_mapScreenOpenForTransition = false;
                                 //screen = STATUS_MENU;
@@ -1433,12 +1475,14 @@ void DashDaCapo::runGameLoop()
                         bool isPlayerTeamAlive = isTeamAlive(combatParticipants, false);
                         bool isEnemyTeamAlive = isTeamAlive(combatParticipants, true);
 
+
                         if (isEnemyTeamAlive == false) 
                         {
                             //saves player team's stats
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             for (int i = 0; i < 4; i++)
                             {
+
                                     if (combatParticipants[i].getName() == flute.getName())
                                         flute = combatParticipants[i];
                                     if (combatParticipants[i].getName() == drum.getName())
@@ -1448,9 +1492,27 @@ void DashDaCapo::runGameLoop()
                                     if (combatParticipants[i].getName() == conductor.getName())
                                         conductor = combatParticipants[i];                                
                             }
+
+                            /// Updates player stats for statMenu page
+                            conductorHPName.changeText(std::to_string(conductor.getHp()) + "-");
+                            statMenuConductorRow[1] = conductorHPName;
+                            bassHPName.changeText(std::to_string(bass.getHp()) + "-");
+                            statMenuBassRow[1] = bassHPName;
+                            drumHPName.changeText(std::to_string(drum.getHp()) + "-");
+                            statMenuDrumRow[1] = drumHPName;
+                            fluteHPName.changeText(std::to_string(flute.getHp()) + "-");
+                            statMenuFluteRow[1] = fluteHPName;
+
                             STATE_combatMenuTargetSelected = false;
+                            STATE_battle = false;
+                            STATE_enemiesSet = false;
+                            STATE_roundsSet = false;
+                            STATE_timerStarted = false;
+                            STATE_timerAnimationStarted = false;
+
                             currTarget = 0;
                             currOrderNum = 0;
+                            STATE_youWin = true;
                             screen = WIN;
                             break;
                         }
@@ -1460,8 +1522,17 @@ void DashDaCapo::runGameLoop()
                             playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             
                             STATE_combatMenuTargetSelected = false;
+                            //STATE_gameOver = true; 
+                            STATE_newGameSelected = false;
+                            STATE_enemiesSet = false;
+                            STATE_battle = false;
+                            STATE_roundsSet = false;
+                            STATE_timerStarted = false;
+                            STATE_timerAnimationStarted = false;
+
                             currTarget = 0;
                             currOrderNum = 0;
+                            STATE_youLoose = true;
                             screen = DEFEAT;
                             break;
                         }
@@ -1496,23 +1567,41 @@ void DashDaCapo::runGameLoop()
                 }
                 case WIN:
                 {
-                    if (event.type == SDL_KEYDOWN)
-                    {
-                        switch (event.key.keysym.sym)
+                     
+                    if(STATE_youWin == true){
+                        if (event.type == SDL_KEYDOWN)
                         {
-                            case SDLK_RETURN:
+                            switch (event.key.keysym.sym)
                             {
-                                
-                                screen = MAP;
-                                break;
+                                case SDLK_RETURN:
+                                {
+                                    STATE_youWin = false;
+                                    screen = MAP;
+                                    break;
+                                }
                             }
-                        }
-                    } 
+                        } 
+                    }
+
+                    
                     
                 }
                 case DEFEAT:
                 {
-                    break;
+                    if(STATE_youLoose == true){
+                        if (event.type == SDL_KEYDOWN)
+                        {
+                            switch (event.key.keysym.sym)
+                            {
+                                case SDLK_ESCAPE:
+                                {
+                                    screen = INTRO;
+                                    break;
+                                }
+                            }
+                        } 
+                    }
+                    
                 }
             }
             
@@ -1603,12 +1692,20 @@ void DashDaCapo::runGameLoop()
                         std::string textNotification = STATE_itemFound + " was found!";
                         TextBox itemNotification = TextBox(textNotification, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
                         itemNotification.render(getRenderer());
-                        //STATE_itemFound = "NONE"; gotta do this after? no
+                        //STATE_itemFound = "NONE"; gotta do this after? no 
                     }
                     else if (nextMapEvent == "JOKE")
                     {
-                        TextBox jokeNotification = TextBox("some joke", 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
-                        jokeNotification.render(getRenderer());
+                        if(STATE_didGetRandNumForJoke == true)
+                        {
+                            std::uniform_int_distribution<> jokeRandomPick(1,6);
+                            jokeNumber = jokeRandomPick(gen);
+                            STATE_didGetRandNumForJoke = false;
+                        }
+        
+                        TextBox jokeNotification = TextBox(jokeList[jokeNumber], 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        jokeNotification.render(getRenderer()); 
+                        
                     }
                     else if (nextMapEvent == "HEAL")
                     {
@@ -1692,13 +1789,13 @@ void DashDaCapo::runGameLoop()
                     if (combatParticipants[i+4].isAlive())
                     {
                         if (combatParticipants[i+4].getName() == enemies[0].getName())
-                            linebackerTexture.render(getRenderer(), charRendering[i+4], 400);
+                            enemyBatTexture.render(getRenderer(), charRendering[i+4], 400);
                         if (combatParticipants[i+4].getName() == enemies[1].getName())
-                            drummerTexture.render(getRenderer(), charRendering[i+4], 400);
+                            enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
                         if (combatParticipants[i+4].getName() == enemies[2].getName())
-                            bassistTexture.render(getRenderer(), charRendering[i+4], 400);
+                            pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
                         if (combatParticipants[i+4].getName() == enemies[3].getName())
-                            flutistTexture.render(getRenderer(), charRendering[i+4], 400); 
+                            carlTexture.render(getRenderer(), charRendering[i+4], 400); 
                     }
                 }
                 
@@ -1966,6 +2063,8 @@ void DashDaCapo::runGameLoop()
             {
                 std::string statMenuDisplayStr;
 
+
+
                 //////Background Color////////
                 SDL_Rect backgroundPane1 = {0, 0, 960, 730};
                 SDL_Color backgroundMenu1 = Color::navy;
@@ -2091,10 +2190,8 @@ void DashDaCapo::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 150, 0, 255);
                 SDL_RenderClear(getRenderer());
 
-                TextBox congrads = TextBox("Congratulations  ", 100, 100, 100, 500, 200, Font::roboto, Color::black, Color::darkGreen);
-                congrads.render(getRenderer());
-                TextBox moveOn = TextBox("Press ''Enter'' to continue", 65, 100, 550, 500, 200, Font::roboto, Color::black, Color::darkGreen);
-                moveOn.render(getRenderer());
+                congradsWinText.render(getRenderer());
+                moveOnWin.render(getRenderer());
 
                 break;
             }
@@ -2104,8 +2201,8 @@ void DashDaCapo::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
 
-                TextBox congrads = TextBox("  You Died", 100, 200, 100, 500, 200, Font::roboto, Color::maroon, Color::black);
-                congrads.render(getRenderer());
+                congradsYouDiedText.render(getRenderer());
+                moveOnLoss.render(getRenderer());
 
                 break;
             }
