@@ -2020,12 +2020,22 @@ void DashDaCapo::runGameLoop()
                     STATE_timerStarted = false; 
                 }
 
-                if(STATE_timerAnimationStarted && timer->deltaTime() < STATE_timerAnimationCount)
+                if(!STATE_bossFightBegin && STATE_timerAnimationStarted && timer->deltaTime() < STATE_timerAnimationCount)
                 {
                     getHitEffect.setAlpha(alphaDamageON);
                     getHitEffect.render(getRenderer(), whichTargetXValueForDamageAnimation, 398);
                 }
-                if (timer->deltaTime() > STATE_timerAnimationCount)
+                if (!STATE_bossFightBegin && timer->deltaTime() > STATE_timerAnimationCount)
+                {
+                    getHitEffect.setAlpha(alphaDamageOFF);
+                    STATE_timerAnimationStarted = false; 
+                }
+                if(STATE_bossFightBegin && STATE_timerAnimationStarted && timer->deltaTime() < STATE_timerAnimationCount)
+                {
+                    getHitEffect.setAlpha(alphaDamageON);
+                    getHitEffect.render(getRenderer(), whichTargetXValueForDamageAnimation+50, 410);
+                }
+                if (STATE_bossFightBegin && timer->deltaTime() > STATE_timerAnimationCount)
                 {
                     getHitEffect.setAlpha(alphaDamageOFF);
                     STATE_timerAnimationStarted = false; 
