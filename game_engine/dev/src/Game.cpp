@@ -2248,7 +2248,7 @@ void DashDaCapo::runGameLoop()
                 //////End Background Color////////
 
                 ///////Background under the text////////
-                /*
+                SDL_SetRenderDrawBlendMode(getRenderer(), SDL_BLENDMODE_BLEND); 
                 SDL_Rect StatMenuBackground1 = {50, 95, 861, 100};
                 SDL_Color StatMenuColor1 = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor1.r, StatMenuColor1.g, StatMenuColor1.b, 128);
@@ -2268,7 +2268,8 @@ void DashDaCapo::runGameLoop()
                 SDL_Color StatMenuColor4 = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), StatMenuColor4.r, StatMenuColor4.g, StatMenuColor4.b, 128);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground4);
-                */
+                SDL_SetRenderDrawBlendMode(getRenderer(), SDL_BLENDMODE_NONE); 
+                
                 ///////End Background under the text////////
 
                 ///////Lines that split the screen//////////

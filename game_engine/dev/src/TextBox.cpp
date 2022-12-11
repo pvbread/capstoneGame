@@ -28,7 +28,8 @@ void TextBox::render(SDL_Renderer* renderer)
     if (isClear)
     {
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND); 
-        SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 128);
+        SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 0);
+
         SDL_RenderFillRect(renderer, &textBox);
         surface = TTF_RenderUTF8_Blended(font, textStream.str().c_str(), textColor); 
     }
