@@ -14,7 +14,8 @@ public:
             int w, int h, 
             std::string inputFont = "../../assets/fonts/Roboto-Medium.ttf",
             SDL_Color textColor = {255, 0, 0, 255}, 
-            SDL_Color backgroundColor = {0, 0, 0, 0}
+            SDL_Color backgroundColor = {0, 0, 0, 0},
+            bool isClear = false
     );
     /// @brief Renders the given textbox
     /// @param renderer, when invoking, you can usually obtain this with getRenderer()
@@ -48,4 +49,5 @@ private:
     SDL_Rect textBox;
     SDL_Color textColor;
     SDL_Color backgroundColor;
+    bool isClear;
 };
