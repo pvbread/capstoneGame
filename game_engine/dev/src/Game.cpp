@@ -390,23 +390,7 @@ void DashDaCapo::runGameLoop()
         "JOKE",
         "ITEM"
     };
-    for (auto event: eventsToAdd)
-        eventList.push_back(event);
     
-    std::uniform_int_distribution<> dist(0,10); 
-
-    for (auto& [coordinate, event]: coordinateToEventTypeMap)
-    {
-        if (coordinateToTileTypeMap[coordinate] == ENDDOWN ||
-            coordinateToTileTypeMap[coordinate] == ENDUP ||
-            coordinateToTileTypeMap[coordinate] == ENDLEFT ||
-            coordinateToTileTypeMap[coordinate] == ENDRIGHT)
-        {
-            event = "BOSS";
-        }
-        else
-            event = eventList[dist(gen)];  
-    }
 
     std::string nextMapEvent = "";
     SDL_Rect mapEventBox = {200, 200, 400, 100};
@@ -693,6 +677,28 @@ void DashDaCapo::runGameLoop()
         //////SCREEN TRANSITIONS////////
         if (STATE_introSelectedOption == "New Game")
         {
+            // whenever select new game, reposition character to the beginning of map
+            // Don't know why 31 works instead of 30
+            characterController.move(31,31);
+            // moved event placements in here whenever starting a new game
+            for (auto event: eventsToAdd)
+                eventList.push_back(event);
+            
+            std::uniform_int_distribution<> dist(0,10); 
+
+            for (auto& [coordinate, event]: coordinateToEventTypeMap)
+            {
+                if (coordinateToTileTypeMap[coordinate] == ENDDOWN ||
+                    coordinateToTileTypeMap[coordinate] == ENDUP ||
+                    coordinateToTileTypeMap[coordinate] == ENDLEFT ||
+                    coordinateToTileTypeMap[coordinate] == ENDRIGHT)
+                {
+                    event = "BOSS";
+                }
+                else
+                    event = eventList[dist(gen)];  
+            }
+
             STATE_preTransition = true;
             if(alphaValueScreenTransition >= 255)
             {
