@@ -119,17 +119,16 @@ void DashDaCapo::runGameLoop()
 
     const std::vector<std::string> introOptions = {
         "New Game",
-        "Load Game",
         "Credits"
     };
 
     //const char* railwayFontPath = "./Raleway-Medium.ttf";
-    SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 100, 140, 400, 100,  
+    //SDL_Color introMenuColor = { 255, 0, 0, 255 };
+    BaseMenu introMenu = BaseMenu(90, 250, 515, 400, 100,  
                                   introOptions, 
                                   Font::raleway, 
-                                  Color::red,
-                                  Color::maroon,
+                                  Color::navy,
+                                  Color::cyan,
                                   getRenderer()
     );
 
@@ -229,6 +228,7 @@ void DashDaCapo::runGameLoop()
     TextureWrapper currPlayerTexture;
     TextureWrapper targetTexture;
     TextureWrapper getHitEffect;
+    TextureWrapper introScreen;
 
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
@@ -251,7 +251,8 @@ void DashDaCapo::runGameLoop()
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
         {&targetTexture, "../../assets/image/sixteenth.png"},  
-        {&getHitEffect, "../../assets/image/explosion-notes.png"}
+        {&getHitEffect, "../../assets/image/explosion-notes.png"},
+        {&introScreen, "../../assets/image/title.png"}
     }; 
     
     //so there's going to be a couple of these per char
@@ -1774,6 +1775,7 @@ void DashDaCapo::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
+                introScreen.render(getRenderer(), 0, 0);
                 introMenu.render(getRenderer()); 
 
                 if(STATE_postTransition == true)
