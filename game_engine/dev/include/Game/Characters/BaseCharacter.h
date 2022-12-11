@@ -83,6 +83,7 @@ public:
     int getSpeedModifier() const;
     int getItemModifier() const;
     int getParticipantsIndex() const;
+    BaseItem getItem() const;
     std::unordered_map<ActionType, std::vector<int>> getMovesAndRanges() const;
     bool isEnemy() const;
     void setHp(int newHp);
@@ -97,7 +98,7 @@ public:
     void changeLifeStatus(bool alive);
     void setAsPlayerOrEnemy(bool enemy);
     void setNewParticipantsIndex(int newIndex);
-
+    void setItem(BaseItem newItem);
 
 protected:
     std::string name;

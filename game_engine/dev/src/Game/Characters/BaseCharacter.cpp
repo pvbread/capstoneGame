@@ -443,3 +443,13 @@ void BaseCharacter::setNewParticipantsIndex(int newIndex)
 {
     participantsIndex = newIndex;
 }
+
+BaseItem BaseCharacter::getItem() const
+{
+    return itemEquipped;
+}
+
+void BaseCharacter::setItem(BaseItem newItem)
+{
+    itemEquipped = newItem;
+}
