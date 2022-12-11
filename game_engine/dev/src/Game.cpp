@@ -190,6 +190,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_bossFightBegin = false;
     bool STATE_didGetRandNumForJoke = true;
     bool STATE_isWorseItem = true;
+    bool STATE_isBossDead = false;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -1672,6 +1673,8 @@ void DashDaCapo::runGameLoop()
                             STATE_roundsSet = false;
                             STATE_timerStarted = false;
                             STATE_timerAnimationStarted = false;
+                            if (combatParticipants[4].getName()==enemies[0].getName())
+                                STATE_isBossDead = true;
 
                             currTarget = 0;
                             currOrderNum = 0;
@@ -1692,6 +1695,7 @@ void DashDaCapo::runGameLoop()
                             STATE_roundsSet = false;
                             STATE_timerStarted = false;
                             STATE_timerAnimationStarted = false;
+                        
 
                             currTarget = 0;
                             currOrderNum = 0;
@@ -1740,7 +1744,10 @@ void DashDaCapo::runGameLoop()
                                 {
                                     STATE_bossFightBegin = false;
                                     STATE_youWin = false;
-                                    screen = MAP;
+                                    if (STATE_isBossDead)
+                                        screen = INTRO;
+                                    else
+                                        screen = MAP;
                                     break;
                                 }
                             }
