@@ -226,6 +226,7 @@ void DashDaCapo::runGameLoop()
     TextureWrapper enemyBatTexture;
     TextureWrapper pizzaheadTexture;
     TextureWrapper carlTexture;
+    TextureWrapper bossTexture;
     TextureWrapper currPlayerTexture;
     TextureWrapper targetTexture;
     TextureWrapper getHitEffect;
@@ -248,6 +249,7 @@ void DashDaCapo::runGameLoop()
         {&enemyBatTexture, "../../assets/image/chars/enemysh-bat.png"},
         {&pizzaheadTexture, "../../assets/image/chars/pizzahead.png"},
         {&carlTexture, "../../assets/image/chars/Carl.png"},
+        {&bossTexture, "../../assets/image/chars/Carl-Boss-vestless.png"},
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
         {&targetTexture, "../../assets/image/sixteenth.png"},  
