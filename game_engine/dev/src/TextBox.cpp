@@ -55,3 +55,8 @@ void TextBox::changeBackgroundColor(SDL_Color color)
 {
     backgroundColor = color;
 }
+
+int TextBox::getBottomY() const
+{
+    return textBox.y + textBox.h;
+}
