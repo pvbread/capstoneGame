@@ -188,6 +188,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_updateHP = false;
     bool STATE_youWin = false;
     bool STATE_youLoose = false;
+    bool STATE_bossFightBegin = false;
     bool STATE_didGetRandNumForJoke = true;
     bool STATE_isWorseItem = true;
     int STATE_lastCurrTarget = 0;
@@ -1160,6 +1161,7 @@ void DashDaCapo::runGameLoop()
                         STATE_enemiesSet = true;
                         //change battle state
                         STATE_battle = true;
+                        STATE_bossFightBegin = true;
                         //setRoundOrder
                         roundOrder = setRoundTurns(combatParticipants);
                         STATE_roundsSet = true;
@@ -1735,6 +1737,7 @@ void DashDaCapo::runGameLoop()
                             {
                                 case SDLK_RETURN:
                                 {
+                                    STATE_bossFightBegin = false;
                                     STATE_youWin = false;
                                     screen = MAP;
                                     break;
@@ -1755,6 +1758,7 @@ void DashDaCapo::runGameLoop()
                             {
                                 case SDLK_ESCAPE:
                                 {
+                                    STATE_bossFightBegin = false;
                                     screen = INTRO;
                                     break;
                                 }
@@ -1935,37 +1939,75 @@ void DashDaCapo::runGameLoop()
                 
                 combatMenu.render(getRenderer());
 
-                // render players at their positions
-                for (int i = 0; i < 4; i++)
-                {
-                    if (combatParticipants[i].isAlive())
+                if(STATE_bossFightBegin != true){
+                    // render players at their positions
+                    for (int i = 0; i < 4; i++)
                     {
-                        if (combatParticipants[i].getName() == flute.getName())
-                            flutistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == drum.getName())
-                            drummerTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == bass.getName())
-                            bassistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == conductor.getName())
-                            flutistTexture.render(getRenderer(), charRendering[i], 400);
+                        if (combatParticipants[i].isAlive())
+                        {
+                            if (combatParticipants[i].getName() == flute.getName())
+                                flutistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == drum.getName())
+                                drummerTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == bass.getName())
+                                bassistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == conductor.getName())
+                                conductorTexture.render(getRenderer(), charRendering[i], 400);
+                        }
+                    }
+                
+                    // render enemies at their positions
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (combatParticipants[i+4].isAlive())
+                        {
+                            if (combatParticipants[i+4].getName() == enemies[0].getName())
+                                enemyBatTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[1].getName())
+                                enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[2].getName())
+                                pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[3].getName())
+                                carlTexture.render(getRenderer(), charRendering[i+4], 400); 
+                        }
+                    }
+                }
+                //in future when we choose to do different encounters this must update
+                else 
+                {
+                    // render players at their positions
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (combatParticipants[i].isAlive())
+                        {
+                            if (combatParticipants[i].getName() == flute.getName())
+                                flutistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == drum.getName())
+                                drummerTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == bass.getName())
+                                bassistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == conductor.getName())
+                                conductorTexture.render(getRenderer(), charRendering[i], 400);
+                        }
+                    }
+                
+                    // render enemies at their positions
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (combatParticipants[i+4].isAlive())
+                        {
+                            if (combatParticipants[i+4].getName() == enemies[0].getName())
+                                bossTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[1].getName())
+                                enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[2].getName())
+                                pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[3].getName())
+                                carlTexture.render(getRenderer(), charRendering[i+4], 400); 
+                        }
                     }
                 }
                 
-                // render enemies at their positions
-                for (int i = 0; i < 4; i++)
-                {
-                    if (combatParticipants[i+4].isAlive())
-                    {
-                        if (combatParticipants[i+4].getName() == enemies[0].getName())
-                            enemyBatTexture.render(getRenderer(), charRendering[i+4], 400);
-                        if (combatParticipants[i+4].getName() == enemies[1].getName())
-                            enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
-                        if (combatParticipants[i+4].getName() == enemies[2].getName())
-                            pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
-                        if (combatParticipants[i+4].getName() == enemies[3].getName())
-                            carlTexture.render(getRenderer(), charRendering[i+4], 400); 
-                    }
-                }
                 
                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
                 {  
