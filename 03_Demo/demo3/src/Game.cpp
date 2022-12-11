@@ -16,10 +16,12 @@ void DashDaCapo::runGameLoop()
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
+    TextureWrapper tileTexture2;
     TextureWrapper characterInMapTexture;  
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
-        {&tileTexture, "../../assets/image/newspritedraft.png"},
+        {&tileTexture, "../../assets/image/newspritedraft1.png"},
+        {&tileTexture2, "../../assets/image/newspritedraft2.png"},
         {&characterInMapTexture, "../../assets/image/maxwell.png"},
     }; 
     
@@ -124,6 +126,7 @@ void DashDaCapo::runGameLoop()
     SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     /////////// END CAMERA AND MAP CHARACTER INIT ///////
+    bool STATE_first = true;
 
     SDL_Event event;
     while (!getQuit())
@@ -140,6 +143,8 @@ void DashDaCapo::runGameLoop()
             {
                 if (event.key.keysym.sym == SDLK_9)
                     STATE_debug = !STATE_debug;
+                if (event.key.keysym.sym == SDLK_1)
+                    STATE_first = !STATE_first;
             }
             if (STATE_debug)
                 debugCont.onInput(event, MAP_WIDTH, MAP_HEIGHT);
@@ -162,9 +167,17 @@ void DashDaCapo::runGameLoop()
             characterController.move(MAP_WIDTH, MAP_HEIGHT);
             characterController.centerScreen(camera, MAP_WIDTH, MAP_HEIGHT);
         }
+        if (STATE_first)
         for(int i = 0; i < tileMap.size(); i++)
         {
             tileMap[i]->render(getRenderer(), tileTexture, camera, tilesClipped);
+        }
+        if (!STATE_first)
+        {
+            for(int i = 0; i < tileMap.size(); i++)
+        {
+            tileMap[i]->render(getRenderer(), tileTexture2, camera, tilesClipped);
+        } 
         }
         /*
         if (!STATE_debug)
