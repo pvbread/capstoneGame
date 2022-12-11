@@ -107,16 +107,15 @@ void DashDaCapo::runGameLoop()
 
     const std::vector<std::string> introOptions = {
         "New Game",
-        "Load Game",
         "Credits"
     };
 
     //const char* railwayFontPath = "./Raleway-Medium.ttf";
-    SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 100, 140, 400, 100,  
+    SDL_Color introMenuColor = { 255, 0, 0, 255 };//no clue what this does
+    BaseMenu introMenu = BaseMenu(100, 210, 500, 400, 100,  
                                   introOptions, 
                                   Font::raleway, 
-                                  Color::red,
+                                  Color::blue,
                                   Color::maroon,
                                   getRenderer()
     );
