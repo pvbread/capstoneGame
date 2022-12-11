@@ -32,6 +32,11 @@ void TextBox::render(SDL_Renderer* renderer)
     SDL_DestroyTexture(texture);
 }
 
+void TextBox::changeFont(std::string fontPath)
+{
+    font = TTF_OpenFont(fontPath.c_str(), fontSize); 
+}
+
 void TextBox::changeText(std::string text)
 {
     this->text = text;
@@ -54,4 +59,9 @@ void TextBox::changeTextColor(SDL_Color color)
 void TextBox::changeBackgroundColor(SDL_Color color)
 {
     backgroundColor = color;
+}
+
+int TextBox::getY() const
+{
+    return textBox.y;
 }

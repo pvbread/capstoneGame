@@ -191,7 +191,7 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1); 
+    //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
@@ -681,6 +681,25 @@ void DashDaCapo::runGameLoop()
     //double degrees = 0;
     //SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
+    TextBox t1 = TextBox("What a horrible", 60, 0, 0, 300, 100, Font::inter, Color::white, Color::black);
+    TextBox t2 = TextBox("night to have a curse", 60, 0, 350, 300, 100, Font::inter, Color::white, Color::black);
+    std::vector<int> sizes = {20, 30, 40, 50};
+    int sizesIdx = 0;
+    int fontsIdx = 0;
+    int colorsIdx = 0;
+    std::vector<std::string> fonts = {Font::inter, Font::lato, Font::montserrat, Font::openSans, Font::oswald, Font::raleway, Font::roboto, Font::satisfy, Font::sono};
+    std::vector<SDL_Color> colors = {Color::black, Color::blue, Color::cyan, Color::darkGreen, Color::gray, Color::lime, Color::magenta, Color::maroon, Color::navy, Color::silver, Color::purple};
+
+    bool STATE_colorTimerStarted = false;
+    float STATE_colorTimerCount = 0.0;
+    bool STATE_fontTimerStarted = false;
+    float STATE_fontTimerCount = 0.0;
+    bool STATE_bothTimerStarted = false;
+    float STATE_bothTimerCount = 0.0;
+    bool STATE_moveText = false;
+    bool STATE_touched = false;
+    int x1 = 0;
+
     SDL_Event event;
     while (!getQuit())
     {
@@ -754,22 +773,26 @@ void DashDaCapo::runGameLoop()
                 {
                     case SDLK_1:
                     {
-                        screen = INTRO;
+                        STATE_colorTimerStarted = !STATE_colorTimerStarted;
+                        STATE_colorTimerCount = timer->deltaTime() + 2;
                         break;
                     }
                     case SDLK_2:
                     {
-                        screen = MAP;
+                        STATE_fontTimerStarted = !STATE_fontTimerStarted;
+                        STATE_fontTimerCount = timer->deltaTime() + 2;
                         break;
                     }
                     case SDLK_3:
                     {
+                        STATE_bothTimerStarted = !STATE_bothTimerStarted;
+                        STATE_bothTimerCount = timer->deltaTime() + 2;
                         //screen = COMBAT;//will segfault hahahhahahahah
                         break;
                     }
                     case SDLK_4:
                     {
-                        screen = SANDBOX;
+                        STATE_moveText = !STATE_moveText;
                         break;
                     }
                     case SDLK_5:
@@ -1413,29 +1436,59 @@ void DashDaCapo::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
-                introMenu.render(getRenderer()); 
 
-                if(STATE_postTransition == true)
-                {
-                    alphaValueScreenTransition -= 5;
-                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
-                    if(alphaValueScreenTransition == 0)
-                    {
-                        STATE_postTransition = false;  
-                    }
-                    blackScreenTransition.render(getRenderer(), 0, 0);
+                if (STATE_colorTimerStarted && timer->deltaTime() > STATE_colorTimerCount)
+                { 
+                    colorsIdx = (colorsIdx+1) % colors.size();
+                    int colorsIdx2 = (colorsIdx+6) % colors.size();
+                    t1.changeTextColor(colors[colorsIdx]);
+                    t2.changeTextColor(colors[colorsIdx2]);
+                    STATE_colorTimerCount = timer->deltaTime() + 2;
                 }
-                else if(STATE_preTransition == true)
-                {
-                    alphaValueScreenTransition += 5;
-                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
-                    if(alphaValueScreenTransition == 255)
-                    {
-                        STATE_preTransition = false;
-                    }
-                    blackScreenTransition.render(getRenderer(), 0, 0);
+
+                if (STATE_fontTimerStarted && timer->deltaTime() > STATE_fontTimerCount)
+                { 
+                    fontsIdx = (fontsIdx+1) % fonts.size();
+                    int fontsIdx2 = (fontsIdx+6) % fonts.size();
+                    t1.changeFont(fonts[fontsIdx]);
+                    t2.changeFont(fonts[fontsIdx2]);
+                    STATE_fontTimerCount = timer->deltaTime() + 2;
+                }
+
+                if (STATE_moveText)
+                { 
+                    if (STATE_touched)
+                        x1 += 4;
+                    else
+                        x1 -= 4;
+                
+                    if (x1 > SCREEN_WIDTH-560)
+                        STATE_touched = !STATE_touched;
+
+                    if (x1 < 0)
+                        STATE_touched = !STATE_touched;
+
+                    t1.changePosition(x1, t1.getY());
+                    t2.changePosition(x1, t2.getY());
+                } 
+
+                if (STATE_bothTimerStarted && timer->deltaTime() > STATE_bothTimerCount)
+                { 
+                    fontsIdx = (fontsIdx+1) % fonts.size();
+                    int fontsIdx2 = (fontsIdx+6) % fonts.size();
+                    t1.changeFont(fonts[fontsIdx]);
+                    t2.changeFont(fonts[fontsIdx2]);
+                    colorsIdx = (colorsIdx+1) % colors.size();
+                    int colorsIdx2 = (colorsIdx+6) % colors.size();
+                    t1.changeTextColor(colors[colorsIdx]);
+                    t2.changeTextColor(colors[colorsIdx2]);
+                    t1.changeBackgroundColor(colors[colorsIdx2]);
+                    t2.changeBackgroundColor(colors[colorsIdx]);
+                    STATE_bothTimerCount = timer->deltaTime() + 2;
                 }
                 
+                t1.render(getRenderer());
+                t2.render(getRenderer()); 
                 break;
             }
             case MAP:
