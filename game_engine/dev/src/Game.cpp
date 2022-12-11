@@ -46,8 +46,8 @@ void DashDaCapo::runGameLoop()
         {{1, "I went to buy some camo pants but couldnt find any."},
         {2, "I failed math so many times at school, I cant even count."},
         {3, "When life gives you melons, you might be dyslexic."},
-        {4, "I cant believe I got fired from the calendar factory. All I did was take a day off."},
-        {5, "Most people are shocked when they find out how bad I am as an electrician."},
+        {4, "I used to think I was indecisive. But now Im not so sure."},
+        {5, "Russian dolls are so full of themselves."},
         {6, "Russian dolls are so full of themselves."}};
 
     ////////ONE LINER JOKES LIST////////
