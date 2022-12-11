@@ -1137,7 +1137,7 @@ void DashDaCapo::runGameLoop()
                     else if (nextMapEvent == "BOSS")
                     {
                         // init boss and 3 dead characters as placeholders
-                        BaseCharacter boss = BaseCharacter("boss", 100, 0, 8, 5, 0, 0, 0, true);
+                        BaseCharacter boss = BaseCharacter("Boss", 100, 0, 8, 5, 0, 0, 0, true);
                         BaseCharacter e2 = BaseCharacter("", 0, 6, 1, 0, 3, 3, 3, true);
                         BaseCharacter e3 = BaseCharacter("", 0, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("", 0, 0, 1, 0, 3, 3, 3, true);
