@@ -39,6 +39,8 @@ public:
     /// @brief Changes the background color of the text
     /// @param color 
     void changeBackgroundColor(SDL_Color color);
+
+    int getBottomY() const;
 private:
     std::string text;
     TTF_Font *font;

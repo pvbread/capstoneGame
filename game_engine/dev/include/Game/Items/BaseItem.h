@@ -8,6 +8,7 @@ public:
     BaseItem(std::string name, std::string type, int mod);
     std::string getName() const;
     std::string getType() const;
+    std::string getMessage() const;
     int getMod() const;
     void setName(std::string name);
     void setType(std::string type);

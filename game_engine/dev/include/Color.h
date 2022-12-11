@@ -10,7 +10,8 @@ public:
     static constexpr SDL_Color white = {255, 255, 255, 0};
     static constexpr SDL_Color red = {255, 0, 0, 0};
     static constexpr SDL_Color lime = {0, 255, 0, 0};
-    static constexpr SDL_Color blue = {0, 0, 255, 0};
+    static constexpr SDL_Color blue = {0, 0, 180, 0};
+    static constexpr SDL_Color lightBlue = {0, 128, 255, 0};
     static constexpr SDL_Color yellow = {255, 255, 0, 0};
     static constexpr SDL_Color cyan = {0, 255, 255, 0};
     static constexpr SDL_Color magenta = {255, 0, 255, 0};
