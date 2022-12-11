@@ -234,7 +234,7 @@ void DashDaCapo::runGameLoop()
 
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
-        {&tileTexture, "../../assets/image/newspritedraft.png"},
+        {&tileTexture, "../../assets/image/newspritedraft3.png"},
         {&characterInMapTextureDown, "../../assets/image/chars/flutist-sprite-down.png"},
         {&characterInMapTextureLeft, "../../assets/image/chars/flutist-sprite-left.png"},
         {&characterInMapTextureRight, "../../assets/image/chars/flutist-sprite-right.png"},
