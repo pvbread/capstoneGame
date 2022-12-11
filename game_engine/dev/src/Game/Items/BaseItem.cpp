@@ -45,9 +45,9 @@ std::string BaseItem::getMessage() const
     else if (itemType == "speed")
         msg += "speed";
     else if (itemType == "dodge")
-        msg += "speed";
+        msg += "dodge";
     else if (itemType == "hit")
-        msg += "speed";
+        msg += "hit";
     else
         return "No item";
     return msg;
