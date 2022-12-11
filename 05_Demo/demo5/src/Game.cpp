@@ -106,14 +106,38 @@ void DashDaCapo::runGameLoop()
     //////////// START MENUS INIT ///////////////
 
     const std::vector<std::string> introOptions = {
-        "New Game",
-        "Load Game",
-        "Credits"
+        "New Tab",
+        "New Window",
+        "New Priv Win",
+        "Close File",
+        "Open File",
+        "Close Tab"
     };
 
     //const char* railwayFontPath = "./Raleway-Medium.ttf";
-    SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 100, 140, 400, 100,  
+    
+    BaseMenu introMenu2 = BaseMenu(100, 70, 70, 400, 100,  
+                                  introOptions, 
+                                  Font::satisfy, 
+                                  Color::green,
+                                  Color::darkGreen,
+                                  getRenderer()
+    );
+    BaseMenu introMenu3 = BaseMenu(100, 70, 70, 400, 100,  
+                                  introOptions, 
+                                  Font::sono, 
+                                  Color::lightNavy,
+                                  Color::navy,
+                                  getRenderer()
+    );
+    BaseMenu introMenu = BaseMenu(100, 70, 70, 400, 100, 
+                                  introOptions, 
+                                  Font::inter, 
+                                  Color::cyan,
+                                  Color::teal,
+                                  getRenderer()
+    );
+    BaseMenu introMenu4 = BaseMenu(100, 70, 70, 400, 100,  
                                   introOptions, 
                                   Font::raleway, 
                                   Color::red,
@@ -191,7 +215,7 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
-    Mix_PlayMusic(SelectOST, -1); 
+    //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
@@ -759,22 +783,22 @@ void DashDaCapo::runGameLoop()
                     }
                     case SDLK_2:
                     {
-                        screen = MAP;
+                        screen = INTRO2;
                         break;
                     }
                     case SDLK_3:
                     {
-                        //screen = COMBAT;//will segfault hahahhahahahah
+                        screen = INTRO3;
                         break;
                     }
                     case SDLK_4:
                     {
-                        screen = SANDBOX;
+                        screen = INTRO4;
                         break;
                     }
                     case SDLK_5:
                     {
-                        screen = STATUS_MENU;
+                        //screen = STATUS_MENU;
                         break;
                     }
                     case SDLK_6:
@@ -795,6 +819,57 @@ void DashDaCapo::runGameLoop()
                 { 
                     
                     introMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
+                    if (STATE_introSelectedOption != "NONE")
+                    {
+                        if (STATE_introSelectedOption == "New Game")
+                        {
+                            
+                            STATE_newGameSelected = true;
+                            STATE_gameOver = false; 
+                            STATE_mapScreenOpenForTransition = true;
+                        }
+                    }
+                    
+                    break;
+                }
+                case INTRO2:
+                { 
+                    
+                    introMenu2.onInput(event, SelectMusic, STATE_introSelectedOption);
+                    if (STATE_introSelectedOption != "NONE")
+                    {
+                        if (STATE_introSelectedOption == "New Game")
+                        {
+                            
+                            STATE_newGameSelected = true;
+                            STATE_gameOver = false; 
+                            STATE_mapScreenOpenForTransition = true;
+                        }
+                    }
+                    
+                    break;
+                }
+                case INTRO3:
+                { 
+                    
+                    introMenu3.onInput(event, SelectMusic, STATE_introSelectedOption);
+                    if (STATE_introSelectedOption != "NONE")
+                    {
+                        if (STATE_introSelectedOption == "New Game")
+                        {
+                            
+                            STATE_newGameSelected = true;
+                            STATE_gameOver = false; 
+                            STATE_mapScreenOpenForTransition = true;
+                        }
+                    }
+                    
+                    break;
+                }
+                case INTRO4:
+                { 
+                    
+                    introMenu4.onInput(event, SelectMusic, STATE_introSelectedOption);
                     if (STATE_introSelectedOption != "NONE")
                     {
                         if (STATE_introSelectedOption == "New Game")
@@ -1414,6 +1489,93 @@ void DashDaCapo::runGameLoop()
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
                 introMenu.render(getRenderer()); 
+
+                if(STATE_postTransition == true)
+                {
+                    alphaValueScreenTransition -= 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 0)
+                    {
+                        STATE_postTransition = false;  
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                else if(STATE_preTransition == true)
+                {
+                    alphaValueScreenTransition += 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 255)
+                    {
+                        STATE_preTransition = false;
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                
+                break;
+            }
+            case INTRO2:
+            {
+                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
+                SDL_RenderClear(getRenderer());
+                introMenu2.render(getRenderer()); 
+
+                if(STATE_postTransition == true)
+                {
+                    alphaValueScreenTransition -= 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 0)
+                    {
+                        STATE_postTransition = false;  
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                else if(STATE_preTransition == true)
+                {
+                    alphaValueScreenTransition += 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 255)
+                    {
+                        STATE_preTransition = false;
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                
+                break;
+            }
+            case INTRO3:
+            {
+                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
+                SDL_RenderClear(getRenderer());
+                introMenu3.render(getRenderer()); 
+
+                if(STATE_postTransition == true)
+                {
+                    alphaValueScreenTransition -= 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 0)
+                    {
+                        STATE_postTransition = false;  
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                else if(STATE_preTransition == true)
+                {
+                    alphaValueScreenTransition += 5;
+                    blackScreenTransition.setAlpha(alphaValueScreenTransition);
+                    if(alphaValueScreenTransition == 255)
+                    {
+                        STATE_preTransition = false;
+                    }
+                    blackScreenTransition.render(getRenderer(), 0, 0);
+                }
+                
+                break;
+            }
+            case INTRO4:
+            {
+                SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
+                SDL_RenderClear(getRenderer());
+                introMenu4.render(getRenderer()); 
 
                 if(STATE_postTransition == true)
                 {
