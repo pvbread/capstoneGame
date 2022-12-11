@@ -52,7 +52,7 @@ BaseMenu::BaseMenu(int fontSize,
 
 
         TTF_SizeText(menuFont, CURSOR.c_str(), &cursorRectangle.w, &cursorRectangle.h);
-        surface = TTF_RenderUTF8_Blended(menuFont, CURSOR.c_str(), fontColor);
+        surface = TTF_RenderUTF8_Blended(menuFont, CURSOR.c_str(), fontHighlightColor);
         cursorTextures[i] = SDL_CreateTextureFromSurface(renderer, surface);
     }
 
