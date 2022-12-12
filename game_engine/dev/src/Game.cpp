@@ -210,7 +210,7 @@ void DashDaCapo::runGameLoop()
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
     Mix_Chunk *MapNotificationSound = Mix_LoadWAV("./MapNotification.wav");
-    //Mix_PlayMusic(SelectOST, -1); 
+    Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
     TextureWrapper tileTexture;
