@@ -235,6 +235,7 @@ void DashDaCapo::runGameLoop()
     TextureWrapper introScreen;
     TextureWrapper statusBg;
     TextureWrapper orderBg;
+    TextureWrapper combatStatBg;
 
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
@@ -261,7 +262,8 @@ void DashDaCapo::runGameLoop()
         {&getHitEffect, "../../assets/image/explosion-notes.png"},
         {&introScreen, "../../assets/image/title.png"},
         {&statusBg, "../../assets/image/road.png"},
-        {&orderBg, "../../assets/image/orderBg.png"} 
+        {&orderBg, "../../assets/image/orderBg.png"},
+        {&combatStatBg, "../../assets/image/statBg.png"}  
 
     }; 
     
@@ -286,17 +288,17 @@ void DashDaCapo::runGameLoop()
 
     
 
-    TextBox combatStatFlute = TextBox("flute", 25, 50, 630, 150, 30, Font::inter, Color::black, Color::cyan);
-    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 50, 660, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatFlute = TextBox("flute", 25, 50, 630, 150, 30, Font::inter, Color::black, Color::cyan, true);
+    TextBox combatStatFluteHP = TextBox(prefixHP + std::to_string(flute.getHp()), 25, 50, 660, 150, 30, Font::inter, Color::black, Color::cyan, true);
     
-    TextBox combatStatConductor = TextBox("conductor", 25, 200, 630, 150, 30, Font::inter, Color::black, Color::cyan);
-    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 200, 660, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatConductor = TextBox("conductor", 25, 200, 630, 150, 30, Font::inter, Color::black, Color::cyan, true);
+    TextBox combatStatConductorHP = TextBox(prefixHP + std::to_string(conductor.getHp()), 25, 200, 660, 150, 30, Font::inter, Color::black, Color::cyan, true);
 
-    TextBox combatStatBass = TextBox("bass", 25, 350, 630, 150, 30, Font::inter, Color::black, Color::cyan);
-    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 350, 660, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatBass = TextBox("bass", 25, 350, 630, 150, 30, Font::inter, Color::black, Color::cyan, true);
+    TextBox combatStatBassHP = TextBox(prefixHP + std::to_string(bass.getHp()), 25, 350, 660, 150, 30, Font::inter, Color::black, Color::cyan, true);
     
-    TextBox combatStatDrum = TextBox("drum", 25, 500, 630, 150, 30, Font::inter, Color::black, Color::cyan);
-    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 500, 660, 150, 30, Font::inter, Color::black, Color::cyan);
+    TextBox combatStatDrum = TextBox("drum", 25, 500, 630, 150, 30, Font::inter, Color::black, Color::cyan, true);
+    TextBox combatStatDrumHP = TextBox(prefixHP + std::to_string(drum.getHp()), 25, 500, 660, 150, 30, Font::inter, Color::black, Color::cyan, true);
 
     std::vector<TextBox> combatStatusRow {
         combatStatFlute, combatStatConductor,
@@ -1936,11 +1938,13 @@ void DashDaCapo::runGameLoop()
 
                 
                 //Status Pane
+                /*
                 SDL_Rect statusPane = {0, 600, 720, 120};
                 SDL_Color colStatus = Color::cyan;
                 SDL_SetRenderDrawColor(getRenderer(), colStatus.r, colStatus.g, colStatus.b, 0);
                 SDL_RenderFillRect(getRenderer(), &statusPane);
-
+                */
+                combatStatBg.render(getRenderer(), 0, 600);
                 //Order Pane
                 orderBg.render(getRenderer(), 720, 0);
                 /*
