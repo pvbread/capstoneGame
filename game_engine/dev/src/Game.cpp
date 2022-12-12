@@ -149,7 +149,7 @@ void DashDaCapo::runGameLoop()
                                    Color::maroon, 
                                    getRenderer()
     );*/
-    BaseMenu combatMenu = BaseMenu(50, 750, 490, 100, 50, 
+    BaseMenu combatMenu = BaseMenu(50, 760, 490, 100, 50, 
                                    combatOptionsStrings, 
                                    Font::openSans, 
                                    Color::white, 
@@ -237,7 +237,9 @@ void DashDaCapo::runGameLoop()
     TextureWrapper introScreen;
     TextureWrapper statusBg;
     TextureWrapper orderBg;
+    TextureWrapper basemenuBg;
     TextureWrapper combatStatBg;
+
 
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
@@ -265,6 +267,7 @@ void DashDaCapo::runGameLoop()
         {&introScreen, "../../assets/image/title.png"},
         {&statusBg, "../../assets/image/road.png"},
         {&orderBg, "../../assets/image/orderBg.png"},
+        {&basemenuBg, "../../assets/image/basemenuBg.png"} 
         {&combatStatBg, "../../assets/image/statBg.png"}  
 
     }; 
@@ -2024,10 +2027,13 @@ void DashDaCapo::runGameLoop()
                 SDL_RenderFillRect(getRenderer(), &orderPane);
                 */
                 //Menu Pane
+                /*
                 SDL_Rect menuPane = {720, 480, 720, 240};
                 SDL_Color colMenu = Color::maroon;
                 SDL_SetRenderDrawColor(getRenderer(), colMenu.r, colMenu.g, colMenu.b, 0);
                 SDL_RenderFillRect(getRenderer(), &menuPane);
+                */
+                basemenuBg.render(getRenderer(), 720, 480);
                 
                 combatMenu.render(getRenderer());
 
