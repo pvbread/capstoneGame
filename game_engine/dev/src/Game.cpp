@@ -239,6 +239,7 @@ void DashDaCapo::runGameLoop()
     TextureWrapper orderBg;
     TextureWrapper basemenuBg;
     TextureWrapper combatStatBg;
+    TextureWrapper maxwell;
 
 
     //add sprite sheet here
@@ -268,7 +269,8 @@ void DashDaCapo::runGameLoop()
         {&statusBg, "../../assets/image/road.png"},
         {&orderBg, "../../assets/image/orderBg.png"},
         {&basemenuBg, "../../assets/image/basemenuBg.png"}, 
-        {&combatStatBg, "../../assets/image/statBg.png"}  
+        {&combatStatBg, "../../assets/image/statBg.png"},
+        {&maxwell, "../../assets/image/maxwell2.png"}   
 
     }; 
     
@@ -732,6 +734,16 @@ void DashDaCapo::runGameLoop()
     TextBox healNotification = TextBox("", 30, 20, 20, 300, 100, Font::openSans, Color::white, Color::black);
     ///// .  END MAP NOTIFS //////////////
 
+
+    ///////// START CREDITS ///////////////
+    
+    TextBox credit1 = TextBox("David Lin", 50, 710, 20, 300, 100, Font::openSans, Color::black, Color::black, true);
+    TextBox credit2 = TextBox("Alexander Michelman", 50, 435, 120, 300, 100, Font::openSans, Color::black, Color::black, true);
+    TextBox credit3 = TextBox("Raymond Naula", 50, 535, 210, 300, 100, Font::openSans, Color::black, Color::black, true);
+    TextBox credit4 = TextBox("Pedro Vizzarro Vallejos", 50, 375, 320, 300, 100, Font::openSans, Color::black, Color::black, true);
+    TextBox credit5 = TextBox("Jack Wu", 50, 750, 420, 300, 100, Font::openSans, Color::black, Color::black, true); 
+    ///////// END CREDITS /////////////////
+
     SDL_Event event;
     while (!getQuit())
     {
@@ -1138,6 +1150,11 @@ void DashDaCapo::runGameLoop()
                             STATE_newGameSelected = true;
                             STATE_gameOver = false; 
                             STATE_mapScreenOpenForTransition = true;
+                        }
+                        if (STATE_introSelectedOption == "Credits")
+                        {
+                            screen = CREDITS;
+                            STATE_introSelectedOption = "NONE";
                         }
                     }
                     
@@ -1895,6 +1912,19 @@ void DashDaCapo::runGameLoop()
                 }
                 
                 break;
+            }
+            case CREDITS:
+            {
+                statusBg.render(getRenderer(), 0, 0);
+                //maxwell.render(getRenderer(), 100, 400);
+                SDL_Rect rect = {470, 400, 300, 200};
+                SDL_RenderCopy(getRenderer(), maxwell.getTexture(), nullptr, &rect);
+                credit1.render(getRenderer());
+                credit2.render(getRenderer()); 
+                credit3.render(getRenderer()); 
+                credit4.render(getRenderer());
+                credit5.render(getRenderer());
+                break;  
             }
             case MAP:
             {
