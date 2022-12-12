@@ -116,3 +116,8 @@ bool TextureWrapper::render(SDL_Renderer* renderer,
     return true;
 }
 
+SDL_Texture* TextureWrapper::getTexture() const
+{
+    return texture;
+}
+

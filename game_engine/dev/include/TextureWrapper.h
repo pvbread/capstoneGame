@@ -28,6 +28,7 @@ public:
                 double angle = 0.0f, 
                 SDL_Point* center = nullptr,
                 SDL_RendererFlip flip = SDL_FLIP_NONE);
+    SDL_Texture* getTexture() const;
     
 private:
     SDL_Texture* texture;

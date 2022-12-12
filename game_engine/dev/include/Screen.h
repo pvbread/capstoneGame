@@ -8,6 +8,7 @@ enum Screen
     SANDBOX = 4,
     STATUS_MENU = 5,
     WIN = 6,
-    DEFEAT = 7
+    DEFEAT = 7,
+    CREDITS = 8
 
 };
