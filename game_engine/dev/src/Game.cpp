@@ -267,7 +267,7 @@ void DashDaCapo::runGameLoop()
         {&introScreen, "../../assets/image/title.png"},
         {&statusBg, "../../assets/image/road.png"},
         {&orderBg, "../../assets/image/orderBg.png"},
-        {&basemenuBg, "../../assets/image/basemenuBg.png"} 
+        {&basemenuBg, "../../assets/image/basemenuBg.png"}, 
         {&combatStatBg, "../../assets/image/statBg.png"}  
 
     }; 
