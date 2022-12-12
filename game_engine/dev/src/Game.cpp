@@ -21,6 +21,7 @@ void DashDaCapo::runGameLoop()
     BaseCharacter drum = BaseCharacter("Drummer", 50, 2, 1, 0, 0, 3, 3,false);
     BaseCharacter flute = BaseCharacter("Flutist", 20, 6, 1, 0, 0, 3, 3,false);
     BaseCharacter bass = BaseCharacter("Bassist", 60, 1, 3, 0, 0, 3, 3,false);
+
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
     bass.setNewParticipantsIndex(2);
@@ -735,6 +736,12 @@ void DashDaCapo::runGameLoop()
         //////SCREEN TRANSITIONS////////
         if (STATE_introSelectedOption == "New Game")
         {
+            // whenever select new game, reposition character to the beginning of map
+            // Don't know why 31 works instead of 30
+            characterController.move(31,31);
+            // moved event placements in here whenever starting a new game
+            
+
             STATE_preTransition = true;
             if(alphaValueScreenTransition >= 255)
             {
@@ -792,7 +799,7 @@ void DashDaCapo::runGameLoop()
             {
                 if ( combatParticipants[i].isEnemy() && combatParticipants[i].getName()==roundOrder[currOrderNum])
                 {
-                    std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "RANDOM");
+                    std::pair<ActionType, std::vector<std::vector<int>>> decision = combatParticipants[i].getActionAndTargets(combatParticipants, "logic");
                     std::uniform_int_distribution<> distForTarget(0,decision.second.size()-1);
                     int targetChoice = distForTarget(gen);
                     currTarget = targetChoice;
@@ -991,20 +998,63 @@ void DashDaCapo::runGameLoop()
                                 if (combatParticipants[i].getName() == conductor.getName())
                                     conductor = combatParticipants[i];                                
                         }
-                        //STATE_combatMenuTargetSelected = false;
+
+                        conductorHPName.changeText(std::to_string(conductor.getHp()) + "-");
+                        statMenuConductorRow[1] = conductorHPName;
+                        bassHPName.changeText(std::to_string(bass.getHp()) + "-");
+                        statMenuBassRow[1] = bassHPName;
+                        drumHPName.changeText(std::to_string(drum.getHp()) + "-");
+                        statMenuDrumRow[1] = drumHPName;
+                        fluteHPName.changeText(std::to_string(flute.getHp()) + "-");
+                        statMenuFluteRow[1] = fluteHPName;
+
+                        STATE_combatMenuTargetSelected = false;
+                        STATE_battle = false;
+                        STATE_enemiesSet = false;
+                        STATE_roundsSet = false;
+                        STATE_timerStarted = false;
+                        STATE_timerAnimationStarted = false;
+
                         currTarget = 0;
                         currOrderNum = 0;
+                        STATE_youWin = true;
                         screen = WIN;
                         break;
+                       
                     }
                     else if (isPlayerTeamAlive == false)
                     {
                         //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
                         //playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                         
+                        // reset player characters health when defeat
+                        flute.setHp(flute.getMaxHp());
+                        conductor.setHp(conductor.getMaxHp());
+                        bass.setHp(bass.getMaxHp());
+                        drum.setHp(drum.getMaxHp());
+                        playerTeam = {flute, conductor, bass, drum};
+
+                        conductorHPName.changeText(std::to_string(conductor.getHp()) + "-");
+                        statMenuConductorRow[1] = conductorHPName;
+                        bassHPName.changeText(std::to_string(bass.getHp()) + "-");
+                        statMenuBassRow[1] = bassHPName;
+                        drumHPName.changeText(std::to_string(drum.getHp()) + "-");
+                        statMenuDrumRow[1] = drumHPName;
+                        fluteHPName.changeText(std::to_string(flute.getHp()) + "-");
+                        statMenuFluteRow[1] = fluteHPName;
+
                         STATE_combatMenuTargetSelected = false;
+                        //STATE_gameOver = true; 
+                        STATE_newGameSelected = false;
+                        STATE_enemiesSet = false;
+                        STATE_battle = false;
+                        STATE_roundsSet = false;
+                        STATE_timerStarted = false;
+                        STATE_timerAnimationStarted = false;
+
                         currTarget = 0;
                         currOrderNum = 0;
+                        STATE_youLoose = true;
                         screen = DEFEAT;
                         break;
                     }
@@ -1106,10 +1156,10 @@ void DashDaCapo::runGameLoop()
                     
                         //init enemy characters
 
-                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e4 = BaseCharacter("Carl         ", 20, 0, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 1, 3, 3, 3, true);
+                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 1, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 3, 3, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("Carl", 20, 0, 5, 5, 3, 3, 3, true);
                         
                         //normally this will just get enemies from a randomly selected "PACK"
                         e1.setNewParticipantsIndex(4);
@@ -1696,8 +1746,23 @@ void DashDaCapo::runGameLoop()
                         else if (isPlayerTeamAlive == false)
                         {
                             //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
-                            playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
+                            //playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
                             
+                            flute.setHp(flute.getMaxHp());
+                            conductor.setHp(conductor.getMaxHp());
+                            bass.setHp(bass.getMaxHp());
+                            drum.setHp(drum.getMaxHp());
+                            playerTeam = {flute, conductor, bass, drum};
+
+                            conductorHPName.changeText(std::to_string(conductor.getHp()) + "-");
+                            statMenuConductorRow[1] = conductorHPName;
+                            bassHPName.changeText(std::to_string(bass.getHp()) + "-");
+                            statMenuBassRow[1] = bassHPName;
+                            drumHPName.changeText(std::to_string(drum.getHp()) + "-");
+                            statMenuDrumRow[1] = drumHPName;
+                            fluteHPName.changeText(std::to_string(flute.getHp()) + "-");
+                            statMenuFluteRow[1] = fluteHPName;
+
                             STATE_combatMenuTargetSelected = false;
                             //STATE_gameOver = true; 
                             STATE_newGameSelected = false;
@@ -1961,6 +2026,7 @@ void DashDaCapo::runGameLoop()
                     // render players at their positions
                     for (int i = 0; i < 4; i++)
                     {
+
                         if (combatParticipants[i].isAlive())
                         {
                             if (combatParticipants[i].getName() == flute.getName())
@@ -1972,6 +2038,7 @@ void DashDaCapo::runGameLoop()
                             if (combatParticipants[i].getName() == conductor.getName())
                                 conductorTexture.render(getRenderer(), charRendering[i], 400);
                         }
+
                     }
                 
                     // render enemies at their positions
