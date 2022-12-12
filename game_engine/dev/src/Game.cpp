@@ -416,22 +416,22 @@ void DashDaCapo::runGameLoop()
         "ITEM"
     };
     for (auto event: eventsToAdd)
-                eventList.push_back(event);
-            
-            std::uniform_int_distribution<> dist(0,10); 
+        eventList.push_back(event);
+    
+    std::uniform_int_distribution<> dist(0,10); 
 
-            for (auto& [coordinate, event]: coordinateToEventTypeMap)
-            {
-                if (coordinateToTileTypeMap[coordinate] == ENDDOWN ||
-                    coordinateToTileTypeMap[coordinate] == ENDUP ||
-                    coordinateToTileTypeMap[coordinate] == ENDLEFT ||
-                    coordinateToTileTypeMap[coordinate] == ENDRIGHT)
-                {
-                    event = "BOSS";
-                }
-                else
-                    event = eventList[dist(gen)];  
-            }
+    for (auto& [coordinate, event]: coordinateToEventTypeMap)
+    {
+        if (coordinateToTileTypeMap[coordinate] == ENDDOWN ||
+            coordinateToTileTypeMap[coordinate] == ENDUP ||
+            coordinateToTileTypeMap[coordinate] == ENDLEFT ||
+            coordinateToTileTypeMap[coordinate] == ENDRIGHT)
+        {
+            event = "BOSS";
+        }
+        else
+            event = eventList[dist(gen)];  
+    }
 
     std::string nextMapEvent = "";
     SDL_Rect mapEventBox = {200, 200, 400, 100};
