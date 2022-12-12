@@ -1127,7 +1127,7 @@ void DashDaCapo::runGameLoop()
                         BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
                         BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e4 = BaseCharacter("Carl         ", 20, 0, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("Mini Carl", 20, 0, 1, 0, 3, 3, 3, true);
                         
                         //normally this will just get enemies from a randomly selected "PACK"
                         e1.setNewParticipantsIndex(4);
@@ -1163,7 +1163,7 @@ void DashDaCapo::runGameLoop()
                     else if (nextMapEvent == "BOSS")
                     {
                         // init boss and 3 dead characters as placeholders
-                        BaseCharacter boss = BaseCharacter("Boss", 100, 0, 8, 5, 0, 0, 0, true);
+                        BaseCharacter boss = BaseCharacter("Carl", 100, 0, 8, 5, 0, 0, 0, true);
                         BaseCharacter e2 = BaseCharacter("", 0, 6, 1, 0, 3, 3, 3, true);
                         BaseCharacter e3 = BaseCharacter("", 0, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("", 0, 0, 1, 0, 3, 3, 3, true);
@@ -1697,7 +1697,7 @@ void DashDaCapo::runGameLoop()
                             STATE_roundsSet = false;
                             STATE_timerStarted = false;
                             STATE_timerAnimationStarted = false;
-                            if (combatParticipants[4].getName()=="Boss")
+                            if (combatParticipants[4].getName()=="Carl")
                                 STATE_isBossDead = true;
 
                             currTarget = 0;
