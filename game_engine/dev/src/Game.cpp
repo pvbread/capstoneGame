@@ -46,8 +46,8 @@ void DashDaCapo::runGameLoop()
         {{1, "I went to buy some camo pants but couldnt find any."},
         {2, "I failed math so many times at school, I cant even count."},
         {3, "When life gives you melons, you might be dyslexic."},
-        {4, "I cant believe I got fired from the calendar factory. All I did was take a day off."},
-        {5, "Most people are shocked when they find out how bad I am as an electrician."},
+        {4, "I used to think I was indecisive. But now Im not so sure."},
+        {5, "Russian dolls are so full of themselves."},
         {6, "Russian dolls are so full of themselves."}};
 
     ////////ONE LINER JOKES LIST////////
@@ -178,6 +178,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_debug = false;
     bool STATE_itemNotificationShowing = false;
     bool STATE_healNotificationShowing = false;
+    bool STATE_jokeNotificationShowing = false;
     bool STATE_preTransition = false;
     bool STATE_postTransition = true;
     bool STATE_statMenu = false;
@@ -206,6 +207,7 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
+    Mix_Chunk *MapNotificationSound = Mix_LoadWAV("./MapNotification.wav");
     //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
@@ -1182,6 +1184,7 @@ void DashDaCapo::runGameLoop()
                     }
                     else if (nextMapEvent == "ITEM" && !STATE_itemNotificationShowing)
                     {
+                        Mix_PlayChannel(-1, MapNotificationSound, 0);
                         //std::random_device rd;
                         //std::mt19937 gen(rd());
                         std::uniform_int_distribution<> distForRarity(1,100);
@@ -1341,6 +1344,7 @@ void DashDaCapo::runGameLoop()
                     }
                     else if (nextMapEvent == "HEAL" && !STATE_healNotificationShowing)
                     {
+                        Mix_PlayChannel(-1, MapNotificationSound, 0);
                         std::uniform_int_distribution<> distForHeal(1,3);
                         STATE_amountHealed = distForHeal(gen);
                         for (auto& player: playerTeam)
@@ -1349,6 +1353,11 @@ void DashDaCapo::runGameLoop()
                                 player.setHp(player.getHp() + STATE_amountHealed);
                         }
                         STATE_healNotificationShowing = true;
+                    }
+                    else if (nextMapEvent == "JOKE" && !STATE_jokeNotificationShowing)
+                    {
+                        Mix_PlayChannel(-1, MapNotificationSound, 0);
+                        STATE_jokeNotificationShowing = true;
                     }
                     
                     
