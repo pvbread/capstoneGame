@@ -24,16 +24,63 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
 {
     ActionType chosenMove;
     std::vector<std::vector<int>> targets;
+    int participantsIndex = getParticipantsIndex();
+
+    // random decision
     if (decisionAlgo == "RANDOM")
     {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dist(0,3);
         chosenMove = (ActionType)dist(gen);
-
-        
-        int participantsIndex = getParticipantsIndex();
         targets = getValidMoves(chosenMove, participantsIndex, participants);
+        
+    }
+
+    // basic logic
+    if (decisionAlgo == "logic")
+    {
+        chosenMove = ATTACK;
+        targets = getValidMoves(chosenMove, participantsIndex, participants);
+        for (int i = 0; i < 4; i++)
+        {
+            if (hit + 6 > participants[i].getHp())
+            {
+                chosenMove = ATTACK;
+                targets = {{i}};
+            }
+            break;
+        }
+        for (int i = 4; i < participants.size(); i++)
+        {
+            if (participants[i].isAlive() && participants[i].getHp() < 5)
+            {
+                chosenMove = BUFF;
+                targets = {{i}};
+            }
+            break;
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            if (participants[i].getSpeedModifier() > 2)
+            {
+                chosenMove = DEBUFF;
+                targets = {{i}};
+            }
+            break;
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            if (participants[i].getHit() > hp)
+            {
+                chosenMove = MOVE;
+                targets = getValidMoves(chosenMove, participantsIndex, participants);
+
+            }
+            break;
+        }
+        
+
     }
 
     return make_pair(chosenMove, targets);
