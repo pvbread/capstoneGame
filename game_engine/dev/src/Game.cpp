@@ -501,8 +501,8 @@ void DashDaCapo::runGameLoop()
         "conductor",
         "drummer",
         "bassist",
-        "coneheadAlpha",
-        "coneheadBeta ",
+        "Conehead A",
+        "Conehead B",
         "PizzaHead",
         "Carl"
     };
@@ -1162,8 +1162,8 @@ void DashDaCapo::runGameLoop()
                     
                         //init enemy characters
 
-                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
-                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e1 = BaseCharacter("Conehead A", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e2 = BaseCharacter("Conehead B ", 10, 6, 1, 0, 3, 3, 3, true);
                         BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("Mini Carl", 20, 0, 1, 0, 3, 3, 3, true);
                         
