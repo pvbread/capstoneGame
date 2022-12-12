@@ -36,3 +36,19 @@ void BaseItem::setMod(int mod)
 {
     itemMod = mod;
 }
+
+std::string BaseItem::getMessage() const
+{
+    std::string msg = "+" + std::to_string(itemMod) + " to ";
+    if (itemType == "armor")
+        msg += "armor";
+    else if (itemType == "speed")
+        msg += "speed";
+    else if (itemType == "dodge")
+        msg += "dodge";
+    else if (itemType == "hit")
+        msg += "hit";
+    else
+        return "No item";
+    return msg;
+}

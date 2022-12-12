@@ -17,14 +17,20 @@ void DashDaCapo::runGameLoop()
     MapDebugController debugCont = MapDebugController();
 
     ////////// START CHARACTER INIT ////////
-    BaseCharacter conductor = BaseCharacter("Conductor", 30, 3, 1, 0, 3, 3, 3,false);
-    BaseCharacter drum = BaseCharacter("Drummer", 50, 2, 2, 4, 3, 3, 0,false);
-    BaseCharacter flute = BaseCharacter("Flutist", 20, 6, 2, 1, 3, 3, 3,false);
-    BaseCharacter bass = BaseCharacter("Bassist", 60, 1, 3, 0, 3, 3, 1,false);
+    BaseCharacter conductor = BaseCharacter("Conductor", 30, 3, 3, 0, 0, 3, 3,false);
+    BaseCharacter drum = BaseCharacter("Drummer", 50, 2, 1, 0, 0, 3, 3,false);
+    BaseCharacter flute = BaseCharacter("Flutist", 20, 6, 1, 0, 0, 3, 3,false);
+    BaseCharacter bass = BaseCharacter("Bassist", 60, 1, 3, 0, 0, 3, 3,false);
+
     flute.setNewParticipantsIndex(0);
     conductor.setNewParticipantsIndex(1);
     bass.setNewParticipantsIndex(2);
     drum.setNewParticipantsIndex(3);
+    BaseItem empty = BaseItem("", "", 0); 
+    conductor.setItem(empty);
+    flute.setItem(empty);
+    bass.setItem(empty);
+    drum.setItem(empty);
     std::vector<BaseCharacter> playerTeam{flute, conductor, bass, drum};
     std::vector<BaseCharacter> enemies;
     std::vector<BaseCharacter> combatParticipants;
@@ -33,6 +39,7 @@ void DashDaCapo::runGameLoop()
 
     ///////// END CHARACTER INIT //////
 
+
     ////////ONE LINER JOKES LIST////////
 
     int jokeNumber = 1;
@@ -40,8 +47,8 @@ void DashDaCapo::runGameLoop()
         {{1, "I went to buy some camo pants but couldnt find any."},
         {2, "I failed math so many times at school, I cant even count."},
         {3, "When life gives you melons, you might be dyslexic."},
-        {4, "I cant believe I got fired from the calendar factory. All I did was take a day off."},
-        {5, "Most people are shocked when they find out how bad I am as an electrician."},
+        {4, "I used to think I was indecisive. But now Im not so sure."},
+        {5, "Russian dolls are so full of themselves."},
         {6, "Russian dolls are so full of themselves."}};
 
     ////////ONE LINER JOKES LIST////////
@@ -57,6 +64,9 @@ void DashDaCapo::runGameLoop()
     BaseItem normalSpeed = BaseItem("Normal Metronome", "speed", 1);
     BaseItem rareSpeed = BaseItem("Rare Metronome", "speed", 2);
     BaseItem epicSpeed = BaseItem("Epic Metronome", "speed", 3);
+    BaseItem normalArmor = BaseItem("Normal Groove", "armor", 1);
+    BaseItem rareArmor = BaseItem("Rare Groove", "armor", 2);
+    BaseItem epicArmor = BaseItem("Epic Groove", "armor", 3);
 
     // access in the following way itemList[NORMAL_HIT]
     // since we already have an ItemEnum for the item indexes
@@ -69,7 +79,10 @@ void DashDaCapo::runGameLoop()
         epicDodge,
         normalSpeed,
         rareSpeed,
-        epicSpeed
+        epicSpeed,
+        normalArmor,
+        rareArmor,
+        epicArmor
     };
 
     //maybe enum this
@@ -107,17 +120,16 @@ void DashDaCapo::runGameLoop()
 
     const std::vector<std::string> introOptions = {
         "New Game",
-        "Load Game",
         "Credits"
     };
 
     //const char* railwayFontPath = "./Raleway-Medium.ttf";
-    SDL_Color introMenuColor = { 255, 0, 0, 255 };
-    BaseMenu introMenu = BaseMenu(100, 100, 140, 400, 100,  
+    //SDL_Color introMenuColor = { 255, 0, 0, 255 };
+    BaseMenu introMenu = BaseMenu(90, 250, 515, 400, 100,  
                                   introOptions, 
                                   Font::raleway, 
-                                  Color::red,
-                                  Color::maroon,
+                                  Color::navy,
+                                  Color::cyan,
                                   getRenderer()
     );
 
@@ -167,6 +179,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_debug = false;
     bool STATE_itemNotificationShowing = false;
     bool STATE_healNotificationShowing = false;
+    bool STATE_jokeNotificationShowing = false;
     bool STATE_preTransition = false;
     bool STATE_postTransition = true;
     bool STATE_statMenu = false;
@@ -176,7 +189,9 @@ void DashDaCapo::runGameLoop()
     bool STATE_updateHP = false;
     bool STATE_youWin = false;
     bool STATE_youLoose = false;
+    bool STATE_bossFightBegin = false;
     bool STATE_didGetRandNumForJoke = true;
+    bool STATE_isWorseItem = true;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -193,6 +208,7 @@ void DashDaCapo::runGameLoop()
     //////////// MUSIC INIT /////////////////
     Mix_Music *SelectOST = Mix_LoadMUS("./bgmusic1.wav");
     Mix_Chunk *SelectMusic = Mix_LoadWAV("./MenuSelect.wav");
+    Mix_Chunk *MapNotificationSound = Mix_LoadWAV("./MapNotification.wav");
     //Mix_PlayMusic(SelectOST, -1); 
 
     //////////// START.TEXTURE LOADING /////////////
@@ -213,13 +229,17 @@ void DashDaCapo::runGameLoop()
     TextureWrapper enemyBatTexture;
     TextureWrapper pizzaheadTexture;
     TextureWrapper carlTexture;
+    TextureWrapper bossTexture;
     TextureWrapper currPlayerTexture;
     TextureWrapper targetTexture;
     TextureWrapper getHitEffect;
+    TextureWrapper introScreen;
+    TextureWrapper statusBg;
+    TextureWrapper orderBg;
 
     //add sprite sheet here
     std::unordered_map<TextureWrapper*, std::string> textureFilePaths = {
-        {&tileTexture, "../../assets/image/newspritedraft.png"},
+        {&tileTexture, "../../assets/image/newspritedraft3.png"},
         {&characterInMapTextureDown, "../../assets/image/chars/flutist-sprite-down.png"},
         {&characterInMapTextureLeft, "../../assets/image/chars/flutist-sprite-left.png"},
         {&characterInMapTextureRight, "../../assets/image/chars/flutist-sprite-right.png"},
@@ -235,10 +255,15 @@ void DashDaCapo::runGameLoop()
         {&enemyBatTexture, "../../assets/image/chars/enemysh-bat.png"},
         {&pizzaheadTexture, "../../assets/image/chars/pizzahead.png"},
         {&carlTexture, "../../assets/image/chars/Carl.png"},
+        {&bossTexture, "../../assets/image/chars/Carl-Boss-vestless.png"},
         {&linebackerTexture, "../../assets/image/chars/linebacker.png"},
         {&currPlayerTexture, "../../assets/image/treble.png"},
         {&targetTexture, "../../assets/image/sixteenth.png"},  
-        {&getHitEffect, "../../assets/image/explosion-notes.png"}
+        {&getHitEffect, "../../assets/image/explosion-notes.png"},
+        {&introScreen, "../../assets/image/title.png"},
+        {&statusBg, "../../assets/image/road.png"},
+        {&orderBg, "../../assets/image/orderBg.png"} 
+
     }; 
     
     //so there's going to be a couple of these per char
@@ -304,7 +329,7 @@ void DashDaCapo::runGameLoop()
    
 
     //////////// END RANDOM MAP GEN /////////////
-
+    
     //////////// START TILE LOADING /////////////
     
     // load random map
@@ -385,7 +410,7 @@ void DashDaCapo::runGameLoop()
     std::vector<std::string> eventList(6, "BLANKEVENT");
     std::vector<std::string> eventsToAdd {
         "BATTLE",
-        "BATTLE",
+        "ITEM",
         "HEAL",
         "JOKE",
         "ITEM"
@@ -431,7 +456,7 @@ void DashDaCapo::runGameLoop()
     std::vector<TextBox> orderBoxes(8);
     for (int i = 0; i < orderBoxes.size(); i++)
     {
-        TextBox temp = TextBox("", 25, 750, 30+(i*50), 200, 30, Font::raleway, Color::black, Color::gray);
+        TextBox temp = TextBox("", 25, 750, 30+(i*50), 200, 30, Font::raleway, Color::black, Color::gray, true);
         orderBoxes[i] = temp; 
     }
 
@@ -560,52 +585,61 @@ void DashDaCapo::runGameLoop()
     std::string tempItemModAddStat = "+Dodge";
 
     ///////Base Stats/////////
-    TextBox baseName = TextBox("   Bassist", 40, 50, 95, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassHPName = TextBox(std::to_string(bass.getHp()) + "-", 40, 130, 145, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassMaxHPName = TextBox(std::to_string(bass.getMaxHp()), 40, 185, 145, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassSpeedName = TextBox(std::to_string(bass.getSpeed()), 40, 315, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassHitName = TextBox(std::to_string(bass.getHit()), 40, 435, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassArmorName = TextBox(std::to_string(bass.getArmor()), 40, 550, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassDodgeName = TextBox(std::to_string(bass.getDodgeModifier()), 40, 670, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox bassItemModName = TextBox(std::to_string(bass.getItemModifier()) + tempItemModAddStat, 40, 750, 148, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox baseName = TextBox("   Bassist", 40, 50, 95, 50, 30, Font::roboto, Color::navy, Color::cyan, true);
+    TextBox bassHPName = TextBox(std::to_string(bass.getHp()) + "-", 30, 130, 145, 40, 50, Font::roboto, Color::navy, Color::cyan, true);
+    TextBox bassMaxHPName = TextBox(std::to_string(bass.getMaxHp()), 30, 185, 145, 40, 50, Font::roboto, Color::navy, Color::cyan, true);
+    TextBox bassSpeedName = TextBox(std::to_string(bass.getSpeed()), 30, 315, 148, 30, 50, Font::roboto, Color::navy, Color::cyan, true);
+    TextBox bassHitName = TextBox(std::to_string(bass.getHit()), 30, 435, 148, 30, 50, Font::roboto, Color::navy, Color::cyan, true);
+    TextBox bassArmorName = TextBox(std::to_string(bass.getArmor()), 30, 550, 148, 30, 50, Font::roboto, Color::navy, Color::cyan, true);
+    TextBox bassDodgeName = TextBox(std::to_string(bass.getDodgeModifier()), 30, 670, 148, 30, 50, Font::roboto, Color::navy, Color::cyan, true);
+    TextBox bassItemModName = TextBox(bass.getItem().getMessage(), 30, 750, 148, 30, 50, Font::roboto, Color::navy, Color::cyan, true);
     
     std::vector<TextBox> statMenuBassRow { baseName , bassHPName, bassMaxHPName, bassSpeedName, bassHitName, bassArmorName, bassDodgeName, bassItemModName };
     ///////End Base Stats/////////
     ///////Drum Stats/////////
-    TextBox drumName = TextBox(" Drummer", 40, 50, 245, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumHPName = TextBox(std::to_string(drum.getHp()) + "-", 40, 130, 295, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumMaxHPName = TextBox(std::to_string(drum.getMaxHp()), 40, 185, 295, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumSpeedName = TextBox(std::to_string(drum.getSpeed()), 40, 315, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumHitName = TextBox(std::to_string(drum.getHit()), 40, 435, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumArmorName = TextBox(std::to_string(drum.getArmor()), 40, 550, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumDodgeName = TextBox(std::to_string(drum.getDodgeModifier()), 40, 670, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox drumItemModName = TextBox(std::to_string(drum.getItemModifier()) + tempItemModAddStat, 40, 750, 298, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox drumName = TextBox(" Drummer", 40, 50, 245, 50, 30, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox drumHPName = TextBox(std::to_string(drum.getHp()) + "-", 30, 130, 295, 40, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox drumMaxHPName = TextBox(std::to_string(drum.getMaxHp()), 30, 185, 295, 40, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox drumSpeedName = TextBox(std::to_string(drum.getSpeed()), 30, 315, 298, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox drumHitName = TextBox(std::to_string(drum.getHit()), 30, 435, 298, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox drumArmorName = TextBox(std::to_string(drum.getArmor()), 30, 550, 298, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox drumDodgeName = TextBox(std::to_string(drum.getDodgeModifier()), 30, 670, 298, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox drumItemModName = TextBox(drum.getItem().getMessage(), 30, 750, 298, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
 
     std::vector<TextBox> statMenuDrumRow { drumName , drumHPName, drumMaxHPName, drumSpeedName, drumHitName, drumArmorName, drumDodgeName, drumItemModName };
     ///////End Drum Stats/////////
     ///////Flute Stats/////////
-    TextBox fluteName = TextBox("    Flutist", 40, 50, 395, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteHPName = TextBox(std::to_string(flute.getHp()) + "-", 40, 130, 445, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteMaxHPName = TextBox(std::to_string(flute.getMaxHp()), 40, 185, 445, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteSpeedName = TextBox(std::to_string(flute.getSpeed()), 40, 315, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteHitName = TextBox(std::to_string(flute.getHit()), 40, 435, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteArmorName = TextBox(std::to_string(flute.getArmor()), 40, 550, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteDodgeName = TextBox(std::to_string(flute.getDodgeModifier()), 40, 670, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox fluteItemModName = TextBox(std::to_string(flute.getItemModifier()) + tempItemModAddStat, 40, 750, 448, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox fluteName = TextBox("    Flutist", 40, 50, 395, 50, 30, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox fluteHPName = TextBox(std::to_string(flute.getHp()) + "-", 30, 130, 445, 40, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox fluteMaxHPName = TextBox(std::to_string(flute.getMaxHp()), 30, 185, 445, 40, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox fluteSpeedName = TextBox(std::to_string(flute.getSpeed()), 30, 315, 448, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox fluteHitName = TextBox(std::to_string(flute.getHit()), 30, 435, 448, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox fluteArmorName = TextBox(std::to_string(flute.getArmor()), 30, 550, 448, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox fluteDodgeName = TextBox(std::to_string(flute.getDodgeModifier()), 30, 670, 448, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox fluteItemModName = TextBox(flute.getItem().getMessage(), 30, 750, 448, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
 
     std::vector<TextBox> statMenuFluteRow { fluteName , fluteHPName, fluteMaxHPName, fluteSpeedName, fluteHitName, fluteArmorName, fluteDodgeName, fluteItemModName };
     ///////End Flute Stats/////////
     ///////Conductor Stats/////////
-    TextBox conductorName = TextBox("Conductor", 40, 50, 545, 50, 30, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorHPName = TextBox(std::to_string(conductor.getHp()) + "-", 40, 130, 595, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorMaxHPName = TextBox(std::to_string(conductor.getMaxHp()), 40, 185, 595, 40, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorSpeedName = TextBox(std::to_string(conductor.getSpeed()), 40, 315, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorHitName = TextBox(std::to_string(conductor.getHit()), 40, 435, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorArmorName = TextBox(std::to_string(conductor.getArmor()), 40, 550, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorDodgeName = TextBox(std::to_string(conductor.getDodgeModifier()), 40, 670, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
-    TextBox conductorItemModName = TextBox(std::to_string(conductor.getItemModifier()) + tempItemModAddStat, 40, 750, 598, 30, 50, Font::roboto, Color::blue, Color::cyan);
+    TextBox conductorName = TextBox("Conductor", 40, 50, 545, 50, 30, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox conductorHPName = TextBox(std::to_string(conductor.getHp()) + "-", 30, 130, 595, 40, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox conductorMaxHPName = TextBox(std::to_string(conductor.getMaxHp()), 30, 185, 595, 40, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox conductorSpeedName = TextBox(std::to_string(conductor.getSpeed()), 30, 315, 598, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox conductorHitName = TextBox(std::to_string(conductor.getHit()), 30, 435, 598, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox conductorArmorName = TextBox(std::to_string(conductor.getArmor()), 30, 550, 598, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox conductorDodgeName = TextBox(std::to_string(conductor.getDodgeModifier()), 30, 670, 598, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
+    TextBox conductorItemModName = TextBox(conductor.getItem().getMessage(), 30, 750, 598, 30, 50, Font::roboto, Color::blue, Color::cyan, true);
 
-    std::vector<TextBox> statMenuConductorRow { conductorName , conductorHPName, conductorMaxHPName, conductorSpeedName, conductorHitName, conductorArmorName, conductorDodgeName, conductorItemModName };
+    std::vector<TextBox> statMenuConductorRow { 
+        conductorName , 
+        conductorHPName, 
+        conductorMaxHPName, 
+        conductorSpeedName, 
+        conductorHitName, 
+        conductorArmorName, 
+        conductorDodgeName, 
+        conductorItemModName 
+    };
     ///////End Conductor Stats/////////
     ///////Display Stat Names/////////
     int startBoxWidth = 95;
@@ -620,28 +654,28 @@ void DashDaCapo::runGameLoop()
 
     for (int i = 0; i < 4; i++)
     {
-        TextBox statsHP = TextBox(" HP", 40, 50, (startBoxWidth + (i*150) + 50),
-         50, 20, Font::roboto, Color::blue, Color::cyan);
+        TextBox statsHP = TextBox(" HP", 30, 50, (startBoxWidth + (i*150) + 50),
+            50, 20, Font::roboto, Color::blue, Color::cyan, true);
         characterStatsHP.push_back(statsHP);
         
         TextBox statsSpeed = TextBox("Speed", 35, 276, (startBoxWidth + (i*150)),
-         100, 50, Font::roboto, Color::blue, Color::cyan);
+         100, 50, Font::roboto, Color::blue, Color::cyan, true);
         characterStatsSpeed.push_back(statsSpeed);
 
         TextBox statsHit = TextBox("   Hit   ", 35, 393, (startBoxWidth + (i*150)),
-         100, 50, Font::roboto, Color::blue, Color::cyan);
+         100, 50, Font::roboto, Color::blue, Color::cyan, true);
         characterStatsHit.push_back(statsHit);
 
         TextBox statsArmor = TextBox("Armor", 35, 510, (startBoxWidth + (i*150)),
-         100, 50, Font::roboto, Color::blue, Color::cyan);
+         100, 50, Font::roboto, Color::blue, Color::cyan, true);
         characterStatsArmor.push_back(statsArmor);
         
         TextBox statsDodge = TextBox("Dodge", 35, 627, (startBoxWidth + (i*150)),
-         100, 50, Font::roboto, Color::blue, Color::cyan);
+         100, 50, Font::roboto, Color::blue, Color::cyan, true);
         characterStatsDodge.push_back(statsDodge);
 
         TextBox statsItemMod = TextBox("Item Mod", 35, 748, (startBoxWidth + (i*150)),
-         100, 50, Font::roboto, Color::blue, Color::cyan);
+         100, 50, Font::roboto, Color::blue, Color::cyan, true);
         characterStatsItemMod.push_back(statsItemMod);
         
         
@@ -666,6 +700,15 @@ void DashDaCapo::runGameLoop()
 
     //double degrees = 0;
     //SDL_RendererFlip flipType = SDL_FLIP_NONE;
+
+    /////// BEGIN MAP NOTIFS /////////////
+
+    TextBox itemNotification = TextBox("", 30, 20, 20, 300, 100, Font::openSans, Color::white, Color::black);
+    TextBox extra = TextBox("but you have something just as good...", 30, 20, 60, 300, 100, Font::openSans, Color::white, Color::black);
+    TextBox extra2 = TextBox("so you leave it :(", 30, 20, 100, 300, 100, Font::openSans, Color::white, Color::black);
+    TextBox jokeNotification = TextBox(jokeList[jokeNumber], 30, 20, 20, 300, 100, Font::openSans, Color::white, Color::black);
+    TextBox healNotification = TextBox("", 30, 20, 20, 300, 100, Font::openSans, Color::white, Color::black);
+    ///// .  END MAP NOTIFS //////////////
 
     SDL_Event event;
     while (!getQuit())
@@ -1152,7 +1195,7 @@ void DashDaCapo::runGameLoop()
                     else if (nextMapEvent == "BOSS")
                     {
                         // init boss and 3 dead characters as placeholders
-                        BaseCharacter boss = BaseCharacter("boss", 100, 0, 8, 5, 0, 0, 0, true);
+                        BaseCharacter boss = BaseCharacter("Boss", 100, 0, 8, 5, 0, 0, 0, true);
                         BaseCharacter e2 = BaseCharacter("", 0, 6, 1, 0, 3, 3, 3, true);
                         BaseCharacter e3 = BaseCharacter("", 0, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("", 0, 0, 1, 0, 3, 3, 3, true);
@@ -1176,6 +1219,7 @@ void DashDaCapo::runGameLoop()
                         STATE_enemiesSet = true;
                         //change battle state
                         STATE_battle = true;
+                        STATE_bossFightBegin = true;
                         //setRoundOrder
                         roundOrder = setRoundTurns(combatParticipants);
                         STATE_roundsSet = true;
@@ -1192,10 +1236,11 @@ void DashDaCapo::runGameLoop()
                     }
                     else if (nextMapEvent == "ITEM" && !STATE_itemNotificationShowing)
                     {
+                        Mix_PlayChannel(-1, MapNotificationSound, 0);
                         //std::random_device rd;
                         //std::mt19937 gen(rd());
                         std::uniform_int_distribution<> distForRarity(1,100);
-                        std::uniform_int_distribution<> distForItem(0,2);
+                        std::uniform_int_distribution<> distForItem(0,3);
                         int itemRoll = distForItem(gen);
                         int rarityRoll = distForRarity(gen);
                         //if it's 0 it's a NORMAL_HIT
@@ -1207,6 +1252,10 @@ void DashDaCapo::runGameLoop()
                         {
                             itemRoll = NORMAL_SPEED;
                         }
+                        else if (itemRoll == 3)
+                        {
+                            itemRoll = NORMAL_ARMOR;
+                        }
                         //this just bumps up the item quality
                         if (rarityRoll > 70 && rarityRoll < 95)
                         {
@@ -1216,14 +1265,138 @@ void DashDaCapo::runGameLoop()
                         {
                             itemRoll += 2;
                         }
-                        //add the item to the item pool
-                        teamItemPool[itemRoll]++;
+                        
+                        STATE_isWorseItem = true;
+
+                        //check to equip item equipItem
+                        
+                        if (itemRoll / 3 == 0)
+                        {
+                            if (itemRoll % 3 + 1 > flute.getItemModifier())
+                            {
+                                //item is better, equip
+                                int oldMod = flute.getItemModifier();
+                                STATE_isWorseItem = false;
+                                flute.setItem(itemList[itemRoll]);
+                                flute.setItemModifier(itemList[itemRoll].getMod());
+                                //upgrade is the difference between the new and the old
+                                int newMod = itemList[itemRoll].getMod() - oldMod;
+                                flute.setHit(flute.getHit() + newMod);
+                                for (auto player: playerTeam)
+                                {
+                                    if (player.getName() == "Flute")
+                                    {
+                                        player.setItem(itemList[itemRoll]);
+                                        player.setItemModifier(itemList[itemRoll].getMod());
+                                        player.setHit(player.getHit() + newMod);
+                                        break;
+                                    }
+                                }
+                                fluteItemModName.changeText(flute.getItem().getMessage());
+                                statMenuFluteRow[7] = fluteItemModName;
+                                fluteHitName.changeText(std::to_string(flute.getHit()));
+                                fluteHitName.changeTextColor(Color::lightBlue);
+                                statMenuFluteRow[4] = fluteHitName;
+                            }
+                        }
+                        else if (itemRoll / 3 == 1)
+                        {
+                            if (itemRoll % 3 + 1 > conductor.getItemModifier())
+                            {
+                                //item is better, equip
+                                int oldMod = conductor.getItemModifier();
+                                STATE_isWorseItem = false;
+                                conductor.setItem(itemList[itemRoll]);
+                                conductor.setItemModifier(itemList[itemRoll].getMod());
+                                //upgrade is the difference between the new and the old
+                                int newMod = itemList[itemRoll].getMod() - oldMod;
+                                conductor.setDodgeModifier(conductor.getDodgeModifier() + newMod);
+                                for (auto player: playerTeam)
+                                {
+                                    if (player.getName() == "Conductor")
+                                    {
+                                        player.setItem(itemList[itemRoll]);
+                                        player.setItemModifier(itemList[itemRoll].getMod());
+                                        player.setDodgeModifier(player.getDodgeModifier() + newMod);
+                                        break;
+                                    }
+                                }
+                                //update for stat menu
+                                conductorItemModName.changeText(conductor.getItem().getMessage());
+                                statMenuConductorRow[7] = conductorItemModName;
+                                conductorDodgeName.changeText(std::to_string(conductor.getDodgeModifier()));
+                                conductorDodgeName.changeTextColor(Color::lightBlue);
+                                statMenuConductorRow[6] = conductorDodgeName;
+
+                            }
+                        }
+                        else if (itemRoll / 3 == 2)
+                        {
+                            if (itemRoll % 3 + 1 > drum.getItemModifier())
+                            {
+                                //item is better, equip
+                                int oldMod = drum.getItemModifier();
+                                STATE_isWorseItem = false;
+                                drum.setItem(itemList[itemRoll]);
+                                drum.setItemModifier(itemList[itemRoll].getMod());
+                                //upgrade is the difference between the new and the old
+                                int newMod = itemList[itemRoll].getMod() - oldMod;
+                                drum.setSpeed(drum.getSpeed() + newMod);
+                                for (auto player: playerTeam)
+                                {
+                                    if (player.getName() == "Drummer")
+                                    {
+                                        player.setItem(itemList[itemRoll]);
+                                        player.setItemModifier(itemList[itemRoll].getMod());
+                                        player.setSpeed(player.getSpeed() + newMod);
+                                        break;
+                                    }
+                                }
+                                drumItemModName.changeText(drum.getItem().getMessage());
+                                statMenuDrumRow[7] = drumItemModName;
+                                drumSpeedName.changeText(std::to_string(drum.getSpeed()));
+                                drumSpeedName.changeTextColor(Color::lightBlue);
+                                statMenuDrumRow[3] = drumSpeedName;
+                            }
+                        }
+                        if (itemRoll / 3 == 3)
+                        {
+                            if (itemRoll % 3 + 1 > bass.getItemModifier())
+                            {
+                                //item is better, equip
+                                int oldMod = bass.getItemModifier();
+                                STATE_isWorseItem = false;
+                                bass.setItem(itemList[itemRoll]);
+                                bass.setItemModifier(itemList[itemRoll].getMod());
+                                //upgrade is the difference between the new and the old
+                                int newMod = itemList[itemRoll].getMod() - oldMod;
+                                bass.setArmor(bass.getArmor() + newMod);
+                                for (auto player: playerTeam)
+                                {
+                                    if (player.getName() == "Bass")
+                                    {
+                                        player.setItem(itemList[itemRoll]);
+                                        player.setItemModifier(itemList[itemRoll].getMod());
+                                        player.setArmor(player.getArmor() + newMod);
+                                        break;
+                                    }
+                                }
+                                bassItemModName.changeText(bass.getItem().getMessage());
+                                statMenuBassRow[7] = bassItemModName;
+                                bassArmorName.changeText(std::to_string(bass.getArmor()));
+                                bassArmorName.changeTextColor(Color::lightBlue);
+                                statMenuBassRow[5] = bassArmorName;
+                            }
+                        }
+
+                        //teamItemPool[itemRoll]++;
                         STATE_itemFound = itemList[itemRoll].getName();
                         STATE_itemNotificationShowing = true;
                         
                     }
                     else if (nextMapEvent == "HEAL" && !STATE_healNotificationShowing)
                     {
+                        Mix_PlayChannel(-1, MapNotificationSound, 0);
                         std::uniform_int_distribution<> distForHeal(1,3);
                         STATE_amountHealed = distForHeal(gen);
                         for (auto& player: playerTeam)
@@ -1232,6 +1405,11 @@ void DashDaCapo::runGameLoop()
                                 player.setHp(player.getHp() + STATE_amountHealed);
                         }
                         STATE_healNotificationShowing = true;
+                    }
+                    else if (nextMapEvent == "JOKE" && !STATE_jokeNotificationShowing)
+                    {
+                        Mix_PlayChannel(-1, MapNotificationSound, 0);
+                        STATE_jokeNotificationShowing = true;
                     }
                     
                     
@@ -1542,7 +1720,7 @@ void DashDaCapo::runGameLoop()
                                         conductor = combatParticipants[i];                                
                             }
 
-                            /// Updates player stats for statMenu page
+                            /// Updates player HP for statMenu page
                             conductorHPName.changeText(std::to_string(conductor.getHp()) + "-");
                             statMenuConductorRow[1] = conductorHPName;
                             bassHPName.changeText(std::to_string(bass.getHp()) + "-");
@@ -1639,6 +1817,7 @@ void DashDaCapo::runGameLoop()
                             {
                                 case SDLK_RETURN:
                                 {
+                                    STATE_bossFightBegin = false;
                                     STATE_youWin = false;
                                     screen = MAP;
                                     break;
@@ -1659,6 +1838,7 @@ void DashDaCapo::runGameLoop()
                             {
                                 case SDLK_ESCAPE:
                                 {
+                                    STATE_bossFightBegin = false;
                                     screen = INTRO;
                                     break;
                                 }
@@ -1680,6 +1860,7 @@ void DashDaCapo::runGameLoop()
             {
                 SDL_SetRenderDrawColor(getRenderer(), 0, 0, 0, 255);
                 SDL_RenderClear(getRenderer());
+                introScreen.render(getRenderer(), 0, 0);
                 introMenu.render(getRenderer()); 
 
                 if(STATE_postTransition == true)
@@ -1754,8 +1935,15 @@ void DashDaCapo::runGameLoop()
                     if (nextMapEvent == "ITEM")
                     {
                         std::string textNotification = STATE_itemFound + " was found!";
-                        TextBox itemNotification = TextBox(textNotification, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        
+                        itemNotification.changeText(textNotification);
                         itemNotification.render(getRenderer());
+                        if (STATE_isWorseItem)
+                        {
+                            extra.render(getRenderer());
+                            
+                            extra2.render(getRenderer());
+                        }
                         //STATE_itemFound = "NONE"; gotta do this after? no 
                     }
                     else if (nextMapEvent == "JOKE")
@@ -1767,7 +1955,8 @@ void DashDaCapo::runGameLoop()
                             STATE_didGetRandNumForJoke = false;
                         }
         
-                        TextBox jokeNotification = TextBox(jokeList[jokeNumber], 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                       
+                        jokeNotification.changeText(jokeList[jokeNumber]);
                         jokeNotification.render(getRenderer()); 
                         
                     }
@@ -1775,7 +1964,7 @@ void DashDaCapo::runGameLoop()
                     {
                         
                         std::string healText = std::to_string(STATE_amountHealed) + "hp healed for all team members";
-                        TextBox healNotification = TextBox(healText, 30, 20, 20, 300, 100, Font::openSans, Color::darkGreen, Color::black);
+                        healNotification.changeText(healText);
                         healNotification.render(getRenderer());
                     }
                 }
@@ -1818,11 +2007,13 @@ void DashDaCapo::runGameLoop()
                 SDL_RenderFillRect(getRenderer(), &statusPane);
 
                 //Order Pane
+                orderBg.render(getRenderer(), 720, 0);
+                /*
                 SDL_Rect orderPane = {720, 0, 240, 480};
                 SDL_Color colOrder = Color::gray;
                 SDL_SetRenderDrawColor(getRenderer(), colOrder.r, colOrder.g, colOrder.b, 0);
                 SDL_RenderFillRect(getRenderer(), &orderPane);
-
+                */
                 //Menu Pane
                 SDL_Rect menuPane = {720, 480, 720, 240};
                 SDL_Color colMenu = Color::maroon;
@@ -1831,37 +2022,77 @@ void DashDaCapo::runGameLoop()
                 
                 combatMenu.render(getRenderer());
 
-                // render players at their positions
-                for (int i = 0; i < 4; i++)
-                {
-                    if (combatParticipants[i].isAlive())
+                if(STATE_bossFightBegin != true){
+                    // render players at their positions
+                    for (int i = 0; i < 4; i++)
                     {
-                        if (combatParticipants[i].getName() == flute.getName())
-                            flutistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == drum.getName())
-                            drummerTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == bass.getName())
-                            bassistTexture.render(getRenderer(), charRendering[i], 400);
-                        if (combatParticipants[i].getName() == conductor.getName())
-                            conductorTexture.render(getRenderer(), charRendering[i], 400);
+
+                        if (combatParticipants[i].isAlive())
+                        {
+                            if (combatParticipants[i].getName() == flute.getName())
+                                flutistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == drum.getName())
+                                drummerTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == bass.getName())
+                                bassistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == conductor.getName())
+                                conductorTexture.render(getRenderer(), charRendering[i], 400);
+                        }
+
+                    }
+                
+                    // render enemies at their positions
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (combatParticipants[i+4].isAlive())
+                        {
+                            if (combatParticipants[i+4].getName() == enemies[0].getName())
+                                enemyBatTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[1].getName())
+                                enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[2].getName())
+                                pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[3].getName())
+                                carlTexture.render(getRenderer(), charRendering[i+4], 400); 
+                        }
+                    }
+                }
+                //in future when we choose to do different encounters this must update
+                else 
+                {
+                    // render players at their positions
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (combatParticipants[i].isAlive())
+                        {
+                            if (combatParticipants[i].getName() == flute.getName())
+                                flutistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == drum.getName())
+                                drummerTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == bass.getName())
+                                bassistTexture.render(getRenderer(), charRendering[i], 400);
+                            if (combatParticipants[i].getName() == conductor.getName())
+                                conductorTexture.render(getRenderer(), charRendering[i], 400);
+                        }
+                    }
+                
+                    // render enemies at their positions
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (combatParticipants[i+4].isAlive())
+                        {
+                            if (combatParticipants[i+4].getName() == enemies[0].getName())
+                                bossTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[1].getName())
+                                enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[2].getName())
+                                pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
+                            if (combatParticipants[i+4].getName() == enemies[3].getName())
+                                carlTexture.render(getRenderer(), charRendering[i+4], 400); 
+                        }
                     }
                 }
                 
-                // render enemies at their positions
-                for (int i = 0; i < 4; i++)
-                {
-                    if (combatParticipants[i+4].isAlive())
-                    {
-                        if (combatParticipants[i+4].getName() == enemies[0].getName())
-                            enemyBatTexture.render(getRenderer(), charRendering[i+4], 400);
-                        if (combatParticipants[i+4].getName() == enemies[1].getName())
-                            enemyBellTexture.render(getRenderer(), charRendering[i+4], 400);
-                        if (combatParticipants[i+4].getName() == enemies[2].getName())
-                            pizzaheadTexture.render(getRenderer(), charRendering[i+4], 400);
-                        if (combatParticipants[i+4].getName() == enemies[3].getName())
-                            carlTexture.render(getRenderer(), charRendering[i+4], 400); 
-                    }
-                }
                 
                 if (STATE_timerStarted && timer->deltaTime() < STATE_timerCount)
                 {  
@@ -2127,80 +2358,82 @@ void DashDaCapo::runGameLoop()
             {
                 std::string statMenuDisplayStr;
 
-
+                //statusBg.setAlpha(126);
+                statusBg.render(getRenderer(), 0, 0);
 
                 //////Background Color////////
-                SDL_Rect backgroundPane1 = {0, 0, 960, 730};
-                SDL_Color backgroundMenu1 = Color::navy;
-                SDL_SetRenderDrawColor(getRenderer(), backgroundMenu1.r, backgroundMenu1.g, backgroundMenu1.b, 0);
-                SDL_RenderFillRect(getRenderer(), &backgroundPane1);
-                SDL_Rect backgroundPane2 = {10, 10, 940, 700};
-                SDL_Color backgroundMenu2 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), backgroundMenu2.r, backgroundMenu2.g, backgroundMenu2.b, 0);
-                SDL_RenderFillRect(getRenderer(), &backgroundPane2);
+                //SDL_Rect backgroundPane1 = {0, 0, 960, 730};
+                //SDL_Color backgroundMenu1 = Color::navy;
+                //SDL_SetRenderDrawColor(getRenderer(), backgroundMenu1.r, backgroundMenu1.g, backgroundMenu1.b, 128);
+                //SDL_RenderFillRect(getRenderer(), &backgroundPane1);
+                //SDL_Rect backgroundPane2 = {10, 10, 940, 700};
+                //SDL_Color backgroundMenu2 = Color::teal;
+                //SDL_SetRenderDrawColor(getRenderer(), backgroundMenu2.r, backgroundMenu2.g, backgroundMenu2.b, 128);
+                //SDL_RenderFillRect(getRenderer(), &backgroundPane2);
                 //////End Background Color////////
 
                 ///////Background under the text////////
-                
+                SDL_SetRenderDrawBlendMode(getRenderer(), SDL_BLENDMODE_BLEND); 
                 SDL_Rect StatMenuBackground1 = {50, 95, 861, 100};
                 SDL_Color StatMenuColor1 = Color::cyan;
-                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor1.r, StatMenuColor1.g, StatMenuColor1.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor1.r, StatMenuColor1.g, StatMenuColor1.b, 128);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground1);
 
                 SDL_Rect StatMenuBackground2 = {50, 245, 861, 100};
                 SDL_Color StatMenuColor2 = Color::cyan;
-                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor2.r, StatMenuColor2.g, StatMenuColor2.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor2.r, StatMenuColor2.g, StatMenuColor2.b, 128);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground2);
 
                 SDL_Rect StatMenuBackground3 = {50, 395, 861, 100};
                 SDL_Color StatMenuColor3 = Color::cyan;
-                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor3.r, StatMenuColor3.g, StatMenuColor3.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor3.r, StatMenuColor3.g, StatMenuColor3.b, 128);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground3);
 
                 SDL_Rect StatMenuBackground4 = {50, 545, 861, 100};
                 SDL_Color StatMenuColor4 = Color::cyan;
-                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor4.r, StatMenuColor4.g, StatMenuColor4.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), StatMenuColor4.r, StatMenuColor4.g, StatMenuColor4.b, 128);
                 SDL_RenderFillRect(getRenderer(), &StatMenuBackground4);
-
+                SDL_SetRenderDrawBlendMode(getRenderer(), SDL_BLENDMODE_NONE); 
+                
                 ///////End Background under the text////////
 
                 ///////Lines that split the screen//////////
-                
+                /*
                 SDL_Rect splitLine1 = {239, 95, 3, 550};
                 SDL_Color splitLineColor1 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), splitLineColor1.r, splitLineColor1.g, splitLineColor1.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor1.r, splitLineColor1.g, splitLineColor1.b, 128);
                 SDL_RenderFillRect(getRenderer(), &splitLine1);
 
                 SDL_Rect splitLine7 = {252, 95, 3, 550};
                 SDL_Color splitLineColor7 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), splitLineColor7.r, splitLineColor7.g, splitLineColor7.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor7.r, splitLineColor7.g, splitLineColor7.b, 128);
                 SDL_RenderFillRect(getRenderer(), &splitLine7);
                 
                 SDL_Rect splitLine2 = {265, 95, 3, 550};
                 SDL_Color splitLineColor2 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), splitLineColor2.r, splitLineColor2.g, splitLineColor2.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor2.r, splitLineColor2.g, splitLineColor2.b, 128);
                 SDL_RenderFillRect(getRenderer(), &splitLine2);
                 
                 SDL_Rect splitLine3 = {385, 95, 3, 550};
                 SDL_Color splitLineColor3 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), splitLineColor3.r, splitLineColor3.g, splitLineColor3.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor3.r, splitLineColor3.g, splitLineColor3.b, 128);
                 SDL_RenderFillRect(getRenderer(), &splitLine3);
 
                 SDL_Rect splitLine4 = {499, 95, 3, 550};
                 SDL_Color splitLineColor4 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), splitLineColor4.r, splitLineColor4.g, splitLineColor4.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor4.r, splitLineColor4.g, splitLineColor4.b, 128);
                 SDL_RenderFillRect(getRenderer(), &splitLine4);
 
                 SDL_Rect splitLine5 = {617, 95, 3, 550};
                 SDL_Color splitLineColor5 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), splitLineColor5.r, splitLineColor5.g, splitLineColor5.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor5.r, splitLineColor5.g, splitLineColor5.b, 128);
                 SDL_RenderFillRect(getRenderer(), &splitLine5);
 
                 SDL_Rect splitLine6 = {737, 95, 3, 550};
                 SDL_Color splitLineColor6 = Color::teal;
-                SDL_SetRenderDrawColor(getRenderer(), splitLineColor6.r, splitLineColor6.g, splitLineColor6.b, 0);
+                SDL_SetRenderDrawColor(getRenderer(), splitLineColor6.r, splitLineColor6.g, splitLineColor6.b, 128);
                 SDL_RenderFillRect(getRenderer(), &splitLine6);
-               
+                */
                 ///////End Lines that split the screen//////////
 
                 ///////Display Names-Stats////////
@@ -2216,7 +2449,7 @@ void DashDaCapo::runGameLoop()
 
                 }
                 
-                for (int statLoopTemp = 0; statLoopTemp < 8; statLoopTemp++)
+                for (int statLoopTemp = 0; statLoopTemp < statMenuConductorRow.size(); statLoopTemp++)
                 {
                     statMenuBassRow[statLoopTemp].render(getRenderer());
                     statMenuDrumRow[statLoopTemp].render(getRenderer());
@@ -2246,6 +2479,7 @@ void DashDaCapo::runGameLoop()
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
+                
                 
                 break;
             }
