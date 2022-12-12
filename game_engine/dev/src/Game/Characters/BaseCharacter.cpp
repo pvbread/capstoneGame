@@ -62,7 +62,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
         }
         for (int i = 0; i < 4; i++)
         {
-            if (participants[i].getSpeedModifier() > 1)
+            if (participants[i].getSpeedModifier() > 2)
             {
                 chosenMove = DEBUFF;
                 targets = {{i}};
