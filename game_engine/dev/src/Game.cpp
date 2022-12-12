@@ -192,6 +192,7 @@ void DashDaCapo::runGameLoop()
     bool STATE_bossFightBegin = false;
     bool STATE_didGetRandNumForJoke = true;
     bool STATE_isWorseItem = true;
+    bool STATE_isBossDead = false;
     int STATE_lastCurrTarget = 0;
     float STATE_timerCount;
     float STATE_timerAnimationCount;
@@ -1025,9 +1026,6 @@ void DashDaCapo::runGameLoop()
                     else if (isPlayerTeamAlive == false)
                     {
                         //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
-                        //playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
-                        
-                        // reset player characters health when defeat
                         flute.setHp(flute.getMaxHp());
                         conductor.setHp(conductor.getMaxHp());
                         bass.setHp(bass.getMaxHp());
@@ -1042,7 +1040,7 @@ void DashDaCapo::runGameLoop()
                         statMenuDrumRow[1] = drumHPName;
                         fluteHPName.changeText(std::to_string(flute.getHp()) + "-");
                         statMenuFluteRow[1] = fluteHPName;
-
+                        
                         STATE_combatMenuTargetSelected = false;
                         //STATE_gameOver = true; 
                         STATE_newGameSelected = false;
@@ -1051,12 +1049,15 @@ void DashDaCapo::runGameLoop()
                         STATE_roundsSet = false;
                         STATE_timerStarted = false;
                         STATE_timerAnimationStarted = false;
+                    
 
                         currTarget = 0;
                         currOrderNum = 0;
                         STATE_youLoose = true;
+                        STATE_youLoose = true;
                         screen = DEFEAT;
                         break;
+                       
                     }
 
                     STATE_combatMenuTargetSelected = false;
@@ -1156,10 +1157,10 @@ void DashDaCapo::runGameLoop()
                     
                         //init enemy characters
 
-                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 1, 3, 3, 3, true);
-                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 1, 3, 3, 3, true);
-                        BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 3, 3, 3, 3, 3, true);
-                        BaseCharacter e4 = BaseCharacter("Carl", 20, 0, 5, 5, 3, 3, 3, true);
+                        BaseCharacter e1 = BaseCharacter("coneheadAlpha", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e2 = BaseCharacter("coneheadBeta ", 10, 6, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e3 = BaseCharacter("Pizza Head", 10, 2, 1, 0, 3, 3, 3, true);
+                        BaseCharacter e4 = BaseCharacter("Mini Carl", 20, 0, 1, 0, 3, 3, 3, true);
                         
                         //normally this will just get enemies from a randomly selected "PACK"
                         e1.setNewParticipantsIndex(4);
@@ -1195,7 +1196,7 @@ void DashDaCapo::runGameLoop()
                     else if (nextMapEvent == "BOSS")
                     {
                         // init boss and 3 dead characters as placeholders
-                        BaseCharacter boss = BaseCharacter("Boss", 100, 0, 8, 5, 0, 0, 0, true);
+                        BaseCharacter boss = BaseCharacter("Carl", 100, 0, 8, 5, 0, 0, 0, true);
                         BaseCharacter e2 = BaseCharacter("", 0, 6, 1, 0, 3, 3, 3, true);
                         BaseCharacter e3 = BaseCharacter("", 0, 2, 1, 0, 3, 3, 3, true);
                         BaseCharacter e4 = BaseCharacter("", 0, 0, 1, 0, 3, 3, 3, true);
@@ -1736,6 +1737,8 @@ void DashDaCapo::runGameLoop()
                             STATE_roundsSet = false;
                             STATE_timerStarted = false;
                             STATE_timerAnimationStarted = false;
+                            if (combatParticipants[4].getName()=="Carl")
+                                STATE_isBossDead = true;
 
                             currTarget = 0;
                             currOrderNum = 0;
@@ -1746,8 +1749,6 @@ void DashDaCapo::runGameLoop()
                         else if (isPlayerTeamAlive == false)
                         {
                             //THIS MAY NEED TO BE UPDATED TO PROPERLY CAUSE THE GAME TO RESTART
-                            //playerTeam = {combatParticipants[0],combatParticipants[1],combatParticipants[2],combatParticipants[3]};
-                            
                             flute.setHp(flute.getMaxHp());
                             conductor.setHp(conductor.getMaxHp());
                             bass.setHp(bass.getMaxHp());
@@ -1771,6 +1772,7 @@ void DashDaCapo::runGameLoop()
                             STATE_roundsSet = false;
                             STATE_timerStarted = false;
                             STATE_timerAnimationStarted = false;
+                        
 
                             currTarget = 0;
                             currOrderNum = 0;
@@ -1819,7 +1821,10 @@ void DashDaCapo::runGameLoop()
                                 {
                                     STATE_bossFightBegin = false;
                                     STATE_youWin = false;
-                                    screen = MAP;
+                                    if (STATE_isBossDead)
+                                        screen = INTRO;
+                                    else
+                                        screen = MAP;
                                     break;
                                 }
                             }
