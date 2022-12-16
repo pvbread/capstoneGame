@@ -42,20 +42,10 @@ void DashDaCapo::runGameLoop()
     //////////// START RANDOM MAP GEN /////////////
     
     std::string commandCall = "python ../mapBuilder/drunkardWalkTestMinusLibs.py ";
-    /*
-    std::vector<std::string> commandCalls;
-    for (int i = 2; i < 6; i++)
-    {
-        commandCalls.push_back(commandCall + std::to_string(i));
-    }
-    */
+    
     system("python ../mapBuilder/drunkardWalkTestMinusLibs.py 1");
     
-    /*
-    for (auto call: commandCalls)
-    {
-        system(call.c_str()); 
-    }*/
+    
     
    
 
@@ -63,16 +53,7 @@ void DashDaCapo::runGameLoop()
 
     //////////// START TILE LOADING /////////////
     
-    // load random map
-    /*
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> intDist(0,4);
-    int mapRandom = intDist(gen);
-    std::vector<std::string> tests = {"testLevelIntegration.map", "testLevel2.map", "testLevel3.map", "testLevel4.map", "testLevel5.map"};
-    */
     
-    //std::string testLevel = tests[mapRandom]; 
 
     std::vector<int> levelInfo = convertMapToVector("../../assets/maps/testLevelIntegration.map");
     const int MAP_COLS = levelInfo[1];
@@ -179,10 +160,7 @@ void DashDaCapo::runGameLoop()
             tileMap[i]->render(getRenderer(), tileTexture2, camera, tilesClipped);
         } 
         }
-        /*
-        if (!STATE_debug)
-            characterController.render(getRenderer(), camera, characterInMapTexture);
-        */     
+          
         //Update screen
         SDL_RenderPresent(getRenderer());
 
