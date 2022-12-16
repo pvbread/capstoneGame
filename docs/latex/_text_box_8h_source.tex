@@ -1,0 +1,45 @@
+\hypertarget{_text_box_8h_source}{}\doxysection{Text\+Box.\+h}
+\label{_text_box_8h_source}\index{include/TextBox.h@{include/TextBox.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{7 \textcolor{keyword}{class }\mbox{\hyperlink{class_text_box}{TextBox}}}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{9 \textcolor{keyword}{public}:}
+\DoxyCodeLine{10     \mbox{\hyperlink{class_text_box}{TextBox}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{11     \mbox{\hyperlink{class_text_box}{TextBox}}(std::string text,}
+\DoxyCodeLine{12             \textcolor{keywordtype}{int} fontSize,}
+\DoxyCodeLine{13             \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y,}
+\DoxyCodeLine{14             \textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h, }
+\DoxyCodeLine{15             std::string inputFont = \textcolor{stringliteral}{"{}../../assets/fonts/Roboto-\/Medium.ttf"{}},}
+\DoxyCodeLine{16             SDL\_Color textColor = \{255, 0, 0, 255\}, }
+\DoxyCodeLine{17             SDL\_Color backgroundColor = \{0, 0, 0, 0\},}
+\DoxyCodeLine{18             \textcolor{keywordtype}{bool} isClear = false}
+\DoxyCodeLine{19     );}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_text_box_a1ab73371b56cc26a9fb766fc188c5a27}{render}}(SDL\_Renderer* renderer);}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{27     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_text_box_a6ca753d78be6a30212cef19cf96bce86}{changeText}}(std::string text);}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29     \textcolor{keywordtype}{void} changeDimensions(\textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h);}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{34     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_text_box_acd4c69c4584bbd05edaa6baf8a04c42c}{changePosition}}(\textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y);}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{38     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_text_box_a5c9710bbc19db319eb870679b77b2ce8}{changeTextColor}}(SDL\_Color color);}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{42     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_text_box_a401d79f04c51959798f514259644f3a9}{changeBackgroundColor}}(SDL\_Color color);}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44     \textcolor{keywordtype}{int} getBottomY() \textcolor{keyword}{const};}
+\DoxyCodeLine{45 \textcolor{keyword}{private}:}
+\DoxyCodeLine{46     std::string text;}
+\DoxyCodeLine{47     TTF\_Font *font;}
+\DoxyCodeLine{48     \textcolor{keywordtype}{int} fontSize;}
+\DoxyCodeLine{49     SDL\_Rect textBox;}
+\DoxyCodeLine{50     SDL\_Color textColor;}
+\DoxyCodeLine{51     SDL\_Color backgroundColor;}
+\DoxyCodeLine{52     \textcolor{keywordtype}{bool} isClear;}
+\DoxyCodeLine{53 \};}
+
+\end{DoxyCode}

@@ -1,0 +1,159 @@
+\hypertarget{class_character_in_map}{}\doxysection{Character\+In\+Map Class Reference}
+\label{class_character_in_map}\index{CharacterInMap@{CharacterInMap}}
+
+
+Game-\/specific class for the character representation in map.  
+
+
+
+
+{\ttfamily \#include $<$Character\+In\+Map.\+h$>$}
+
+Inheritance diagram for Character\+In\+Map\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_character_in_map}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_character_in_map_a5ea287a9721699c6002db2defb0d5c78}\label{class_character_in_map_a5ea287a9721699c6002db2defb0d5c78}} 
+{\bfseries Character\+In\+Map} (int main\+Velocity, int velocityX, int velocityY, SDL\+\_\+\+Rect collision\+Box)
+\item 
+bool \mbox{\hyperlink{class_character_in_map_a38eb7b5f0e6ea8f772881cf650afd9c1}{is\+Move\+Valid}} (std\+::string direction, std\+::map$<$ std\+::pair$<$ int, int $>$, Tile\+Type $>$ \&coordinate\+To\+Tile\+Type\+Map)
+\begin{DoxyCompactList}\small\item\em helper function to check if the user move was valid \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_character_in_map_ac530c5dacb10cbf3d37a14bd8604cfaf}{update\+Event}} (std\+::string \&next\+Map\+Event, bool \&box\+Open, std\+::pair$<$ int, int $>$ coordinates, std\+::map$<$ std\+::pair$<$ int, int $>$, std\+::string $>$ \&coordinate\+To\+Event\+Type\+Map)
+\begin{DoxyCompactList}\small\item\em Helper function that updates the next map event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_character_in_map_adfc79ca658dcb3a85a74e98960f9c5ec}{on\+Input}} (SDL\+\_\+\+Event \&event, std\+::string \&next\+Map\+Event, bool \&box\+Open, int \&STATE\+\_\+character\+Direction, std\+::map$<$ std\+::pair$<$ int, int $>$, Tile\+Type $>$ \&coordinate\+To\+Tile\+Type\+Map, std\+::map$<$ std\+::pair$<$ int, int $>$, std\+::string $>$ \&coordinate\+To\+Event\+Type\+Map)
+\begin{DoxyCompactList}\small\item\em defines the movement for the character in the map \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_character_in_map_a4394e5d6ea7fe48c7e39a98cf2637617}{move}} (int x\+Boundary, int y\+Boundary)
+\begin{DoxyCompactList}\small\item\em Updates the character state in the map. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_character_in_map_a2ad313785644a98e042b8c303871b46c}\label{class_character_in_map_a2ad313785644a98e042b8c303871b46c}} 
+void {\bfseries center\+Screen} (SDL\+\_\+\+Rect \&camera, int x\+Boundary, int y\+Boundary)
+\item 
+void \mbox{\hyperlink{class_character_in_map_a49888df685fa78fb74493c627b34af4a}{render}} (SDL\+\_\+\+Renderer $\ast$renderer, const SDL\+\_\+\+Rect \&camera, \mbox{\hyperlink{class_texture_wrapper}{Texture\+Wrapper}} \&character\+Texture)
+\begin{DoxyCompactList}\small\item\em renders the texture \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Game-\/specific class for the character representation in map. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_character_in_map_a38eb7b5f0e6ea8f772881cf650afd9c1}\label{class_character_in_map_a38eb7b5f0e6ea8f772881cf650afd9c1}} 
+\index{CharacterInMap@{CharacterInMap}!isMoveValid@{isMoveValid}}
+\index{isMoveValid@{isMoveValid}!CharacterInMap@{CharacterInMap}}
+\doxysubsubsection{\texorpdfstring{isMoveValid()}{isMoveValid()}}
+{\footnotesize\ttfamily bool Character\+In\+Map\+::is\+Move\+Valid (\begin{DoxyParamCaption}\item[{std\+::string}]{direction,  }\item[{std\+::map$<$ std\+::pair$<$ int, int $>$, Tile\+Type $>$ \&}]{coordinate\+To\+Tile\+Type\+Map }\end{DoxyParamCaption})}
+
+
+
+helper function to check if the user move was valid 
+
+
+\begin{DoxyParams}{Parameters}
+{\em direction} & \\
+\hline
+{\em coordinate\+To\+Tile\+Type\+Map} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_character_in_map_a4394e5d6ea7fe48c7e39a98cf2637617}\label{class_character_in_map_a4394e5d6ea7fe48c7e39a98cf2637617}} 
+\index{CharacterInMap@{CharacterInMap}!move@{move}}
+\index{move@{move}!CharacterInMap@{CharacterInMap}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily void Character\+In\+Map\+::move (\begin{DoxyParamCaption}\item[{int}]{x\+Boundary,  }\item[{int}]{y\+Boundary }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Updates the character state in the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+Boundary} & \\
+\hline
+{\em y\+Boundary} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_base_single_texture_ae552fccb14a8d3b1b9a29159d8624aa0}{Base\+Single\+Texture}}.
+
+\mbox{\Hypertarget{class_character_in_map_adfc79ca658dcb3a85a74e98960f9c5ec}\label{class_character_in_map_adfc79ca658dcb3a85a74e98960f9c5ec}} 
+\index{CharacterInMap@{CharacterInMap}!onInput@{onInput}}
+\index{onInput@{onInput}!CharacterInMap@{CharacterInMap}}
+\doxysubsubsection{\texorpdfstring{onInput()}{onInput()}}
+{\footnotesize\ttfamily void Character\+In\+Map\+::on\+Input (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Event \&}]{event,  }\item[{std\+::string \&}]{next\+Map\+Event,  }\item[{bool \&}]{box\+Open,  }\item[{int \&}]{STATE\+\_\+character\+Direction,  }\item[{std\+::map$<$ std\+::pair$<$ int, int $>$, Tile\+Type $>$ \&}]{coordinate\+To\+Tile\+Type\+Map,  }\item[{std\+::map$<$ std\+::pair$<$ int, int $>$, std\+::string $>$ \&}]{coordinate\+To\+Event\+Type\+Map }\end{DoxyParamCaption})}
+
+
+
+defines the movement for the character in the map 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & \\
+\hline
+{\em next\+Map\+Event} & \\
+\hline
+{\em box\+Open} & \\
+\hline
+{\em coordinate\+To\+Tile\+Type\+Map} & \\
+\hline
+{\em coordinate\+To\+Event\+Type\+Map} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_character_in_map_a49888df685fa78fb74493c627b34af4a}\label{class_character_in_map_a49888df685fa78fb74493c627b34af4a}} 
+\index{CharacterInMap@{CharacterInMap}!render@{render}}
+\index{render@{render}!CharacterInMap@{CharacterInMap}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void Character\+In\+Map\+::render (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{const SDL\+\_\+\+Rect \&}]{camera,  }\item[{\mbox{\hyperlink{class_texture_wrapper}{Texture\+Wrapper}} \&}]{debug\+Controller\+Texture }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+renders the texture 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & \\
+\hline
+{\em camera} & \\
+\hline
+{\em debug\+Controller\+Texture} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_base_single_texture_a41066f8cabeaab97e9d6f9d0f92a90fa}{Base\+Single\+Texture}}.
+
+\mbox{\Hypertarget{class_character_in_map_ac530c5dacb10cbf3d37a14bd8604cfaf}\label{class_character_in_map_ac530c5dacb10cbf3d37a14bd8604cfaf}} 
+\index{CharacterInMap@{CharacterInMap}!updateEvent@{updateEvent}}
+\index{updateEvent@{updateEvent}!CharacterInMap@{CharacterInMap}}
+\doxysubsubsection{\texorpdfstring{updateEvent()}{updateEvent()}}
+{\footnotesize\ttfamily void Character\+In\+Map\+::update\+Event (\begin{DoxyParamCaption}\item[{std\+::string \&}]{next\+Map\+Event,  }\item[{bool \&}]{box\+Open,  }\item[{std\+::pair$<$ int, int $>$}]{coordinates,  }\item[{std\+::map$<$ std\+::pair$<$ int, int $>$, std\+::string $>$ \&}]{coordinate\+To\+Event\+Type\+Map }\end{DoxyParamCaption})}
+
+
+
+Helper function that updates the next map event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em next\+Map\+Event} & string holding the state of the next\+Map\+Event \\
+\hline
+{\em box\+Open} & checks if event box is already open \\
+\hline
+{\em coordinates} & map coordinates \\
+\hline
+{\em coordinate\+To\+Event\+Type\+Map} & coordinate-\/to-\/event map \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Character\+In\+Map.\+h\end{DoxyCompactItemize}

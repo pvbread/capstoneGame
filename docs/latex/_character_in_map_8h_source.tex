@@ -1,0 +1,57 @@
+\hypertarget{_character_in_map_8h_source}{}\doxysection{Character\+In\+Map.\+h}
+\label{_character_in_map_8h_source}\index{include/CharacterInMap.h@{include/CharacterInMap.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}BaseSingleTexture.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}TextureWrapper.h"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}TileType.h"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}CharacterDirection.h"{}}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{12 \textcolor{keyword}{class }\mbox{\hyperlink{class_character_in_map}{CharacterInMap}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_base_single_texture}{BaseSingleTexture}}}
+\DoxyCodeLine{13 \{}
+\DoxyCodeLine{14 \textcolor{keyword}{public}:}
+\DoxyCodeLine{15     \mbox{\hyperlink{class_character_in_map}{CharacterInMap}}(\textcolor{keywordtype}{int} mainVelocity, }
+\DoxyCodeLine{16                    \textcolor{keywordtype}{int} velocityX, }
+\DoxyCodeLine{17                    \textcolor{keywordtype}{int} velocityY, }
+\DoxyCodeLine{18                    SDL\_Rect collisionBox}
+\DoxyCodeLine{19     ); }
+\DoxyCodeLine{20 }
+\DoxyCodeLine{25     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_character_in_map_a38eb7b5f0e6ea8f772881cf650afd9c1}{isMoveValid}}(std::string direction, }
+\DoxyCodeLine{26                      std::map<std::pair<int, int>, TileType>\& coordinateToTileTypeMap}
+\DoxyCodeLine{27     );}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{34     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_character_in_map_ac530c5dacb10cbf3d37a14bd8604cfaf}{updateEvent}}(std::string\& nextMapEvent,}
+\DoxyCodeLine{35                      \textcolor{keywordtype}{bool}\& boxOpen,}
+\DoxyCodeLine{36                      std::pair<int, int> coordinates, }
+\DoxyCodeLine{37                      std::map<std::pair<int, int>, std::string>\& coordinateToEventTypeMap}
+\DoxyCodeLine{38     );}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{46     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_character_in_map_adfc79ca658dcb3a85a74e98960f9c5ec}{onInput}}(SDL\_Event\& event,}
+\DoxyCodeLine{47                  std::string\& nextMapEvent,}
+\DoxyCodeLine{48                  \textcolor{keywordtype}{bool}\& boxOpen,}
+\DoxyCodeLine{49                  \textcolor{keywordtype}{int}\& STATE\_characterDirection,}
+\DoxyCodeLine{50                  std::map<std::pair<int, int>, TileType>\& coordinateToTileTypeMap,}
+\DoxyCodeLine{51                  std::map<std::pair<int, int>, std::string>\& coordinateToEventTypeMap}
+\DoxyCodeLine{52     );}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{57     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_character_in_map_a4394e5d6ea7fe48c7e39a98cf2637617}{move}}(\textcolor{keywordtype}{int} xBoundary, }
+\DoxyCodeLine{58               \textcolor{keywordtype}{int} yBoundary);}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60     \textcolor{keywordtype}{void} centerScreen(SDL\_Rect\& camera, \textcolor{keywordtype}{int} xBoundary, \textcolor{keywordtype}{int} yBoundary);}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_character_in_map_a49888df685fa78fb74493c627b34af4a}{render}}(SDL\_Renderer* renderer, }
+\DoxyCodeLine{63                 \textcolor{keyword}{const} SDL\_Rect\& camera, }
+\DoxyCodeLine{64                 \mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}\& characterTexture);}
+\DoxyCodeLine{65 \textcolor{keyword}{private}:    }
+\DoxyCodeLine{66     \textcolor{keywordtype}{int} mainVelocity;}
+\DoxyCodeLine{67     \textcolor{keywordtype}{int} velocityX;}
+\DoxyCodeLine{68     \textcolor{keywordtype}{int} velocityY;}
+\DoxyCodeLine{69     SDL\_Rect collisionBox;}
+\DoxyCodeLine{70 \};}
+
+\end{DoxyCode}

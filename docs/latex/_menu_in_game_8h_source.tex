@@ -1,0 +1,23 @@
+\hypertarget{_menu_in_game_8h_source}{}\doxysection{Menu\+In\+Game.\+h}
+\label{_menu_in_game_8h_source}\index{include/MenuInGame.h@{include/MenuInGame.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <SDL.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <SDL\_image.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}TextureWrapper.h"{}}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{keyword}{class }\mbox{\hyperlink{class_menu}{Menu}}\{}
+\DoxyCodeLine{9 \textcolor{keyword}{public}:}
+\DoxyCodeLine{10     \mbox{\hyperlink{class_menu}{Menu}}(\textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h);}
+\DoxyCodeLine{11     \textcolor{keywordtype}{bool} render(SDL\_Renderer* renderer,}
+\DoxyCodeLine{12                 \mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}\& menuTexture);}
+\DoxyCodeLine{13     SDL\_Rect GetMenuBox();}
+\DoxyCodeLine{14     \textcolor{keywordtype}{void} message();}
+\DoxyCodeLine{15 \textcolor{keyword}{private}:}
+\DoxyCodeLine{16     SDL\_Rect menuBox;}
+\DoxyCodeLine{17 \};}
+
+\end{DoxyCode}

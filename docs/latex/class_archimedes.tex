@@ -1,0 +1,178 @@
+\hypertarget{class_archimedes}{}\doxysection{Archimedes Class Reference}
+\label{class_archimedes}\index{Archimedes@{Archimedes}}
+
+
+Where the engine gets implemented.  
+
+
+
+
+{\ttfamily \#include $<$game\+Engine.\+h$>$}
+
+Inheritance diagram for Archimedes\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_archimedes}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_archimedes_ae7b3c6c1be502a8f72027ef96e8c911e}\label{class_archimedes_ae7b3c6c1be502a8f72027ef96e8c911e}} 
+{\bfseries Archimedes} (Uint32 flags, const char $\ast$title, int x, int y, int w, int h)
+\item 
+virtual void \mbox{\hyperlink{class_archimedes_aab194e13dc803367360061714848f36e}{run\+Game\+Loop}} ()
+\item 
+\mbox{\Hypertarget{class_archimedes_a7cd30a5653216a326728f67ce9dc313b}\label{class_archimedes_a7cd30a5653216a326728f67ce9dc313b}} 
+void {\bfseries stop\+Game\+Loop} ()
+\begin{DoxyCompactList}\small\item\em Quits the game. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_archimedes_ab772b044dbd9d2396e68a92de53f8e59}{load\+Tiles}} (std\+::vector$<$ \mbox{\hyperlink{class_tile}{Tile}} $\ast$ $>$ \&tile\+Map, const std\+::vector$<$ int $>$ \&level\+Info, std\+::map$<$ std\+::pair$<$ int, int $>$, Tile\+Type $>$ \&coordinate\+To\+Tile\+Type\+Map, std\+::map$<$ std\+::pair$<$ int, int $>$, std\+::string $>$ \&coordinate\+To\+Event\+Type\+Map, int TILE\+\_\+\+COUNT, int TYPE\+\_\+\+COUNT, int TILE\+\_\+\+LENGTH)
+\begin{DoxyCompactList}\small\item\em loads tiles into tile\+Map. Additionally we have it loading coordinates and event maps. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_archimedes_afa8378361e4ce8bd50efe949954d385a}{load\+Image\+Assets}} (SDL\+\_\+\+Renderer $\ast$renderer, std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{class_texture_wrapper}{Texture\+Wrapper}} $\ast$, std\+::string $>$ texture\+File\+Paths)
+\begin{DoxyCompactList}\small\item\em Loads the image assets. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_archimedes_a65e26b83895e7f31bae3377958cfc142}{clip\+Sheet}} (int ROWS, int COLS, int BLOCK\+\_\+\+LENGTH, int BLOCK\+\_\+\+HEIGHT, int TYPE\+\_\+\+COUNT, std\+::vector$<$ SDL\+\_\+\+Rect $>$ \&sheet\+Clipped)
+\begin{DoxyCompactList}\small\item\em Given the sheet specs, will clip the sheet into SDL rectangles. \end{DoxyCompactList}\item 
+SDL\+\_\+\+Window $\ast$ \mbox{\hyperlink{class_archimedes_a907bb0aafd35567aa68e582c3b795383}{get\+Window}} () const
+\begin{DoxyCompactList}\small\item\em the public method to access the window object pointer \end{DoxyCompactList}\item 
+SDL\+\_\+\+Renderer $\ast$ \mbox{\hyperlink{class_archimedes_af9383b675108c9725c1d462477039c1d}{get\+Renderer}} () const
+\begin{DoxyCompactList}\small\item\em the public method to access the renderer object pointer \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_archimedes_a5b885480376d44c794295775ffffd012}\label{class_archimedes_a5b885480376d44c794295775ffffd012}} 
+std\+::vector$<$ int $>$ {\bfseries convert\+Map\+To\+Vector} (std\+::string path\+Name)
+\item 
+\mbox{\Hypertarget{class_archimedes_ac1406843a9fc6184b827fab4ae446eca}\label{class_archimedes_ac1406843a9fc6184b827fab4ae446eca}} 
+bool {\bfseries get\+Quit} () const
+\item 
+\mbox{\Hypertarget{class_archimedes_af8f7e172f98375ed5fa4c2c38ab2993e}\label{class_archimedes_af8f7e172f98375ed5fa4c2c38ab2993e}} 
+int {\bfseries get\+Width} () const
+\item 
+\mbox{\Hypertarget{class_archimedes_a84a151e8ab22288e13ab5f3a410e0452}\label{class_archimedes_a84a151e8ab22288e13ab5f3a410e0452}} 
+int {\bfseries get\+Height} () const
+\item 
+\mbox{\Hypertarget{class_archimedes_a3f903358e1f873909ee7a015c3d0d7b9}\label{class_archimedes_a3f903358e1f873909ee7a015c3d0d7b9}} 
+void {\bfseries set\+To\+Quit} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Where the engine gets implemented. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_archimedes_a65e26b83895e7f31bae3377958cfc142}\label{class_archimedes_a65e26b83895e7f31bae3377958cfc142}} 
+\index{Archimedes@{Archimedes}!clipSheet@{clipSheet}}
+\index{clipSheet@{clipSheet}!Archimedes@{Archimedes}}
+\doxysubsubsection{\texorpdfstring{clipSheet()}{clipSheet()}}
+{\footnotesize\ttfamily bool Archimedes\+::clip\+Sheet (\begin{DoxyParamCaption}\item[{int}]{ROWS,  }\item[{int}]{COLS,  }\item[{int}]{BLOCK\+\_\+\+LENGTH,  }\item[{int}]{BLOCK\+\_\+\+HEIGHT,  }\item[{int}]{TYPE\+\_\+\+COUNT,  }\item[{std\+::vector$<$ SDL\+\_\+\+Rect $>$ \&}]{sheet\+Clipped }\end{DoxyParamCaption})}
+
+
+
+Given the sheet specs, will clip the sheet into SDL rectangles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ROWS} & \\
+\hline
+{\em COLS} & \\
+\hline
+{\em BLOCK\+\_\+\+LENGTH} & \\
+\hline
+{\em BLOCK\+\_\+\+HEIGHT} & \\
+\hline
+{\em TYPE\+\_\+\+COUNT} & \\
+\hline
+{\em sheet\+Clipped} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_archimedes_af9383b675108c9725c1d462477039c1d}\label{class_archimedes_af9383b675108c9725c1d462477039c1d}} 
+\index{Archimedes@{Archimedes}!getRenderer@{getRenderer}}
+\index{getRenderer@{getRenderer}!Archimedes@{Archimedes}}
+\doxysubsubsection{\texorpdfstring{getRenderer()}{getRenderer()}}
+{\footnotesize\ttfamily SDL\+\_\+\+Renderer $\ast$ Archimedes\+::get\+Renderer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+the public method to access the renderer object pointer 
+
+\begin{DoxyReturn}{Returns}
+pointer to the engine\textquotesingle{}s SDL\+\_\+\+Renderer instance 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_archimedes_a907bb0aafd35567aa68e582c3b795383}\label{class_archimedes_a907bb0aafd35567aa68e582c3b795383}} 
+\index{Archimedes@{Archimedes}!getWindow@{getWindow}}
+\index{getWindow@{getWindow}!Archimedes@{Archimedes}}
+\doxysubsubsection{\texorpdfstring{getWindow()}{getWindow()}}
+{\footnotesize\ttfamily SDL\+\_\+\+Window $\ast$ Archimedes\+::get\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+the public method to access the window object pointer 
+
+\begin{DoxyReturn}{Returns}
+pointer to the engine\textquotesingle{}s SDL\+\_\+\+Window instance 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_archimedes_afa8378361e4ce8bd50efe949954d385a}\label{class_archimedes_afa8378361e4ce8bd50efe949954d385a}} 
+\index{Archimedes@{Archimedes}!loadImageAssets@{loadImageAssets}}
+\index{loadImageAssets@{loadImageAssets}!Archimedes@{Archimedes}}
+\doxysubsubsection{\texorpdfstring{loadImageAssets()}{loadImageAssets()}}
+{\footnotesize\ttfamily bool Archimedes\+::load\+Image\+Assets (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{class_texture_wrapper}{Texture\+Wrapper}} $\ast$, std\+::string $>$}]{texture\+File\+Paths }\end{DoxyParamCaption})}
+
+
+
+Loads the image assets. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & \\
+\hline
+{\em texture\+File\+Paths} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool of success or failure 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_archimedes_ab772b044dbd9d2396e68a92de53f8e59}\label{class_archimedes_ab772b044dbd9d2396e68a92de53f8e59}} 
+\index{Archimedes@{Archimedes}!loadTiles@{loadTiles}}
+\index{loadTiles@{loadTiles}!Archimedes@{Archimedes}}
+\doxysubsubsection{\texorpdfstring{loadTiles()}{loadTiles()}}
+{\footnotesize\ttfamily bool Archimedes\+::load\+Tiles (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{class_tile}{Tile}} $\ast$ $>$ \&}]{tile\+Map,  }\item[{const std\+::vector$<$ int $>$ \&}]{level\+Info,  }\item[{std\+::map$<$ std\+::pair$<$ int, int $>$, Tile\+Type $>$ \&}]{coordinate\+To\+Tile\+Type\+Map,  }\item[{std\+::map$<$ std\+::pair$<$ int, int $>$, std\+::string $>$ \&}]{coordinate\+To\+Event\+Type\+Map,  }\item[{int}]{TILE\+\_\+\+COUNT,  }\item[{int}]{TYPE\+\_\+\+COUNT,  }\item[{int}]{TILE\+\_\+\+LENGTH }\end{DoxyParamCaption})}
+
+
+
+loads tiles into tile\+Map. Additionally we have it loading coordinates and event maps. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tile\+Map} & \\
+\hline
+{\em coordinate\+To\+Tile\+Type\+Map} & \\
+\hline
+{\em coordinate\+To\+Event\+Type\+Map} & \\
+\hline
+{\em TILE\+\_\+\+COUNT} & \\
+\hline
+{\em TYPE\+\_\+\+COUNT} & \\
+\hline
+{\em TILE\+\_\+\+LENGTH} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_archimedes_aab194e13dc803367360061714848f36e}\label{class_archimedes_aab194e13dc803367360061714848f36e}} 
+\index{Archimedes@{Archimedes}!runGameLoop@{runGameLoop}}
+\index{runGameLoop@{runGameLoop}!Archimedes@{Archimedes}}
+\doxysubsubsection{\texorpdfstring{runGameLoop()}{runGameLoop()}}
+{\footnotesize\ttfamily virtual void Archimedes\+::run\+Game\+Loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_dash_da_capo_ad4cfadf2264a2ce555c4cc647561408c}{Dash\+Da\+Capo}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/game\+Engine.\+h\end{DoxyCompactItemize}

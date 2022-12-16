@@ -1,0 +1,34 @@
+\hypertarget{class_base_menu}{}\doxysection{Base\+Menu Class Reference}
+\label{class_base_menu}\index{BaseMenu@{BaseMenu}}
+
+
+Creates a menu. Just specify a font size, some dimensions, a list of options, font path and color, and a renderer. Additionally it keeps track of which option was selected.  
+
+
+
+
+{\ttfamily \#include $<$Base\+Menu.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_base_menu_adca3474310036206a7c5294c98dacc5f}\label{class_base_menu_adca3474310036206a7c5294c98dacc5f}} 
+{\bfseries Base\+Menu} (int font\+Size, int x, int y, int w, int h, const std\+::vector$<$ std\+::string $>$ \&option\+Names, std\+::string font\+Path, SDL\+\_\+\+Color font\+Color, SDL\+\_\+\+Color font\+Highlight\+Color, SDL\+\_\+\+Renderer $\ast$renderer)
+\item 
+\mbox{\Hypertarget{class_base_menu_a0684b2d47501c0890c34385c40c6661f}\label{class_base_menu_a0684b2d47501c0890c34385c40c6661f}} 
+void {\bfseries on\+Input} (SDL\+\_\+\+Event \&event, Mix\+\_\+\+Chunk $\ast$Select\+Music, std\+::string \&option\+Selected)
+\item 
+\mbox{\Hypertarget{class_base_menu_a58582e346c2552f846600b4bb114b02d}\label{class_base_menu_a58582e346c2552f846600b4bb114b02d}} 
+void {\bfseries render} (SDL\+\_\+\+Renderer $\ast$renderer)
+\item 
+\mbox{\Hypertarget{class_base_menu_a0e08fb0f637f66d3222a094d515c4b10}\label{class_base_menu_a0e08fb0f637f66d3222a094d515c4b10}} 
+void {\bfseries update\+Highlight} (int prev\+Idx, int curr\+Idx)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Creates a menu. Just specify a font size, some dimensions, a list of options, font path and color, and a renderer. Additionally it keeps track of which option was selected. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Base\+Menu.\+h\end{DoxyCompactItemize}
