@@ -28,6 +28,6 @@ Contributors:
 * Raymond Naula🐢
 * Pedro Vizzarro Vallejos 🥙
 
-This repository was created for our project in Capstone, with Professor Charles Richards.
+This repository was created for our project in Capstone, taught by Professor Charles Richards.
 
 ---
