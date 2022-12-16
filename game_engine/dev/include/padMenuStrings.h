@@ -1,3 +1,5 @@
+// outdated function that we used as a hack for trying to 
+// straighten text rendering
 // pads strings with white space so that they get rendered properly in menus
 // takes the longest string as reference
 // may need to have a minimum length otherwise

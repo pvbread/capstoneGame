@@ -1,5 +1,6 @@
 #pragma once
 
+/// @brief enums to reflect our tileSheet format
 enum TileType
 {
     TRIGHT = 0,

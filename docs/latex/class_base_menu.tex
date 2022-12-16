@@ -15,19 +15,67 @@ Creates a menu. Just specify a font size, some dimensions, a list of options, fo
 \mbox{\Hypertarget{class_base_menu_adca3474310036206a7c5294c98dacc5f}\label{class_base_menu_adca3474310036206a7c5294c98dacc5f}} 
 {\bfseries Base\+Menu} (int font\+Size, int x, int y, int w, int h, const std\+::vector$<$ std\+::string $>$ \&option\+Names, std\+::string font\+Path, SDL\+\_\+\+Color font\+Color, SDL\+\_\+\+Color font\+Highlight\+Color, SDL\+\_\+\+Renderer $\ast$renderer)
 \item 
-\mbox{\Hypertarget{class_base_menu_a0684b2d47501c0890c34385c40c6661f}\label{class_base_menu_a0684b2d47501c0890c34385c40c6661f}} 
-void {\bfseries on\+Input} (SDL\+\_\+\+Event \&event, Mix\+\_\+\+Chunk $\ast$Select\+Music, std\+::string \&option\+Selected)
+void \mbox{\hyperlink{class_base_menu_a0684b2d47501c0890c34385c40c6661f}{on\+Input}} (SDL\+\_\+\+Event \&event, Mix\+\_\+\+Chunk $\ast$Select\+Music, std\+::string \&option\+Selected)
 \item 
-\mbox{\Hypertarget{class_base_menu_a58582e346c2552f846600b4bb114b02d}\label{class_base_menu_a58582e346c2552f846600b4bb114b02d}} 
-void {\bfseries render} (SDL\+\_\+\+Renderer $\ast$renderer)
-\item 
-\mbox{\Hypertarget{class_base_menu_a0e08fb0f637f66d3222a094d515c4b10}\label{class_base_menu_a0e08fb0f637f66d3222a094d515c4b10}} 
-void {\bfseries update\+Highlight} (int prev\+Idx, int curr\+Idx)
-\end{DoxyCompactItemize}
+void \mbox{\hyperlink{class_base_menu_a58582e346c2552f846600b4bb114b02d}{render}} (SDL\+\_\+\+Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em renders the menu \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_base_menu_a0e08fb0f637f66d3222a094d515c4b10}{update\+Highlight}} (int prev\+Idx, int curr\+Idx)
+\begin{DoxyCompactList}\small\item\em updates the highlight color of the option selected \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Creates a menu. Just specify a font size, some dimensions, a list of options, font path and color, and a renderer. Additionally it keeps track of which option was selected. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_base_menu_a0684b2d47501c0890c34385c40c6661f}\label{class_base_menu_a0684b2d47501c0890c34385c40c6661f}} 
+\index{BaseMenu@{BaseMenu}!onInput@{onInput}}
+\index{onInput@{onInput}!BaseMenu@{BaseMenu}}
+\doxysubsubsection{\texorpdfstring{onInput()}{onInput()}}
+{\footnotesize\ttfamily void Base\+Menu\+::on\+Input (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Event \&}]{event,  }\item[{Mix\+\_\+\+Chunk $\ast$}]{Select\+Music,  }\item[{std\+::string \&}]{option\+Selected }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & reads the input event \\
+\hline
+{\em Select\+Music} & the sound to be made when scrolling \\
+\hline
+{\em option\+Selected} & the variable that retains the option chosen by the end \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_base_menu_a58582e346c2552f846600b4bb114b02d}\label{class_base_menu_a58582e346c2552f846600b4bb114b02d}} 
+\index{BaseMenu@{BaseMenu}!render@{render}}
+\index{render@{render}!BaseMenu@{BaseMenu}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void Base\+Menu\+::render (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer }\end{DoxyParamCaption})}
+
+
+
+renders the menu 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_base_menu_a0e08fb0f637f66d3222a094d515c4b10}\label{class_base_menu_a0e08fb0f637f66d3222a094d515c4b10}} 
+\index{BaseMenu@{BaseMenu}!updateHighlight@{updateHighlight}}
+\index{updateHighlight@{updateHighlight}!BaseMenu@{BaseMenu}}
+\doxysubsubsection{\texorpdfstring{updateHighlight()}{updateHighlight()}}
+{\footnotesize\ttfamily void Base\+Menu\+::update\+Highlight (\begin{DoxyParamCaption}\item[{int}]{prev\+Idx,  }\item[{int}]{curr\+Idx }\end{DoxyParamCaption})}
+
+
+
+updates the highlight color of the option selected 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prev\+Idx} & index of the previously chosen option \\
+\hline
+{\em curr\+Idx} & index of the currently chosent option \\
+\hline
+\end{DoxyParams}
+
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

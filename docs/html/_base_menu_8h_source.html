@@ -93,32 +93,37 @@ $(function() {
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>             SDL_Color fontHighlightColor,</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>             SDL_Renderer* renderer</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    );</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="comment">//might need to do a combatMenu with extra onInput behavior</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">void</span> onInput(SDL_Event&amp; event, Mix_Chunk* SelectMusic, std::string&amp; optionSelected);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordtype">void</span> render(SDL_Renderer* renderer);  </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordtype">void</span> updateHighlight(<span class="keywordtype">int</span> prevIdx, <span class="keywordtype">int</span> currIdx);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">int</span> startX;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordtype">int</span> startY;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">int</span> optionWidth;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">int</span> optionHeight;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">int</span> initialCursorHeight;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">int</span> cursorIndex;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    std::vector&lt;SDL_Texture*&gt; menuTextures;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    std::vector&lt;SDL_Rect&gt; optionRectangles;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    std::vector&lt;SDL_Texture*&gt; cursorTextures;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    std::vector&lt;SDL_Rect&gt; cursorRectangles;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    std::vector&lt;std::string&gt; optionNames;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    SDL_Color fontColor;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    SDL_Color highlightColor;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    SDL_Rect cursorRectangle;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    SDL_Texture* menuCursorTexture;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    TTF_Font* menuFont;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    SDL_Renderer* renderer;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>};</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="class_base_menu.html#a0684b2d47501c0890c34385c40c6661f">   26</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_base_menu.html#a0684b2d47501c0890c34385c40c6661f">onInput</a>(SDL_Event&amp; event, Mix_Chunk* SelectMusic, std::string&amp; optionSelected);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="class_base_menu.html#a58582e346c2552f846600b4bb114b02d">   30</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_base_menu.html#a58582e346c2552f846600b4bb114b02d">render</a>(SDL_Renderer* renderer);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="class_base_menu.html#a0e08fb0f637f66d3222a094d515c4b10">   35</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_base_menu.html#a0e08fb0f637f66d3222a094d515c4b10">updateHighlight</a>(<span class="keywordtype">int</span> prevIdx, <span class="keywordtype">int</span> currIdx);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">int</span> startX;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">int</span> startY;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">int</span> optionWidth;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">int</span> optionHeight;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">int</span> initialCursorHeight;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">int</span> cursorIndex;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    std::vector&lt;SDL_Texture*&gt; menuTextures;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    std::vector&lt;SDL_Rect&gt; optionRectangles;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    std::vector&lt;SDL_Texture*&gt; cursorTextures;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    std::vector&lt;SDL_Rect&gt; cursorRectangles;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    std::vector&lt;std::string&gt; optionNames;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    SDL_Color fontColor;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    SDL_Color highlightColor;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    SDL_Rect cursorRectangle;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    SDL_Texture* menuCursorTexture;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    TTF_Font* menuFont;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    SDL_Renderer* renderer;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>};</div>
 <div class="ttc" id="aclass_base_menu_html"><div class="ttname"><a href="class_base_menu.html">BaseMenu</a></div><div class="ttdoc">Creates a menu. Just specify a font size, some dimensions, a list of options, font path and color,...</div><div class="ttdef"><b>Definition:</b> BaseMenu.h:10</div></div>
+<div class="ttc" id="aclass_base_menu_html_a0684b2d47501c0890c34385c40c6661f"><div class="ttname"><a href="class_base_menu.html#a0684b2d47501c0890c34385c40c6661f">BaseMenu::onInput</a></div><div class="ttdeci">void onInput(SDL_Event &amp;event, Mix_Chunk *SelectMusic, std::string &amp;optionSelected)</div></div>
+<div class="ttc" id="aclass_base_menu_html_a0e08fb0f637f66d3222a094d515c4b10"><div class="ttname"><a href="class_base_menu.html#a0e08fb0f637f66d3222a094d515c4b10">BaseMenu::updateHighlight</a></div><div class="ttdeci">void updateHighlight(int prevIdx, int currIdx)</div><div class="ttdoc">updates the highlight color of the option selected</div></div>
+<div class="ttc" id="aclass_base_menu_html_a58582e346c2552f846600b4bb114b02d"><div class="ttname"><a href="class_base_menu.html#a58582e346c2552f846600b4bb114b02d">BaseMenu::render</a></div><div class="ttdeci">void render(SDL_Renderer *renderer)</div><div class="ttdoc">renders the menu</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

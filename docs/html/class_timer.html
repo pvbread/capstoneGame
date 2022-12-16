@@ -76,14 +76,18 @@ $(function() {
   <div class="headertitle"><div class="title">Timer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>general timer class. We use it for transitions effects and also timed notifications.  
+ <a href="class_timer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_timer_8h_source.html">Timer.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9020542d73357a4eef512eefaf57524b"><td class="memItemLeft" align="right" valign="top"><a id="a9020542d73357a4eef512eefaf57524b" name="a9020542d73357a4eef512eefaf57524b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
 <tr class="separator:a9020542d73357a4eef512eefaf57524b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f2885ef7088f8400b11508f89ce8520"><td class="memItemLeft" align="right" valign="top"><a id="a1f2885ef7088f8400b11508f89ce8520" name="a1f2885ef7088f8400b11508f89ce8520"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>deltaTime</b> ()</td></tr>
+<tr class="memitem:a1f2885ef7088f8400b11508f89ce8520"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_timer.html#a1f2885ef7088f8400b11508f89ce8520">deltaTime</a> ()</td></tr>
 <tr class="separator:a1f2885ef7088f8400b11508f89ce8520"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c3c8d80409643ce0553bd42209f9667"><td class="memItemLeft" align="right" valign="top"><a id="a7c3c8d80409643ce0553bd42209f9667" name="a7c3c8d80409643ce0553bd42209f9667"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>timerScale</b> (float t)</td></tr>
@@ -93,20 +97,111 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>getTimerScale</b> ()
 <tr class="separator:a49abb9f4d68bedac32707160d8a0aa6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a745ad59b5a46744cd871a1129a25d74f"><td class="memItemLeft" align="right" valign="top"><a id="a745ad59b5a46744cd871a1129a25d74f" name="a745ad59b5a46744cd871a1129a25d74f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
+<tr class="memdesc:a745ad59b5a46744cd871a1129a25d74f"><td class="mdescLeft">&#160;</td><td class="mdescRight">updates the timer (needs to be at the top of the game loop) <br /></td></tr>
 <tr class="separator:a745ad59b5a46744cd871a1129a25d74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e4017ec1667e5829ccad751cde498fe"><td class="memItemLeft" align="right" valign="top"><a id="a2e4017ec1667e5829ccad751cde498fe" name="a2e4017ec1667e5829ccad751cde498fe"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>timePassed</b> (int countdownTime, int currentTime)</td></tr>
+<tr class="memitem:a2e4017ec1667e5829ccad751cde498fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_timer.html#a2e4017ec1667e5829ccad751cde498fe">timePassed</a> (int countdownTime, int currentTime)</td></tr>
+<tr class="memdesc:a2e4017ec1667e5829ccad751cde498fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether some time has elapsed. Incomplete function.  <br /></td></tr>
 <tr class="separator:a2e4017ec1667e5829ccad751cde498fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a32722f7f195d9f9d807ea2f609bfaf4e"><td class="memItemLeft" align="right" valign="top"><a id="a32722f7f195d9f9d807ea2f609bfaf4e" name="a32722f7f195d9f9d807ea2f609bfaf4e"></a>
-static <a class="el" href="class_timer.html">Timer</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
+<tr class="memitem:a32722f7f195d9f9d807ea2f609bfaf4e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_timer.html">Timer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_timer.html#a32722f7f195d9f9d807ea2f609bfaf4e">instance</a> ()</td></tr>
+<tr class="memdesc:a32722f7f195d9f9d807ea2f609bfaf4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a singleton so we don't provide direct access to the timer constructor.  <br /></td></tr>
 <tr class="separator:a32722f7f195d9f9d807ea2f609bfaf4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16d5161342730382f4a5170b3d5c2314"><td class="memItemLeft" align="right" valign="top"><a id="a16d5161342730382f4a5170b3d5c2314" name="a16d5161342730382f4a5170b3d5c2314"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>release</b> ()</td></tr>
 <tr class="separator:a16d5161342730382f4a5170b3d5c2314"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>general timer class. We use it for transitions effects and also timed notifications. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1f2885ef7088f8400b11508f89ce8520" name="a1f2885ef7088f8400b11508f89ce8520"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f2885ef7088f8400b11508f89ce8520">&#9670;&#160;</a></span>deltaTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Timer::deltaTime </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>the change in time <br  />
+ </dd></dl>
+
+</div>
+</div>
+<a id="a32722f7f195d9f9d807ea2f609bfaf4e" name="a32722f7f195d9f9d807ea2f609bfaf4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32722f7f195d9f9d807ea2f609bfaf4e">&#9670;&#160;</a></span>instance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="class_timer.html">Timer</a> * Timer::instance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is a singleton so we don't provide direct access to the timer constructor. </p>
+<dl class="section return"><dt>Returns</dt><dd><br  />
+ </dd></dl>
+
+</div>
+</div>
+<a id="a2e4017ec1667e5829ccad751cde498fe" name="a2e4017ec1667e5829ccad751cde498fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e4017ec1667e5829ccad751cde498fe">&#9670;&#160;</a></span>timePassed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Timer::timePassed </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>countdownTime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currentTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether some time has elapsed. Incomplete function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">countdownTime</td><td></td></tr>
+    <tr><td class="paramname">currentTime</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><br  />
+ </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="_timer_8h_source.html">Timer.h</a></li>
 </ul>

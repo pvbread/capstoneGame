@@ -75,14 +75,18 @@ $(function() {
   <div class="headertitle"><div class="title">Tile Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Your friendly next-door-tile. Does everything a tile can. It's the backbone class for our map.  
+ <a href="class_tile.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_tile_8h_source.html">Tile.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0f51254b873903a68cfeb41251b21e3"><td class="memItemLeft" align="right" valign="top"><a id="aa0f51254b873903a68cfeb41251b21e3" name="aa0f51254b873903a68cfeb41251b21e3"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Tile</b> (int x, int y, int w, int h, TileType tileType)</td></tr>
 <tr class="separator:aa0f51254b873903a68cfeb41251b21e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ba4eb88f2300aba9da7c6dd4023941c"><td class="memItemLeft" align="right" valign="top"><a id="a4ba4eb88f2300aba9da7c6dd4023941c" name="a4ba4eb88f2300aba9da7c6dd4023941c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (SDL_Renderer *renderer, <a class="el" href="class_texture_wrapper.html">TextureWrapper</a> &amp;tileTexture, const SDL_Rect &amp;camera, const std::vector&lt; SDL_Rect &gt; &amp;tileClips)</td></tr>
+<tr class="memitem:a4ba4eb88f2300aba9da7c6dd4023941c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tile.html#a4ba4eb88f2300aba9da7c6dd4023941c">render</a> (SDL_Renderer *renderer, <a class="el" href="class_texture_wrapper.html">TextureWrapper</a> &amp;tileTexture, const SDL_Rect &amp;camera, const std::vector&lt; SDL_Rect &gt; &amp;tileClips)</td></tr>
 <tr class="separator:a4ba4eb88f2300aba9da7c6dd4023941c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c5c52ada25a3848a13476827410b139"><td class="memItemLeft" align="right" valign="top"><a id="a9c5c52ada25a3848a13476827410b139" name="a9c5c52ada25a3848a13476827410b139"></a>
 TileType&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> ()</td></tr>
@@ -91,6 +95,60 @@ TileType&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> ()</t
 SDL_Rect&#160;</td><td class="memItemRight" valign="bottom"><b>getCollisionBox</b> ()</td></tr>
 <tr class="separator:a4c3182d1bb573ac04ea145d721b07725"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Your friendly next-door-tile. Does everything a tile can. It's the backbone class for our map. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4ba4eb88f2300aba9da7c6dd4023941c" name="a4ba4eb88f2300aba9da7c6dd4023941c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ba4eb88f2300aba9da7c6dd4023941c">&#9670;&#160;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Tile::render </td>
+          <td>(</td>
+          <td class="paramtype">SDL_Renderer *&#160;</td>
+          <td class="paramname"><em>renderer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_texture_wrapper.html">TextureWrapper</a> &amp;&#160;</td>
+          <td class="paramname"><em>tileTexture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const SDL_Rect &amp;&#160;</td>
+          <td class="paramname"><em>camera</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; SDL_Rect &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tileClips</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">renderer</td><td></td></tr>
+    <tr><td class="paramname">tileTexture</td><td>takes a particular texture from tileSheet </td></tr>
+    <tr><td class="paramname">camera</td><td>needs the camera position to know whether to render or not </td></tr>
+    <tr><td class="paramname">tileClips</td><td>vector of the coordinates to render in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><br  />
+ </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="_tile_8h_source.html">Tile.h</a></li>
 </ul>

@@ -4,7 +4,8 @@
 
 #include "TextureWrapper.h"
 
-/// @brief Abstract container for a single texture
+/// @brief Abstract high levelcontainer for a single texture.
+/// Has methods built-in to deal with movement and camera centering
 class BaseSingleTexture
 {
 public:

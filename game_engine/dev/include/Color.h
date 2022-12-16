@@ -3,6 +3,7 @@
 #include "pch.h"
 
 /// @brief Provides static access to common colors
+/// Note that most colors have a nearby color as a highlight pair.
 class Color
 {
 public:

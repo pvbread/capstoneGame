@@ -1,5 +1,6 @@
 #pragma once
 
+/// @brief Covers all the screens scenarios for the game.
 enum Screen
 {
     INTRO = 1,

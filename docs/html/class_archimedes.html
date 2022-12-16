@@ -116,8 +116,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>stopGameLoop</b> ()</
 <tr class="memitem:af9383b675108c9725c1d462477039c1d"><td class="memItemLeft" align="right" valign="top">SDL_Renderer *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_archimedes.html#af9383b675108c9725c1d462477039c1d">getRenderer</a> () const</td></tr>
 <tr class="memdesc:af9383b675108c9725c1d462477039c1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">the public method to access the renderer object pointer  <br /></td></tr>
 <tr class="separator:af9383b675108c9725c1d462477039c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b885480376d44c794295775ffffd012"><td class="memItemLeft" align="right" valign="top"><a id="a5b885480376d44c794295775ffffd012" name="a5b885480376d44c794295775ffffd012"></a>
-std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>convertMapToVector</b> (std::string pathName)</td></tr>
+<tr class="memitem:a5b885480376d44c794295775ffffd012"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_archimedes.html#a5b885480376d44c794295775ffffd012">convertMapToVector</a> (std::string pathName)</td></tr>
+<tr class="memdesc:a5b885480376d44c794295775ffffd012"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes in a .map file and parses it into a vector in the format that we need it. It's an intermediate step to account for variable size maps.  <br /></td></tr>
 <tr class="separator:a5b885480376d44c794295775ffffd012"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1406843a9fc6184b827fab4ae446eca"><td class="memItemLeft" align="right" valign="top"><a id="ac1406843a9fc6184b827fab4ae446eca" name="ac1406843a9fc6184b827fab4ae446eca"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getQuit</b> () const</td></tr>
@@ -194,6 +194,34 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setToQuit</b> ()</td>
     <tr><td class="paramname">BLOCK_HEIGHT</td><td></td></tr>
     <tr><td class="paramname">TYPE_COUNT</td><td></td></tr>
     <tr><td class="paramname">sheetClipped</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><br  />
+ </dd></dl>
+
+</div>
+</div>
+<a id="a5b885480376d44c794295775ffffd012" name="a5b885480376d44c794295775ffffd012"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b885480376d44c794295775ffffd012">&#9670;&#160;</a></span>convertMapToVector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; int &gt; Archimedes::convertMapToVector </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>pathName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Takes in a .map file and parses it into a vector in the format that we need it. It's an intermediate step to account for variable size maps. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pathName</td><td></td></tr>
   </table>
   </dd>
 </dl>

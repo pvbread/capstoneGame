@@ -2,26 +2,41 @@
 
 #include "pch.h"
 
+/// @brief general timer class. We use it for transitions
+/// effects and also timed notifications.
 class Timer
 {
 public:
+    /// @brief This is a singleton so we don't provide direct access to
+    /// the timer constructor.
+    /// @return 
     static Timer* instance();
+    
     static void release();
 
     void reset();
-    float deltaTime();//gives back delta time
+    
+    /// @brief
+    /// @return the change in time 
+    float deltaTime();
 
-    void timerScale(float t);//for setting timescale
-    float getTimerScale();//returns timescale
+    void timerScale(float t);
 
-    void update();//timer update
+    float getTimerScale();
 
+    /// @brief updates the timer (needs to be at the top of the game loop)
+    void update();
+
+    /// @brief Checks whether some time has elapsed. Incomplete function.
+    /// @param countdownTime 
+    /// @param currentTime 
+    /// @return 
     bool timePassed(int countdownTime, int currentTime);
 
 private:
     static Timer* sInstance;
 
-    unsigned int mStartTicks;//where SDL_GETTICKS gets from beginning of program
+    unsigned int mStartTicks;
     unsigned int mElapsedTicks;
     float mDeltaTime;
     float mTimerScale;

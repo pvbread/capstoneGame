@@ -69,6 +69,11 @@ public:
     /// @return pointer to the engine's SDL_Renderer instance
     SDL_Renderer* getRenderer() const;
 
+    /// @brief Takes in a .map file and parses it into a vector
+    /// in the format that we need it. It's an intermediate step to account for
+    /// variable size maps.
+    /// @param pathName 
+    /// @return 
     std::vector<int> convertMapToVector(std::string pathName);
 
     bool getQuit() const;

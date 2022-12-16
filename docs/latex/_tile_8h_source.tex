@@ -13,21 +13,23 @@
 \DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}TextureWrapper.h"{}}}
 \DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}TileType.h"{}}}
 \DoxyCodeLine{11 }
-\DoxyCodeLine{12 \textcolor{keyword}{class }\mbox{\hyperlink{class_tile}{Tile}}}
-\DoxyCodeLine{13 \{}
-\DoxyCodeLine{14 \textcolor{keyword}{public}:}
-\DoxyCodeLine{15     \textcolor{comment}{//make this an enum type}}
-\DoxyCodeLine{16     \mbox{\hyperlink{class_tile}{Tile}}(\textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h, TileType tileType);}
-\DoxyCodeLine{17     \textcolor{keywordtype}{bool} render(SDL\_Renderer* renderer, }
-\DoxyCodeLine{18                 \mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}\& tileTexture, }
-\DoxyCodeLine{19                 \textcolor{keyword}{const} SDL\_Rect\& camera, }
-\DoxyCodeLine{20                 \textcolor{keyword}{const} std::vector<SDL\_Rect>\& tileClips);}
-\DoxyCodeLine{21     TileType getType();}
-\DoxyCodeLine{22     SDL\_Rect getCollisionBox();}
-\DoxyCodeLine{23 \textcolor{keyword}{private}:}
-\DoxyCodeLine{24     \textcolor{comment}{// Tile attributes}}
-\DoxyCodeLine{25     SDL\_Rect collisionBox;}
-\DoxyCodeLine{26     TileType tileType;}
-\DoxyCodeLine{27 \};}
+\DoxyCodeLine{14 \textcolor{keyword}{class }\mbox{\hyperlink{class_tile}{Tile}}}
+\DoxyCodeLine{15 \{}
+\DoxyCodeLine{16 \textcolor{keyword}{public}:}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18     \mbox{\hyperlink{class_tile}{Tile}}(\textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h, TileType tileType);}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{26     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_tile_a4ba4eb88f2300aba9da7c6dd4023941c}{render}}(SDL\_Renderer* renderer, }
+\DoxyCodeLine{27                 \mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}\& tileTexture, }
+\DoxyCodeLine{28                 \textcolor{keyword}{const} SDL\_Rect\& camera, }
+\DoxyCodeLine{29                 \textcolor{keyword}{const} std::vector<SDL\_Rect>\& tileClips);}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31     TileType getType();}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33     SDL\_Rect getCollisionBox();}
+\DoxyCodeLine{34 \textcolor{keyword}{private}:}
+\DoxyCodeLine{35     SDL\_Rect collisionBox;}
+\DoxyCodeLine{36     TileType tileType;}
+\DoxyCodeLine{37 \};}
 
 \end{DoxyCode}

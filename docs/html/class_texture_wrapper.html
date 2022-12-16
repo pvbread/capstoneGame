@@ -75,6 +75,11 @@ $(function() {
   <div class="headertitle"><div class="title">TextureWrapper Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Middle-level object that is used for a lot of the map rendering. Occasionally we use it in the game directly when we want to play with transparency levels.  
+ <a href="class_texture_wrapper.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_texture_wrapper_8h_source.html">TextureWrapper.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -83,21 +88,126 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>loadImage</b> (SDL_Re
 <tr class="separator:a3e33a3e5921f0352b9457dc23985d000"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42c5d6150121b0eb7b1e6580630fc717"><td class="memItemLeft" align="right" valign="top"><a id="a42c5d6150121b0eb7b1e6580630fc717" name="a42c5d6150121b0eb7b1e6580630fc717"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>freeMemory</b> ()</td></tr>
-<tr class="memdesc:a42c5d6150121b0eb7b1e6580630fc717"><td class="mdescLeft">&#160;</td><td class="mdescRight">in case the user wants to free memory explicitly will give that functionality and prevent double deletion plus avoid direct calls to destructor <br /></td></tr>
+<tr class="memdesc:a42c5d6150121b0eb7b1e6580630fc717"><td class="mdescLeft">&#160;</td><td class="mdescRight">in case the user wants to free memory explicitly will give that functionality and prevent double deletion plus avoid direct calls to destructor. The game was never intricate enough to need this and we dropped this functionality on later classes. But we might want to extend it in the future. <br /></td></tr>
 <tr class="separator:a42c5d6150121b0eb7b1e6580630fc717"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08e82db1f1decb22681cca39ee43e950"><td class="memItemLeft" align="right" valign="top"><a id="a08e82db1f1decb22681cca39ee43e950" name="a08e82db1f1decb22681cca39ee43e950"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>setColor</b> (Uint8 r, Uint8 g, Uint8 b)</td></tr>
 <tr class="separator:a08e82db1f1decb22681cca39ee43e950"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7eb6eabf69fa8f60ba6c2f05671b034a"><td class="memItemLeft" align="right" valign="top"><a id="a7eb6eabf69fa8f60ba6c2f05671b034a" name="a7eb6eabf69fa8f60ba6c2f05671b034a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setAlpha</b> (Uint8 alpha)</td></tr>
+<tr class="memitem:a7eb6eabf69fa8f60ba6c2f05671b034a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture_wrapper.html#a7eb6eabf69fa8f60ba6c2f05671b034a">setAlpha</a> (Uint8 alpha)</td></tr>
+<tr class="memdesc:a7eb6eabf69fa8f60ba6c2f05671b034a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the transparency level.  <br /></td></tr>
 <tr class="separator:a7eb6eabf69fa8f60ba6c2f05671b034a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a942a85099716a4314ecdbeaeafeaf952"><td class="memItemLeft" align="right" valign="top"><a id="a942a85099716a4314ecdbeaeafeaf952" name="a942a85099716a4314ecdbeaeafeaf952"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (SDL_Renderer *renderer, int x, int y, const SDL_Rect *clip=nullptr, double angle=0.0f, SDL_Point *center=nullptr, SDL_RendererFlip flip=SDL_FLIP_NONE)</td></tr>
+<tr class="memitem:a942a85099716a4314ecdbeaeafeaf952"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_texture_wrapper.html#a942a85099716a4314ecdbeaeafeaf952">render</a> (SDL_Renderer *renderer, int x, int y, const SDL_Rect *clip=nullptr, double angle=0.0f, SDL_Point *center=nullptr, SDL_RendererFlip flip=SDL_FLIP_NONE)</td></tr>
+<tr class="memdesc:a942a85099716a4314ecdbeaeafeaf952"><td class="mdescLeft">&#160;</td><td class="mdescRight">Highly customizable rendering function.  <br /></td></tr>
 <tr class="separator:a942a85099716a4314ecdbeaeafeaf952"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a613171cb6429803d393c8454c011ce5c"><td class="memItemLeft" align="right" valign="top"><a id="a613171cb6429803d393c8454c011ce5c" name="a613171cb6429803d393c8454c011ce5c"></a>
 SDL_Texture *&#160;</td><td class="memItemRight" valign="bottom"><b>getTexture</b> () const</td></tr>
 <tr class="separator:a613171cb6429803d393c8454c011ce5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Middle-level object that is used for a lot of the map rendering. Occasionally we use it in the game directly when we want to play with transparency levels. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a942a85099716a4314ecdbeaeafeaf952" name="a942a85099716a4314ecdbeaeafeaf952"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a942a85099716a4314ecdbeaeafeaf952">&#9670;&#160;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool TextureWrapper::render </td>
+          <td>(</td>
+          <td class="paramtype">SDL_Renderer *&#160;</td>
+          <td class="paramname"><em>renderer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const SDL_Rect *&#160;</td>
+          <td class="paramname"><em>clip</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angle</em> = <code>0.0f</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SDL_Point *&#160;</td>
+          <td class="paramname"><em>center</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SDL_RendererFlip&#160;</td>
+          <td class="paramname"><em>flip</em> = <code>SDL_FLIP_NONE</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Highly customizable rendering function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">renderer</td><td></td></tr>
+    <tr><td class="paramname">x</td><td></td></tr>
+    <tr><td class="paramname">y</td><td></td></tr>
+    <tr><td class="paramname">clip</td><td>allows to just pick a portion of the texture </td></tr>
+    <tr><td class="paramname">angle</td><td>allows to rotate the angle </td></tr>
+    <tr><td class="paramname">center</td><td>allows to rotate upon a central focal point </td></tr>
+    <tr><td class="paramname">flip</td><td>allows for up-down-left-right flips </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><br  />
+ </dd></dl>
+
+</div>
+</div>
+<a id="a7eb6eabf69fa8f60ba6c2f05671b034a" name="a7eb6eabf69fa8f60ba6c2f05671b034a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eb6eabf69fa8f60ba6c2f05671b034a">&#9670;&#160;</a></span>setAlpha()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool TextureWrapper::setAlpha </td>
+          <td>(</td>
+          <td class="paramtype">Uint8&#160;</td>
+          <td class="paramname"><em>alpha</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the transparency level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">alpha</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><br  />
+ </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="_texture_wrapper_8h_source.html">TextureWrapper.h</a></li>
 </ul>

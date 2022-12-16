@@ -1,5 +1,9 @@
 #pragma once
 
+/// @brief checks if two hitboxes are colliding.
+/// @param rect1 
+/// @param rect2 
+/// @return 
 bool isColliding(const SDL_Rect* rect1, const SDL_Rect* rect2)
 {
     int leftRect1, leftRect2, 

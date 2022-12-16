@@ -57,6 +57,10 @@ public:
     void move(int xBoundary, 
               int yBoundary);
 
+    /// @brief If there is a camera, it will center it on the character.
+    /// @param camera 
+    /// @param xBoundary 
+    /// @param yBoundary 
     void centerScreen(SDL_Rect& camera, int xBoundary, int yBoundary);
 
     void render(SDL_Renderer* renderer, 

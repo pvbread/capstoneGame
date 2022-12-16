@@ -1,13 +1,21 @@
 \hypertarget{class_timer}{}\doxysection{Timer Class Reference}
 \label{class_timer}\index{Timer@{Timer}}
+
+
+general timer class. We use it for transitions effects and also timed notifications.  
+
+
+
+
+{\ttfamily \#include $<$Timer.\+h$>$}
+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{class_timer_a9020542d73357a4eef512eefaf57524b}\label{class_timer_a9020542d73357a4eef512eefaf57524b}} 
 void {\bfseries reset} ()
 \item 
-\mbox{\Hypertarget{class_timer_a1f2885ef7088f8400b11508f89ce8520}\label{class_timer_a1f2885ef7088f8400b11508f89ce8520}} 
-float {\bfseries delta\+Time} ()
+float \mbox{\hyperlink{class_timer_a1f2885ef7088f8400b11508f89ce8520}{delta\+Time}} ()
 \item 
 \mbox{\Hypertarget{class_timer_a7c3c8d80409643ce0553bd42209f9667}\label{class_timer_a7c3c8d80409643ce0553bd42209f9667}} 
 void {\bfseries timer\+Scale} (float t)
@@ -17,19 +25,68 @@ float {\bfseries get\+Timer\+Scale} ()
 \item 
 \mbox{\Hypertarget{class_timer_a745ad59b5a46744cd871a1129a25d74f}\label{class_timer_a745ad59b5a46744cd871a1129a25d74f}} 
 void {\bfseries update} ()
-\item 
-\mbox{\Hypertarget{class_timer_a2e4017ec1667e5829ccad751cde498fe}\label{class_timer_a2e4017ec1667e5829ccad751cde498fe}} 
-bool {\bfseries time\+Passed} (int countdown\+Time, int current\+Time)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em updates the timer (needs to be at the top of the game loop) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_timer_a2e4017ec1667e5829ccad751cde498fe}{time\+Passed}} (int countdown\+Time, int current\+Time)
+\begin{DoxyCompactList}\small\item\em Checks whether some time has elapsed. Incomplete function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{class_timer_a32722f7f195d9f9d807ea2f609bfaf4e}\label{class_timer_a32722f7f195d9f9d807ea2f609bfaf4e}} 
-static \mbox{\hyperlink{class_timer}{Timer}} $\ast$ {\bfseries instance} ()
-\item 
+static \mbox{\hyperlink{class_timer}{Timer}} $\ast$ \mbox{\hyperlink{class_timer_a32722f7f195d9f9d807ea2f609bfaf4e}{instance}} ()
+\begin{DoxyCompactList}\small\item\em This is a singleton so we don\textquotesingle{}t provide direct access to the timer constructor. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{class_timer_a16d5161342730382f4a5170b3d5c2314}\label{class_timer_a16d5161342730382f4a5170b3d5c2314}} 
 static void {\bfseries release} ()
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+general timer class. We use it for transitions effects and also timed notifications. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_timer_a1f2885ef7088f8400b11508f89ce8520}\label{class_timer_a1f2885ef7088f8400b11508f89ce8520}} 
+\index{Timer@{Timer}!deltaTime@{deltaTime}}
+\index{deltaTime@{deltaTime}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{deltaTime()}{deltaTime()}}
+{\footnotesize\ttfamily float Timer\+::delta\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+the change in time ~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timer_a32722f7f195d9f9d807ea2f609bfaf4e}\label{class_timer_a32722f7f195d9f9d807ea2f609bfaf4e}} 
+\index{Timer@{Timer}!instance@{instance}}
+\index{instance@{instance}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{instance()}{instance()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{class_timer}{Timer}} $\ast$ Timer\+::instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+This is a singleton so we don\textquotesingle{}t provide direct access to the timer constructor. 
+
+\begin{DoxyReturn}{Returns}
+~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timer_a2e4017ec1667e5829ccad751cde498fe}\label{class_timer_a2e4017ec1667e5829ccad751cde498fe}} 
+\index{Timer@{Timer}!timePassed@{timePassed}}
+\index{timePassed@{timePassed}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{timePassed()}{timePassed()}}
+{\footnotesize\ttfamily bool Timer\+::time\+Passed (\begin{DoxyParamCaption}\item[{int}]{countdown\+Time,  }\item[{int}]{current\+Time }\end{DoxyParamCaption})}
+
+
+
+Checks whether some time has elapsed. Incomplete function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em countdown\+Time} & \\
+\hline
+{\em current\+Time} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+~\newline
+ 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

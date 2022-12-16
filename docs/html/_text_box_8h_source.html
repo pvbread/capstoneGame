@@ -105,21 +105,22 @@ $(function() {
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="class_text_box.html#a401d79f04c51959798f514259644f3a9">   42</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_text_box.html#a401d79f04c51959798f514259644f3a9">changeBackgroundColor</a>(SDL_Color color);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">int</span> getBottomY() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    std::string text;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    TTF_Font *font;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">int</span> fontSize;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    SDL_Rect textBox;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    SDL_Color textColor;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    SDL_Color backgroundColor;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">bool</span> isClear;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>};</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="class_text_box.html#a9aa8480955a9e3ac2846285baeabe2c0">   47</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_text_box.html#a9aa8480955a9e3ac2846285baeabe2c0">getBottomY</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    std::string text;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    TTF_Font *font;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">int</span> fontSize;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    SDL_Rect textBox;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    SDL_Color textColor;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    SDL_Color backgroundColor;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordtype">bool</span> isClear;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>};</div>
 <div class="ttc" id="aclass_text_box_html"><div class="ttname"><a href="class_text_box.html">TextBox</a></div><div class="ttdoc">container for text, can select from given fonts/colors give the path to your own string font path / S...</div><div class="ttdef"><b>Definition:</b> TextBox.h:8</div></div>
 <div class="ttc" id="aclass_text_box_html_a1ab73371b56cc26a9fb766fc188c5a27"><div class="ttname"><a href="class_text_box.html#a1ab73371b56cc26a9fb766fc188c5a27">TextBox::render</a></div><div class="ttdeci">void render(SDL_Renderer *renderer)</div><div class="ttdoc">Renders the given textbox.</div></div>
 <div class="ttc" id="aclass_text_box_html_a401d79f04c51959798f514259644f3a9"><div class="ttname"><a href="class_text_box.html#a401d79f04c51959798f514259644f3a9">TextBox::changeBackgroundColor</a></div><div class="ttdeci">void changeBackgroundColor(SDL_Color color)</div><div class="ttdoc">Changes the background color of the text.</div></div>
 <div class="ttc" id="aclass_text_box_html_a5c9710bbc19db319eb870679b77b2ce8"><div class="ttname"><a href="class_text_box.html#a5c9710bbc19db319eb870679b77b2ce8">TextBox::changeTextColor</a></div><div class="ttdeci">void changeTextColor(SDL_Color color)</div><div class="ttdoc">Changes the color of the text.</div></div>
 <div class="ttc" id="aclass_text_box_html_a6ca753d78be6a30212cef19cf96bce86"><div class="ttname"><a href="class_text_box.html#a6ca753d78be6a30212cef19cf96bce86">TextBox::changeText</a></div><div class="ttdeci">void changeText(std::string text)</div><div class="ttdoc">Changes the contents of the text.</div></div>
+<div class="ttc" id="aclass_text_box_html_a9aa8480955a9e3ac2846285baeabe2c0"><div class="ttname"><a href="class_text_box.html#a9aa8480955a9e3ac2846285baeabe2c0">TextBox::getBottomY</a></div><div class="ttdeci">int getBottomY() const</div><div class="ttdoc">Unsuccesful attempt to get the bottom of the hitbox AFTER the text size gets fitted properly.</div></div>
 <div class="ttc" id="aclass_text_box_html_acd4c69c4584bbd05edaa6baf8a04c42c"><div class="ttname"><a href="class_text_box.html#acd4c69c4584bbd05edaa6baf8a04c42c">TextBox::changePosition</a></div><div class="ttdeci">void changePosition(int x, int y)</div><div class="ttdoc">Changes the position of the text.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

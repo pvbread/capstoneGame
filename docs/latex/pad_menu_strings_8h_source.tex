@@ -2,30 +2,32 @@
 \label{pad_menu_strings_8h_source}\index{include/padMenuStrings.h@{include/padMenuStrings.h}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{1 \textcolor{comment}{// pads strings with white space so that they get rendered properly in menus}}
-\DoxyCodeLine{2 \textcolor{comment}{// takes the longest string as reference}}
-\DoxyCodeLine{3 \textcolor{comment}{// may need to have a minimum length otherwise}}
-\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
-\DoxyCodeLine{5 }
-\DoxyCodeLine{6 std::vector<std::string> padMenuStrings(\textcolor{keyword}{const} std::vector<std::string>\& strs)}
-\DoxyCodeLine{7 \{}
-\DoxyCodeLine{8     \textcolor{keywordtype}{int} maxLength = INT\_MIN;}
-\DoxyCodeLine{9     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} s: strs)}
-\DoxyCodeLine{10     \{}
-\DoxyCodeLine{11         maxLength = std::max<int>(maxLength, s.length());}
-\DoxyCodeLine{12     \}}
-\DoxyCodeLine{13     std::vector<std::string> padded;}
-\DoxyCodeLine{14 }
-\DoxyCodeLine{15     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} s: strs)}
-\DoxyCodeLine{16     \{}
-\DoxyCodeLine{17         \textcolor{keywordflow}{while}(s.length() != maxLength)}
-\DoxyCodeLine{18         \{}
-\DoxyCodeLine{19             s += \textcolor{stringliteral}{"{} "{}};}
-\DoxyCodeLine{20         \}}
-\DoxyCodeLine{21         padded.push\_back(s);}
-\DoxyCodeLine{22     \}}
-\DoxyCodeLine{23 }
-\DoxyCodeLine{24     \textcolor{keywordflow}{return} padded;}
-\DoxyCodeLine{25 \}}
+\DoxyCodeLine{1 \textcolor{comment}{// outdated function that we used as a hack for trying to }}
+\DoxyCodeLine{2 \textcolor{comment}{// straighten text rendering}}
+\DoxyCodeLine{3 \textcolor{comment}{// pads strings with white space so that they get rendered properly in menus}}
+\DoxyCodeLine{4 \textcolor{comment}{// takes the longest string as reference}}
+\DoxyCodeLine{5 \textcolor{comment}{// may need to have a minimum length otherwise}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 std::vector<std::string> padMenuStrings(\textcolor{keyword}{const} std::vector<std::string>\& strs)}
+\DoxyCodeLine{9 \{}
+\DoxyCodeLine{10     \textcolor{keywordtype}{int} maxLength = INT\_MIN;}
+\DoxyCodeLine{11     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} s: strs)}
+\DoxyCodeLine{12     \{}
+\DoxyCodeLine{13         maxLength = std::max<int>(maxLength, s.length());}
+\DoxyCodeLine{14     \}}
+\DoxyCodeLine{15     std::vector<std::string> padded;}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} s: strs)}
+\DoxyCodeLine{18     \{}
+\DoxyCodeLine{19         \textcolor{keywordflow}{while}(s.length() != maxLength)}
+\DoxyCodeLine{20         \{}
+\DoxyCodeLine{21             s += \textcolor{stringliteral}{"{} "{}};}
+\DoxyCodeLine{22         \}}
+\DoxyCodeLine{23         padded.push\_back(s);}
+\DoxyCodeLine{24     \}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26     \textcolor{keywordflow}{return} padded;}
+\DoxyCodeLine{27 \}}
 
 \end{DoxyCode}

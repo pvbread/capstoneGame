@@ -36,9 +36,8 @@ SDL\+\_\+\+Window $\ast$ \mbox{\hyperlink{class_archimedes_a907bb0aafd35567aa68e
 \begin{DoxyCompactList}\small\item\em the public method to access the window object pointer \end{DoxyCompactList}\item 
 SDL\+\_\+\+Renderer $\ast$ \mbox{\hyperlink{class_archimedes_af9383b675108c9725c1d462477039c1d}{get\+Renderer}} () const
 \begin{DoxyCompactList}\small\item\em the public method to access the renderer object pointer \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{class_archimedes_a5b885480376d44c794295775ffffd012}\label{class_archimedes_a5b885480376d44c794295775ffffd012}} 
-std\+::vector$<$ int $>$ {\bfseries convert\+Map\+To\+Vector} (std\+::string path\+Name)
-\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_archimedes_a5b885480376d44c794295775ffffd012}{convert\+Map\+To\+Vector}} (std\+::string path\+Name)
+\begin{DoxyCompactList}\small\item\em Takes in a .map file and parses it into a vector in the format that we need it. It\textquotesingle{}s an intermediate step to account for variable size maps. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{class_archimedes_ac1406843a9fc6184b827fab4ae446eca}\label{class_archimedes_ac1406843a9fc6184b827fab4ae446eca}} 
 bool {\bfseries get\+Quit} () const
 \item 
@@ -80,6 +79,25 @@ Given the sheet specs, will clip the sheet into SDL rectangles.
 {\em TYPE\+\_\+\+COUNT} & \\
 \hline
 {\em sheet\+Clipped} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_archimedes_a5b885480376d44c794295775ffffd012}\label{class_archimedes_a5b885480376d44c794295775ffffd012}} 
+\index{Archimedes@{Archimedes}!convertMapToVector@{convertMapToVector}}
+\index{convertMapToVector@{convertMapToVector}!Archimedes@{Archimedes}}
+\doxysubsubsection{\texorpdfstring{convertMapToVector()}{convertMapToVector()}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ Archimedes\+::convert\+Map\+To\+Vector (\begin{DoxyParamCaption}\item[{std\+::string}]{path\+Name }\end{DoxyParamCaption})}
+
+
+
+Takes in a .map file and parses it into a vector in the format that we need it. It\textquotesingle{}s an intermediate step to account for variable size maps. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path\+Name} & \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

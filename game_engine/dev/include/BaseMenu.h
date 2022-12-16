@@ -18,9 +18,20 @@ public:
              SDL_Color fontHighlightColor,
              SDL_Renderer* renderer
     );
-    //might need to do a combatMenu with extra onInput behavior
+    
+    /// @brief 
+    /// @param event: reads the input event
+    /// @param SelectMusic: the sound to be made when scrolling 
+    /// @param optionSelected: the variable that retains the option chosen by the end
     void onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& optionSelected);
-    void render(SDL_Renderer* renderer);  
+    
+    /// @brief renders the menu
+    /// @param renderer 
+    void render(SDL_Renderer* renderer);
+
+    /// @brief updates the highlight color of the option selected
+    /// @param prevIdx index of the previously chosen option
+    /// @param currIdx index of the currently chosent option
     void updateHighlight(int prevIdx, int currIdx);
 
 

@@ -1,5 +1,6 @@
 #pragma once
 
+/// @brief Covers the character direction in the map screen
 enum CharacterDirection
 {
     UP = 1,

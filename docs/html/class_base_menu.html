@@ -86,19 +86,125 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adca3474310036206a7c5294c98dacc5f"><td class="memItemLeft" align="right" valign="top"><a id="adca3474310036206a7c5294c98dacc5f" name="adca3474310036206a7c5294c98dacc5f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>BaseMenu</b> (int fontSize, int x, int y, int w, int h, const std::vector&lt; std::string &gt; &amp;optionNames, std::string fontPath, SDL_Color fontColor, SDL_Color fontHighlightColor, SDL_Renderer *renderer)</td></tr>
 <tr class="separator:adca3474310036206a7c5294c98dacc5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0684b2d47501c0890c34385c40c6661f"><td class="memItemLeft" align="right" valign="top"><a id="a0684b2d47501c0890c34385c40c6661f" name="a0684b2d47501c0890c34385c40c6661f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onInput</b> (SDL_Event &amp;event, Mix_Chunk *SelectMusic, std::string &amp;optionSelected)</td></tr>
+<tr class="memitem:a0684b2d47501c0890c34385c40c6661f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_menu.html#a0684b2d47501c0890c34385c40c6661f">onInput</a> (SDL_Event &amp;event, Mix_Chunk *SelectMusic, std::string &amp;optionSelected)</td></tr>
 <tr class="separator:a0684b2d47501c0890c34385c40c6661f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58582e346c2552f846600b4bb114b02d"><td class="memItemLeft" align="right" valign="top"><a id="a58582e346c2552f846600b4bb114b02d" name="a58582e346c2552f846600b4bb114b02d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (SDL_Renderer *renderer)</td></tr>
+<tr class="memitem:a58582e346c2552f846600b4bb114b02d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_menu.html#a58582e346c2552f846600b4bb114b02d">render</a> (SDL_Renderer *renderer)</td></tr>
+<tr class="memdesc:a58582e346c2552f846600b4bb114b02d"><td class="mdescLeft">&#160;</td><td class="mdescRight">renders the menu  <br /></td></tr>
 <tr class="separator:a58582e346c2552f846600b4bb114b02d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e08fb0f637f66d3222a094d515c4b10"><td class="memItemLeft" align="right" valign="top"><a id="a0e08fb0f637f66d3222a094d515c4b10" name="a0e08fb0f637f66d3222a094d515c4b10"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>updateHighlight</b> (int prevIdx, int currIdx)</td></tr>
+<tr class="memitem:a0e08fb0f637f66d3222a094d515c4b10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_base_menu.html#a0e08fb0f637f66d3222a094d515c4b10">updateHighlight</a> (int prevIdx, int currIdx)</td></tr>
+<tr class="memdesc:a0e08fb0f637f66d3222a094d515c4b10"><td class="mdescLeft">&#160;</td><td class="mdescRight">updates the highlight color of the option selected  <br /></td></tr>
 <tr class="separator:a0e08fb0f637f66d3222a094d515c4b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Creates a menu. Just specify a font size, some dimensions, a list of options, font path and color, and a renderer. Additionally it keeps track of which option was selected. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0684b2d47501c0890c34385c40c6661f" name="a0684b2d47501c0890c34385c40c6661f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0684b2d47501c0890c34385c40c6661f">&#9670;&#160;</a></span>onInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BaseMenu::onInput </td>
+          <td>(</td>
+          <td class="paramtype">SDL_Event &amp;&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mix_Chunk *&#160;</td>
+          <td class="paramname"><em>SelectMusic</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>optionSelected</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>reads the input event </td></tr>
+    <tr><td class="paramname">SelectMusic</td><td>the sound to be made when scrolling </td></tr>
+    <tr><td class="paramname">optionSelected</td><td>the variable that retains the option chosen by the end </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a58582e346c2552f846600b4bb114b02d" name="a58582e346c2552f846600b4bb114b02d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58582e346c2552f846600b4bb114b02d">&#9670;&#160;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BaseMenu::render </td>
+          <td>(</td>
+          <td class="paramtype">SDL_Renderer *&#160;</td>
+          <td class="paramname"><em>renderer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>renders the menu </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">renderer</td><td><br  />
+ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0e08fb0f637f66d3222a094d515c4b10" name="a0e08fb0f637f66d3222a094d515c4b10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e08fb0f637f66d3222a094d515c4b10">&#9670;&#160;</a></span>updateHighlight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BaseMenu::updateHighlight </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>prevIdx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>currIdx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>updates the highlight color of the option selected </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prevIdx</td><td>index of the previously chosen option </td></tr>
+    <tr><td class="paramname">currIdx</td><td>index of the currently chosent option </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="_base_menu_8h_source.html">BaseMenu.h</a></li>
 </ul>
 </div><!-- contents -->

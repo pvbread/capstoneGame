@@ -7,5 +7,6 @@ var searchData=
   ['changetextcolor_4',['changeTextColor',['../class_text_box.html#a5c9710bbc19db319eb870679b77b2ce8',1,'TextBox']]],
   ['characterinmap_5',['CharacterInMap',['../class_character_in_map.html',1,'']]],
   ['clipsheet_6',['clipSheet',['../class_archimedes.html#a65e26b83895e7f31bae3377958cfc142',1,'Archimedes']]],
-  ['color_7',['Color',['../class_color.html',1,'']]]
+  ['color_7',['Color',['../class_color.html',1,'']]],
+  ['convertmaptovector_8',['convertMapToVector',['../class_archimedes.html#a5b885480376d44c794295775ffffd012',1,'Archimedes']]]
 ];

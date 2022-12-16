@@ -41,6 +41,9 @@ public:
     /// @param color 
     void changeBackgroundColor(SDL_Color color);
 
+    /// @brief Unsuccesful attempt to get the bottom of the hitbox
+    /// AFTER the text size gets fitted properly
+    /// @return 
     int getBottomY() const;
 private:
     std::string text;

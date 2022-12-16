@@ -6,33 +6,36 @@
 \DoxyCodeLine{2 }
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
 \DoxyCodeLine{4 }
-\DoxyCodeLine{5 \textcolor{keyword}{class }\mbox{\hyperlink{class_timer}{Timer}}}
-\DoxyCodeLine{6 \{}
-\DoxyCodeLine{7 \textcolor{keyword}{public}:}
-\DoxyCodeLine{8     \textcolor{keyword}{static} \mbox{\hyperlink{class_timer}{Timer}}* instance();}
-\DoxyCodeLine{9     \textcolor{keyword}{static} \textcolor{keywordtype}{void} release();}
-\DoxyCodeLine{10 }
-\DoxyCodeLine{11     \textcolor{keywordtype}{void} reset();}
-\DoxyCodeLine{12     \textcolor{keywordtype}{float} deltaTime();\textcolor{comment}{//gives back delta time}}
-\DoxyCodeLine{13 }
-\DoxyCodeLine{14     \textcolor{keywordtype}{void} timerScale(\textcolor{keywordtype}{float} t);\textcolor{comment}{//for setting timescale}}
-\DoxyCodeLine{15     \textcolor{keywordtype}{float} getTimerScale();\textcolor{comment}{//returns timescale}}
+\DoxyCodeLine{7 \textcolor{keyword}{class }\mbox{\hyperlink{class_timer}{Timer}}}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{9 \textcolor{keyword}{public}:}
+\DoxyCodeLine{13     \textcolor{keyword}{static} \mbox{\hyperlink{class_timer}{Timer}}* \mbox{\hyperlink{class_timer_a32722f7f195d9f9d807ea2f609bfaf4e}{instance}}();}
+\DoxyCodeLine{14     }
+\DoxyCodeLine{15     \textcolor{keyword}{static} \textcolor{keywordtype}{void} release();}
 \DoxyCodeLine{16 }
-\DoxyCodeLine{17     \textcolor{keywordtype}{void} update();\textcolor{comment}{//timer update}}
-\DoxyCodeLine{18 }
-\DoxyCodeLine{19     \textcolor{keywordtype}{bool} timePassed(\textcolor{keywordtype}{int} countdownTime, \textcolor{keywordtype}{int} currentTime);}
-\DoxyCodeLine{20 }
-\DoxyCodeLine{21 \textcolor{keyword}{private}:}
-\DoxyCodeLine{22     \textcolor{keyword}{static} \mbox{\hyperlink{class_timer}{Timer}}* sInstance;}
-\DoxyCodeLine{23 }
-\DoxyCodeLine{24     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} mStartTicks;\textcolor{comment}{//where SDL\_GETTICKS gets from beginning of program}}
-\DoxyCodeLine{25     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} mElapsedTicks;}
-\DoxyCodeLine{26     \textcolor{keywordtype}{float} mDeltaTime;}
-\DoxyCodeLine{27     \textcolor{keywordtype}{float} mTimerScale;}
-\DoxyCodeLine{28 }
-\DoxyCodeLine{29     \mbox{\hyperlink{class_timer}{Timer}}();}
-\DoxyCodeLine{30     \mbox{\hyperlink{class_timer}{\string~Timer}}();}
-\DoxyCodeLine{31 }
-\DoxyCodeLine{32 \};}
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} reset();}
+\DoxyCodeLine{18     }
+\DoxyCodeLine{21     \textcolor{keywordtype}{float} \mbox{\hyperlink{class_timer_a1f2885ef7088f8400b11508f89ce8520}{deltaTime}}();}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} timerScale(\textcolor{keywordtype}{float} t);}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25     \textcolor{keywordtype}{float} getTimerScale();}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{28     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_timer_a745ad59b5a46744cd871a1129a25d74f}{update}}();}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{34     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_timer_a2e4017ec1667e5829ccad751cde498fe}{timePassed}}(\textcolor{keywordtype}{int} countdownTime, \textcolor{keywordtype}{int} currentTime);}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36 \textcolor{keyword}{private}:}
+\DoxyCodeLine{37     \textcolor{keyword}{static} \mbox{\hyperlink{class_timer}{Timer}}* sInstance;}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} mStartTicks;}
+\DoxyCodeLine{40     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} mElapsedTicks;}
+\DoxyCodeLine{41     \textcolor{keywordtype}{float} mDeltaTime;}
+\DoxyCodeLine{42     \textcolor{keywordtype}{float} mTimerScale;}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44     \mbox{\hyperlink{class_timer}{Timer}}();}
+\DoxyCodeLine{45     \mbox{\hyperlink{class_timer}{\string~Timer}}();}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47 \};}
 
 \end{DoxyCode}

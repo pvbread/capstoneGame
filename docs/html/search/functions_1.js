@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['freememory_0',['freeMemory',['../class_texture_wrapper.html#a42c5d6150121b0eb7b1e6580630fc717',1,'TextureWrapper']]]
+  ['deltatime_0',['deltaTime',['../class_timer.html#a1f2885ef7088f8400b11508f89ce8520',1,'Timer']]]
 ];
