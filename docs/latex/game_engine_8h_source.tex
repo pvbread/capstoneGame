@@ -1,0 +1,64 @@
+\hypertarget{game_engine_8h_source}{}\doxysection{game\+Engine.\+h}
+\label{game_engine_8h_source}\index{include/gameEngine.h@{include/gameEngine.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}TileType.h"{}}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}Tile.h"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}TextBox.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}Color.h"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}Font.h"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}Timer.h"{}}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{12 \textcolor{keyword}{class }\mbox{\hyperlink{class_archimedes}{Archimedes}}}
+\DoxyCodeLine{13 \{}
+\DoxyCodeLine{14 \textcolor{keyword}{public}:}
+\DoxyCodeLine{15     \mbox{\hyperlink{class_archimedes}{Archimedes}}(Uint32 flags, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* title, \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h);}
+\DoxyCodeLine{16     \mbox{\hyperlink{class_archimedes}{\string~Archimedes}}();}
+\DoxyCodeLine{17     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} runGameLoop();}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_archimedes_a7cd30a5653216a326728f67ce9dc313b}{stopGameLoop}}();}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{31     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_archimedes_ab772b044dbd9d2396e68a92de53f8e59}{loadTiles}}(std::vector<Tile*>\& tileMap, }
+\DoxyCodeLine{32                    \textcolor{keyword}{const} std::vector<int>\& levelInfo,}
+\DoxyCodeLine{33                    std::map<std::pair<int, int>, TileType>\& coordinateToTileTypeMap,}
+\DoxyCodeLine{34                    std::map<std::pair<int, int>, std::string>\& coordinateToEventTypeMap,  }
+\DoxyCodeLine{35                    \textcolor{keywordtype}{int} TILE\_COUNT, }
+\DoxyCodeLine{36                    \textcolor{keywordtype}{int} TYPE\_COUNT, }
+\DoxyCodeLine{37                    \textcolor{keywordtype}{int} TILE\_LENGTH}
+\DoxyCodeLine{38     );}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{44     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_archimedes_afa8378361e4ce8bd50efe949954d385a}{loadImageAssets}}(SDL\_Renderer* renderer, }
+\DoxyCodeLine{45                          std::unordered\_map<TextureWrapper*, std::string> textureFilePaths}
+\DoxyCodeLine{46     );}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{56     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_archimedes_a65e26b83895e7f31bae3377958cfc142}{clipSheet}}(\textcolor{keywordtype}{int} ROWS,}
+\DoxyCodeLine{57                    \textcolor{keywordtype}{int} COLS, }
+\DoxyCodeLine{58                    \textcolor{keywordtype}{int} BLOCK\_LENGTH,}
+\DoxyCodeLine{59                    \textcolor{keywordtype}{int} BLOCK\_HEIGHT,}
+\DoxyCodeLine{60                    \textcolor{keywordtype}{int} TYPE\_COUNT,}
+\DoxyCodeLine{61                    std::vector<SDL\_Rect>\& sheetClipped}
+\DoxyCodeLine{62     );}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{66     SDL\_Window* \mbox{\hyperlink{class_archimedes_a907bb0aafd35567aa68e582c3b795383}{getWindow}}() \textcolor{keyword}{const};}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{70     SDL\_Renderer* \mbox{\hyperlink{class_archimedes_af9383b675108c9725c1d462477039c1d}{getRenderer}}() \textcolor{keyword}{const};}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72     std::vector<int> convertMapToVector(std::string pathName);}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74     \textcolor{keywordtype}{bool} getQuit() \textcolor{keyword}{const};}
+\DoxyCodeLine{75     \textcolor{keywordtype}{int} getWidth() \textcolor{keyword}{const};}
+\DoxyCodeLine{76     \textcolor{keywordtype}{int} getHeight() \textcolor{keyword}{const};}
+\DoxyCodeLine{77     \textcolor{keywordtype}{void} setToQuit();}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79 \textcolor{keyword}{private}:}
+\DoxyCodeLine{80     SDL\_Window* window = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{81     SDL\_Renderer* renderer = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{82     \textcolor{keywordtype}{bool} quit = \textcolor{keyword}{false};}
+\DoxyCodeLine{83     \textcolor{keywordtype}{int} width;}
+\DoxyCodeLine{84     \textcolor{keywordtype}{int} height;}
+\DoxyCodeLine{85 \};}
+
+\end{DoxyCode}

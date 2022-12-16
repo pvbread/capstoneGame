@@ -1,0 +1,48 @@
+\hypertarget{_base_menu_8h_source}{}\doxysection{Base\+Menu.\+h}
+\label{_base_menu_8h_source}\index{include/BaseMenu.h@{include/BaseMenu.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}Color.h"{}}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{9 \textcolor{keyword}{class }\mbox{\hyperlink{class_base_menu}{BaseMenu}}}
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{11 \textcolor{keyword}{public}:}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13     \mbox{\hyperlink{class_base_menu}{BaseMenu}}(\textcolor{keywordtype}{int} fontSize, }
+\DoxyCodeLine{14              \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h, }
+\DoxyCodeLine{15              \textcolor{keyword}{const} std::vector<std::string>\& optionNames,}
+\DoxyCodeLine{16              std::string fontPath,}
+\DoxyCodeLine{17              SDL\_Color fontColor,}
+\DoxyCodeLine{18              SDL\_Color fontHighlightColor,}
+\DoxyCodeLine{19              SDL\_Renderer* renderer}
+\DoxyCodeLine{20     );}
+\DoxyCodeLine{21     \textcolor{comment}{//might need to do a combatMenu with extra onInput behavior}}
+\DoxyCodeLine{22     \textcolor{keywordtype}{void} onInput(SDL\_Event\& event, Mix\_Chunk* SelectMusic, std::string\& optionSelected);}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} render(SDL\_Renderer* renderer);  }
+\DoxyCodeLine{24     \textcolor{keywordtype}{void} updateHighlight(\textcolor{keywordtype}{int} prevIdx, \textcolor{keywordtype}{int} currIdx);}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{keyword}{private}:}
+\DoxyCodeLine{28     \textcolor{keywordtype}{int} startX;}
+\DoxyCodeLine{29     \textcolor{keywordtype}{int} startY;}
+\DoxyCodeLine{30     \textcolor{keywordtype}{int} optionWidth;}
+\DoxyCodeLine{31     \textcolor{keywordtype}{int} optionHeight;}
+\DoxyCodeLine{32     \textcolor{keywordtype}{int} initialCursorHeight;}
+\DoxyCodeLine{33     \textcolor{keywordtype}{int} cursorIndex;}
+\DoxyCodeLine{34     std::vector<SDL\_Texture*> menuTextures;}
+\DoxyCodeLine{35     std::vector<SDL\_Rect> optionRectangles;}
+\DoxyCodeLine{36     std::vector<SDL\_Texture*> cursorTextures;}
+\DoxyCodeLine{37     std::vector<SDL\_Rect> cursorRectangles;}
+\DoxyCodeLine{38     std::vector<std::string> optionNames;}
+\DoxyCodeLine{39     SDL\_Color fontColor;}
+\DoxyCodeLine{40     SDL\_Color highlightColor;}
+\DoxyCodeLine{41     SDL\_Rect cursorRectangle;}
+\DoxyCodeLine{42     SDL\_Texture* menuCursorTexture;}
+\DoxyCodeLine{43     TTF\_Font* menuFont;}
+\DoxyCodeLine{44     SDL\_Renderer* renderer;}
+\DoxyCodeLine{45 \};}
+
+\end{DoxyCode}

@@ -1,0 +1,28 @@
+\hypertarget{class_texture_wrapper}{}\doxysection{Texture\+Wrapper Class Reference}
+\label{class_texture_wrapper}\index{TextureWrapper@{TextureWrapper}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_texture_wrapper_a3e33a3e5921f0352b9457dc23985d000}\label{class_texture_wrapper_a3e33a3e5921f0352b9457dc23985d000}} 
+bool {\bfseries load\+Image} (SDL\+\_\+\+Renderer $\ast$renderer, std\+::string file\+Path)
+\item 
+\mbox{\Hypertarget{class_texture_wrapper_a42c5d6150121b0eb7b1e6580630fc717}\label{class_texture_wrapper_a42c5d6150121b0eb7b1e6580630fc717}} 
+void {\bfseries free\+Memory} ()
+\begin{DoxyCompactList}\small\item\em in case the user wants to free memory explicitly will give that functionality and prevent double deletion plus avoid direct calls to destructor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_texture_wrapper_a08e82db1f1decb22681cca39ee43e950}\label{class_texture_wrapper_a08e82db1f1decb22681cca39ee43e950}} 
+bool {\bfseries set\+Color} (Uint8 r, Uint8 g, Uint8 b)
+\item 
+\mbox{\Hypertarget{class_texture_wrapper_a7eb6eabf69fa8f60ba6c2f05671b034a}\label{class_texture_wrapper_a7eb6eabf69fa8f60ba6c2f05671b034a}} 
+bool {\bfseries set\+Alpha} (Uint8 alpha)
+\item 
+\mbox{\Hypertarget{class_texture_wrapper_a942a85099716a4314ecdbeaeafeaf952}\label{class_texture_wrapper_a942a85099716a4314ecdbeaeafeaf952}} 
+bool {\bfseries render} (SDL\+\_\+\+Renderer $\ast$renderer, int x, int y, const SDL\+\_\+\+Rect $\ast$clip=nullptr, double angle=0.\+0f, SDL\+\_\+\+Point $\ast$center=nullptr, SDL\+\_\+\+Renderer\+Flip flip=SDL\+\_\+\+FLIP\+\_\+\+NONE)
+\item 
+\mbox{\Hypertarget{class_texture_wrapper_a613171cb6429803d393c8454c011ce5c}\label{class_texture_wrapper_a613171cb6429803d393c8454c011ce5c}} 
+SDL\+\_\+\+Texture $\ast$ {\bfseries get\+Texture} () const
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Texture\+Wrapper.\+h\end{DoxyCompactItemize}

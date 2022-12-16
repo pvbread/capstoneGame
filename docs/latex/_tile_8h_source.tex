@@ -1,0 +1,33 @@
+\hypertarget{_tile_8h_source}{}\doxysection{Tile.\+h}
+\label{_tile_8h_source}\index{include/Tile.h@{include/Tile.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{comment}{/*}}
+\DoxyCodeLine{4 \textcolor{comment}{\#include <SDL.h>}}
+\DoxyCodeLine{5 \textcolor{comment}{\#include <SDL\_image.h>}}
+\DoxyCodeLine{6 \textcolor{comment}{\#include <vector>}}
+\DoxyCodeLine{7 \textcolor{comment}{*/}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}TextureWrapper.h"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}TileType.h"{}}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{keyword}{class }\mbox{\hyperlink{class_tile}{Tile}}}
+\DoxyCodeLine{13 \{}
+\DoxyCodeLine{14 \textcolor{keyword}{public}:}
+\DoxyCodeLine{15     \textcolor{comment}{//make this an enum type}}
+\DoxyCodeLine{16     \mbox{\hyperlink{class_tile}{Tile}}(\textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, \textcolor{keywordtype}{int} w, \textcolor{keywordtype}{int} h, TileType tileType);}
+\DoxyCodeLine{17     \textcolor{keywordtype}{bool} render(SDL\_Renderer* renderer, }
+\DoxyCodeLine{18                 \mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}\& tileTexture, }
+\DoxyCodeLine{19                 \textcolor{keyword}{const} SDL\_Rect\& camera, }
+\DoxyCodeLine{20                 \textcolor{keyword}{const} std::vector<SDL\_Rect>\& tileClips);}
+\DoxyCodeLine{21     TileType getType();}
+\DoxyCodeLine{22     SDL\_Rect getCollisionBox();}
+\DoxyCodeLine{23 \textcolor{keyword}{private}:}
+\DoxyCodeLine{24     \textcolor{comment}{// Tile attributes}}
+\DoxyCodeLine{25     SDL\_Rect collisionBox;}
+\DoxyCodeLine{26     TileType tileType;}
+\DoxyCodeLine{27 \};}
+
+\end{DoxyCode}

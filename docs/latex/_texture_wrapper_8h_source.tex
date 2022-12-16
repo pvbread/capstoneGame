@@ -1,0 +1,40 @@
+\hypertarget{_texture_wrapper_8h_source}{}\doxysection{Texture\+Wrapper.\+h}
+\label{_texture_wrapper_8h_source}\index{include/TextureWrapper.h@{include/TextureWrapper.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{comment}{/*}}
+\DoxyCodeLine{4 \textcolor{comment}{\#include <SDL.h>}}
+\DoxyCodeLine{5 \textcolor{comment}{\#include <SDL\_image.h>}}
+\DoxyCodeLine{6 \textcolor{comment}{\#include <string>}}
+\DoxyCodeLine{7 \textcolor{comment}{*/}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{class }\mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}}
+\DoxyCodeLine{12 \{}
+\DoxyCodeLine{13 \textcolor{keyword}{public}:}
+\DoxyCodeLine{14     \mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}();}
+\DoxyCodeLine{15     \mbox{\hyperlink{class_texture_wrapper}{\string~TextureWrapper}}();}
+\DoxyCodeLine{16     \textcolor{keywordtype}{bool} loadImage(SDL\_Renderer* renderer, std::string filePath);}
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_texture_wrapper_a42c5d6150121b0eb7b1e6580630fc717}{freeMemory}}();}
+\DoxyCodeLine{21     \textcolor{keywordtype}{bool} setColor(Uint8 r, Uint8 g, Uint8 b);}
+\DoxyCodeLine{22     \textcolor{keywordtype}{bool} setAlpha(Uint8 alpha);}
+\DoxyCodeLine{23     \textcolor{comment}{//bool setBlendMode}}
+\DoxyCodeLine{24     \textcolor{comment}{//}}
+\DoxyCodeLine{25     \textcolor{keywordtype}{bool} render(SDL\_Renderer* renderer,}
+\DoxyCodeLine{26                 \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{int} y, }
+\DoxyCodeLine{27                 \textcolor{keyword}{const} SDL\_Rect* clip = \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{28                 \textcolor{keywordtype}{double} angle = 0.0f, }
+\DoxyCodeLine{29                 SDL\_Point* center = \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{30                 SDL\_RendererFlip flip = SDL\_FLIP\_NONE);}
+\DoxyCodeLine{31     SDL\_Texture* getTexture() \textcolor{keyword}{const};}
+\DoxyCodeLine{32     }
+\DoxyCodeLine{33 \textcolor{keyword}{private}:}
+\DoxyCodeLine{34     SDL\_Texture* texture;}
+\DoxyCodeLine{35     \textcolor{keywordtype}{int} width;}
+\DoxyCodeLine{36     \textcolor{keywordtype}{int} height;}
+\DoxyCodeLine{37 \};}
+
+\end{DoxyCode}

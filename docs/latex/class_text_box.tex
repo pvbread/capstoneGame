@@ -1,0 +1,126 @@
+\hypertarget{class_text_box}{}\doxysection{Text\+Box Class Reference}
+\label{class_text_box}\index{TextBox@{TextBox}}
+
+
+container for text, can select from given fonts/colors give the path to your own string font path / SDL colors.  
+
+
+
+
+{\ttfamily \#include $<$Text\+Box.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_text_box_ab3157120dab2607ec3a0e301a048f71e}\label{class_text_box_ab3157120dab2607ec3a0e301a048f71e}} 
+{\bfseries Text\+Box} (std\+::string text, int font\+Size, int x, int y, int w, int h, std\+::string input\+Font=\char`\"{}../../assets/fonts/Roboto-\/Medium.\+ttf\char`\"{}, SDL\+\_\+\+Color text\+Color=\{255, 0, 0, 255\}, SDL\+\_\+\+Color background\+Color=\{0, 0, 0, 0\}, bool is\+Clear=false)
+\item 
+void \mbox{\hyperlink{class_text_box_a1ab73371b56cc26a9fb766fc188c5a27}{render}} (SDL\+\_\+\+Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Renders the given textbox. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_text_box_a6ca753d78be6a30212cef19cf96bce86}{change\+Text}} (std\+::string text)
+\begin{DoxyCompactList}\small\item\em Changes the contents of the text. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_text_box_a5e17c5d2858217ecd28f7218079bb3e5}\label{class_text_box_a5e17c5d2858217ecd28f7218079bb3e5}} 
+void {\bfseries change\+Dimensions} (int w, int h)
+\item 
+void \mbox{\hyperlink{class_text_box_acd4c69c4584bbd05edaa6baf8a04c42c}{change\+Position}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em Changes the position of the text. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_text_box_a5c9710bbc19db319eb870679b77b2ce8}{change\+Text\+Color}} (SDL\+\_\+\+Color color)
+\begin{DoxyCompactList}\small\item\em Changes the color of the text. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_text_box_a401d79f04c51959798f514259644f3a9}{change\+Background\+Color}} (SDL\+\_\+\+Color color)
+\begin{DoxyCompactList}\small\item\em Changes the background color of the text. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_text_box_a9aa8480955a9e3ac2846285baeabe2c0}\label{class_text_box_a9aa8480955a9e3ac2846285baeabe2c0}} 
+int {\bfseries get\+BottomY} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+container for text, can select from given fonts/colors give the path to your own string font path / SDL colors. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_text_box_a401d79f04c51959798f514259644f3a9}\label{class_text_box_a401d79f04c51959798f514259644f3a9}} 
+\index{TextBox@{TextBox}!changeBackgroundColor@{changeBackgroundColor}}
+\index{changeBackgroundColor@{changeBackgroundColor}!TextBox@{TextBox}}
+\doxysubsubsection{\texorpdfstring{changeBackgroundColor()}{changeBackgroundColor()}}
+{\footnotesize\ttfamily void Text\+Box\+::change\+Background\+Color (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Color}]{color }\end{DoxyParamCaption})}
+
+
+
+Changes the background color of the text. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_text_box_acd4c69c4584bbd05edaa6baf8a04c42c}\label{class_text_box_acd4c69c4584bbd05edaa6baf8a04c42c}} 
+\index{TextBox@{TextBox}!changePosition@{changePosition}}
+\index{changePosition@{changePosition}!TextBox@{TextBox}}
+\doxysubsubsection{\texorpdfstring{changePosition()}{changePosition()}}
+{\footnotesize\ttfamily void Text\+Box\+::change\+Position (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+Changes the position of the text. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & \\
+\hline
+{\em y} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_text_box_a6ca753d78be6a30212cef19cf96bce86}\label{class_text_box_a6ca753d78be6a30212cef19cf96bce86}} 
+\index{TextBox@{TextBox}!changeText@{changeText}}
+\index{changeText@{changeText}!TextBox@{TextBox}}
+\doxysubsubsection{\texorpdfstring{changeText()}{changeText()}}
+{\footnotesize\ttfamily void Text\+Box\+::change\+Text (\begin{DoxyParamCaption}\item[{std\+::string}]{text }\end{DoxyParamCaption})}
+
+
+
+Changes the contents of the text. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em text} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_text_box_a5c9710bbc19db319eb870679b77b2ce8}\label{class_text_box_a5c9710bbc19db319eb870679b77b2ce8}} 
+\index{TextBox@{TextBox}!changeTextColor@{changeTextColor}}
+\index{changeTextColor@{changeTextColor}!TextBox@{TextBox}}
+\doxysubsubsection{\texorpdfstring{changeTextColor()}{changeTextColor()}}
+{\footnotesize\ttfamily void Text\+Box\+::change\+Text\+Color (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Color}]{color }\end{DoxyParamCaption})}
+
+
+
+Changes the color of the text. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_text_box_a1ab73371b56cc26a9fb766fc188c5a27}\label{class_text_box_a1ab73371b56cc26a9fb766fc188c5a27}} 
+\index{TextBox@{TextBox}!render@{render}}
+\index{render@{render}!TextBox@{TextBox}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void Text\+Box\+::render (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer }\end{DoxyParamCaption})}
+
+
+
+Renders the given textbox. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer,when} & invoking, you can usually obtain this with get\+Renderer() e.\+g. my\+Text\+Box.\+render(get\+Renderer()) ~\newline
+ \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Text\+Box.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,38 @@
+\hypertarget{_timer_8h_source}{}\doxysection{Timer.\+h}
+\label{_timer_8h_source}\index{include/Timer.h@{include/Timer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{keyword}{class }\mbox{\hyperlink{class_timer}{Timer}}}
+\DoxyCodeLine{6 \{}
+\DoxyCodeLine{7 \textcolor{keyword}{public}:}
+\DoxyCodeLine{8     \textcolor{keyword}{static} \mbox{\hyperlink{class_timer}{Timer}}* instance();}
+\DoxyCodeLine{9     \textcolor{keyword}{static} \textcolor{keywordtype}{void} release();}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11     \textcolor{keywordtype}{void} reset();}
+\DoxyCodeLine{12     \textcolor{keywordtype}{float} deltaTime();\textcolor{comment}{//gives back delta time}}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14     \textcolor{keywordtype}{void} timerScale(\textcolor{keywordtype}{float} t);\textcolor{comment}{//for setting timescale}}
+\DoxyCodeLine{15     \textcolor{keywordtype}{float} getTimerScale();\textcolor{comment}{//returns timescale}}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} update();\textcolor{comment}{//timer update}}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19     \textcolor{keywordtype}{bool} timePassed(\textcolor{keywordtype}{int} countdownTime, \textcolor{keywordtype}{int} currentTime);}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{keyword}{private}:}
+\DoxyCodeLine{22     \textcolor{keyword}{static} \mbox{\hyperlink{class_timer}{Timer}}* sInstance;}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} mStartTicks;\textcolor{comment}{//where SDL\_GETTICKS gets from beginning of program}}
+\DoxyCodeLine{25     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} mElapsedTicks;}
+\DoxyCodeLine{26     \textcolor{keywordtype}{float} mDeltaTime;}
+\DoxyCodeLine{27     \textcolor{keywordtype}{float} mTimerScale;}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29     \mbox{\hyperlink{class_timer}{Timer}}();}
+\DoxyCodeLine{30     \mbox{\hyperlink{class_timer}{\string~Timer}}();}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \};}
+
+\end{DoxyCode}

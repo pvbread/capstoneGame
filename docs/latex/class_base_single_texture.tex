@@ -1,0 +1,136 @@
+\hypertarget{class_base_single_texture}{}\doxysection{Base\+Single\+Texture Class Reference}
+\label{class_base_single_texture}\index{BaseSingleTexture@{BaseSingleTexture}}
+
+
+Abstract container for a single texture.  
+
+
+
+
+{\ttfamily \#include $<$Base\+Single\+Texture.\+h$>$}
+
+Inheritance diagram for Base\+Single\+Texture\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_base_single_texture}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_base_single_texture_a6d8759f70c0882d4005aff68f2daf586}\label{class_base_single_texture_a6d8759f70c0882d4005aff68f2daf586}} 
+{\bfseries Base\+Single\+Texture} (int main\+Velocity, int velocityX, int velocityY, SDL\+\_\+\+Rect collision\+Box)
+\item 
+virtual void \mbox{\hyperlink{class_base_single_texture_add81a994ff6fdb1df34f338c872356a0}{on\+Input}} (SDL\+\_\+\+Event \&event)
+\begin{DoxyCompactList}\small\item\em processes user input \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_base_single_texture_ae552fccb14a8d3b1b9a29159d8624aa0}{move}} (int x\+Boundary, int y\+Boundary)=0
+\begin{DoxyCompactList}\small\item\em updates the textures position \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_base_single_texture_ae3380fc5d65058fd71f3b99661aff506}{center\+Screen}} (SDL\+\_\+\+Rect \&camera)
+\begin{DoxyCompactList}\small\item\em if there is a camera, will center it on the texture \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_base_single_texture_a41066f8cabeaab97e9d6f9d0f92a90fa}{render}} (SDL\+\_\+\+Renderer $\ast$renderer, const SDL\+\_\+\+Rect \&camera, \mbox{\hyperlink{class_texture_wrapper}{Texture\+Wrapper}} \&debug\+Controller\+Texture)=0
+\begin{DoxyCompactList}\small\item\em renders the texture \end{DoxyCompactList}\item 
+SDL\+\_\+\+Rect \mbox{\hyperlink{class_base_single_texture_a87d35c9397e9f750137741c1939aac72}{get\+Collision\+Box}} () const
+\begin{DoxyCompactList}\small\item\em returns the collision\+Box \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract container for a single texture. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_base_single_texture_ae3380fc5d65058fd71f3b99661aff506}\label{class_base_single_texture_ae3380fc5d65058fd71f3b99661aff506}} 
+\index{BaseSingleTexture@{BaseSingleTexture}!centerScreen@{centerScreen}}
+\index{centerScreen@{centerScreen}!BaseSingleTexture@{BaseSingleTexture}}
+\doxysubsubsection{\texorpdfstring{centerScreen()}{centerScreen()}}
+{\footnotesize\ttfamily virtual void Base\+Single\+Texture\+::center\+Screen (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Rect \&}]{camera }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+if there is a camera, will center it on the texture 
+
+
+\begin{DoxyParams}{Parameters}
+{\em camera} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_base_single_texture_a87d35c9397e9f750137741c1939aac72}\label{class_base_single_texture_a87d35c9397e9f750137741c1939aac72}} 
+\index{BaseSingleTexture@{BaseSingleTexture}!getCollisionBox@{getCollisionBox}}
+\index{getCollisionBox@{getCollisionBox}!BaseSingleTexture@{BaseSingleTexture}}
+\doxysubsubsection{\texorpdfstring{getCollisionBox()}{getCollisionBox()}}
+{\footnotesize\ttfamily SDL\+\_\+\+Rect Base\+Single\+Texture\+::get\+Collision\+Box (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+returns the collision\+Box 
+
+\begin{DoxyReturn}{Returns}
+~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_base_single_texture_ae552fccb14a8d3b1b9a29159d8624aa0}\label{class_base_single_texture_ae552fccb14a8d3b1b9a29159d8624aa0}} 
+\index{BaseSingleTexture@{BaseSingleTexture}!move@{move}}
+\index{move@{move}!BaseSingleTexture@{BaseSingleTexture}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily virtual void Base\+Single\+Texture\+::move (\begin{DoxyParamCaption}\item[{int}]{x\+Boundary,  }\item[{int}]{y\+Boundary }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+updates the textures position 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+Boundary} & \\
+\hline
+{\em y\+Boundary} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_character_in_map_a4394e5d6ea7fe48c7e39a98cf2637617}{Character\+In\+Map}}.
+
+\mbox{\Hypertarget{class_base_single_texture_add81a994ff6fdb1df34f338c872356a0}\label{class_base_single_texture_add81a994ff6fdb1df34f338c872356a0}} 
+\index{BaseSingleTexture@{BaseSingleTexture}!onInput@{onInput}}
+\index{onInput@{onInput}!BaseSingleTexture@{BaseSingleTexture}}
+\doxysubsubsection{\texorpdfstring{onInput()}{onInput()}}
+{\footnotesize\ttfamily virtual void Base\+Single\+Texture\+::on\+Input (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Event \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+processes user input 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_base_single_texture_a41066f8cabeaab97e9d6f9d0f92a90fa}\label{class_base_single_texture_a41066f8cabeaab97e9d6f9d0f92a90fa}} 
+\index{BaseSingleTexture@{BaseSingleTexture}!render@{render}}
+\index{render@{render}!BaseSingleTexture@{BaseSingleTexture}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily virtual void Base\+Single\+Texture\+::render (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{const SDL\+\_\+\+Rect \&}]{camera,  }\item[{\mbox{\hyperlink{class_texture_wrapper}{Texture\+Wrapper}} \&}]{debug\+Controller\+Texture }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+renders the texture 
+
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & \\
+\hline
+{\em camera} & \\
+\hline
+{\em debug\+Controller\+Texture} & ~\newline
+ \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_character_in_map_a49888df685fa78fb74493c627b34af4a}{Character\+In\+Map}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Base\+Single\+Texture.\+h\end{DoxyCompactItemize}

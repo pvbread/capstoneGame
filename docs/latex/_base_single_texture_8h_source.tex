@@ -1,0 +1,37 @@
+\hypertarget{_base_single_texture_8h_source}{}\doxysection{Base\+Single\+Texture.\+h}
+\label{_base_single_texture_8h_source}\index{include/BaseSingleTexture.h@{include/BaseSingleTexture.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}pch.h"{}}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}TextureWrapper.h"{}}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{8 \textcolor{keyword}{class }\mbox{\hyperlink{class_base_single_texture}{BaseSingleTexture}}}
+\DoxyCodeLine{9 \{}
+\DoxyCodeLine{10 \textcolor{keyword}{public}:}
+\DoxyCodeLine{11     \mbox{\hyperlink{class_base_single_texture}{BaseSingleTexture}}(\textcolor{keywordtype}{int} mainVelocity, }
+\DoxyCodeLine{12                       \textcolor{keywordtype}{int} velocityX, }
+\DoxyCodeLine{13                       \textcolor{keywordtype}{int} velocityY, }
+\DoxyCodeLine{14                       SDL\_Rect collisionBox);}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{18     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_base_single_texture_add81a994ff6fdb1df34f338c872356a0}{onInput}}(SDL\_Event\& event)\{\};}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{23     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_base_single_texture_ae552fccb14a8d3b1b9a29159d8624aa0}{move}}(\textcolor{keywordtype}{int} xBoundary, \textcolor{keywordtype}{int} yBoundary) = 0;}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{27     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_base_single_texture_ae3380fc5d65058fd71f3b99661aff506}{centerScreen}}(SDL\_Rect\& camera);}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{33     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_base_single_texture_a41066f8cabeaab97e9d6f9d0f92a90fa}{render}}(SDL\_Renderer* renderer, }
+\DoxyCodeLine{34                         \textcolor{keyword}{const} SDL\_Rect\& camera, }
+\DoxyCodeLine{35                         \mbox{\hyperlink{class_texture_wrapper}{TextureWrapper}}\& debugControllerTexture) = 0;}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{39     SDL\_Rect \mbox{\hyperlink{class_base_single_texture_a87d35c9397e9f750137741c1939aac72}{getCollisionBox}}() \textcolor{keyword}{const};}
+\DoxyCodeLine{40 \textcolor{keyword}{private}:    }
+\DoxyCodeLine{41     \textcolor{keywordtype}{int} mainVelocity;}
+\DoxyCodeLine{42     \textcolor{keywordtype}{int} velocityX;}
+\DoxyCodeLine{43     \textcolor{keywordtype}{int} velocityY;}
+\DoxyCodeLine{44     SDL\_Rect collisionBox;}
+\DoxyCodeLine{45 \};}
+
+\end{DoxyCode}
