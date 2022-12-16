@@ -1,5 +1,6 @@
 #include "../Characters/BaseCharacter.h"
 
+// Checks if enemies are all alive or if players are all alive
 bool isTeamAlive(const std::vector<BaseCharacter>& participants, bool enemy)
 {
     int i = 0;
