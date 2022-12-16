@@ -1,5 +1,6 @@
 #include "Game/Characters/BaseCharacter.h"
 
+// Constructor
 BaseCharacter::BaseCharacter(std::string name, int hp, int speed, 
                              int hit, int armor, int itemModifier, int speedModifier, 
                              int dodgeModifier, bool enemy)
@@ -18,7 +19,7 @@ BaseCharacter::BaseCharacter(std::string name, int hp, int speed,
     BaseItem noItem = BaseItem("", "", 0);
 }
 
-
+// For enemy AI, returns an action and its target list
 std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAndTargets(const std::vector<BaseCharacter>& participants, 
                                                                             std::string decisionAlgo)
 {
@@ -26,7 +27,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
     std::vector<std::vector<int>> targets;
     int participantsIndex = getParticipantsIndex();
 
-    // random decision
+    // Random decision
     if (decisionAlgo == "RANDOM")
     {
         std::random_device rd;
@@ -37,11 +38,13 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
         
     }
 
-    // basic logic
+    // Basic logic
     if (decisionAlgo == "logic")
     {
+        // Prioritize attack
         chosenMove = ATTACK;
         targets = getValidMoves(chosenMove, participantsIndex, participants);
+        // Change target to specific target if target HP is low
         for (int i = 0; i < 4; i++)
         {
             if (hit + 6 > participants[i].getHp())
@@ -51,6 +54,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
             }
             break;
         }
+        // Change action to Buff if ally HP is low
         for (int i = 4; i < participants.size(); i++)
         {
             if (participants[i].isAlive() && participants[i].getHp() < 5)
@@ -60,6 +64,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
             }
             break;
         }
+        // Change action to Debuff if target's speed is high
         for (int i = 0; i < 4; i++)
         {
             if (participants[i].getSpeedModifier() > 2)
@@ -69,6 +74,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
             }
             break;
         }
+        // Change action to Move if opponent's hit damage is higher than its own HP
         for (int i = 0; i < 4; i++)
         {
             if (participants[i].getHit() > hp)
@@ -86,6 +92,7 @@ std::pair<ActionType, std::vector<std::vector<int>>> BaseCharacter::getActionAnd
     return make_pair(chosenMove, targets);
 }
 
+// Get valid targets for each action, returns vector of valid targets for character to choose from
 std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType,
                                               int charIndex,
                                               const std::vector<BaseCharacter>& participants)
@@ -97,7 +104,7 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
     {
         case ATTACK:
         {   
-            // change valid moves for attacks one character at a time
+            // Valid moves for attacks one character at a time
             const int TEAM_SIZE = 4;
             if (!enemy)
             {
@@ -106,15 +113,7 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
                         if (participants[i+4].isAlive())
                             validMoves.push_back({i+4});
                     }
-                /*
-                for (auto position: movesAndRanges[ATTACK])
-                {
-                    int targetPosition = charIndex + position;
-                    if (targetPosition < participants.size())
-                        targets = {targetPosition};
-                    validMoves.push_back(targets);
-                }
-                */
+                
             }
             else
             {
@@ -123,16 +122,6 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
                         if (participants[i].isAlive())
                             validMoves.push_back({i});
                     }
-                //it's an enemy
-                /*
-                for (auto position: movesAndRanges[ATTACK])
-                {
-                    int targetPosition = charIndex - position;
-                    if (targetPosition >= 0)
-                        targets = {targetPosition};
-                    validMoves.push_back(targets);
-                }
-                */
             }
             break;
         }
@@ -166,7 +155,7 @@ std::vector<std::vector<int>> BaseCharacter::getValidMoves(ActionType actionType
                             validMoves.push_back({i+4});
                     }
             }
-            // if move is selected and teammates are dead
+            // If move is selected and teammates are dead
             if (validMoves.size()==0)
             {
                 validMoves.push_back({charIndex});
@@ -206,7 +195,7 @@ std::vector<int> BaseCharacter::getValidBuffTargets(ActionType typeOfBuff,
     return validMoves;
 }
 
-
+// Apply effects of the action the character chose, returns an updated combat participants vector
 std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType, 
                                                    std::vector<int>& effectOfAction,
                                                    std::vector<int> targets, 
@@ -272,10 +261,11 @@ std::vector<BaseCharacter> BaseCharacter::doAction(ActionType actionType,
     return participants;
 
 }
-
+// Shift dead characters away from the middle of the combat, alive characters move closer to the middle
 std::vector<BaseCharacter> BaseCharacter::shiftDead(std::vector<BaseCharacter> participants)
 {
     const int LIVE_BOUNDARY = 3;
+    // Shift dead for players
     for (int i = 0; i < LIVE_BOUNDARY; i++)
     {
         for (int j = 0; j < LIVE_BOUNDARY; j++)
@@ -289,6 +279,7 @@ std::vector<BaseCharacter> BaseCharacter::shiftDead(std::vector<BaseCharacter> p
             }   
         }
     }
+    // Shift dead for enemies
     for (int i = 0; i < LIVE_BOUNDARY; i++)
     {
         for (int j = 0; j < LIVE_BOUNDARY; j++)
@@ -297,7 +288,6 @@ std::vector<BaseCharacter> BaseCharacter::shiftDead(std::vector<BaseCharacter> p
             {
                 std::swap(participants[j+4],participants[j+5]);
                 // once swapped, update participant index
-
                 participants[j+4].setNewParticipantsIndex(j+4);
                 participants[j+5].setNewParticipantsIndex(j+5);
             }   
@@ -305,7 +295,7 @@ std::vector<BaseCharacter> BaseCharacter::shiftDead(std::vector<BaseCharacter> p
     }
     return participants;
 }
-
+// Attack function returns amount of damage dealt
 int BaseCharacter::attack(BaseCharacter targetCharacter)
 {
     const float DODGE_SCALE = 0.02;
@@ -329,9 +319,7 @@ int BaseCharacter::attack(BaseCharacter targetCharacter)
     return damage;
 }
 
-
-// returns the hp to heal
-
+// Buff function, returns the hp to heal
 int BaseCharacter::buff(BaseCharacter targetCharacter)
 {
     if (targetCharacter.getHp() >= targetCharacter.getMaxHp())
@@ -343,6 +331,7 @@ int BaseCharacter::buff(BaseCharacter targetCharacter)
     return healAmount;
 }
 
+// Debuff function, returns the new speed for character
 int BaseCharacter::debuff(BaseCharacter targetCharacter)
 {
     int newSpeedMod = targetCharacter.getSpeedModifier() - 1;
@@ -351,6 +340,7 @@ int BaseCharacter::debuff(BaseCharacter targetCharacter)
     return newSpeedMod;
 }
 
+// Move function, returns updated combat participants vector
 std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetIndex, std::vector<BaseCharacter> participants)
 {
    
@@ -362,6 +352,7 @@ std::vector<BaseCharacter> BaseCharacter::moveSpots(int charIndex, int targetInd
     
 }
 
+//////GETTER FUNCTIONS/////////
 std::string BaseCharacter::getName() const
 {
     return name;
@@ -426,6 +417,8 @@ std::unordered_map<ActionType, std::vector<int>> BaseCharacter::getMovesAndRange
 {
     return movesAndRanges;
 }
+
+/////SETTER FUNCTIONS//////
 
 void BaseCharacter::setHp(int newHp)
 {

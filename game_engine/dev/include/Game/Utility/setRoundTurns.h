@@ -16,6 +16,7 @@ struct greater_prefer_ally
     }
 };
 
+// Set round order for character by using a priority queue, returns a vector of strings of the character names
 std::vector<std::string> setRoundTurns(std::vector<BaseCharacter>& characters)
 {   
     
@@ -30,8 +31,10 @@ std::vector<std::string> setRoundTurns(std::vector<BaseCharacter>& characters)
 
     for (int i = 0; i < characters.size(); i++) 
     {
+        // Skip if character is dead
         if (!characters[i].isAlive())
             continue;
+        // Calculate initiative to determine round order
         int initiativeRoll = intDist(gen);
         int totalSpeedScore = characters[i].getSpeed() + characters[i].getSpeedModifier() + initiativeRoll;
         //tuple of form (bool isEnemy, BaseChar*)
@@ -44,6 +47,7 @@ std::vector<std::string> setRoundTurns(std::vector<BaseCharacter>& characters)
     {
         auto curr = newOrderQueue.top();
         auto temp = (&(*curr.second.second)); //insert pointer to character
+        // Get name of character and push into the roundOrder vector
         std::string charName = temp->getName(); 
         roundOrder.push_back(charName);
         newOrderQueue.pop();
