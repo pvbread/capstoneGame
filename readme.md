@@ -4,7 +4,7 @@
 
 ## Table of Contents
 * [Summary](#summary)
-* [Structure](#features)
+* [Structure](#structure)
 * [Contributors & Final Notes](#Contributors-&-final-notes)
 ---
 ## Summary
