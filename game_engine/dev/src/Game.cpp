@@ -1099,6 +1099,7 @@ void DashDaCapo::runGameLoop()
                 case INTRO:
                 { 
                     introMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
+                    //Screen options for intro 
                     if (STATE_introSelectedOption != "NONE")
                     {
                         if (STATE_introSelectedOption == "New Game")
@@ -1390,6 +1391,8 @@ void DashDaCapo::runGameLoop()
                         STATE_jokeNotificationShowing = true;
                     }
                 
+                    //New events add here
+
                     if (event.type == SDL_KEYDOWN)
                     {
                         switch (event.key.keysym.sym)
@@ -1410,7 +1413,6 @@ void DashDaCapo::runGameLoop()
                                 STATE_updateHP = true;
                                 STATE_statMenu = true;
                                 STATE_mapScreenOpenForTransition = false;
-                                //screen = STATUS_MENU;
                                 break;
                             }
                         }
@@ -1784,8 +1786,7 @@ void DashDaCapo::runGameLoop()
                 }
                 // Victory state
                 case WIN:
-                {
-                     
+                {     
                     if(STATE_youWin == true){
                         if (event.type == SDL_KEYDOWN)
                         {
@@ -1846,6 +1847,7 @@ void DashDaCapo::runGameLoop()
                 introScreen.render(getRenderer(), 0, 0);
                 introMenu.render(getRenderer()); 
 
+                //Screen transition turning background opaque 
                 if(STATE_postTransition == true)
                 {
                     alphaValueScreenTransition -= 5;
@@ -1856,6 +1858,7 @@ void DashDaCapo::runGameLoop()
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
+                //Screen transition turning background transparent
                 else if(STATE_preTransition == true)
                 {
                     alphaValueScreenTransition += 5;
@@ -1964,6 +1967,7 @@ void DashDaCapo::runGameLoop()
                     }
                 }
                 // Transitions rendering
+                //Screen transition turning background opaque 
                 if(STATE_postTransition == true)
                 {
                     alphaValueScreenTransition -= 5;
@@ -1974,6 +1978,7 @@ void DashDaCapo::runGameLoop()
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
+                //Screen transition turning background transparent
                 else if(STATE_preTransition == true)
                 {
                     alphaValueScreenTransition += 5;
@@ -2223,6 +2228,7 @@ void DashDaCapo::runGameLoop()
                     el.render(getRenderer());
                 } 
 
+                //Screen transition turning background opaque 
                 if(STATE_postTransition == true)
                 {
                     alphaValueScreenTransition -= 5;
@@ -2233,6 +2239,7 @@ void DashDaCapo::runGameLoop()
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
+                //Screen transition turning background transparent
                 else if(STATE_preTransition == true)
                 {
                     alphaValueScreenTransition += 5;
@@ -2374,6 +2381,7 @@ void DashDaCapo::runGameLoop()
 
                 ///////Display Names-Stats//////// 
 
+                //Screen transition turning background opaque 
                 if(STATE_postTransition == true)
                 {
                     alphaValueScreenTransition -= 5;
@@ -2384,6 +2392,7 @@ void DashDaCapo::runGameLoop()
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
                 }
+                //Screen transition turning background transparent
                 else if(STATE_preTransition == true)
                 {
                     alphaValueScreenTransition += 5;
