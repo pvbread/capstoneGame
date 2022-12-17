@@ -20,6 +20,11 @@ TextBox::TextBox(std::string text,
 
 void TextBox::render(SDL_Renderer* renderer)
 {
+    // a lot of care has to be taken here if the texture wants
+    // to be rendered with transparent background
+    // basically the SDL "blend" context has to be set and unset
+    // (otherwise transparency stays on pervasively)
+
     std::stringstream textStream;
     textStream << text;
     TTF_SizeText(font, text.c_str(), &textBox.w, &textBox.h);

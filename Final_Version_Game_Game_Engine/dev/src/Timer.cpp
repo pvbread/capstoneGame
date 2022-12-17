@@ -60,6 +60,7 @@ void Timer::update()
 
 bool Timer::timePassed(int countdownTime, int currentTime)
 {
+    // unfinished function. These should probably be floats
     if(currentTime >= currentTime + countdownTime){
         return true;
     }
