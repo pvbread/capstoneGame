@@ -5,7 +5,7 @@
 ## Table of Contents
 * [Summary](#summary)
 * [Structure](#structure)
-* [Contributors & Final Notes](#Contributors-&-final-notes)
+* [Contributors & Final Notes](#Contributors)
 ---
 ## Summary
 [Live link to DOCUMENTATION for the engine](https://pvbread.github.io/hierarchy.html "Engine Docs Page")
@@ -26,7 +26,7 @@ find files marked "learning folders" with some toy model attempts at small ideas
 ---
 
 ---
-## Contributors & Final Notes
+## Contributors
 Contributors: 
 * Alex Michelmann⚙️
 * Jack Wu⚙️
