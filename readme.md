@@ -8,6 +8,7 @@
 * [Contributors & Final Notes](#Contributors)
 ---
 ## Summary
+
 [Live link to DOCUMENTATION for the engine](https://pvbread.github.io/hierarchy.html "Engine Docs Page")
 
 We tried to make a loosesly coupled game engine and game (although there are some tight couplings, notable with state management).
