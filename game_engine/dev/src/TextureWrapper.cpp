@@ -13,6 +13,8 @@ TextureWrapper::~TextureWrapper()
 
 void TextureWrapper::freeMemory()
 {
+    //this is a pattern we don't end up doing on our other objects just
+    //out of lack of time
     if (texture != nullptr)
     {
         SDL_DestroyTexture(texture);
@@ -76,6 +78,9 @@ bool TextureWrapper::setColor(Uint8 r, Uint8 g, Uint8 b)
 
 bool TextureWrapper::setAlpha(Uint8 alpha)
 {
+    // changes the alpha setting,
+    // to be clear, this still needs the SLD blend context to be activated
+    // to be of any use
     int didSet = SDL_SetTextureAlphaMod(texture, alpha);
     if (didSet < 0)
     {
@@ -103,7 +108,9 @@ bool TextureWrapper::render(SDL_Renderer* renderer,
     }
     // Copies a portion of the texture to current rendering
     // with rotation/flipping option which we may eventually want to use
-    //the src is the clip and dest is the &rect at the position we specified
+    // the src is the clip and dest is the &rect at the position we specified
+    // we never ended up using the extra functionality
+    // but we didn't know how far we'd go
 
     int didCopy = SDL_RenderCopyEx(renderer, texture, clip, &rectangle, angle, center, flip);
 

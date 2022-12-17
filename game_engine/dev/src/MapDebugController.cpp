@@ -2,11 +2,13 @@
 
 MapDebugController::MapDebugController()
 {
+    //hard coded just for our game, needs to be more general in future
     newCameraPos = {0, 0, 960, 720};
 }
 
 void MapDebugController::onInput(SDL_Event& event, int xBoundary, int yBoundary)
 {
+    // basic manipulation of the camera
     if (event.type == SDL_KEYDOWN)
     {
         switch (event.key.keysym.sym)

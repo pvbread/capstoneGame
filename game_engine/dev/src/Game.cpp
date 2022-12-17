@@ -17,6 +17,7 @@ void DashDaCapo::runGameLoop()
     MapDebugController debugCont = MapDebugController();
 
     ////////// START CHARACTER INIT ////////
+
     BaseCharacter conductor = BaseCharacter("Conductor", 30, 3, 3, 0, 0, 3, 3,false);
     BaseCharacter drum = BaseCharacter("Drummer", 50, 2, 1, 0, 0, 3, 3,false);
     BaseCharacter flute = BaseCharacter("Flutist", 20, 6, 1, 0, 0, 3, 3,false);
@@ -86,28 +87,9 @@ void DashDaCapo::runGameLoop()
         epicArmor
     };
 
-    std::unordered_map<int, int> teamItemPool {
-        {NORMAL_HIT, 0},
-        {RARE_HIT, 0},
-        {EPIC_HIT, 0},
-        {NORMAL_DODGE, 0},
-        {RARE_DODGE, 0},
-        {EPIC_DODGE, 0},
-        {NORMAL_SPEED, 0},
-        {RARE_SPEED, 0},
-        {EPIC_SPEED, 0}
-    };    
-
     ///////// END ITEM INIT /////////
 
-    // temporary place for this
-    Screen screen = INTRO;
-    //temporary 
-    TTF_Font *font = TTF_OpenFont("./Raleway-Medium.ttf", 100);
-    
-    //temp
-    SDL_Rect cursor = { 45, 160, 50, 50 };
-
+    Screen screen = INTRO; 
 
     //////////// START MENUS INIT ///////////////
 
@@ -684,6 +666,15 @@ void DashDaCapo::runGameLoop()
     TextBox credit5 = TextBox("Jack Wu", 50, 750, 420, 300, 100, Font::openSans, Color::black, Color::black, true); 
     ///////// END CREDITS /////////////////
 
+    /////// GAME LOOP ////////////
+    // Explanation:
+    // First phase: 
+    // Timer updates, transition updates, AI updates
+    // Second Phase:
+    // Input handling and state changing
+    // Third Phase:
+    // Rendering
+
     SDL_Event event;
     while (!getQuit())
     {
@@ -1063,16 +1054,6 @@ void DashDaCapo::runGameLoop()
                     case SDLK_2:
                     {
                         screen = MAP;
-                        break;
-                    }
-                    case SDLK_3:
-                    {
-                        //screen = COMBAT;
-                        break;
-                    }
-                    case SDLK_4:
-                    {
-                        screen = SANDBOX;
                         break;
                     }
                     case SDLK_5:
@@ -1761,11 +1742,6 @@ void DashDaCapo::runGameLoop()
                         currTarget = 0;
                     }
                 }
-                case SANDBOX:
-                {
-                    sandboxMenu.onInput(event, SelectMusic, STATE_introSelectedOption);
-                    break;
-                }
                 // Stat menu state
                 case STATUS_MENU:
                 {
@@ -1903,6 +1879,7 @@ void DashDaCapo::runGameLoop()
                 }
                 if (!STATE_debug)
                 {
+                    //hard coded directions, should be a sprite-sheet had time allowed
                     switch (STATE_characterDirection)
                     {
                         case UP:
@@ -2249,80 +2226,6 @@ void DashDaCapo::runGameLoop()
                         STATE_preTransition = false;
                     }
                     blackScreenTransition.render(getRenderer(), 0, 0);
-                }
-                break;
-            }
-            case SANDBOX:           
-            {
-                //Combat Pane
-                SDL_Rect combatPane = {0, 0, 720, 600};
-                SDL_Color colCombat = Color::navy;
-                SDL_SetRenderDrawColor(getRenderer(), colCombat.r, colCombat.g, colCombat.b, 0);
-                SDL_RenderFillRect(getRenderer(), &combatPane);
-
-                //Status Pane
-                SDL_Rect statusPane = {0, 600, 720, 120};
-                SDL_Color colStatus = Color::cyan;
-                SDL_SetRenderDrawColor(getRenderer(), colStatus.r, colStatus.g, colStatus.b, 0);
-                SDL_RenderFillRect(getRenderer(), &statusPane);
-
-                //Order Pane
-                SDL_Rect orderPane = {720, 0, 240, 480};
-                SDL_Color colOrder = Color::gray;
-                SDL_SetRenderDrawColor(getRenderer(), colOrder.r, colOrder.g, colOrder.b, 0);
-                SDL_RenderFillRect(getRenderer(), &orderPane);
-
-                //Menu Pane
-                SDL_Rect menuPane = {720, 480, 720, 240};
-                SDL_Color colMenu = Color::maroon;
-                SDL_SetRenderDrawColor(getRenderer(), colMenu.r, colMenu.g, colMenu.b, 0);
-                SDL_RenderFillRect(getRenderer(), &menuPane);
-                
-                //Recent Attack Pane
-                SDL_Rect recentAttackPane = {0, 540, 500, 60};
-                SDL_Color colRecentAttack = Color::gray;
-                SDL_SetRenderDrawColor(getRenderer(), colRecentAttack.r, colRecentAttack.g, colRecentAttack.b, 0);
-                SDL_RenderFillRect(getRenderer(), &recentAttackPane);
-
-                conductorStats.render(getRenderer());
-                testToHitStats.render(getRenderer());
-                SDL_Rect x = {20, 620, 226, 100};
-                SDL_Color y = Color::gray;
-                SDL_SetRenderDrawColor(getRenderer(), y.r, y.g, y.b, 0);
-                SDL_RenderFillRect(getRenderer(), &x);
-                SDL_Rect a = {666, 620, 226, 100};
-                SDL_Color b = Color::gray;
-                SDL_SetRenderDrawColor(getRenderer(), b.r, b.g, b.b, 0);
-                SDL_RenderFillRect(getRenderer(), &a);
-                SDL_Rect box1 = {246, 620, 84, 100};
-                SDL_Color color1 = Color::gray;
-                SDL_SetRenderDrawColor(getRenderer(), color1.r, color1.g, color1.b, 0);
-                SDL_RenderFillRect(getRenderer(), &box1);
-                SDL_Rect box2 = {330, 620, 84, 100};
-                SDL_Color color2 = Color::navy;
-                SDL_SetRenderDrawColor(getRenderer(), color2.r, color2.g, color2.b, 0);
-                SDL_RenderFillRect(getRenderer(), &box2);
-                SDL_Rect box3 = {414, 620, 84, 100};
-                SDL_Color color3 = Color::black;
-                SDL_SetRenderDrawColor(getRenderer(), color3.r, color3.g, color3.b, 0);
-                SDL_RenderFillRect(getRenderer(), &box3);
-                SDL_Rect box4 = {498, 620, 84, 100};
-                SDL_Color color4 = Color::olive;
-                SDL_SetRenderDrawColor(getRenderer(), color4.r, color4.g, color4.b, 0);
-                SDL_RenderFillRect(getRenderer(), &box4);
-                SDL_Rect box5 = {582, 620, 84, 100};
-                SDL_Color color5 = Color::white;
-                SDL_SetRenderDrawColor(getRenderer(), color5.r, color5.g, color5.b, 0);
-                SDL_RenderFillRect(getRenderer(), &box5);
-                conductorStats.render(getRenderer());
-                drummerStats.render(getRenderer());
-                for (auto stat: conductorStatsRow)
-                {
-                    stat.render(getRenderer());
-                }
-                for (auto stat: drummerStatsRow)
-                {
-                    stat.render(getRenderer());
                 }
                 break;
             }

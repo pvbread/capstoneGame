@@ -119,10 +119,9 @@ void CharacterInMap::onInput(SDL_Event& event,
                              std::map<std::pair<int, int>, std::string>& coordinateToEventTypeMap
                             )
 {
-    
-    //std::pair<int,int> coordinates = std::make_pair(collisionBox.x-30, collisionBox.y-30);
-                //TileType currentTileType = coordinateToTileTypeMap[coordinates];
-                          
+    // not only do we check for the validity of moves by cross referencing
+    // the coordinate-to-tile map
+    // we also remember the event state of the new block we walk upon 
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
     {
         switch (event.key.keysym.sym)
@@ -182,6 +181,7 @@ void CharacterInMap::onInput(SDL_Event& event,
 void CharacterInMap::move(int xBoundary, 
                           int yBoundary)
 {  
+    //basic block discrete motions
     if (collisionBox.x < 30)
         collisionBox.x += mainVelocity;
     else if (collisionBox.x >= xBoundary)
@@ -194,14 +194,14 @@ void CharacterInMap::move(int xBoundary,
 
 void CharacterInMap::render(SDL_Renderer* renderer, const SDL_Rect& camera, TextureWrapper& characterTexture)
 {
-    //the debug object is drawn at it's distance from the camera's idea of 0
+    //the object is drawn at it's distance from the camera's idea of 0
     characterTexture.render(renderer, collisionBox.x-camera.x, collisionBox.y-camera.y);
 }
 
 
 void CharacterInMap::centerScreen(SDL_Rect& camera, int xBoundary, int yBoundary)
 {
-    // TODO fix this hardcoding to take in any size
+    // we fixed the hardcoding here to make it more generals
     camera.x = collisionBox.x - (camera.w/2);
     camera.y = collisionBox.y - (camera.h/2);
 

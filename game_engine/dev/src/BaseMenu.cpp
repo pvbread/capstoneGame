@@ -9,6 +9,11 @@ BaseMenu::BaseMenu(int fontSize,
                    SDL_Color fontHighlightColor,
                    SDL_Renderer* renderer)
 {
+    // The strategy here is to create a column for a cursor versus the rows of options
+    //  [ ] Option 1
+    //  [*] Option 2
+    //  [ ] Option 3
+    //  [ ] Option n
     int numTextures = optionNames.size(); 
     startX = x;
     startY = y;
@@ -67,8 +72,6 @@ void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& op
     int prevIdx, currIdx;
     if (event.type == SDL_KEYDOWN)
     {
-        //alias to make code more readable
-        //SDL_Rect & cursor = optionRectangles.back(); 
         switch (event.key.keysym.sym)
         {
             case SDLK_UP:
@@ -101,8 +104,8 @@ void BaseMenu::onInput(SDL_Event& event, Mix_Chunk* SelectMusic, std::string& op
             }
             case SDLK_RETURN:
             {
+                // get the state information back
                 optionSelected = optionNames[cursorIndex];
-                //deselect(selectedIndex);
                 break;
             }
         }

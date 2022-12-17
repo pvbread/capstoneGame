@@ -17,10 +17,13 @@ BaseSingleTexture::BaseSingleTexture(int mainVelocity,
 
 void BaseSingleTexture::centerScreen(SDL_Rect& camera)
 {
-    // TODO fix this hardcoding to take in any size
+    // finds where the center of the texture is and positions the
+    // top left portion of the camera accordingly
     camera.x = collisionBox.x - (camera.w/2);
     camera.y = collisionBox.y - (camera.h/2);
 
+    //bounds checking, hardcoded for our dimensions
+    //this is actually fixed in the texturess that inherit this classs
     if (camera.x < 0)
         camera.x = 0;
     if (camera.y < 0)

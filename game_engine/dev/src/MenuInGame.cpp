@@ -2,7 +2,9 @@
 #include <iostream>
 #include <string>
 
-//Menu::message()
+// We never ended up finishing implementing this idea because
+// we took a different approach. I might pick it up again later
+// which is why I leave it here.
 
 Menu::Menu(int x, int y, int w, int h)
 {

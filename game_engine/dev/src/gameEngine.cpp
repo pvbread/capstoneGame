@@ -61,6 +61,7 @@ Archimedes::~Archimedes()
     SDL_Quit();
 }
 
+/// @brief The loop that our game takes over to work withs
 void Archimedes::runGameLoop()
 {}
 
@@ -78,16 +79,13 @@ bool Archimedes::loadTiles(std::vector<Tile*>& tileMap,
                         int TYPE_COUNT, 
                         int TILE_LENGTH)
 {
+    //we feed this function a pre-parsed vector of all the level info
+    //the vector contains ints that map both the coordinate dimensions
+    //and tile types
+    //this is where we also populate events and coordinate types
+
     int x = 0;
     int y = 0;
-
-    //std::ifstream level("../../assets/maps/testLevel.map");
-    /*
-    if (level.fail())
-    {
-        SDL_Log("Failure loading level");
-        return false;
-    }*/
 
     //tyle type
     int tileType;
@@ -96,14 +94,6 @@ bool Archimedes::loadTiles(std::vector<Tile*>& tileMap,
     //start at index 2 (because first 2 are the dimensions)
     for (int i = 0; i < TILE_COUNT; i++)
     {
-        //level >> tileType;
-        /*
-        if (level.fail())
-        {
-            SDL_Log("Error with level read at %d", i);
-            return false;
-        }
-        */
         //need to offset the 2 dimensions
         tileType = levelInfo[i+2];
 
@@ -135,6 +125,10 @@ bool Archimedes::loadTiles(std::vector<Tile*>& tileMap,
 bool Archimedes::loadImageAssets(SDL_Renderer* renderer,  
                               std::unordered_map<TextureWrapper*, std::string> textureFilePaths)
 {
+    // we get around the issue of not being able to map objects
+    // by mapping pointers to objects instead here
+    // this way we have a factored function that can take a ton of textures
+    // and load them efficiently
     for (auto [texturePtr, textureFilePath]: textureFilePaths)
     {
         bool didTextureLoad = texturePtr->loadImage(renderer, textureFilePath);
@@ -156,6 +150,9 @@ bool Archimedes::clipSheet(int ROWS,
                         std::vector<SDL_Rect>& sheetClipped
                        )
 {
+    // the clipping here basically takes a tile/sprite sheet
+    // and maps the coordinates to SDL Rectangles
+    // note the variable dimension size of the algorithm
     int blockType = 0;
     for (int r = 0; r < ROWS; r++)
     {
@@ -190,6 +187,8 @@ SDL_Renderer* Archimedes::getRenderer() const
 
 std::vector<int> Archimedes::convertMapToVector(std::string pathName)
 {
+    //preprocess our specific raw map data to vector form
+
     std::ifstream level(pathName);
     std::vector<int> levelData;
     int rows;
