@@ -12,7 +12,7 @@
 
 We tried to make a loosesly coupled game engine and game (although there are some tight couplings, notable with state management).
 Since the game was an RPG, most of our engine functionalities aimed to work towards that end.
-
+---
 ---
 ## Structure
 
