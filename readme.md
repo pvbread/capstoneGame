@@ -24,7 +24,6 @@ All Unit tests can be found in everything_else/PyToCMigration/test.
 The everything else folder has all our preparatory work (including tangential trials). At different points you may
 find files marked "learning folders" with some toy model attempts at small ideas.
 
----
 
 ---
 ## Contributors
