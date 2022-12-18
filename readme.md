@@ -15,8 +15,6 @@ We tried to make a loosesly coupled game engine and game (although there are som
 Since the game was an RPG, most of our engine functionalities aimed to work towards that end.
 
 ---
-
----
 ## Structure
 
 Final Game and Game Engine have our final version of the project.
