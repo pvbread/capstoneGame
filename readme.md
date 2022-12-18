@@ -17,10 +17,10 @@ Since the game was an RPG, most of our engine functionalities aimed to work towa
 ---
 ## Structure
 
-Final Game and Game Engine have our final version of the project.
-You can click on the link above for documentation of the game engine.
-The demos folder houses the demos we did both in the final mvp demo and in the midterm.
-All Unit tests can be found in everything_else/PyToCMigration/test.
+Final Game and Game Engine have our final version of the project.<br>
+You can click on the link above for documentation of the game engine.<br>
+The <b>demos folder</b> houses the demos we did both in the final mvp demo and in the midterm.<br>
+All <b>Unit tests</b> can be found in everything_else/PyToCMigration/test.<br>
 The everything else folder has all our preparatory work (including tangential trials). At different points you may
 find files marked "learning folders" with some toy model attempts at small ideas.
 
